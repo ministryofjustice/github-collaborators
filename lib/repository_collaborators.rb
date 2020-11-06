@@ -36,7 +36,7 @@ class Collaborator
     @data = data
   end
 
-  def github_username
+  def login
     data.dig("node", "login")
   end
 

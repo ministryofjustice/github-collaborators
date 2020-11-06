@@ -21,8 +21,6 @@ end
 class Organization < GithubGraphQlClient
   attr_reader :login
 
-  PAGE_SIZE = 100
-
   def initialize(params)
     @login = params.fetch(:login)
     super(params)
@@ -30,6 +28,10 @@ class Organization < GithubGraphQlClient
 
   def members
     @list ||= get_all_members
+  end
+
+  def is_member?(login)
+    members.map(&:login).include?(login)
   end
 
   private
