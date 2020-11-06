@@ -1,0 +1,97 @@
+class Collaborator
+  attr_reader :data
+
+  # data is a hash, from the github graphql API, like this:
+  #
+  # {"node"=>{"login"=>"SteveMarshall"},
+  #  "permissionSources"=>
+  #   [{"permission"=>"ADMIN",
+  #     "source"=>
+  #      {"websiteUrl"=>"https://www.justice.gov.uk/",
+  #       "id"=>"MDEyOk9yZ2FuaXphdGlvbjIyMDM1NzQ=",
+  #       "name"=>"Ministry of Justice"}},
+  #    {"permission"=>"ADMIN",
+  #     "source"=>
+  #      {"homepageUrl"=>nil,
+  #       "id"=>"MDEwOlJlcG9zaXRvcnkzMTA2MTkyNzY=",
+  #       "name"=>"testing-external-collaborators",
+  #       "nameWithOwner"=>"ministryofjustice/testing-external-collaborators"}},
+  #    {"permission"=>"ADMIN",
+  #     "source"=>
+  #      {"editTeamUrl"=>
+  #        "https://github.com/orgs/ministryofjustice/teams/operations-engineering/edit",
+  #       "id"=>"MDQ6VGVhbTQxOTIxMTU=",
+  #       "name"=>"Operations Engineering",
+  #       "combinedSlug"=>"ministryofjustice/operations-engineering"}}]}
+  #
+  # This user has access to the repo because:
+  #   * They are an Organization admin
+  #   * They are in the "Operations Engineering" team
+  # They also show up as having direct permission on the repository. This is
+  # misleading - they only have access to the repository because of their
+  # Organization permission and team membership.
+
+
+  def initialize(data)
+    @data = data
+  end
+
+  def github_username
+    data.dig("node", "login")
+  end
+
+  # If the only permissionSources this collaborator has is permission on the
+  # repository (i.e. no "Organization" or "Team" permissions), then they have
+  # been granted acess specifically to this repository (so they're probably an
+  # external collaborator, but we would need to check a) if they are a member
+  # of the organization and b) if they have an organization email address, if
+  # we want to confirm that.
+  def is_direct_collaborator?
+    permission_sources = data.fetch("permissionSources")
+    permission_sources.size == 1 && permission_sources.first.fetch("source").has_key?("nameWithOwner") # nameWithOwner means this is a Repository permission
+  end
+end
+
+class RepositoryCollaborators < GithubGraphQlClient
+  attr_reader :repository, :owner
+
+  MINISTRYOFJUSTICE = "ministryofjustice"
+
+  def initialize(params)
+    @owner = params.fetch(:owner, MINISTRYOFJUSTICE)
+    @repository = params.fetch(:repository)
+    super(params)
+  end
+
+  def list
+    JSON.parse(run_query(collaborators_query))
+      .dig("data", "organization", "repository", "collaborators", "edges")
+      .map { |hash| Collaborator.new(hash) }
+  end
+
+  private
+
+  def collaborators_query
+    %[
+      {
+        organization(login: "#{owner}") {
+          repository(name: "#{repository}") {
+            collaborators(first: 100) {
+              edges {
+                node { login }
+                permissionSources {
+                  permission
+                  source {
+                    ... on Organization { websiteUrl id name }
+                    ... on Repository { homepageUrl id name nameWithOwner }
+                    ... on Team { editTeamUrl id name combinedSlug }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  end
+end

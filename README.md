@@ -1,15 +1,10 @@
-# Ministry of Justice Template Repository
+# GitHub External Collaborators
 
-Use this template to [create a repository] with the default initial files for a Ministry of Justice Github repository, including:
+Manage MoJ GitHub external collaborators via code.
 
-* The correct LICENSE
-* Github actions
-* .gitignore file
+## Pre-requisites
 
-Once you have created your repository, please:
-
-* Edit the copy of this README.md file to document your project
-* Grant permissions to the appropriate MoJ teams
-* Setup branch protection
-
-[create a repository]: https://github.com/ministryofjustice/template-repository/generate
+The environment variable `GITHUB_TOKEN` must contain a GitHub personal access
+token (PAC) enabled for MoJ SSO, with the following scopes:
+  * admin:org
+  * repo
