@@ -66,6 +66,7 @@ class RepositoryCollaborators < GithubGraphQlClient
   def list
     JSON.parse(run_query(collaborators_query))
       .dig("data", "organization", "repository", "collaborators", "edges")
+      .to_a
       .map { |hash| Collaborator.new(hash) }
   end
 
