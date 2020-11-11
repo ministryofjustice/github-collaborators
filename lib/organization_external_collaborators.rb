@@ -29,7 +29,6 @@ class OrganizationExternalCollaborators < GithubGraphQlClient
       .reject(&:archived?)
       .reject(&:disabled?)
       .reject(&:locked?)
-      .sample(50) # TODO: remove this
   end
 
   def external_collaborators(repository)
