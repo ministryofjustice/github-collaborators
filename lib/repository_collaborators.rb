@@ -40,6 +40,10 @@ class Collaborator
     data.dig("node", "login")
   end
 
+  def url
+    data.dig("node", "url")
+  end
+
   # If the only permissionSources this collaborator has is permission on the
   # repository (i.e. no "Organization" or "Team" permissions), then they have
   # been granted acess specifically to this repository (so they're probably an
@@ -79,7 +83,10 @@ class RepositoryCollaborators < GithubGraphQlClient
           repository(name: "#{repository}") {
             collaborators(first: 100) {
               edges {
-                node { login }
+                node {
+                  login
+                  url
+                }
                 permissionSources {
                   permission
                   source {

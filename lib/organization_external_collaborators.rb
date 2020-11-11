@@ -11,8 +11,9 @@ class OrganizationExternalCollaborators < GithubGraphQlClient
       external_collaborators(repo).each do |collab|
         arr.push(
           repository: repo.name,
-          url: repo.url,
+          repo_url: repo.url,
           login: collab.login,
+          login_url: collab.url,
         )
       end
       arr
