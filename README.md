@@ -17,10 +17,15 @@ The environment variable `OPS_ENG_REPORTS_URL` must contain the URL of the [Oper
 
 ## Usage
 
+This script is run on a schedule by a [github action](.github/workflows/post-data.yaml) You can also run it manually either by [triggering the action], or running locally like this:
+
 ```
 bin/external-collaborators.rb
 ```
 
 This outputs a JSON document suitable for POSTing to the [Operations Engineering Reports] web application.
 
+You can also use the `bin/post-data.sh` script to generate and POST the JSON data.
+
 [Operations Engineering Reports]: https://github.com/ministryofjustice/operations-engineering-reports
+[triggering the action]: https://github.com/ministryofjustice/operations-engineering-github-collaborators/actions?query=workflow%3A.github%2Fworkflows%2Fpost-data.yaml
