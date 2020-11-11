@@ -13,6 +13,10 @@ class Repository
     data.fetch("name")
   end
 
+  def url
+    data.fetch("url")
+  end
+
   def locked?
     data.fetch("isLocked")
   end
@@ -68,6 +72,7 @@ class Repositories < GithubGraphQlClient
           nodes {
             id
             name
+            url
             isLocked
             isArchived
             isDisabled
