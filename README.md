@@ -10,3 +10,13 @@ token (PAC) enabled for MoJ SSO, with the following scopes:
   * repo
   * read:user
   * user:email
+
+## Usage
+
+```
+bin/external-collaborators.rb
+```
+
+This outputs a JSON document suitable for POSTing to the [Operations Engineering Reports] web application.
+
+[Operations Engineering Reports]: https://github.com/ministryofjustice/operations-engineering-reports
