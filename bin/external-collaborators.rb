@@ -7,4 +7,9 @@ list = OrganizationExternalCollaborators.new(
   login: "ministryofjustice"
 ).list
 
-puts list.to_json
+output = {
+  data: list,
+  updated_at: Time.now.strftime("%Y-%m-%d %H:%M:%S")
+}
+
+puts output.to_json
