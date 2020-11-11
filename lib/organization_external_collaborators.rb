@@ -11,6 +11,7 @@ class OrganizationExternalCollaborators < GithubGraphQlClient
       external_collaborators(repo).each do |collab|
         arr.push(
           repository: repo.name,
+          url: repo.url,
           login: collab.login,
         )
       end
@@ -28,7 +29,7 @@ class OrganizationExternalCollaborators < GithubGraphQlClient
       .reject(&:archived?)
       .reject(&:disabled?)
       .reject(&:locked?)
-      .sample(50)
+      .sample(50) # TODO: remove this
   end
 
   def external_collaborators(repository)
