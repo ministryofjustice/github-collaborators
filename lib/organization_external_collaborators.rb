@@ -14,6 +14,7 @@ class OrganizationExternalCollaborators < GithubGraphQlClient
           repo_url: repo.url,
           login: collab.login,
           login_url: collab.url,
+          permission: collab.permission,
         )
       end
       arr
