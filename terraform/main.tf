@@ -13,12 +13,3 @@ provider "github" {
   owner = "ministryofjustice"
   token = var.github_token
 }
-
-module "testing-external-collaborators" {
-  source     = "./modules/repository"
-  repository = "testing-external-collaborators"
-  collaborators = {
-    DangerDawson = "push"
-    toonsend     = "triage"
-  }
-}
