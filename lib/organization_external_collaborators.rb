@@ -21,6 +21,16 @@ class OrganizationExternalCollaborators < GithubGraphQlClient
     end
   end
 
+  def for_repository(repo_name)
+    external_collaborators(repo_name).map do |collab|
+      {
+        login: collab.login,
+        login_url: collab.url,
+        permission: collab.permission,
+      }
+    end
+  end
+
   private
 
   def repositories
@@ -31,6 +41,7 @@ class OrganizationExternalCollaborators < GithubGraphQlClient
       .reject(&:archived?)
       .reject(&:disabled?)
       .reject(&:locked?)
+      .sample(150)
   end
 
   def external_collaborators(repo_name)
