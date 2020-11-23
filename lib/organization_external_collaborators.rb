@@ -8,7 +8,7 @@ class OrganizationExternalCollaborators < GithubGraphQlClient
 
   def list
     @list ||= repositories.inject([]) do |arr, repo|
-      external_collaborators(repo).each do |collab|
+      external_collaborators(repo.name).each do |collab|
         arr.push(
           repository: repo.name,
           repo_url: repo.url,
@@ -32,8 +32,8 @@ class OrganizationExternalCollaborators < GithubGraphQlClient
       .reject(&:locked?)
   end
 
-  def external_collaborators(repository)
-    collaborators(repository.name)
+  def external_collaborators(repo_name)
+    collaborators(repo_name)
       .reject { |collab| organization.is_member?(collab.login) }
   end
 
