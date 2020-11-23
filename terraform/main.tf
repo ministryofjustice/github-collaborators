@@ -14,12 +14,11 @@ provider "github" {
   token = var.github_token
 }
 
-resource "github_repository_collaborator" "collaborator" {
+module "testing-external-collaborators" {
+  source     = "./modules/repository"
   repository = "testing-external-collaborators"
-  for_each = {
+  collaborators = {
     DangerDawson = "push"
     toonsend     = "triage"
   }
-  username   = each.key
-  permission = each.value
 }
