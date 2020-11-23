@@ -44,6 +44,17 @@ class Collaborator
     data.dig("node", "url")
   end
 
+  # This will only be correct if this is an external collaborator.
+  # Organisation members with access to the repository are likely to have
+  # multiple permissions, and there is no guarantee that the first permission
+  # (which this method returns) is the highest privilege permission.
+  def permission
+    data.fetch("permissionSources")
+      .map { |i| i["permission"] }
+      .first
+      .downcase
+  end
+
   # If the only permissionSources this collaborator has is permission on the
   # repository (i.e. no "Organization" or "Team" permissions), then they have
   # been granted acess specifically to this repository (so they're probably an
