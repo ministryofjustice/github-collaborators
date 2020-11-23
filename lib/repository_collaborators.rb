@@ -31,6 +31,13 @@ class Collaborator
   # misleading - they only have access to the repository because of their
   # Organization permission and team membership.
 
+  GITHUB_TO_TERRAFORM_PERMISSIONS = {
+    "read" => "pull",
+    "triage" => "triage",
+    "write" => "push",
+    "maintain" => "maintain",
+    "admin" => "admin",
+  }
 
   def initialize(data)
     @data = data
@@ -49,10 +56,11 @@ class Collaborator
   # multiple permissions, and there is no guarantee that the first permission
   # (which this method returns) is the highest privilege permission.
   def permission
-    data.fetch("permissionSources")
+    perm = data.fetch("permissionSources")
       .map { |i| i["permission"] }
       .first
       .downcase
+    GITHUB_TO_TERRAFORM_PERMISSIONS.fetch(perm)
   end
 
   # If the only permissionSources this collaborator has is permission on the
