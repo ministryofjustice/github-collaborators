@@ -30,9 +30,13 @@ class RepositoryCollaboratorImporter
 
   def create_terraform_file(repository, collaborators)
     terraform = render_template(repository, collaborators)
-    output_file = "#{terraform_dir}/#{repository}.tf"
-    File.write(output_file, terraform)
-    puts "Generated terraform file: #{output_file}"
+    outfile = output_file(repository)
+    File.write(outfile, terraform)
+    puts "Generated terraform file: #{outfile}"
+  end
+
+  def output_file(repository)
+    "#{terraform_dir}/#{tf_safe(repository)}.tf"
   end
 
   def import_collaborators(repository, collaborators)
@@ -48,8 +52,10 @@ class RepositoryCollaboratorImporter
   end
 
   def render_template(repository, collaborators)
+    repo = tf_safe(repository)
+
     template = <<EOF
-module "<%= repository %>" {
+module "<%= repo %>" {
   source     = "./modules/repository-collaborators"
   repository = "<%= repository %>"
   collaborators = {
@@ -61,5 +67,9 @@ module "<%= repository %>" {
 EOF
     renderer = ERB.new(template, 0, ">")
     renderer.result(binding)
+  end
+
+  def tf_safe(string)
+    string.gsub(".", "-")
   end
 end
