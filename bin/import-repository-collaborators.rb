@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require "erb"
 require_relative "../lib/github_collaborators"
 
 repositories = ARGV
