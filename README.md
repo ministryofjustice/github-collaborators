@@ -2,14 +2,71 @@
 
 Manage MoJ GitHub external collaborators via code.
 
+The terraform code manages external collaborators on our GitHub repositories.
+
+The intention is that all external collaborator relationships will be defined here, with the rationale for the collaborator(s) specified in the commit messages which add/remove them.
+
+Collaborators who have been added to any of our repositories manually (i.e. they are not specified in code in this repository) will be automatically removed (nightly?).
+
 ## Functions
 
 * List all external collaborators with access to Ministry of Justice github repositories, and post the data to the [Operations Engineering Reports] web application
 * Define external collaborators in terraform code
 * Import pre-existing external collaborators from individual github repositories, create the corresponding terraform code and import into terraform state
 
-## Adding/Removing/Updating collaborators
+## Managing collaborators
 
+Before you can manage repository collaborators, you need to add a terraform file corresponding to the repository.
+
+The filename should be `<repository name>.tf` with the following contents:
+
+```
+module "<repository name>" {
+  source     = "./modules/repository-collaborators"
+  repository = "<repository name>"
+  collaborators = {
+  }
+}
+```
+
+To add collaborators to the repository, define them inside the `collaborators` block like this:
+
+```
+    <github username> = "push" # pull|push|maintain|triage|admin
+```
+
+For example:
+
+```
+  collaborators = {
+    digitalronin = "admin"
+    l33thax0r    = "triage"
+  }
+```
+
+You can, and should, add comments (prefixed with `#`) to these files describing who the collaborators are, and why they need access to the repository.
+
+### Import existing collaborators
+
+If you have a repository which already has collaborators, there is a utility script which will create the required terraform file and import the existing collaborators into the terraform state:
+
+```
+bin/import-repository-collaborators.rb
+```
+
+See the usage details below.
+
+If you have manually added an external collaborator to a repository which is already defined in this repository, you should edit the terraform file as usual, but you will also need to import the existing collaborator into the terraform state like this:
+
+```
+terraform import module.<repository name>.github_repository_collaborator.collaborator[\"github username\"]> <repository name>:<github username>
+```
+
+e.g.
+
+```
+terraform import module.testing-external-collaborators.github_repository_collaborator.collaborator[\"toonsend\"] testing-external-collaborators:toonsend
+```
 
 ## Pre-requisites
 
