@@ -11,10 +11,12 @@ class RepositoryCollaboratorImporter
     )
   end
 
-  def import(repository)
-    collaborators = external_collaborators(repository)
-    create_terraform_file(repository, collaborators)
-    import_collaborators(repository, collaborators)
+  def import(repo_names)
+    repo_names.each do |repository|
+      collaborators = external_collaborators(repository)
+      create_terraform_file(repository, collaborators)
+      import_collaborators(repository, collaborators)
+    end
   end
 
   private
