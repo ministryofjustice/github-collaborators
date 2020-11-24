@@ -4,6 +4,7 @@ require "erb"
 require_relative "../lib/github_collaborators"
 
 repository = ARGV.shift
+output_file = "terraform/#{repository}.tf"
 
 collaborators = OrganizationExternalCollaborators.new(
   github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"),
@@ -23,5 +24,7 @@ module "<%= repository %>" {
 EOF
 
 renderer = ERB.new(template, 0, ">")
-puts renderer.result()
+terraform = renderer.result()
+File.write(output_file, terraform)
+
 
