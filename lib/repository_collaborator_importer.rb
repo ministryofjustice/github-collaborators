@@ -15,6 +15,7 @@ class RepositoryCollaboratorImporter
     repo_names.each do |repository|
       collaborators = external_collaborators(repository)
       if collaborators.any?
+        $stderr.puts "Importing collaborators for #{repository}"
         create_terraform_file(repository, collaborators)
         import_collaborators(repository, collaborators)
       end
@@ -39,8 +40,9 @@ class RepositoryCollaboratorImporter
 
     collaborators.each do |c|
       login = c.fetch(:login)
+      $stderr.puts "  importing collaborator #{login} for repository #{repository}"
       cmd = %[cd #{terraform_dir}; #{terraform_executable} import module.#{repository}.github_repository_collaborator.collaborator[\\"#{login}\\"] #{repository}:#{login}]
-      puts cmd
+      $stderr.puts cmd
       system(cmd)
     end
   end
