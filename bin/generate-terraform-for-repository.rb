@@ -21,7 +21,7 @@ end
 def render_template(repository, collaborators)
   template = <<EOF
 module "<%= repository %>" {
-  source     = "./modules/repository"
+  source     = "./modules/repository-collaborators"
   repository = "<%= repository %>"
   collaborators = {
   <% collaborators.each do |collab| %>
