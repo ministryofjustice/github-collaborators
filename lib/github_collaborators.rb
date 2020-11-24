@@ -6,5 +6,6 @@ require_relative "./repository_collaborators"
 require_relative "./organization"
 require_relative "./repositories"
 require_relative "./organization_external_collaborators"
+require_relative "./repository_collaborator_importer"
 
 PAGE_SIZE = 100
