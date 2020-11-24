@@ -42,6 +42,13 @@ class Repositories < GithubGraphQlClient
     @list ||= get_all_repos
   end
 
+  def current
+    list
+      .reject(&:archived?)
+      .reject(&:disabled?)
+      .reject(&:locked?)
+  end
+
   private
 
   def get_all_repos

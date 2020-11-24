@@ -37,10 +37,7 @@ class OrganizationExternalCollaborators < GithubGraphQlClient
     @repos ||= Repositories.new(
       github_token: github_token,
       login: "ministryofjustice"
-    ).list
-      .reject(&:archived?)
-      .reject(&:disabled?)
-      .reject(&:locked?)
+    ).current
   end
 
   def external_collaborators(repo_name)
