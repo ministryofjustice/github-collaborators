@@ -41,7 +41,6 @@ class OrganizationExternalCollaborators < GithubGraphQlClient
       .reject(&:archived?)
       .reject(&:disabled?)
       .reject(&:locked?)
-      .sample(150)
   end
 
   def external_collaborators(repo_name)
