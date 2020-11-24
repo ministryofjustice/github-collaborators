@@ -40,12 +40,13 @@ class RepositoryCollaboratorImporter
   end
 
   def import_collaborators(repository, collaborators)
+    repo = tf_safe(repository)
     system("cd #{terraform_dir}; #{terraform_executable} init")
 
     collaborators.each do |c|
       login = c.fetch(:login)
       $stderr.puts "  importing collaborator #{login} for repository #{repository}"
-      cmd = %[cd #{terraform_dir}; #{terraform_executable} import module.#{repository}.github_repository_collaborator.collaborator[\\"#{login}\\"] #{repository}:#{login}]
+      cmd = %[cd #{terraform_dir}; #{terraform_executable} import module.#{repo}.github_repository_collaborator.collaborator[\\"#{login}\\"] #{repository}:#{login}]
       $stderr.puts cmd
       system(cmd)
     end
