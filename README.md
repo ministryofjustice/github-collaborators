@@ -48,9 +48,13 @@ You can also use the `bin/post-data.sh` script to generate and POST the JSON dat
 
 * Does not report any external collaborators who have not yet accepted their invitation to collaborate. Pending collaborators are not reported by the github graphql API.
 
+### `bin/list-repositories.rb`
+
+Output the names of all current (i.e. excluding deleted/archived/locked) MoJ github repositories.
+
 ### ` bin/import-repository-collaborators.rb`
 
-This script takes the name of an MoJ github repository as a single paramater, and creates a file in the `terraform` directory defining all of that repository's external collaborators.
+This script takes a list of names of MoJ github repositories, and creates a file for each repository, in the `terraform` directory, defining all of that repository's external collaborators.
 
 e.g. running
 
@@ -59,6 +63,16 @@ bin/import-repository-collaborators.rb acronyms`
 ```
 
 ...will create the file `terraform/acronyms.tf`
+
+It also imports any existing collaborators into the terraform state.
+
+### Import all repositories' collaborators
+
+```
+bin/list-repositories.rb | xargs bin/import-repository-collaborators.rb
+```
+
+> This takes quite a long time.
 
 [Operations Engineering Reports]: https://github.com/ministryofjustice/operations-engineering-reports
 [triggering the action]: https://github.com/ministryofjustice/operations-engineering-github-collaborators/actions?query=workflow%3A.github%2Fworkflows%2Fpost-data.yaml
