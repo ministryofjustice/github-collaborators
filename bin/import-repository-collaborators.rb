@@ -3,6 +3,8 @@
 require "erb"
 require_relative "../lib/github_collaborators"
 
+TERRAFORM_DIR = "terraform"
+
 def main(repository)
   collaborators = external_collaborators(repository)
   create_terraform_file(repository, collaborators)
@@ -18,15 +20,21 @@ end
 
 def create_terraform_file(repository, collaborators)
   terraform = render_template(repository, collaborators)
-  output_file = "terraform/#{repository}.tf"
+  output_file = "#{TERRAFORM_DIR}/#{repository}.tf"
   File.write(output_file, terraform)
   puts "Generated terraform file: #{output_file}"
 end
 
 def import_collaborators(repository, collaborators)
-# terraform init
-# terraform import module.acronyms.github_repository_collaborator.collaborator[\"matthewtansini\"] acronyms:matthewtansini
+  terraform = ENV.fetch("TERRAFORM")
+  system("cd #{TERRAFORM_DIR}; #{terraform} init")
 
+  collaborators.each do |c|
+    login = c.fetch(:login)
+    cmd = %[cd #{TERRAFORM_DIR}; #{terraform} import module.#{repository}.github_repository_collaborator.collaborator[\\"#{login}\\"] #{repository}:#{login}]
+    puts cmd
+    system(cmd)
+  end
 end
 
 def render_template(repository, collaborators)
