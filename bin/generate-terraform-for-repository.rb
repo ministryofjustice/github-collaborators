@@ -3,15 +3,23 @@
 require "erb"
 require_relative "../lib/github_collaborators"
 
-repository = ARGV.shift
-output_file = "terraform/#{repository}.tf"
+def main(repository)
+  collaborators = external_collaborators(repository)
+  terraform = render_template(repository, collaborators)
+  output_file = "terraform/#{repository}.tf"
+  File.write(output_file, terraform)
+  puts "Generated terraform file: #{output_file}"
+end
 
-collaborators = OrganizationExternalCollaborators.new(
-  github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"),
-  login: "ministryofjustice"
-).for_repository(repository)
+def external_collaborators(repository)
+  OrganizationExternalCollaborators.new(
+    github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"),
+    login: "ministryofjustice"
+  ).for_repository(repository)
+end
 
-template = <<EOF
+def render_template(repository, collaborators)
+  template = <<EOF
 module "<%= repository %>" {
   source     = "./modules/repository"
   repository = "<%= repository %>"
@@ -22,9 +30,12 @@ module "<%= repository %>" {
 }
 }
 EOF
+  renderer = ERB.new(template, 0, ">")
+  renderer.result(binding)
+end
 
-renderer = ERB.new(template, 0, ">")
-terraform = renderer.result()
-File.write(output_file, terraform)
+repository = ARGV.shift
+raise "USAGE: #{$0} [repository name]" if repository.nil?
+main(repository)
 
 
