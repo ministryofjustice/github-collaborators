@@ -23,6 +23,7 @@ main() {
 }
 
 changed_repositories() {
+  git fetch origin main:refs/remotes/origin/main # Ensure we have the `main` branch
   git diff main --name-only | sed 's/^terraform.\(.*\)\.tf$/\1/'
 }
 
