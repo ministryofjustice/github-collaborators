@@ -3,5 +3,6 @@ module "testing-external-collaborators" {
   repository = "testing-external-collaborators"
   collaborators = {
     DangerDawson = "push"
+    toonsend = "triage"
   }
 }
