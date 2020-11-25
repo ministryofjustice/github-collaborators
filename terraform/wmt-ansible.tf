@@ -3,6 +3,6 @@ module "wmt-ansible" {
   repository = "wmt-ansible"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }

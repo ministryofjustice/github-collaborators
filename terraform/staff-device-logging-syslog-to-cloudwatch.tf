@@ -3,6 +3,6 @@ module "staff-device-logging-syslog-to-cloudwatch" {
   repository = "staff-device-logging-syslog-to-cloudwatch"
   collaborators = {
     neilkidd = "admin"
-    jbevan4 = "admin"
+    jbevan4  = "admin"
   }
 }

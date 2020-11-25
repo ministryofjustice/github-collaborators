@@ -3,6 +3,6 @@ module "wmt-azurerm" {
   repository = "wmt-azurerm"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }
