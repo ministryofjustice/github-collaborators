@@ -3,6 +3,6 @@ module "staff-infrastructure-azure-landing-zone" {
   repository = "staff-infrastructure-azure-landing-zone"
   collaborators = {
     bsharpen-soltec = "push"
-    cscales-soltec = "push"
+    cscales-soltec  = "push"
   }
 }

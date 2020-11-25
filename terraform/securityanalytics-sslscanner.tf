@@ -2,7 +2,7 @@ module "securityanalytics-sslscanner" {
   source     = "./modules/repository-collaborators"
   repository = "securityanalytics-sslscanner"
   collaborators = {
-    blackmamo = "admin"
+    blackmamo    = "admin"
     progers-tech = "admin"
   }
 }
