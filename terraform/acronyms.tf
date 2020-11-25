@@ -3,5 +3,6 @@ module "acronyms" {
   repository = "acronyms"
   collaborators = {
     matthewtansini = "push"
+    DangerDawson   = "push"
   }
 }
