@@ -3,6 +3,6 @@ module "staff-device-management-ios-configuration" {
   repository = "staff-device-management-ios-configuration"
   collaborators = {
     JimGregory-SolTec = "admin"
-    HughSolTec = "admin"
+    HughSolTec        = "admin"
   }
 }

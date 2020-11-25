@@ -2,7 +2,7 @@ module "securityanalytics-sharedinfrastructure" {
   source     = "./modules/repository-collaborators"
   repository = "securityanalytics-sharedinfrastructure"
   collaborators = {
-    blackmamo = "admin"
+    blackmamo    = "admin"
     progers-tech = "admin"
   }
 }

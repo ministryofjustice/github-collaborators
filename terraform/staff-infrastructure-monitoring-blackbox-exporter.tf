@@ -2,7 +2,7 @@ module "staff-infrastructure-monitoring-blackbox-exporter" {
   source     = "./modules/repository-collaborators"
   repository = "staff-infrastructure-monitoring-blackbox-exporter"
   collaborators = {
-    elena-vi = "push"
+    elena-vi    = "push"
     chubberlisk = "push"
   }
 }
