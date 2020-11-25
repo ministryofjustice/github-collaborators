@@ -22,4 +22,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 0.13.5
-      - run: terraform apply -auto-approve
+      - run: |
+          cd terraform
+          terraform init
+          terraform apply -auto-approve
