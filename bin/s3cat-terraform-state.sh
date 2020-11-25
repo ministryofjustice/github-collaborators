@@ -13,7 +13,7 @@ output=$(
     -e S3_BUCKET_NAME=${S3_BUCKET_NAME} \
     -v ${PWD}:/app \
     -w /app \
-    -it amazon/aws-cli s3 cp ${source} foo
+    amazon/aws-cli s3 cp ${source} foo
 )
 cat foo
 rm foo
