@@ -3,6 +3,6 @@ module "apvs-internal-web" {
   repository = "apvs-internal-web"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }

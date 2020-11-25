@@ -3,6 +3,6 @@ module "apvs" {
   repository = "apvs"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }

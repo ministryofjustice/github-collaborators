@@ -3,6 +3,6 @@ module "apvs-ansible" {
   repository = "apvs-ansible"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }

@@ -3,6 +3,6 @@ module "wmt-puppet" {
   repository = "wmt-puppet"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }

@@ -3,9 +3,9 @@ module "staff-device-dns-server" {
   repository = "staff-device-dns-server"
   collaborators = {
     Themitchell = "admin"
-    neilkidd = "admin"
+    neilkidd    = "admin"
     jivdhaliwal = "admin"
-    jbevan4 = "admin"
-    efuaakum = "admin"
+    jbevan4     = "admin"
+    efuaakum    = "admin"
   }
 }

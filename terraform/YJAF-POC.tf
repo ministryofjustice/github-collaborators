@@ -3,6 +3,6 @@ module "YJAF-POC" {
   repository = "YJAF-POC"
   collaborators = {
     oliviergaubert = "push"
-    gregi2n = "admin"
+    gregi2n        = "admin"
   }
 }
