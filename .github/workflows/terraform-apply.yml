@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+    paths: 'terraform/**'
 
 env:
   AWS_REGION:  "eu-west-2"
