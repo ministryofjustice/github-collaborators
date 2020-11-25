@@ -3,7 +3,7 @@ module "wmt-jmeter" {
   repository = "wmt-jmeter"
   collaborators = {
     andrew-js-wright = "admin"
-    Nathanials = "admin"
-    kevinfox1 = "admin"
+    Nathanials       = "admin"
+    kevinfox1        = "admin"
   }
 }

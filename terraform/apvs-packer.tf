@@ -3,6 +3,6 @@ module "apvs-packer" {
   repository = "apvs-packer"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }
