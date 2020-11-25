@@ -3,10 +3,10 @@ module "staff-device-dns-dhcp-admin" {
   repository = "staff-device-dns-dhcp-admin"
   collaborators = {
     Themitchell = "admin"
-    neilkidd = "admin"
+    neilkidd    = "admin"
     jivdhaliwal = "admin"
     CaitBarnard = "admin"
-    jbevan4 = "admin"
-    efuaakum = "admin"
+    jbevan4     = "admin"
+    efuaakum    = "admin"
   }
 }

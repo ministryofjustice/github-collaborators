@@ -3,6 +3,6 @@ module "wmt-data-migration" {
   repository = "wmt-data-migration"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }

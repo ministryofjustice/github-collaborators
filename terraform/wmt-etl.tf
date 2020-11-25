@@ -3,7 +3,7 @@ module "wmt-etl" {
   repository = "wmt-etl"
   collaborators = {
     kylethompson = "push"
-    Nathanials = "admin"
-    kevinfox1 = "admin"
+    Nathanials   = "admin"
+    kevinfox1    = "admin"
   }
 }
