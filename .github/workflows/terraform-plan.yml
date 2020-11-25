@@ -21,11 +21,4 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 0.13.5
-      - run: |
-          echo "::set-output name=plan_output::$(scripts/targeted-plan.sh)"
-        id: tfplan
-      - run: |
-          echo "Hello"
-          echo "message is: ${PLANOUTPUT}"
-        env:
-          PLANOUTPUT: ${{steps.tfplan.outputs.plan_output}}
+      - run: scripts/targeted-plan.sh
