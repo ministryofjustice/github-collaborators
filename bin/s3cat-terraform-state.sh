@@ -11,9 +11,9 @@ output=$(
     -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
     -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
     -e S3_BUCKET_NAME=${S3_BUCKET_NAME} \
-    -v /tmp:/app \
+    -v ${PWD}:/app \
     -w /app \
     -it amazon/aws-cli s3 cp ${source} foo
 )
-cat /tmp/foo
-rm /tmp/foo
+cat foo
+rm foo
