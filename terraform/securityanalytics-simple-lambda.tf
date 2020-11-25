@@ -2,7 +2,7 @@ module "securityanalytics-simple-lambda" {
   source     = "./modules/repository-collaborators"
   repository = "securityanalytics-simple-lambda"
   collaborators = {
-    blackmamo = "push"
+    blackmamo    = "push"
     progers-tech = "push"
   }
 }

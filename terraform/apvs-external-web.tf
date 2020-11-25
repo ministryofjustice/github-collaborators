@@ -3,6 +3,6 @@ module "apvs-external-web" {
   repository = "apvs-external-web"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }

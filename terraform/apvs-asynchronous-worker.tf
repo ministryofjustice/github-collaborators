@@ -3,6 +3,6 @@ module "apvs-asynchronous-worker" {
   repository = "apvs-asynchronous-worker"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }
