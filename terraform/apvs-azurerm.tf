@@ -3,6 +3,6 @@ module "apvs-azurerm" {
   repository = "apvs-azurerm"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }

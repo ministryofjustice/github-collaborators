@@ -2,7 +2,7 @@ module "securityanalytics-nmapscanner" {
   source     = "./modules/repository-collaborators"
   repository = "securityanalytics-nmapscanner"
   collaborators = {
-    blackmamo = "admin"
+    blackmamo    = "admin"
     progers-tech = "admin"
   }
 }

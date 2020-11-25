@@ -3,6 +3,6 @@ module "apvs-puppet" {
   repository = "apvs-puppet"
   collaborators = {
     Nathanials = "admin"
-    kevinfox1 = "admin"
+    kevinfox1  = "admin"
   }
 }

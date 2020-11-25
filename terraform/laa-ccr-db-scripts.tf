@@ -3,6 +3,6 @@ module "laa-ccr-db-scripts" {
   repository = "laa-ccr-db-scripts"
   collaborators = {
     abelsky = "push"
-    annaep = "push"
+    annaep  = "push"
   }
 }
