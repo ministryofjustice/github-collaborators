@@ -12,4 +12,5 @@ jobs:
   get-terraform-state:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@main
       - run: bin/compare-collaborators.rb
