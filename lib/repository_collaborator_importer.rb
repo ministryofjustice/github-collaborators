@@ -59,11 +59,20 @@ class RepositoryCollaboratorImporter
 module "<%= repo %>" {
   source     = "./modules/repository-collaborators"
   repository = "<%= repository %>"
-  collaborators = {
+  collaborators = [
   <% collaborators.each do |collab| %>
-  <%= collab[:login] %> = "<%= collab[:permission] %>"
+  {
+      github_user  = "<%= collab[:login] %>"
+      permission   = "<%= collab[:permission] %>"
+      name         = ""
+      email        = ""
+      org          = ""
+      added_by     = ""
+      reason       = ""
+      review_after = ""
+    },
   <% end %>
-}
+]
 }
 EOF
     renderer = ERB.new(template, 0, ">")
