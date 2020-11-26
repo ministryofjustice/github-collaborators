@@ -3,16 +3,14 @@ module "testing-external-collaborators" {
   repository = "testing-external-collaborators"
   collaborators = [
     {
-      github_user = "DangerDawson"
-      permission  = "push"
-      name        = "David Dawson"
-      email       = "not@real.email"
+      github_user  = "DangerDawson"
+      permission   = "push"
+      name         = ""
+      email        = ""
+      org          = ""
+      added_by     = ""
+      reason       = ""
+      review_after = ""
     },
-    {
-      github_user = "toonsend"
-      permission  = "triage"
-      name        = "David Townsend"
-      email       = "not@real.email"
-    }
   ]
 }
