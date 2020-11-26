@@ -7,7 +7,7 @@ class RepositoryCollaboratorImporter
 
     @org_ext_collabs = OrganizationExternalCollaborators.new(
       github_token: params.fetch(:github_token),
-      login: "ministryofjustice",
+      login: "ministryofjustice"
     )
   end
 
@@ -15,7 +15,7 @@ class RepositoryCollaboratorImporter
     repo_names.each do |repository|
       collaborators = external_collaborators(repository)
       if collaborators.any?
-        $stderr.puts "Importing collaborators for #{repository}"
+        warn "Importing collaborators for #{repository}"
         create_terraform_file(repository, collaborators)
         import_collaborators(repository, collaborators)
       end
@@ -45,9 +45,9 @@ class RepositoryCollaboratorImporter
 
     collaborators.each do |c|
       login = c.fetch(:login)
-      $stderr.puts "  importing collaborator #{login} for repository #{repository}"
-      cmd = %[cd #{terraform_dir}; #{terraform_executable} import module.#{repo}.github_repository_collaborator.collaborator[\\"#{login}\\"] #{repository}:#{login}]
-      $stderr.puts cmd
+      warn "  importing collaborator #{login} for repository #{repository}"
+      cmd = %(cd #{terraform_dir}; #{terraform_executable} import module.#{repo}.github_repository_collaborator.collaborator[\\"#{login}\\"] #{repository}:#{login})
+      warn cmd
       system(cmd)
     end
   end
@@ -55,31 +55,31 @@ class RepositoryCollaboratorImporter
   def render_template(repository, collaborators)
     repo = tf_safe(repository)
 
-    template = <<EOF
-module "<%= repo %>" {
-  source     = "./modules/repository-collaborators"
-  repository = "<%= repository %>"
-  collaborators = [
-  <% collaborators.each do |collab| %>
-  {
-      github_user  = "<%= collab[:login] %>"
-      permission   = "<%= collab[:permission] %>"
-      name         = ""  #  The name of the person behind github_user
-      email        = ""  #  Their email address
-      org          = ""  #  The organisation/entity they belong to
-      reason       = ""  #  Why is this person being granted access?
-      added_by     = ""  #  Who made the decision to grant them access? e.g. "Some Person <some.person@digital.justice.gov.uk>"
-      review_after = ""  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
-    },
-  <% end %>
-]
-}
-EOF
-    renderer = ERB.new(template, 0, ">")
+    template = <<~EOF
+      module "<%= repo %>" {
+        source     = "./modules/repository-collaborators"
+        repository = "<%= repository %>"
+        collaborators = [
+        <% collaborators.each do |collab| %>
+        {
+            github_user  = "<%= collab[:login] %>"
+            permission   = "<%= collab[:permission] %>"
+            name         = ""  #  The name of the person behind github_user
+            email        = ""  #  Their email address
+            org          = ""  #  The organisation/entity they belong to
+            reason       = ""  #  Why is this person being granted access?
+            added_by     = ""  #  Who made the decision to grant them access? e.g. "Some Person <some.person@digital.justice.gov.uk>"
+            review_after = ""  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+          },
+        <% end %>
+      ]
+      }
+    EOF
+    renderer = ERB.new(template, trim_mode: ">")
     renderer.result(binding)
   end
 
   def tf_safe(string)
-    string.gsub(".", "-")
+    string.tr(".", "-")
   end
 end
