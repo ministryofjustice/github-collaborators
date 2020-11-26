@@ -13,7 +13,7 @@ variable "collaborators" {
     org          = string   #  The organisation/entity they belong to
     reason       = string   #  Why is this person being granted access?
     added_by     = string   #  Who made the decision to grant them access? e.g. "Some Person <some.person@digital.justice.gov.uk>"
-    review_after = string   #  Date after which this grant should be reviewed/revoked
+    review_after = string   #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
   }))
   default = [
     {
