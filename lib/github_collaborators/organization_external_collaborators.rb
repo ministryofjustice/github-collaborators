@@ -35,10 +35,7 @@ class GithubCollaborators
     private
 
     def repositories
-      @repos ||= Repositories.new(
-        github_token: github_token,
-        login: "ministryofjustice"
-      ).current
+      @repos ||= Repositories.new(login: login).current
     end
 
     def external_collaborators(repo_name)

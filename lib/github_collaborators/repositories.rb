@@ -31,12 +31,12 @@ class GithubCollaborators
     end
   end
 
-  class Repositories < GithubGraphQlClient
-    attr_reader :login
+  class Repositories
+    attr_reader :graphql, :login
 
     def initialize(params)
       @login = params.fetch(:login)
-      super(params)
+      @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
     end
 
     def list
@@ -67,7 +67,7 @@ class GithubCollaborators
     end
 
     def get_repos(end_cursor = nil)
-      json = run_query(repositories_query(end_cursor))
+      json = graphql.run_query(repositories_query(end_cursor))
       JSON.parse(json).dig("data", "organization", "repositories")
     end
 
