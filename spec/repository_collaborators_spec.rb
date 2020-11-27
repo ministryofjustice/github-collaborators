@@ -1,9 +1,11 @@
 describe GithubCollaborators::RepositoryCollaborators do
-  let(:params) { {
-    login: "myorg",
-    repository: "myrepo",
-    graphql: graphql
-  } }
+  let(:params) {
+    {
+      login: "myorg",
+      repository: "myrepo",
+      graphql: graphql
+    }
+  }
 
   let(:json) { File.read("spec/fixtures/repo-collabs.json") }
   let(:collaborators) { # Defined in spec/fixtures/repo-collabs.json
@@ -20,4 +22,3 @@ describe GithubCollaborators::RepositoryCollaborators do
     ).to eq(collaborators)
   end
 end
-

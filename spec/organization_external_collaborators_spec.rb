@@ -1,7 +1,9 @@
 describe GithubCollaborators::OrganizationExternalCollaborators do
-  let(:params) { {
-    login: "myorg"
-  } }
+  let(:params) {
+    {
+      login: "myorg"
+    }
+  }
 
   let(:org_ext_collabs) { described_class.new(params) }
 
@@ -14,7 +16,7 @@ describe GithubCollaborators::OrganizationExternalCollaborators do
   let(:alice) { double(GithubCollaborators::Collaborator, login: "alice", url: "alice_url", permission: "admin") }
 
   let(:alice_collab) {
-    { login: "alice", login_url: "alice_url", permission: "admin" }
+    {login: "alice", login_url: "alice_url", permission: "admin"}
   }
 
   let(:repo_collabs) { double(GithubCollaborators::RepositoryCollaborators, list: [alice]) }
@@ -25,8 +27,7 @@ describe GithubCollaborators::OrganizationExternalCollaborators do
   let(:bbb_collab) {
     alice_collab.merge(repository: "bbb", repo_url: "bbb_url")
   }
-  let(:ext_collabs) { [ aaa_collab, bbb_collab ] }
-
+  let(:ext_collabs) { [aaa_collab, bbb_collab] }
 
   before do
     allow(GithubCollaborators::Repositories).to receive(:new).and_return(repositories)
@@ -42,5 +43,3 @@ describe GithubCollaborators::OrganizationExternalCollaborators do
     expect(org_ext_collabs.for_repository("aaa")).to eq([alice_collab])
   end
 end
-
-

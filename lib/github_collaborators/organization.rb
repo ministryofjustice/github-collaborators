@@ -43,7 +43,7 @@ class GithubCollaborators
 
       loop do
         data = get_members(end_cursor)
-        members = members + data.fetch("edges").map { |d| Member.new(d) }
+        members += data.fetch("edges").map { |d| Member.new(d) }
         break unless data.dig("pageInfo", "hasNextPage")
         end_cursor = data.dig("pageInfo", "endCursor")
       end
@@ -57,7 +57,7 @@ class GithubCollaborators
     end
 
     def members_query(end_cursor)
-      after = end_cursor.nil? ? "" : %[, after: "#{end_cursor}"]
+      after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
       %[
     {
       organization(login: "#{login}") {

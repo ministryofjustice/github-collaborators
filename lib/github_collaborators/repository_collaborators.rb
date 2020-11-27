@@ -37,7 +37,7 @@ class GithubCollaborators
       "triage" => "triage",
       "write" => "push",
       "maintain" => "maintain",
-      "admin" => "admin",
+      "admin" => "admin"
     }
 
     def initialize(data)

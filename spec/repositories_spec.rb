@@ -1,8 +1,10 @@
 describe GithubCollaborators::Repositories do
-  let(:params) { {
-    login: "myorg",
-    graphql: graphql
-  } }
+  let(:params) {
+    {
+      login: "myorg",
+      graphql: graphql
+    }
+  }
 
   let(:json) { File.read("spec/fixtures/repositories.json") }
   let(:repositories) { # Defined in spec/fixtures/repositories.json
