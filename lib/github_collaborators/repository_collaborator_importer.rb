@@ -5,11 +5,7 @@ class GithubCollaborators
     def initialize(params)
       @terraform_dir = params.fetch(:terraform_dir)
       @terraform_executable = params.fetch(:terraform_executable)
-
-      @org_ext_collabs = OrganizationExternalCollaborators.new(
-        github_token: params.fetch(:github_token),
-        login: "ministryofjustice"
-      )
+      @org_ext_collabs = OrganizationExternalCollaborators.new(login: "ministryofjustice")
     end
 
     def import(repo_names)

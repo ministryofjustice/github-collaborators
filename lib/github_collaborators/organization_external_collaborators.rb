@@ -1,10 +1,9 @@
 class GithubCollaborators
-  class OrganizationExternalCollaborators < GithubGraphQlClient
+  class OrganizationExternalCollaborators
     attr_reader :login
 
     def initialize(params)
       @login = params.fetch(:login)
-      super(params)
     end
 
     def list
