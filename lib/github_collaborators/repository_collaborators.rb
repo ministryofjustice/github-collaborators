@@ -76,19 +76,19 @@ class GithubCollaborators
     end
   end
 
-  class RepositoryCollaborators < GithubGraphQlClient
-    attr_reader :repository, :owner
+  class RepositoryCollaborators
+    attr_reader :graphql, :repository, :owner
 
     MINISTRYOFJUSTICE = "ministryofjustice"
 
     def initialize(params)
       @owner = params.fetch(:owner, MINISTRYOFJUSTICE)
       @repository = params.fetch(:repository)
-      super(params)
+      @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
     end
 
     def list
-      JSON.parse(run_query(collaborators_query))
+      JSON.parse(graphql.run_query(collaborators_query))
         .dig("data", "organization", "repository", "collaborators", "edges")
         .to_a
         .map { |hash| Collaborator.new(hash) }

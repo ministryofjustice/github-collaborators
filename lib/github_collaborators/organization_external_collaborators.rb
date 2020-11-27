@@ -45,7 +45,6 @@ class GithubCollaborators
 
     def collaborators(repo_name)
       RepositoryCollaborators.new(
-        github_token: github_token,
         owner: login,
         repository: repo_name
       ).list
