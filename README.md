@@ -4,7 +4,7 @@ Manage MoJ GitHub external collaborators via code.
 
 The terraform code manages external collaborators on our GitHub repositories.
 
-The intention is that all external collaborator relationships will be defined here, with the rationale for the collaborator(s) specified in the commit messages which add/remove them.
+The intention is that all external collaborator relationships will be defined here, along with the rationale for the collaboration.
 
 Collaborators who have been added to any of our repositories manually (i.e. they are not specified in code in this repository) will be automatically removed (nightly?).
 
@@ -14,37 +14,58 @@ Collaborators who have been added to any of our repositories manually (i.e. they
 * Define external collaborators in terraform code
 * Import pre-existing external collaborators from individual github repositories, create the corresponding terraform code and import into terraform state
 
-## Managing collaborators
+## Defining collaborators
 
-Before you can manage repository collaborators, you need to add a terraform file corresponding to the repository.
+To define collaborators on a repository, first add a terraform file corresponding to the repository (unless there already is such a file).
 
-The filename should be `<repository name>.tf` with the following contents:
+The filename should be `<repository-name>.tf` where `repository-name` is the repository name **with any `.` characters replaced by `-`**
+
+The file should contain:
 
 ```
-module "<repository name>" {
+module "<repository-name>" {
   source     = "./modules/repository-collaborators"
-  repository = "<repository name>"
-  collaborators = {
-  }
+  repository = "<repository.name>"
+  collaborators = [
+  ]
 }
 ```
 
-To add collaborators to the repository, define them inside the `collaborators` block like this:
+> The value of `repository` inside the file should be the exact name of the repository, with no substitutions. i.e. if the repository is called `ministryofjustice/foo.bar` then put `repository = "foo.bar"`
+
+To add collaborators to the repository, define each of them inside the `collaborators` block, with the following information inside the quotation marks:
 
 ```
-    <github username> = "push" # pull|push|maintain|triage|admin
+    {
+      github_user  = "<github username>"
+      permission   = "push"  #  pull|push|maintain|triage|admin
+      name         = ""  #  The name of the person behind github_user
+      email        = ""  #  Their email address
+      org          = ""  #  The organisation/entity they belong to
+      reason       = ""  #  Why is this person being granted access?
+      added_by     = ""  #  Who made the decision to grant them access? e.g. "Some Person <some.person@digital.justice.gov.uk>"
+      review_after = ""  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
 ```
 
 For example:
 
 ```
-  collaborators = {
-    digitalronin = "admin"
-    l33thax0r    = "triage"
-  }
+  collaborators = [
+    {
+      github_user  = "digitalronin"
+      permission   = "admin"
+      name         = "David Salgado"
+      email        = "david@acme.com"
+      org          = "Acme. Corp."
+      reason       = "Acme are building some stuff for us"
+      added_by     = "Steve Marshall <steve@fake-email.gov.uk>"
+      review_after = "2021-11-26"
+    },
+  ]
 ```
 
-You can, and should, add comments (prefixed with `#`) to these files describing who the collaborators are, and why they need access to the repository.
+You can add comments (prefixed with `#` on every line) to these files to provide additional context/information.
 
 ### Import existing collaborators
 

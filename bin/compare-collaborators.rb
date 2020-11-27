@@ -27,6 +27,7 @@ end
 
 # Get all github collaborators defined in our terraform state, and return a
 # list of "<repo>,<username>" strings
+
 def repo_collaborators_from_terraform
   json = `bin/s3cat-terraform-state.sh`
   terraform_state = JSON.parse(json)
