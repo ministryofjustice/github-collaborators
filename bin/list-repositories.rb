@@ -2,7 +2,7 @@
 
 require_relative "../lib/github_collaborators"
 
-repositories = Repositories.new(
+repositories = GithubCollaborators::Repositories.new(
   github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"),
   login: "ministryofjustice",
 ).current

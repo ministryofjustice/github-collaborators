@@ -2,7 +2,7 @@
 
 require_relative "../lib/github_collaborators"
 
-list = OrganizationExternalCollaborators.new(
+list = GithubCollaborators::OrganizationExternalCollaborators.new(
   github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"),
   login: "ministryofjustice"
 ).list
