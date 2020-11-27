@@ -19,12 +19,12 @@ class GithubCollaborators
     end
   end
 
-  class Organization < GithubGraphQlClient
-    attr_reader :login
+  class Organization
+    attr_reader :graphql, :login
 
     def initialize(params)
       @login = params.fetch(:login)
-      super(params)
+      @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
     end
 
     def members
@@ -52,7 +52,7 @@ class GithubCollaborators
     end
 
     def get_members(end_cursor = nil)
-      json = run_query(members_query(end_cursor))
+      json = graphql.run_query(members_query(end_cursor))
       JSON.parse(json).dig("data", "organization", "membersWithRole")
     end
 
