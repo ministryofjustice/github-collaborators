@@ -3,7 +3,11 @@
 # Fetch the remote terraform.tfstate file and dump it to stdout This
 # will enable a ruby script to parse and inspect the JSON content.
 
+set -euo pipefail
+
 source="s3://${S3_BUCKET_NAME}/terraform.tfstate"
+
+TEMPFILE="tempfile"
 
 output=$(
   docker run --rm \
@@ -13,7 +17,7 @@ output=$(
     -e S3_BUCKET_NAME=${S3_BUCKET_NAME} \
     -v ${PWD}:/app \
     -w /app \
-    amazon/aws-cli s3 cp ${source} foo
+    amazon/aws-cli s3 cp ${source} ${TEMPFILE}
 )
-cat foo
-rm foo
+cat ${TEMPFILE}
+rm ${TEMPFILE}
