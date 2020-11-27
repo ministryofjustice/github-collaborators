@@ -58,7 +58,7 @@ class GithubCollaborators
 
       loop do
         data = get_repos(end_cursor)
-        repos = repos + data.fetch("nodes").map { |d| Repository.new(d) }
+        repos += data.fetch("nodes").map { |d| Repository.new(d) }
         break unless data.dig("pageInfo", "hasNextPage")
         end_cursor = data.dig("pageInfo", "endCursor")
       end
@@ -72,7 +72,7 @@ class GithubCollaborators
     end
 
     def repositories_query(end_cursor)
-      after = end_cursor.nil? ? "" : %[, after: "#{end_cursor}"]
+      after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
       %[
     {
       organization(login: "#{login}") {

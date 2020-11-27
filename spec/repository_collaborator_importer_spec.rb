@@ -1,18 +1,22 @@
 describe GithubCollaborators::RepositoryCollaboratorImporter do
   let(:executor) { double(Executor, run: "") }
   let(:logger) { double(Logger, warn: nil) }
-  let(:collabs) { [
-    { login: "digitalronin", permission: "admin" }
-  ] }
+  let(:collabs) {
+    [
+      {login: "digitalronin", permission: "admin"}
+    ]
+  }
   let(:oec) { double(GithubCollaborators::OrganizationExternalCollaborators, for_repository: collabs) }
 
-  let(:params) { {
-    terraform_dir: "spec/tmp",
-    terraform_executable: "/bin/terraform",
-    org_ext_collabs: oec,
-    executor: executor,
-    logger: logger,
-  } }
+  let(:params) {
+    {
+      terraform_dir: "spec/tmp",
+      terraform_executable: "/bin/terraform",
+      org_ext_collabs: oec,
+      executor: executor,
+      logger: logger
+    }
+  }
 
   let(:rci) { described_class.new(params) }
 
@@ -33,8 +37,8 @@ describe GithubCollaborators::RepositoryCollaboratorImporter do
   end
 
   it "runs terraform import" do
-    init = %[cd spec/tmp; /bin/terraform init]
-    import = %[cd spec/tmp; /bin/terraform import module.myrepo.github_repository_collaborator.collaborator[\\"digitalronin\\"] myrepo:digitalronin]
+    init = %(cd spec/tmp; /bin/terraform init)
+    import = %(cd spec/tmp; /bin/terraform import module.myrepo.github_repository_collaborator.collaborator[\\"digitalronin\\"] myrepo:digitalronin)
     expect(executor).to receive(:run).with(init)
     expect(executor).to receive(:run).with(import)
 

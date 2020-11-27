@@ -7,18 +7,17 @@ class GithubCollaborators
     end
 
     def list
-      @list ||= repositories.inject([]) do |arr, repo|
+      @list ||= repositories.each_with_object([]) { |repo, arr|
         external_collaborators(repo.name).each do |collab|
           arr.push(
             repository: repo.name,
             repo_url: repo.url,
             login: collab.login,
             login_url: collab.url,
-            permission: collab.permission,
+            permission: collab.permission
           )
         end
-        arr
-      end
+      }
     end
 
     def for_repository(repo_name)
@@ -26,7 +25,7 @@ class GithubCollaborators
         {
           login: collab.login,
           login_url: collab.url,
-          permission: collab.permission,
+          permission: collab.permission
         }
       end
     end
