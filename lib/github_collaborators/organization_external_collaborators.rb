@@ -55,10 +55,7 @@ class GithubCollaborators
     end
 
     def organization
-      @org ||= Organization.new(
-        github_token: github_token,
-        login: login
-      )
+      @org ||= Organization.new(login: login)
     end
   end
 end
