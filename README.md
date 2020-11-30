@@ -6,17 +6,17 @@ The terraform code manages external collaborators on our GitHub repositories.
 
 The intention is that all external collaborator relationships will be defined here, along with the rationale for the collaboration.
 
-Collaborators who have been added to any of our repositories manually (i.e. they are not specified in code in this repository) will be automatically removed (nightly?).
+> Collaborators who are not defined in the terraform code here in sufficient detail (i.e. so that we know why they have access to a repository, who gave it to them, and when it should be reviewed) will be automatically removed.
 
 ## Functions
 
-* List all external collaborators with access to Ministry of Justice github repositories, and post the data to the [Operations Engineering Reports] web application
 * Define external collaborators in terraform code
+* List all external collaborators with access to Ministry of Justice github repositories, where there is insufficient detail defined in the terraform code here, and post the data to the [Operations Engineering Reports] web application
 * Import pre-existing external collaborators from individual github repositories, create the corresponding terraform code and import into terraform state
 
 ## Defining collaborators
 
-To define collaborators on a repository, first add a terraform file corresponding to the repository (unless there already is such a file).
+To define collaborators on a repository, first add a terraform file corresponding to the repository (unless there already is one).
 
 The filename should be `<repository-name>.tf` where `repository-name` is the repository name **with any `.` characters replaced by `-`**
 
@@ -76,6 +76,8 @@ bin/import-repository-collaborators.rb
 ```
 
 See the usage details below.
+
+> This has already been done for all repository collaborators which existed as at 2020-11-24
 
 If you have manually added an external collaborator to a repository which is already defined in this repository, you should edit the terraform file as usual, but you will also need to import the existing collaborator into the terraform state like this:
 
