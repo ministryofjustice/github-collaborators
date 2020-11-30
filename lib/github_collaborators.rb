@@ -12,3 +12,9 @@ require_relative "./github_collaborators/organization_external_collaborators"
 require_relative "./github_collaborators/repository_collaborator_importer"
 
 PAGE_SIZE = 100
+
+class GithubCollaborators
+  def self.tf_safe(string)
+    string.tr(".", "-")
+  end
+end

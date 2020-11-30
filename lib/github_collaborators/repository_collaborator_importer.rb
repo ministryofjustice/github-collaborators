@@ -35,11 +35,11 @@ class GithubCollaborators
     end
 
     def output_file(repository)
-      "#{terraform_dir}/#{tf_safe(repository)}.tf"
+      "#{terraform_dir}/#{GithubCollaborators.tf_safe(repository)}.tf"
     end
 
     def import_collaborators(repository, collaborators)
-      repo = tf_safe(repository)
+      repo = GithubCollaborators.tf_safe(repository)
       @executor.run("cd #{terraform_dir}; #{terraform_executable} init")
 
       collaborators.each do |c|
@@ -52,7 +52,7 @@ class GithubCollaborators
     end
 
     def render_template(repository, collaborators)
-      repo = tf_safe(repository)
+      repo = GithubCollaborators.tf_safe(repository)
 
       template = <<~EOF
         module "<%= repo %>" {
@@ -76,10 +76,6 @@ class GithubCollaborators
       EOF
       renderer = ERB.new(template, trim_mode: ">")
       renderer.result(binding)
-    end
-
-    def tf_safe(string)
-      string.tr(".", "-")
     end
   end
 end
