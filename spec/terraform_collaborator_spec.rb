@@ -1,4 +1,6 @@
 describe GithubCollaborators::TerraformCollaborator do
+  let(:review_date) { (Date.today + 30).strftime("%Y-%m-%d") }
+
   let(:matthewtansini) {
     <<EOF
     {
@@ -9,7 +11,7 @@ describe GithubCollaborators::TerraformCollaborator do
       org          = "MoJ"
       reason       = "A really good reason"
       added_by     = "David Salgado <david.salgado@digital.justice.gov.uk>"
-      review_after = "2021-03-01"
+      review_after = "#{review_date}"
     },
 EOF
   }
@@ -73,7 +75,15 @@ EOF
       expect(tc.org).to eq("MoJ")
       expect(tc.reason).to eq("A really good reason")
       expect(tc.added_by).to eq("David Salgado <david.salgado@digital.justice.gov.uk>")
-      expect(tc.review_after).to eq(Date.parse("2021-03-01"))
+      expect(tc.review_after).to eq(Date.parse(review_date))
+    end
+
+    it "has green status" do
+      expect(tc.status).to eq("green")
+    end
+
+    it "has no issues" do
+      expect(tc.issues).to eq([])
     end
   end
 
@@ -90,12 +100,33 @@ EOF
       expect(tc.added_by).to be_nil
       expect(tc.review_after).to be_nil
     end
+
+    it "has red status" do
+      expect(tc.status).to eq("red")
+    end
+
+    it "has issues" do
+      expected = [
+        "Collaborator name is missing",
+        "Collaborator email is missing",
+        "Collaborator organisation is missing",
+        "Collaborator reason is missing",
+        "Person who added this collaborator is missing",
+        "Collaboration review date is missing",
+      ].sort
+
+      expect(tc.issues.sort).to eq(expected)
+    end
   end
 
   context "when no such collaborator" do
     let(:login) { "not-a-collaborator" }
 
     specify { expect(tc.exists?).to be(false) }
+
+    it "has red status" do
+      expect(tc.status).to eq("red")
+    end
   end
 
   context "when date is malformed" do
@@ -104,8 +135,10 @@ EOF
     it "returns nil" do
       expect(tc.review_after).to be_nil
     end
-  end
 
-  # TODO: collaborator is valid or not.....
+    it "has red status" do
+      expect(tc.status).to eq("red")
+    end
+  end
 end
 

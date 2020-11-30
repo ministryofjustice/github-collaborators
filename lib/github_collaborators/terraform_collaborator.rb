@@ -11,6 +11,19 @@ class GithubCollaborators
 
     TERRAFORM_DIR = "terraform"
 
+    GREEN = "green"
+    AMBER = "amber"
+    RED = "red"
+
+    REQUIRED_ATTRIBUTES = {
+      "name" => "Collaborator name is missing",
+      "email" => "Collaborator email is missing",
+      "org" => "Collaborator organisation is missing",
+      "reason" => "Collaborator reason is missing",
+      "added_by" => "Person who added this collaborator is missing",
+      "review_after" => "Collaboration review date is missing",
+    }
+
     def initialize(params)
       @repository = params.fetch(:repository)
       @login = params.fetch(:login)
@@ -21,6 +34,14 @@ class GithubCollaborators
 
     def exists?
       collaborator_source != nil
+    end
+
+    def status
+      issues.any? ? RED : GREEN
+    end
+
+    def issues
+      REQUIRED_ATTRIBUTES.map { |attr, msg| msg if get_value(attr).nil? }.compact
     end
 
     def name
