@@ -42,6 +42,8 @@ class GithubCollaborators
     end
 
     def issues
+      return ["Collaborator not defined in terraform"] unless exists?
+
       rtn = REQUIRED_ATTRIBUTES.map { |attr, msg| msg if get_value(attr).nil? }.compact
       if review_after != nil
         rtn << "Review after date has passed" if review_after < Date.today
@@ -89,12 +91,15 @@ class GithubCollaborators
     private
 
     def fetch_terraform_source
-      filename = "#{GithubCollaborators.tf_safe(repository)}.tf"
-      File.read(File.join(@terraform_dir, filename))
+      source_file = "#{GithubCollaborators.tf_safe(repository)}.tf"
+      filename = File.join(@terraform_dir, source_file)
+      FileTest.exists?(filename) ? File.read(filename) : nil
     end
 
     # Extract the lines of the terraform source which define this specific collaborator
     def collaborator_source
+      return nil if @tfsource.nil?
+
       @str ||= begin
                  # extract all the "collaborators" lines from the terraform source
                  lines = @tfsource.split("\n").inject([]) { |arr, line| arr << line if (line =~ / collaborators =/) .. (line =~ /]/); arr }

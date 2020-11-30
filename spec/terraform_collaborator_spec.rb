@@ -64,6 +64,21 @@ EOF
 
   subject(:tc) { described_class.new(params) }
 
+  context "when there is no terraform source file" do
+    let(:params) { {
+      repository: "no-such-sourc-code-file-exists",
+      login: "whatever",
+    } }
+
+    it "has fail status" do
+      expect(tc.status).to eq("fail")
+    end
+
+    it "has an issue" do
+      expect(tc.issues).to eq(["Collaborator not defined in terraform"])
+    end
+  end
+
   context "when review date is too far ahead" do
     let(:login) { "matthewtansini" }
     let(:review_date) { (Date.today + 500).strftime("%Y-%m-%d") }
@@ -171,6 +186,10 @@ EOF
 
     it "has fail status" do
       expect(tc.status).to eq("fail")
+    end
+
+    it "has an issue" do
+      expect(tc.issues).to eq(["Collaborator not defined in terraform"])
     end
   end
 
