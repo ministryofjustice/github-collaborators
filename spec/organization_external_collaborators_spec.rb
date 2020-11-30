@@ -15,24 +15,28 @@ describe GithubCollaborators::OrganizationExternalCollaborators do
 
   let(:alice) { double(GithubCollaborators::Collaborator, login: "alice", url: "alice_url", permission: "admin") }
 
-  let(:alice_collab) {
-    {login: "alice", login_url: "alice_url", permission: "admin"}
-  }
+  let(:alice_hash) { {login: "alice", login_url: "alice_url", permission: "admin"} }
+  let(:alice_collab) { double(GithubCollaborators::TerraformCollaborator, to_hash: alice_hash, status: "fail") }
 
   let(:repo_collabs) { double(GithubCollaborators::RepositoryCollaborators, list: [alice]) }
 
   let(:aaa_collab) {
     alice_collab.merge(repository: "aaa", repo_url: "aaa_url")
   }
-  let(:bbb_collab) {
-    alice_collab.merge(repository: "bbb", repo_url: "bbb_url")
+
+  let(:ext_collabs) {
+    [
+      alice_hash.merge(repo_url: "aaa_url"),
+      alice_hash.merge(repo_url: "bbb_url")
+    ]
   }
-  let(:ext_collabs) { [aaa_collab, bbb_collab] }
 
   before do
     allow(GithubCollaborators::Repositories).to receive(:new).and_return(repositories)
     allow(GithubCollaborators::RepositoryCollaborators).to receive(:new).and_return(repo_collabs)
     allow(GithubCollaborators::Organization).to receive(:new).and_return(org)
+    allow(GithubCollaborators::TerraformCollaborator).to receive(:new).and_return(alice_collab)
+    allow(GithubCollaborators::TerraformCollaborator).to receive(:new).and_return(alice_collab)
   end
 
   it "lists external collaborators" do
@@ -40,6 +44,6 @@ describe GithubCollaborators::OrganizationExternalCollaborators do
   end
 
   it "lists external collaborators for a repo" do
-    expect(org_ext_collabs.for_repository("aaa")).to eq([alice_collab])
+    expect(org_ext_collabs.for_repository("aaa")).to eq([alice_hash])
   end
 end
