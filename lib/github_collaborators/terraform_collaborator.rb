@@ -10,6 +10,7 @@ class GithubCollaborators
     attr_reader :repository, :login
 
     TERRAFORM_DIR = "terraform"
+    GITHUB_URL = "https://github.com/ministryofjustice/operations-engineering-github-collaborators/blob/main/terraform"
 
     PASS = "pass"
     FAIL = "fail"
@@ -58,6 +59,7 @@ class GithubCollaborators
         "login" => login,
         "status" => status,
         "issues" => issues,
+        "href" => href,
       }
     end
 
@@ -86,6 +88,11 @@ class GithubCollaborators
       str.nil? ? nil : Date.parse(str)
     rescue Date::Error
       nil
+    end
+
+    def href
+      filename = fetch_terraform_source.nil? ? "" : "#{GithubCollaborators.tf_safe(repository)}.tf"
+      [ GITHUB_URL, filename ].join("/")
     end
 
     private

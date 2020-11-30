@@ -77,6 +77,10 @@ EOF
     it "has an issue" do
       expect(tc.issues).to eq(["Collaborator not defined in terraform"])
     end
+
+    it "links to the terraform directory" do
+      expect(tc.href).to eq("https://github.com/ministryofjustice/operations-engineering-github-collaborators/blob/main/terraform/")
+    end
   end
 
   context "when review date is too far ahead" do
@@ -164,6 +168,7 @@ EOF
         "repository" => "acronyms",
         "login" => "DangerDawson",
         "status" => "fail",
+        "href" => "https://github.com/ministryofjustice/operations-engineering-github-collaborators/blob/main/terraform/acronyms.tf",
         "issues" => [
           "Collaborator name is missing",
           "Collaborator email is missing",
@@ -176,7 +181,6 @@ EOF
 
       expect(tc.to_hash).to eq(expected)
     end
-
   end
 
   context "when no such collaborator" do
