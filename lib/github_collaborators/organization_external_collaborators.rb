@@ -13,13 +13,16 @@ class GithubCollaborators
             repository: repo.name,
             login: collab.login,
           )
-          arr.push(
-            tc.to_hash.merge(
-              repo_url: repo.url,
-              login_url: collab.url,
-              permission: collab.permission
+          if tc.status == TerraformCollaborator::FAIL
+            arr.push(
+              tc.to_hash.merge(
+                repo_url: repo.url,
+                login_url: collab.url,
+                permission: collab.permission
+              )
             )
-          )
+          end
+          arr
         end
       }
     end

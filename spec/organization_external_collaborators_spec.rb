@@ -16,7 +16,7 @@ describe GithubCollaborators::OrganizationExternalCollaborators do
   let(:alice) { double(GithubCollaborators::Collaborator, login: "alice", url: "alice_url", permission: "admin") }
 
   let(:alice_hash) { { login: "alice", login_url: "alice_url", permission: "admin" } }
-  let(:alice_collab) { double(GithubCollaborators::TerraformCollaborator, to_hash: alice_hash) }
+  let(:alice_collab) { double(GithubCollaborators::TerraformCollaborator, to_hash: alice_hash, status: "fail") }
 
   let(:repo_collabs) { double(GithubCollaborators::RepositoryCollaborators, list: [alice]) }
 
