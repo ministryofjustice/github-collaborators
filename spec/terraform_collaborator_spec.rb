@@ -143,6 +143,25 @@ EOF
 
       expect(tc.issues.sort).to eq(expected)
     end
+
+    it "renders as a hash" do
+      expected = {
+        "repository" => "acronyms",
+        "login" => "DangerDawson",
+        "status" => "fail",
+        "issues" => [
+          "Collaborator name is missing",
+          "Collaborator email is missing",
+          "Collaborator organisation is missing",
+          "Collaborator reason is missing",
+          "Person who added this collaborator is missing",
+          "Collaboration review date is missing",
+        ]
+      }
+
+      expect(tc.to_hash).to eq(expected)
+    end
+
   end
 
   context "when no such collaborator" do

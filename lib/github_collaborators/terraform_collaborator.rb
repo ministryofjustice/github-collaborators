@@ -50,6 +50,15 @@ class GithubCollaborators
       rtn
     end
 
+    def to_hash
+      {
+        "repository" => repository,
+        "login" => login,
+        "status" => status,
+        "issues" => issues,
+      }
+    end
+
     def name
       get_value("name")
     end
