@@ -1,6 +1,6 @@
-module "myrepo" {
+module "my-repo" {
   source     = "./modules/repository-collaborators"
-  repository = "myrepo"
+  repository = "my.repo"
   collaborators = [
     {
       github_user  = "digitalronin"
