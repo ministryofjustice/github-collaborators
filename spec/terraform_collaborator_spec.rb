@@ -41,34 +41,38 @@ EOF
   }
 
   let(:tfsource) {
-    <<EOF
-module "acronyms" {
-  source     = "./modules/repository-collaborators"
-  repository = "acronyms"
-  collaborators = [
-#{matthewtansini}
-#{detailsmissing}
-#{malformed_date}
-  ]
-}
-EOF
+    <<~EOF
+      module "acronyms" {
+        source     = "./modules/repository-collaborators"
+        repository = "acronyms"
+        collaborators = [
+      #{matthewtansini}
+      #{detailsmissing}
+      #{malformed_date}
+        ]
+      }
+    EOF
   }
 
   let(:repository) { "acronyms" }
 
-  let(:params) { {
-    repository: repository,
-    login: login,
-    tfsource: tfsource,
-  } }
+  let(:params) {
+    {
+      repository: repository,
+      login: login,
+      tfsource: tfsource
+    }
+  }
 
   subject(:tc) { described_class.new(params) }
 
   context "when there is no terraform source file" do
-    let(:params) { {
-      repository: "no-such-sourc-code-file-exists",
-      login: "whatever",
-    } }
+    let(:params) {
+      {
+        repository: "no-such-sourc-code-file-exists",
+        login: "whatever"
+      }
+    }
 
     it "has fail status" do
       expect(tc.status).to eq("fail")
@@ -157,7 +161,7 @@ EOF
         "Collaborator organisation is missing",
         "Collaborator reason is missing",
         "Person who added this collaborator is missing",
-        "Collaboration review date is missing",
+        "Collaboration review date is missing"
       ].sort
 
       expect(tc.issues.sort).to eq(expected)
@@ -175,7 +179,7 @@ EOF
           "Collaborator organisation is missing",
           "Collaborator reason is missing",
           "Person who added this collaborator is missing",
-          "Collaboration review date is missing",
+          "Collaboration review date is missing"
         ]
       }
 
@@ -209,4 +213,3 @@ EOF
     end
   end
 end
-

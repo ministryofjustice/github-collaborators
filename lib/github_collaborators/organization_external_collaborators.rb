@@ -11,7 +11,7 @@ class GithubCollaborators
         external_collaborators(repo.name).each do |collab|
           tc = TerraformCollaborator.new(
             repository: repo.name,
-            login: collab.login,
+            login: collab.login
           )
           if tc.status == TerraformCollaborator::FAIL
             arr.push(

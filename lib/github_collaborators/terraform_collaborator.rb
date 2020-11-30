@@ -21,7 +21,7 @@ class GithubCollaborators
       "org" => "Collaborator organisation is missing",
       "reason" => "Collaborator reason is missing",
       "added_by" => "Person who added this collaborator is missing",
-      "review_after" => "Collaboration review date is missing",
+      "review_after" => "Collaboration review date is missing"
     }
 
     YEAR = 365
@@ -46,7 +46,7 @@ class GithubCollaborators
       return ["Collaborator not defined in terraform"] unless exists?
 
       rtn = REQUIRED_ATTRIBUTES.map { |attr, msg| msg if get_value(attr).nil? }.compact
-      if review_after != nil
+      unless review_after.nil?
         rtn << "Review after date has passed" if review_after < Date.today
         rtn << "Review after date is more than a year in the future" if review_after > (Date.today + YEAR)
       end
@@ -59,7 +59,7 @@ class GithubCollaborators
         "login" => login,
         "status" => status,
         "issues" => issues,
-        "href" => href,
+        "href" => href
       }
     end
 
@@ -92,7 +92,7 @@ class GithubCollaborators
 
     def href
       filename = fetch_terraform_source.nil? ? "" : "#{GithubCollaborators.tf_safe(repository)}.tf"
-      [ GITHUB_URL, filename ].join("/")
+      [GITHUB_URL, filename].join("/")
     end
 
     private
@@ -108,22 +108,20 @@ class GithubCollaborators
       return nil if @tfsource.nil?
 
       @str ||= begin
-                 # extract all the "collaborators" lines from the terraform source
-                 lines = @tfsource.split("\n").inject([]) { |arr, line| arr << line if (line =~ / collaborators =/) .. (line =~ /]/); arr }
+        # extract all the "collaborators" lines from the terraform source
+        lines = @tfsource.split("\n").each_with_object([]) { |line, arr| arr << line if (line =~ / collaborators =/) .. (line =~ /]/); }
 
-                 # break into individual collaborator string chunks (plus some trailing junk)
-                 collabs = lines.join("\n").split("}")
+        # break into individual collaborator string chunks (plus some trailing junk)
+        collabs = lines.join("\n").split("}")
 
-                 # pull out the block (string) with the collaborator we want
-                 collabs.grep(/github_user.*#{login}/).first
-               end
+        # pull out the block (string) with the collaborator we want
+        collabs.grep(/github_user.*#{login}/).first
+      end
     end
 
     def get_value(val)
       if m = /#{val}.*"([^"]+)"$/.match(collaborator_source)
         m[1]
-      else
-        nil
       end
     end
   end
