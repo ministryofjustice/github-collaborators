@@ -64,6 +64,32 @@ EOF
 
   subject(:tc) { described_class.new(params) }
 
+  context "when review date is too far ahead" do
+    let(:login) { "matthewtansini" }
+    let(:review_date) { (Date.today + 500).strftime("%Y-%m-%d") }
+
+    it "has fail status" do
+      expect(tc.status).to eq("fail")
+    end
+
+    it "has an issue" do
+      expect(tc.issues).to eq(["Review after date is more than a year in the future"])
+    end
+  end
+
+  context "when review date has passed" do
+    let(:login) { "matthewtansini" }
+    let(:review_date) { (Date.today - 10).strftime("%Y-%m-%d") }
+
+    it "has fail status" do
+      expect(tc.status).to eq("fail")
+    end
+
+    it "has an issue" do
+      expect(tc.issues).to eq(["Review after date has passed"])
+    end
+  end
+
   context "when all details are present" do
     let(:login) { "matthewtansini" }
 
@@ -78,8 +104,8 @@ EOF
       expect(tc.review_after).to eq(Date.parse(review_date))
     end
 
-    it "has green status" do
-      expect(tc.status).to eq("green")
+    it "has pass status" do
+      expect(tc.status).to eq("pass")
     end
 
     it "has no issues" do
@@ -101,8 +127,8 @@ EOF
       expect(tc.review_after).to be_nil
     end
 
-    it "has red status" do
-      expect(tc.status).to eq("red")
+    it "has fail status" do
+      expect(tc.status).to eq("fail")
     end
 
     it "has issues" do
@@ -124,8 +150,8 @@ EOF
 
     specify { expect(tc.exists?).to be(false) }
 
-    it "has red status" do
-      expect(tc.status).to eq("red")
+    it "has fail status" do
+      expect(tc.status).to eq("fail")
     end
   end
 
@@ -136,8 +162,8 @@ EOF
       expect(tc.review_after).to be_nil
     end
 
-    it "has red status" do
-      expect(tc.status).to eq("red")
+    it "has fail status" do
+      expect(tc.status).to eq("fail")
     end
   end
 end

@@ -11,9 +11,8 @@ class GithubCollaborators
 
     TERRAFORM_DIR = "terraform"
 
-    GREEN = "green"
-    AMBER = "amber"
-    RED = "red"
+    PASS = "pass"
+    FAIL = "fail"
 
     REQUIRED_ATTRIBUTES = {
       "name" => "Collaborator name is missing",
@@ -23,6 +22,8 @@ class GithubCollaborators
       "added_by" => "Person who added this collaborator is missing",
       "review_after" => "Collaboration review date is missing",
     }
+
+    YEAR = 365
 
     def initialize(params)
       @repository = params.fetch(:repository)
@@ -37,11 +38,16 @@ class GithubCollaborators
     end
 
     def status
-      issues.any? ? RED : GREEN
+      issues.any? ? FAIL : PASS
     end
 
     def issues
-      REQUIRED_ATTRIBUTES.map { |attr, msg| msg if get_value(attr).nil? }.compact
+      rtn = REQUIRED_ATTRIBUTES.map { |attr, msg| msg if get_value(attr).nil? }.compact
+      if review_after != nil
+        rtn << "Review after date has passed" if review_after < Date.today
+        rtn << "Review after date is more than a year in the future" if review_after > (Date.today + YEAR)
+      end
+      rtn
     end
 
     def name
