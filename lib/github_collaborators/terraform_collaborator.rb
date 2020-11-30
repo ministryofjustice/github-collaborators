@@ -18,6 +18,10 @@ class GithubCollaborators
       @tfsource = params.fetch(:tfsource) { fetch_terraform_source }
     end
 
+    def is_collaborator?
+      collaborator_source != nil
+    end
+
     def name
       get_value("name")
     end
@@ -39,7 +43,10 @@ class GithubCollaborators
     end
 
     def review_after
-      Date.parse get_value("review_after")
+      str = get_value("review_after")
+      str.nil? ? nil : Date.parse(str)
+    rescue Date::Error
+      nil
     end
 
     private
