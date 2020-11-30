@@ -15,7 +15,12 @@ class GithubCollaborators
       @repository = params.fetch(:repository)
       @login = params.fetch(:login)
       @terraform_dir = params.fetch(:terraform_dir, TERRAFORM_DIR)
+      # Enable the terraform source to be passed in, to make it easier to test the code
       @tfsource = params.fetch(:tfsource) { fetch_terraform_source }
+    end
+
+    def exists?
+      collaborator_source != nil
     end
 
     def name
@@ -39,7 +44,10 @@ class GithubCollaborators
     end
 
     def review_after
-      Date.parse get_value("review_after")
+      str = get_value("review_after")
+      str.nil? ? nil : Date.parse(str)
+    rescue Date::Error
+      nil
     end
 
     private
