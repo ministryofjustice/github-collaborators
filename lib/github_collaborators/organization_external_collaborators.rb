@@ -9,12 +9,16 @@ class GithubCollaborators
     def list
       @list ||= repositories.each_with_object([]) { |repo, arr|
         external_collaborators(repo.name).each do |collab|
-          arr.push(
+          tc = TerraformCollaborator.new(
             repository: repo.name,
-            repo_url: repo.url,
             login: collab.login,
-            login_url: collab.url,
-            permission: collab.permission
+          )
+          arr.push(
+            tc.to_hash.merge(
+              repo_url: repo.url,
+              login_url: collab.url,
+              permission: collab.permission
+            )
           )
         end
       }
