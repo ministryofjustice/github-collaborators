@@ -1,4 +1,3 @@
-require "pry-byebug"
 require_relative "../lib/github_collaborators"
 
 RSpec.configure do |config|
