@@ -1,0 +1,19 @@
+env:
+  RUBY_VERSION: 2.7.1
+
+name: Rspec tests
+on: [push,pull_request]
+jobs:
+  rspec-test:
+    name: RSpec
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+      - name: Install rspec
+        run: |
+          gem install rspec
+      - name: Run tests
+        run: rspec
