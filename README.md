@@ -2,17 +2,21 @@
 
 Manage MoJ GitHub external collaborators via code.
 
-The terraform code manages external collaborators on our GitHub repositories.
+## Background
 
-The intention is that all external collaborator relationships will be defined here, along with the rationale for the collaboration.
+Sometimes we need to grant access to one of more of our github repositories to people who are not part of the "ministryofjustice" github organisation. This often happens when we engage third-party suppliers to carry out work on our behalf.
 
-> Collaborators who are not defined in the terraform code here in sufficient detail (i.e. so that we know why they have access to a repository, who gave it to them, and when it should be reviewed) will be automatically removed.
+Github has the concept of "external collaborators" for this purpose. We can grant a certain level of access to a specific repository to an individual github user account.
 
-## Functions
+Rather than manage this via "clickops" this repository enables us to manage these relationships via terraform code. This also means we can attach metadata to the collaborator relationship, to explain its purpose. This will help to ensure that collaborators are removed when they no longer need access to the relevant github repositories.
 
-* Define external collaborators in terraform code
-* List all external collaborators with access to Ministry of Justice github repositories, where there is insufficient detail defined in the terraform code here, and post the data to the [Operations Engineering Reports] web application
-* Import pre-existing external collaborators from individual github repositories, create the corresponding terraform code and import into terraform state
+## How it works
+
+* The `terraform/` directory contains a file per repository that has collaborators, defining the collaboration with metadata. The name of the file is the repository name with any `.` characters replaced with `-` to render the name acceptable for terraform. i.e. the file for repository `foo.bar` will be `terraform/foo-bar.tf`
+* Github actions run `terraform plan` and `terraform apply` to keep the collaborations in GitHub in sync with the terraform source code
+* Ruby code in the `bin/` and `lib/` directories (with unit tests in the `spec/` directory) queries GitHub via the GraphQL API and retrieves all the collaborator relationships which exist
+* A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are included in a JSON report which is the basis for [this report].
+* A utility script will import existing external collaborators from specified github repositories, create the corresponding terraform code, and import into terraform state
 
 ## Defining collaborators
 
@@ -43,7 +47,7 @@ To add collaborators to the repository, define each of them inside the `collabor
       email        = ""  #  Their email address
       org          = ""  #  The organisation/entity they belong to
       reason       = ""  #  Why is this person being granted access?
-      added_by     = ""  #  Who made the decision to grant them access? e.g. "Some Person <some.person@digital.justice.gov.uk>"
+      added_by     = ""  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = ""  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
 ```
@@ -59,7 +63,7 @@ For example:
       email        = "david@acme.com"
       org          = "Acme. Corp."
       reason       = "Acme are building some stuff for us"
-      added_by     = "Steve Marshall <steve@fake-email.gov.uk>"
+      added_by     = "Awesome Team <awesome.team@digital.justice.gov.uk>"
       review_after = "2021-11-26"
     },
   ]
@@ -108,6 +112,8 @@ terraform import module.testing-external-collaborators.github_repository_collabo
 
 * `TERRAFORM` must define the terraform executable (e.g. `/usr/local/bin/terraform0.13.5`)
 
+* `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` - credentials with access to the S3 bucket holding the terraform state file
+
 See [env.example](./env.example) for more more information.
 
 ## Usage
@@ -155,5 +161,6 @@ bin/list-repositories.rb | xargs bin/import-repository-collaborators.rb
 > This takes quite a long time.
 
 [Operations Engineering Reports]: https://github.com/ministryofjustice/operations-engineering-reports
-[triggering the action]: https://github.com/ministryofjustice/operations-engineering-github-collaborators/actions?query=workflow%3A.github%2Fworkflows%2Fpost-data.yaml
+[triggering the action]: https://github.com/ministryofjustice/github-collaborators/actions?query=workflow%3A.github%2Fworkflows%2Fpost-data.yaml
 [Terraform]: https://www.terraform.io/downloads.html
+[this report]: https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_collaborators
