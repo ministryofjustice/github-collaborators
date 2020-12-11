@@ -5,7 +5,7 @@ class GithubCollaborators
     def initialize(params)
       @terraform_dir = params.fetch(:terraform_dir)
       @terraform_executable = params.fetch(:terraform_executable)
-      @org_ext_collabs = params.fetch(:org_ext_collabs) { OrganizationExternalCollaborators.new(login: "ministryofjustice") }
+      @org_ext_collabs = params.fetch(:org_ext_collabs)
       @executor = params.fetch(:executor) { Executor.new }
       @logger = params.fetch(:logger) { Logger.new }
     end
