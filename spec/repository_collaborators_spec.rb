@@ -2,7 +2,7 @@ class GithubCollaborators
   describe RepositoryCollaborators do
     let(:params) {
       {
-        login: "myorg",
+        owner: "myorg",
         repository: "myrepo",
         graphql: graphql
       }
