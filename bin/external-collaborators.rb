@@ -2,7 +2,10 @@
 
 require_relative "../lib/github_collaborators"
 
-list = GithubCollaborators::OrganizationExternalCollaborators.new(login: "ministryofjustice").list
+list = GithubCollaborators::OrganizationExternalCollaborators.new(
+  login: "ministryofjustice",
+  base_url: "https://github.com/ministryofjustice/cloud-platform-report-orphaned-resources"
+).list
 
 output = {
   data: list,

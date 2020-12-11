@@ -2,7 +2,8 @@ class GithubCollaborators
   describe OrganizationExternalCollaborators do
     let(:params) {
       {
-        login: "myorg"
+        login: "myorg",
+        base_url: "https://github.com/ministryofjustice/cloud-platform-report-orphaned-resources"
       }
     }
 

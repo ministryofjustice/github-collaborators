@@ -1,9 +1,10 @@
 class GithubCollaborators
   class OrganizationExternalCollaborators
-    attr_reader :login
+    attr_reader :login, :base_url
 
     def initialize(params)
       @login = params.fetch(:login)
+      @base_url = params.fetch(:base_url) # URL of the github UI page listing all the terraform files
     end
 
     def list
@@ -12,7 +13,7 @@ class GithubCollaborators
           tc = TerraformCollaborator.new(
             repository: repo.name,
             login: collab.login,
-            base_url: "https://github.com/ministryofjustice/cloud-platform-report-orphaned-resources"
+            base_url: base_url
           )
           if tc.status == TerraformCollaborator::FAIL
             arr.push(
