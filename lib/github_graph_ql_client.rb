@@ -7,7 +7,19 @@ class GithubGraphQlClient
     @github_token = params.fetch(:github_token)
   end
 
-  # private
+  def get_paginated_results
+    list = []
+    end_cursor = nil
+
+    loop do
+      arr, data = yield(end_cursor)
+      list += arr
+      break unless data.dig("pageInfo", "hasNextPage")
+      end_cursor = data.dig("pageInfo", "endCursor")
+    end
+
+    list
+  end
 
   def run_query(body)
     json = {query: body}.to_json

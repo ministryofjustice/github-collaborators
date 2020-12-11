@@ -53,17 +53,11 @@ class GithubCollaborators
     private
 
     def get_all_repos
-      repos = []
-      end_cursor = nil
-
-      loop do
+      graphql.get_paginated_results do |end_cursor|
         data = get_repos(end_cursor)
-        repos += data.fetch("nodes").map { |d| Repository.new(d) }
-        break unless data.dig("pageInfo", "hasNextPage")
-        end_cursor = data.dig("pageInfo", "endCursor")
+        arr = data.fetch("nodes").map { |d| Repository.new(d) }
+        [arr, data]
       end
-
-      repos
     end
 
     def get_repos(end_cursor = nil)

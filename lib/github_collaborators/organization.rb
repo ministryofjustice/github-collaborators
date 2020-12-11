@@ -38,17 +38,11 @@ class GithubCollaborators
     private
 
     def get_all_members
-      members = []
-      end_cursor = nil
-
-      loop do
+      graphql.get_paginated_results do |end_cursor|
         data = get_members(end_cursor)
-        members += data.fetch("edges").map { |d| Member.new(d) }
-        break unless data.dig("pageInfo", "hasNextPage")
-        end_cursor = data.dig("pageInfo", "endCursor")
+        arr = data.fetch("edges").map { |d| Member.new(d) }
+        [arr, data]
       end
-
-      members
     end
 
     def get_members(end_cursor = nil)
