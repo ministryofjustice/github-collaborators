@@ -7,10 +7,9 @@
 # we go to the terraform source to get it.
 class GithubCollaborators
   class TerraformCollaborator
-    attr_reader :repository, :login
+    attr_reader :repository, :login, :base_url
 
     TERRAFORM_DIR = "terraform"
-    GITHUB_URL = "https://github.com/ministryofjustice/operations-engineering-github-collaborators/blob/main/terraform"
 
     PASS = "pass"
     FAIL = "fail"
@@ -32,6 +31,7 @@ class GithubCollaborators
       @terraform_dir = params.fetch(:terraform_dir, TERRAFORM_DIR)
       # Enable the terraform source to be passed in, to make it easier to test the code
       @tfsource = params.fetch(:tfsource) { fetch_terraform_source }
+      @base_url = params.fetch(:base_url) # URL of the github UI page listing all the terraform files
     end
 
     def exists?
@@ -92,7 +92,7 @@ class GithubCollaborators
 
     def href
       filename = fetch_terraform_source.nil? ? "" : "#{GithubCollaborators.tf_safe(repository)}.tf"
-      [GITHUB_URL, filename].join("/")
+      [base_url, filename].join("/")
     end
 
     private

@@ -61,7 +61,8 @@ EOF
       {
         repository: repository,
         login: login,
-        tfsource: tfsource
+        tfsource: tfsource,
+        base_url: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
       }
     }
 
@@ -71,7 +72,8 @@ EOF
       let(:params) {
         {
           repository: "no-such-sourc-code-file-exists",
-          login: "whatever"
+          login: "whatever",
+          base_url: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
         }
       }
 
@@ -84,7 +86,7 @@ EOF
       end
 
       it "links to the terraform directory" do
-        expect(tc.href).to eq("https://github.com/ministryofjustice/operations-engineering-github-collaborators/blob/main/terraform/")
+        expect(tc.href).to eq("https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/")
       end
     end
 
@@ -173,7 +175,7 @@ EOF
           "repository" => "acronyms",
           "login" => "DangerDawson",
           "status" => "fail",
-          "href" => "https://github.com/ministryofjustice/operations-engineering-github-collaborators/blob/main/terraform/acronyms.tf",
+          "href" => "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/acronyms.tf",
           "issues" => [
             "Collaborator name is missing",
             "Collaborator email is missing",
