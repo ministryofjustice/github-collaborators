@@ -5,22 +5,22 @@ module "yjaf-conversions" {
     {
       github_user  = "gregi2n"
       permission   = "admin"
-      name         = "" #  The name of the person behind github_user
-      email        = "" #  Their email address
-      org          = "" #  The organisation/entity they belong to
-      reason       = "" #  Why is this person being granted access?
-      added_by     = "" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "" #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Greg Whiting"
+      email        = "greg.whiting@northgateps.com"
+      org          = "Northgate"
+      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
+      added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      review_after = "2021-12-11"
     },
     {
       github_user  = "TomDover-NorthgatePS"
       permission   = "push"
-      name         = "" #  The name of the person behind github_user
-      email        = "" #  Their email address
-      org          = "" #  The organisation/entity they belong to
-      reason       = "" #  Why is this person being granted access?
-      added_by     = "" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "" #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Tom Dover"
+      email        = "tom.dover@northgateps.com"
+      org          = "Northgate"
+      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
+      added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      review_after = "2021-12-11"
     },
   ]
 }
