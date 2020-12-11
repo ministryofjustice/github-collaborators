@@ -79,10 +79,8 @@ class GithubCollaborators
   class RepositoryCollaborators
     attr_reader :graphql, :repository, :owner
 
-    MINISTRYOFJUSTICE = "ministryofjustice"
-
     def initialize(params)
-      @owner = params.fetch(:owner, MINISTRYOFJUSTICE)
+      @owner = params.fetch(:owner)
       @repository = params.fetch(:repository)
       @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
     end
