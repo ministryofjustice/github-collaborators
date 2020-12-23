@@ -1,6 +1,6 @@
-module "pttp-shared-services-infrastructure" {
+module "staff-device-shared-services-infrastructure" {
   source     = "./modules/repository-collaborators"
-  repository = "pttp-shared-services-infrastructure"
+  repository = "staff-device-shared-services-infrastructure"
   collaborators = [
     {
       github_user  = "Themitchell"
