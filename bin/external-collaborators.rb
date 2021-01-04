@@ -4,7 +4,7 @@ require_relative "../lib/github_collaborators"
 
 list = GithubCollaborators::OrganizationExternalCollaborators.new(
   login: "ministryofjustice",
-  base_url: "https://github.com/ministryofjustice/cloud-platform-report-orphaned-resources"
+  base_url: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
 ).list
 
 output = {
