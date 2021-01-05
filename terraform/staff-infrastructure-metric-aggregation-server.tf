@@ -15,8 +15,8 @@ module "staff-infrastructure-metric-aggregation-server" {
     {
       github_user  = "elcorbs"
       permission   = "admin"
-      name         = "Emma Corbett" 
-      email        = "emma@madetech.com" 
+      name         = "Emma Corbett"
+      email        = "emma@madetech.com"
       org          = "Made Tech Ltd"
       reason       = "PTTP Tech Team"
       added_by     = "richard.baguley@justice.gov.uk"
