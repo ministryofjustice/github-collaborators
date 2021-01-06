@@ -8,7 +8,7 @@ class GithubCollaborators
     end
 
     def list
-      @list ||= repositories.each_with_object([]) { |repo, arr|
+      repositories.each_with_object([]) { |repo, arr|
         external_collaborators(repo.name).each do |collab|
           tc = TerraformCollaborator.new(
             repository: repo.name,
