@@ -120,9 +120,12 @@ class GithubCollaborators
     end
 
     def get_value(val)
-      if m = /#{val}.*"([^"]+)"$/.match(collaborator_source)
-        m[1]
+      collaborator_source.split("\n").grep(/#{val}\s+=/).each do |line|
+        if m = /#{val}.*"([^"]+?)"/.match(line)
+          return m[1]
+        end
       end
+      nil
     end
   end
 end

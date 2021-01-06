@@ -11,7 +11,7 @@ class GithubCollaborators
       email        = "matt.tans@not.real.email"
       org          = "MoJ"
       reason       = "A really good reason"
-      added_by     = "David Salgado <david.salgado@digital.justice.gov.uk>"
+      added_by     = "David Salgado <david.salgado@digital.justice.gov.uk>" # TODO: whatever
       review_after = "#{review_date}"
     },
 EOF
@@ -43,15 +43,15 @@ EOF
 
     let(:tfsource) {
       <<~EOF
-      module "acronyms" {
-        source     = "./modules/repository-collaborators"
-        repository = "acronyms"
-        collaborators = [
-      #{matthewtansini}
-      #{detailsmissing}
-      #{malformed_date}
-        ]
-      }
+        module "acronyms" {
+          source     = "./modules/repository-collaborators"
+          repository = "acronyms"
+          collaborators = [
+        #{matthewtansini}
+        #{detailsmissing}
+        #{malformed_date}
+          ]
+        }
       EOF
     }
 
