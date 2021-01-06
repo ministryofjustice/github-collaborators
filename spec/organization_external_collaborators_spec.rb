@@ -17,7 +17,7 @@ class GithubCollaborators
 
     let(:alice) { double(Collaborator, login: "alice", url: "alice_url", permission: "admin") }
 
-    let(:alice_hash) { {login: "alice", login_url: "alice_url", permission: "admin"} }
+    let(:alice_hash) { {login: "alice", login_url: "alice_url", permission: "admin", last_commit: last_commit_date} }
     let(:alice_collab) { double(TerraformCollaborator, to_hash: alice_hash, status: "fail") }
 
     let(:repo_collabs) { double(RepositoryCollaborators, list: [alice]) }
@@ -33,12 +33,17 @@ class GithubCollaborators
       ]
     }
 
+    let(:last_commit_date) { "2020-12-24 11:12:13" }
+
+    let(:last_commit) { double(LastCommit, date: last_commit_date) }
+
     before do
       allow(Repositories).to receive(:new).and_return(repositories)
       allow(RepositoryCollaborators).to receive(:new).and_return(repo_collabs)
       allow(Organization).to receive(:new).and_return(org)
       allow(TerraformCollaborator).to receive(:new).and_return(alice_collab)
       allow(TerraformCollaborator).to receive(:new).and_return(alice_collab)
+      allow(LastCommit).to receive(:new).and_return(last_commit)
     end
 
     it "lists external collaborators" do
