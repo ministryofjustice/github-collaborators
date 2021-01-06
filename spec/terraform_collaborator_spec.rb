@@ -43,15 +43,15 @@ EOF
 
     let(:tfsource) {
       <<~EOF
-      module "acronyms" {
-        source     = "./modules/repository-collaborators"
-        repository = "acronyms"
-        collaborators = [
-      #{matthewtansini}
-      #{detailsmissing}
-      #{malformed_date}
-        ]
-      }
+        module "acronyms" {
+          source     = "./modules/repository-collaborators"
+          repository = "acronyms"
+          collaborators = [
+        #{matthewtansini}
+        #{detailsmissing}
+        #{malformed_date}
+          ]
+        }
       EOF
     }
 
