@@ -21,7 +21,7 @@ class GithubCollaborators
                 repo_url: repo.url,
                 login_url: collab.url,
                 permission: collab.permission,
-                last_commit: last_commit(repo, collab.login),
+                last_commit: last_commit(repo, collab.login)
               )
             )
           end
@@ -36,7 +36,7 @@ class GithubCollaborators
           login: collab.login,
           login_url: collab.url,
           permission: collab.permission,
-          last_commit: last_commit(repo_name, collab.login),
+          last_commit: last_commit(repo_name, collab.login)
         }
       end
     end
@@ -47,7 +47,7 @@ class GithubCollaborators
       LastCommit.new(
         org: login,
         login: username,
-        repo: repo,
+        repo: repo
       ).date
     end
 
