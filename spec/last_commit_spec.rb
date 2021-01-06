@@ -20,6 +20,6 @@ class GithubCollaborators
       allow(graphql).to receive(:run_query).and_return(userjson, json)
     end
 
-    specify { expect(lc.date).to eq("2020-12-24 04:23:22") }
+    specify { expect(lc.date).to eq("2020-12-24T04:23:22Z") }
   end
 end

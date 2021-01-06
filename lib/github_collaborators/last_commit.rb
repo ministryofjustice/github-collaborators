@@ -17,12 +17,10 @@ class GithubCollaborators
 
     def fetch_date
       json = graphql.run_query(last_commit_date_query)
-      d = JSON.parse(json)
+      JSON.parse(json)
         .dig("data", "repository", "defaultBranchRef", "target", "history", "edges")
         &.first
         &.dig("node", "committedDate")
-
-      d.nil? ? nil : DateTime.parse(d).strftime("%Y-%m-%d %H:%M:%S")
     end
 
     def last_commit_date_query
