@@ -1,0 +1,19 @@
+{
+  "data": {
+    "repository": {
+      "defaultBranchRef": {
+        "target": {
+          "history": {
+            "edges": [
+              {
+                "node": {
+                  "committedDate": "2020-12-24T04:23:22Z"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
