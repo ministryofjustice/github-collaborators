@@ -5,22 +5,22 @@ module "apvs-packer" {
     {
       github_user  = "Nathanials"
       permission   = "admin"
-      name         = "" #  The name of the person behind github_user
-      email        = "" #  Their email address
-      org          = "" #  The organisation/entity they belong to
-      reason       = "" #  Why is this person being granted access?
-      added_by     = "" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "" #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Nathanial Stewart"
+      email        = "n.stewart@kainos.com"
+      org          = "Kainos"
+      reason       = "Kainos manage the Assisted Prison Visits Scheme (APVS) application"
+      added_by     = "phoebe.crossland@digital.justice.gov.uk" # TODO: replace with APVS team email address
+      review_after = "2021-04-01"
     },
     {
       github_user  = "kevinfox1"
       permission   = "admin"
-      name         = "" #  The name of the person behind github_user
-      email        = "" #  Their email address
-      org          = "" #  The organisation/entity they belong to
-      reason       = "" #  Why is this person being granted access?
-      added_by     = "" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "" #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Kevin Fox"
+      email        = "k.fox@kainos.com"
+      org          = "Kainos"
+      reason       = "Kainos manage the Assisted Prison Visits Scheme (APVS) application"
+      added_by     = "phoebe.crossland@digital.justice.gov.uk" # TODO: replace with APVS team email address
+      review_after = "2021-04-01"
     },
   ]
 }
