@@ -20,7 +20,8 @@ class GithubCollaborators
               tc.to_hash.merge(
                 repo_url: repo.url,
                 login_url: collab.url,
-                permission: collab.permission
+                permission: collab.permission,
+                last_commit: last_commit(repo, collab.login),
               )
             )
           end
@@ -34,12 +35,21 @@ class GithubCollaborators
         {
           login: collab.login,
           login_url: collab.url,
-          permission: collab.permission
+          permission: collab.permission,
+          last_commit: last_commit(repo_name, collab.login),
         }
       end
     end
 
     private
+
+    def last_commit(repo, username)
+      LastCommit.new(
+        org: login,
+        login: username,
+        repo: repo,
+      ).date
+    end
 
     def repositories
       @repos ||= Repositories.new(login: login).current
