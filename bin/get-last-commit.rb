@@ -17,7 +17,7 @@ date = GithubCollaborators::LastCommit.new(
   graphql: graphql,
   login: username,
   org: org,
-  repo: repo,
+  repo: repo
 ).date
 
 puts "date: #{date}"
