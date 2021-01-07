@@ -21,7 +21,7 @@ class GithubCollaborators
                 repo_url: repo.url,
                 login_url: collab.url,
                 permission: collab.permission,
-                last_commit: last_commit(repo, collab.login)
+                last_commit: last_commit(repo.name, collab.login)
               )
             )
           end
