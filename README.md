@@ -18,6 +18,24 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 * A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are included in a JSON report which is the basis for [this report].
 * A utility script will import existing external collaborators from specified github repositories, create the corresponding terraform code, and import into terraform state
 
+## Removing collaborators
+
+* If the collaborator is defined in terraform code
+
+Raise and merge a PR removing the collaborator from the list of collaborators in the terraform source code file for the repository.
+
+* If the collaborator is not defined in terraform code
+
+This will be the case if access was granted by a repository administrator via the github UI.
+
+To remove such a collaborator, use [this GitHub Action](https://github.com/ministryofjustice/github-collaborators/actions?query=workflow%3A%22Remove+a+collaborator%22)
+
+![GitHub Action UI image](doc/images/github-action.png)
+
+1. Click the `Run workflow` button
+2. Enter the repository name and the username of the collaborator to remove
+3. Click `Run workflow`
+
 ## Defining collaborators
 
 To define collaborators on a repository, first add a terraform file corresponding to the repository (unless there already is one).
