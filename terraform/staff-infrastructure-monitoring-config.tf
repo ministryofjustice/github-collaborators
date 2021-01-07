@@ -21,6 +21,16 @@ module "staff-infrastructure-monitoring-config" {
       reason       = "PTTP Tech Team"
       added_by     = "richard.baguley@justice.gov.uk"
       review_after = "2021-06-01"
+    },
+    {
+      github_user  = "jbevan4"
+      permission   = "admin"
+      name         = "Joshua-Luke Bevan"
+      email        = "joshua.bevan@madetech.com"
+      org          = "Made Tech Ltd"
+      reason       = "PTTP Tech Team"
+      added_by     = "richard.baguley@justice.gov.uk"
+      review_after = "2021-06-01"
     }
   ]
 }
