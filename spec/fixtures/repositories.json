@@ -1,0 +1,46 @@
+{
+  "data": {
+    "organization": {
+      "repositories": {
+        "nodes": [
+          {
+            "id": "MDEwOlJlcG9zaXRvcnk3MTE1NTc1",
+            "name": "government-digital-strategy",
+            "url": "https://github.com/ministryofjustice/government-digital-strategy",
+            "isLocked": false,
+            "isArchived": false,
+            "isDisabled": false
+          },
+          {
+            "id": "MDEwOlJlcG9zaXRvcnk3NTA0MDk3",
+            "name": "moj-digital-strategy-2013",
+            "url": "https://github.com/ministryofjustice/moj-digital-strategy-2013",
+            "isLocked": true,
+            "isArchived": false,
+            "isDisabled": false
+          },
+          {
+            "id": "MDEwOlJlcG9zaXRvcnk4MjIyMDg3",
+            "name": "courtfinder",
+            "url": "https://github.com/ministryofjustice/courtfinder",
+            "isLocked": false,
+            "isArchived": true,
+            "isDisabled": false
+          },
+          {
+            "id": "MDEwOlJlcG9zaXRvcnk4MzM1MzMx",
+            "name": "worddoc_convert",
+            "url": "https://github.com/ministryofjustice/worddoc_convert",
+            "isLocked": false,
+            "isArchived": false,
+            "isDisabled": true
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": null
+        }
+      }
+    }
+  }
+}
