@@ -3,7 +3,7 @@ class GithubCollaborators
     let(:params) {
       {
         login: "whoever",
-        graphql: graphql,
+        graphql: graphql
       }
     }
 
@@ -30,4 +30,3 @@ class GithubCollaborators
     end
   end
 end
-

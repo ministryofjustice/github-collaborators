@@ -12,4 +12,3 @@ class GithubCollaborators
     specify { expect(repo).to_not be_disabled }
   end
 end
-
