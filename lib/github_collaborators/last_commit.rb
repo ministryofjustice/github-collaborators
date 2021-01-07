@@ -6,6 +6,7 @@ class GithubCollaborators
       @org = params.fetch(:org)
       @repo = params.fetch(:repo)
       @login = params.fetch(:login)
+      raise "Bad parameters: repo should be a string" unless repo.is_a?(String)
       @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
     end
 
