@@ -1,10 +1,10 @@
 name: Terraform apply
 on:
   workflow_dispatch:
-#  push:
-#    branches:
-#      - main
-#    paths: 'terraform/**'
+  push:
+    branches:
+      - main
+    paths: 'terraform/**'
 
 env:
   AWS_REGION:  "eu-west-2"
@@ -27,9 +27,9 @@ jobs:
           cd terraform
           terraform init
           terraform apply -auto-approve
-#      - name: Update OpsEng collaborators report
-#        run: bin/post-data.sh
-#        env:
-#          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
-#          OPERATIONS_ENGINEERING_REPORTS_API_KEY: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_API_KEY }}
-#          OPS_ENG_REPORTS_URL: "https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_collaborators"
+      - name: Update OpsEng collaborators report
+        run: bin/post-data.sh
+        env:
+          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+          OPERATIONS_ENGINEERING_REPORTS_API_KEY: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_API_KEY }}
+          OPS_ENG_REPORTS_URL: "https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_collaborators"
