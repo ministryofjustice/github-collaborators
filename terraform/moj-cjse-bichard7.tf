@@ -72,35 +72,5 @@ module "moj-cjse-bichard7" {
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
-    {
-      github_user  = "R1chardA"
-      permission   = "push"
-      name         = "" #  The name of the person behind github_user
-      email        = "" #  Their email address
-      org          = "" #  The organisation/entity they belong to
-      reason       = "" #  Why is this person being granted access?
-      added_by     = "" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "" #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
-    },
-    {
-      github_user  = "sotaylor"
-      permission   = "push"
-      name         = "" #  The name of the person behind github_user
-      email        = "" #  Their email address
-      org          = "" #  The organisation/entity they belong to
-      reason       = "" #  Why is this person being granted access?
-      added_by     = "" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "" #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
-    },
-    {
-      github_user  = "rdc1969"
-      permission   = "push"
-      name         = "" #  The name of the person behind github_user
-      email        = "" #  Their email address
-      org          = "" #  The organisation/entity they belong to
-      reason       = "" #  Why is this person being granted access?
-      added_by     = "" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "" #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
-    },
   ]
 }
