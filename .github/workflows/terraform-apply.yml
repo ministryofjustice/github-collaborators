@@ -25,7 +25,7 @@ jobs:
           terraform_version: 0.13.5
       - run: |
           cd terraform
-          terraform init
+          terraform init -backend-config="bucket=${S3_BUCKET_NAME}"
           terraform apply -auto-approve
       - name: Update OpsEng collaborators report
         run: bin/post-data.sh

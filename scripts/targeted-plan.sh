@@ -14,7 +14,7 @@ main() {
   cd terraform
   echo "Running terraform init"
   # Suppress init output, unless it fails
-  output=$(${TERRAFORM} init -input=false 2>&1) || (echo "$output" && false)
+  output=$(${TERRAFORM} init -input=false -backend-config="bucket=${S3_BUCKET_NAME}" 2>&1) || (echo "$output" && false)
 
   for r in $(changed_repositories); do
     echo "Running terraform plan for ${r}"
