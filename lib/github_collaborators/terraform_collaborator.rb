@@ -59,7 +59,8 @@ class GithubCollaborators
         "login" => login,
         "status" => status,
         "issues" => issues,
-        "href" => href
+        "href" => href,
+        "defined_in_terraform" => exists?,
       }
     end
 

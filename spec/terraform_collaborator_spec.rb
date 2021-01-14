@@ -183,10 +183,15 @@ EOF
             "Collaborator reason is missing",
             "Person who added this collaborator is missing",
             "Collaboration review date is missing"
-          ]
+          ],
+          "defined_in_terraform" => true,
         }
 
         expect(tc.to_hash).to eq(expected)
+      end
+
+      it "sets defined_in_terraform to true" do
+        expect(tc.to_hash["defined_in_terraform"]).to be(true)
       end
     end
 
@@ -201,6 +206,10 @@ EOF
 
       it "has an issue" do
         expect(tc.issues).to eq(["Collaborator not defined in terraform"])
+      end
+
+      it "sets defined_in_terraform to false" do
+        expect(tc.to_hash["defined_in_terraform"]).to be(false)
       end
     end
 
