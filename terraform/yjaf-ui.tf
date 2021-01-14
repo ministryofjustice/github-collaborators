@@ -62,5 +62,25 @@ module "yjaf-ui" {
       added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2021-12-11"
     },
+    {
+      github_user  = "mat-nps"
+      permission   = "push"
+      name         = "Mat Kamil"
+      email        = "Mat.Kamil@northgateps.com"
+      org          = "Northgate"
+      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
+      added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      review_after = "2021-12-11"
+    },
+    {
+      github_user  = "JWGNPS"
+      permission   = "push"
+      name         = "James Grunewald"
+      email        = "James.Grunewald@northgateps.com"
+      org          = "Northgate"
+      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
+      added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      review_after = "2021-12-11"
+    },
   ]
 }
