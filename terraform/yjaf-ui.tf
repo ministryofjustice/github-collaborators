@@ -82,6 +82,5 @@ module "yjaf-ui" {
       added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2021-12-11"
     },
-
   ]
 }
