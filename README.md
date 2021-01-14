@@ -2,6 +2,12 @@
 
 Manage MoJ GitHub external collaborators via code.
 
+## Requesting collaborator access
+
+If you want to allow access to an MoJ GitHub repository for an external collaborator, please raise a pull request making the required changes to the corresponding `terraform/[repository-name].tf` file in this repository.
+
+If you are not confident editing terraform code, you can [raise an issue](https://github.com/ministryofjustice/github-collaborators/issues/new?labels=Access+Request&template=access-request.md) to request access for a collaborator, and we will make the changes for you.
+
 ## Background
 
 Sometimes we need to grant access to one of more of our github repositories to people who are not part of the "ministryofjustice" github organisation. This often happens when we engage third-party suppliers to carry out work on our behalf.
@@ -13,6 +19,7 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 ## How it works
 
 * The `terraform/` directory contains a file per repository that has collaborators, defining the collaboration with metadata. The name of the file is the repository name with any `.` characters replaced with `-` to render the name acceptable for terraform. i.e. the file for repository `foo.bar` will be `terraform/foo-bar.tf`
+
 * Github actions run `terraform plan` and `terraform apply` to keep the collaborations in GitHub in sync with the terraform source code
 * Ruby code in the `bin/` and `lib/` directories (with unit tests in the `spec/` directory) queries GitHub via the GraphQL API and retrieves all the collaborator relationships which exist
 * A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are included in a JSON report which is the basis for [this report].
