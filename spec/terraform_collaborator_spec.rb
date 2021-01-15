@@ -184,7 +184,7 @@ EOF
             "Person who added this collaborator is missing",
             "Collaboration review date is missing"
           ],
-          "defined_in_terraform" => true,
+          "defined_in_terraform" => true
         }
 
         expect(tc.to_hash).to eq(expected)

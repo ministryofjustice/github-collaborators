@@ -60,7 +60,7 @@ class GithubCollaborators
         "status" => status,
         "issues" => issues,
         "href" => href,
-        "defined_in_terraform" => exists?,
+        "defined_in_terraform" => exists?
       }
     end
 

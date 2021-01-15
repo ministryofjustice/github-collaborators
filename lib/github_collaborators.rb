@@ -13,6 +13,9 @@ require_relative "./github_collaborators/repositories"
 require_relative "./github_collaborators/organization_external_collaborators"
 require_relative "./github_collaborators/repository_collaborator_importer"
 require_relative "./github_collaborators/terraform_collaborator"
+require_relative "./github_collaborators/access_remover"
+require_relative "./github_collaborators/issue_creator"
+require_relative "./github_collaborators/http_client"
 
 PAGE_SIZE = 100
 
