@@ -34,6 +34,16 @@ class GithubCollaborators
       @base_url = params.fetch(:base_url) # URL of the github UI page listing all the terraform files
     end
 
+    def remove
+      hash = {
+        owner: "ministryofjustice",
+        repository: repository,
+        github_user: login,
+      }
+      IssueCreator.new(hash).create
+      AccessRemover.new(hash).remove
+    end
+
     def exists?
       collaborator_source != nil
     end
