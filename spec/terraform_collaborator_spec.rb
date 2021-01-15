@@ -73,11 +73,13 @@ EOF
       let(:ic) { double(IssueCreator) }
       let(:login) { "somegithubuser" }
 
-      let(:ar_params) { {
+      let(:ar_params) {
+        {
           owner: "ministryofjustice",
           repository: repository,
-          github_user: login,
-      } }
+          github_user: login
+        }
+      }
 
       before do
         allow(AccessRemover).to receive(:new).and_return(ar)
@@ -223,7 +225,7 @@ EOF
             "Person who added this collaborator is missing",
             "Collaboration review date is missing"
           ],
-          "defined_in_terraform" => true,
+          "defined_in_terraform" => true
         }
 
         expect(tc.to_hash).to eq(expected)

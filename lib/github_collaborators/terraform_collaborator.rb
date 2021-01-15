@@ -38,7 +38,7 @@ class GithubCollaborators
       hash = {
         owner: "ministryofjustice",
         repository: repository,
-        github_user: login,
+        github_user: login
       }
       IssueCreator.new(hash).create
       AccessRemover.new(hash).remove
@@ -70,7 +70,7 @@ class GithubCollaborators
         "status" => status,
         "issues" => issues,
         "href" => href,
-        "defined_in_terraform" => exists?,
+        "defined_in_terraform" => exists?
       }
     end
 

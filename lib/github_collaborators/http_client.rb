@@ -38,9 +38,8 @@ class GithubCollaborators
       {
         "Accept" => "application/json",
         "Content-Type" => "application/json",
-        "Authorization" => "token #{token}",
+        "Authorization" => "token #{token}"
       }
     end
   end
 end
-
