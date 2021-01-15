@@ -6,6 +6,12 @@ class GithubCollaborators
       token = params.fetch(:token, ENV.fetch("ADMIN_GITHUB_TOKEN"))
     end
 
+    def fetch_json(url)
+      http, uri = client(url)
+      request = Net::HTTP::Get.new(uri.request_uri, headers)
+      http.request(request)
+    end
+
     def post_json(url, json)
       http, uri = client(url)
       request = Net::HTTP::Post.new(uri.request_uri, headers)
@@ -30,6 +36,7 @@ class GithubCollaborators
 
     def headers
       {
+        "Accept" => "application/json",
         "Content-Type" => "application/json",
         "Authorization" => "token #{token}",
       }
