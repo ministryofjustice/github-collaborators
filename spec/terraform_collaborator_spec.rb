@@ -68,45 +68,6 @@ EOF
 
     subject(:tc) { described_class.new(params) }
 
-    context "removing" do
-      let(:ar) { double(AccessRemover) }
-      let(:ic) { double(IssueCreator) }
-      let(:login) { "somegithubuser" }
-
-      let(:ar_params) { {
-          owner: "ministryofjustice",
-          repository: repository,
-          github_user: login,
-      } }
-
-      before do
-        allow(AccessRemover).to receive(:new).and_return(ar)
-        allow(IssueCreator).to receive(:new).and_return(ic)
-        allow(ar).to receive(:remove)
-        allow(ic).to receive(:create)
-      end
-
-      it "uses IssueCreator" do
-        expect(IssueCreator).to receive(:new).with hash_including(ar_params)
-        tc.remove
-      end
-
-      it "uses AccessRemover" do
-        expect(AccessRemover).to receive(:new).with hash_including(ar_params)
-        tc.remove
-      end
-
-      it "removes collaborator" do
-        expect(AccessRemover).to receive(:new).with hash_including(ar_params)
-        tc.remove
-      end
-
-      it "creates an issue" do
-        expect(ic).to receive(:create)
-        tc.remove
-      end
-    end
-
     context "when there is no terraform source file" do
       let(:params) {
         {
