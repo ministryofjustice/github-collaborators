@@ -18,17 +18,17 @@ class GithubCollaborators
     def issue_hash
       {
         title: "Please define external collaborators in code",
-        assignees: [ github_user ],
-        body: <<EOF
-Hi there
-
-We now have a process to manage github collaborators in code:
-https://github.com/ministryofjustice/github-collaborators/blob/main/README.md#github-external-collaborators
-
-Please follow the procedure described there to grant @#{github_user} access to this repository.
-
-If you have any questions, please post in #ask-operations-engineering on Slack.
-EOF
+        assignees: [github_user],
+        body: <<~EOF
+          Hi there
+          
+          We now have a process to manage github collaborators in code:
+          https://github.com/ministryofjustice/github-collaborators/blob/main/README.md#github-external-collaborators
+          
+          Please follow the procedure described there to grant @#{github_user} access to this repository.
+          
+          If you have any questions, please post in #ask-operations-engineering on Slack.
+        EOF
       }
     end
   end

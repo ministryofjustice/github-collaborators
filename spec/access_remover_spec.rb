@@ -1,10 +1,12 @@
 class GithubCollaborators
   describe AccessRemover do
-    let(:params) { {
-      owner: "ministryofjustice",
-      repository: "somerepo",
-      github_user: "somegithubuser",
-    } }
+    let(:params) {
+      {
+        owner: "ministryofjustice",
+        repository: "somerepo",
+        github_user: "somegithubuser"
+      }
+    }
 
     subject(:ar) { described_class.new(params) }
 

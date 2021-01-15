@@ -14,7 +14,7 @@ def remove_collaborator(hash)
   params = {
     owner: ENV.fetch("OWNER"),
     repository: repository,
-    github_user: login,
+    github_user: login
   }
 
   # We must create the issue before removing access, because the issue is
