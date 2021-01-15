@@ -5,9 +5,6 @@
 
 require_relative "../lib/github_collaborators"
 
-OWNER = "ministryofjustice"
-REPORT_URL = "https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_collaborators"
-
 def remove_collaborator(hash)
   repository = hash.fetch("repository")
   github_user = hash.fetch("login")
@@ -15,7 +12,7 @@ def remove_collaborator(hash)
   puts "Removing collaborator #{login} from repository #{repository}"
 
   params = {
-    owner: OWNER,
+    owner: ENV.fetch("OWNER"),
     repository: repository,
     github_user: login,
   }
@@ -27,7 +24,10 @@ def remove_collaborator(hash)
   GithubCollaborators::AccessRemover.new(params).remove
 end
 
-json = GithubCollaborators::HttpClient.new.fetch_json(REPORT_URL).body
+############################################################
+
+url = ENV.fetch("OPS_ENG_REPORTS_URL")
+json = GithubCollaborators::HttpClient.new.fetch_json(url).body
 
 JSON.parse(json)
   .fetch("data")
