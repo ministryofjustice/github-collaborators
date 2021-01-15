@@ -35,6 +35,8 @@ Raise and merge a PR removing the collaborator from the list of collaborators in
 
 This will be the case if access was granted by a repository administrator via the github UI.
 
+> You should not need to do this manually - there is a github action which runs daily, and removes all collaborators who are not defined in terraform code.
+
 To remove such a collaborator, use [this GitHub Action](https://github.com/ministryofjustice/github-collaborators/actions?query=workflow%3A%22Remove+a+collaborator%22)
 
 ![GitHub Action UI image](doc/images/github-action.png)
