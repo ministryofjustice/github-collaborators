@@ -72,5 +72,15 @@ module "staff-device-dns-dhcp-admin" {
       added_by     = "nick.holbrook@justice.gov.uk"
       review_after = "2021-06-01"
     },
+    {
+      github_user  = "elcorbs"
+      permission   = "admin"
+      name         = "Emma Corbett"
+      email        = "emma@madetech.com"
+      org          = "Made Tech Ltd"
+      reason       = "PTTP Tech Team"
+      added_by     = "nick.holbrook@justice.gov.uk"
+      review_after = "2021-06-01"
+    },
   ]
 }
