@@ -31,5 +31,5 @@ json = GithubCollaborators::HttpClient.new.fetch_json(url).body
 
 JSON.parse(json)
   .fetch("data")
-  .filter { |c| !c["defined_in_terraform"] }
+  .find_all { |c| !c["defined_in_terraform"] }
   .map { |c| remove_collaborator(c) }
