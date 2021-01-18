@@ -35,12 +35,12 @@ module "staff-device-management-virtualdesktop" {
     {
       github_user  = "jabenny"
       permission   = "push"
-      name         = "Josh Benfield"                                                          #  The name of the person behind github_user
-      email        = "jbenfield@sol-tec.com"                                                  #  Their email address
-      org          = "Sol-Tec"                                                                #  The organisation/entity they belong to
-      reason       = "PTTP Tech Team"                                                         #  Why is this person being granted access?
-      added_by     = "Richard Baguley on behalf of <MoJ-TechnicalOperations@justice.gov.uk> " #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2021-12-31"                                                             #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Josh Benfield"                                                     #  The name of the person behind github_user
+      email        = "jbenfield@sol-tec.com"                                             #  Their email address
+      org          = "Sol-Tec"                                                           #  The organisation/entity they belong to
+      reason       = "PTTP Tech Team"                                                    #  Why is this person being granted access?
+      added_by     = "MoJ Technical Operations <MoJ-TechnicalOperations@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2021-12-31"                                                        #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
   ]
 }
