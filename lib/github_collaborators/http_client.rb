@@ -3,7 +3,7 @@ class GithubCollaborators
     attr_reader :token
 
     def initialize(params = {})
-      token = params.fetch(:token, ENV.fetch("ADMIN_GITHUB_TOKEN"))
+      @token = params.fetch(:token) { ENV.fetch("ADMIN_GITHUB_TOKEN") }
     end
 
     def fetch_json(url)
