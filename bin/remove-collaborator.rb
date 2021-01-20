@@ -17,6 +17,8 @@ def remove_collaborator(hash)
     github_user: github_user
   }
 
+  pp params
+
   # We must create the issue before removing access, because the issue is
   # assigned to the removed collaborator, so that they (hopefully) get a
   # notification about it.
@@ -28,7 +30,8 @@ end
 
 ############################################################
 
-c = {
+json = %[
+{
   "repository": "#{ENV.fetch("REPO")}",
   "login": "#{ENV.fetch("USERNAME")}",
   "status": "fail",
@@ -42,5 +45,7 @@ c = {
   "permission": "push",
   "last_commit": "2021-01-18T13:00:46Z"
 }
+]
+c = JSON.parse(json)
 
 remove_collaborator(c)
