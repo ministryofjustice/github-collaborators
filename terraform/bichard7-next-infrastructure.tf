@@ -72,5 +72,16 @@ module "bichard7-next-infrastructure" {
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
+
+    {
+      github_user  = "satvinder-hullait"
+      permission   = "push"
+      name         = "Satvinder Hullait"                        #  The name of the person behind github_user
+      email        = "satvinderhullait@gmail.com"               #  Their email address
+      org          = "Madetech"                                 #  The organisation/entity they belong to
+      reason       = "CJSE Bichard Development"                 #  Why is this person being granted access?
+      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
   ]
 }
