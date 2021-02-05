@@ -33,26 +33,6 @@ module "staff-device-dns-dhcp-admin" {
       review_after = "2021-06-01"
     },
     {
-      github_user  = "jivdhaliwal"
-      permission   = "admin"
-      name         = "Jiv Dhaliwal"
-      email        = "jiv.dhaliwal@madetech.com"
-      org          = "Made Tech Ltd"
-      reason       = "PTTP Tech Team"
-      added_by     = "nick.holbrook@justice.gov.uk"
-      review_after = "2021-06-01"
-    },
-    {
-      github_user  = "CaitBarnard"
-      permission   = "admin"
-      name         = "Caitlin Barnard"
-      email        = "caitlin@madetech.com"
-      org          = "Made Tech Ltd"
-      reason       = "PTTP Tech Team"
-      added_by     = "nick.holbrook@justice.gov.uk"
-      review_after = "2021-06-01"
-    },
-    {
       github_user  = "jbevan4"
       permission   = "admin"
       name         = "Joshua-Luke Bevan"
