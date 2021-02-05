@@ -4,7 +4,7 @@ module "security-guidance" {
   collaborators = [
     {
       github_user  = "tomdMOJ"
-      permission   = "write"
+      permission   = "push"
       name         = "Tom Dumic"
       email        = "tom.dumic@digital.justice.gov.uk"
       org          = "UK MoJ Digital and Technology"
