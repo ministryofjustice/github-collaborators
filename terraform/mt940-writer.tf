@@ -4,7 +4,7 @@ module "mt940-writer" {
   collaborators = [
     {
       github_user  = "ibrechin"
-      permission   = "maintain"
+      permission   = "push"
       name         = "Ian Brechin"
       email        = "ian.brechin@gmail.com"
       org          = "External, formerly on Prisoner Money team"

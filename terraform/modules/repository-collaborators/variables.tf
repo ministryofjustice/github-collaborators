@@ -7,7 +7,7 @@ variable "collaborators" {
   description = "Details of all the external collaborators of a repository"
   type = list(object({
     github_user  = string   #  The github_user who needs to access the repository
-    permission   = string   #  The level of access: pull|triage|push|maintain|admin
+    permission   = string   #  The level of access: pull|push|admin
     name         = string   #  The name of the person behind github_user
     email        = string   #  Their email address
     org          = string   #  The organisation/entity they belong to
