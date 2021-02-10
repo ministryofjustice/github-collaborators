@@ -4,7 +4,7 @@ module "tax-tribunals-datacapture" {
   collaborators = [
     {
       github_user  = "jriga"
-      permission   = "maintain"
+      permission   = "push"
       name         = "Jerome Riga"            #  The name of the person behind github_user
       email        = "jerome.riga@hmcts.net"  #  Their email address
       org          = "HMCTS"                  #  The organisation/entity they belong to
