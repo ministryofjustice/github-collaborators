@@ -69,7 +69,7 @@ To add collaborators to the repository, define each of them inside the `collabor
 ```
     {
       github_user  = "<github username>"
-      permission   = "push"  #  pull|push|maintain|triage|admin
+      permission   = "push"  #  pull|push|admin
       name         = ""  #  The name of the person behind github_user
       email        = ""  #  Their email address
       org          = ""  #  The organisation/entity they belong to
