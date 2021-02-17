@@ -85,22 +85,22 @@ module "bichard7-next-infrastructure" {
     {
       github_user  = "umarqureshi"
       permission   = "pull"
-      name         = "Umar Qureshi"                             #  The name of the person behind github_user
-      email        = "umar.qureshi@digital.justice.gov.uk"      #  Their email address
-      org          = "MoJ"                                      #  The organisation/entity they belong to
-      reason       = "Security Scanning"                        #  Why is this person being granted access?
-      added_by     = "Ben Pirt <ben@madetech.com>"              #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Umar Qureshi"                        #  The name of the person behind github_user
+      email        = "umar.qureshi@digital.justice.gov.uk" #  Their email address
+      org          = "MoJ"                                 #  The organisation/entity they belong to
+      reason       = "Security Scanning"                   #  Why is this person being granted access?
+      added_by     = "Ben Pirt <ben@madetech.com>"         #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2021-12-31"                          #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
     {
       github_user  = "simonsMOJ"
       permission   = "pull"
-      name         = "Simon Heron"                              #  The name of the person behind github_user
-      email        = "simon.heron@digital.justice.gov.uk"       #  Their email address
-      org          = "MoJ"                                      #  The organisation/entity they belong to
-      reason       = "Security Scanning"                        #  Why is this person being granted access?
-      added_by     = "Ben Pirt <ben@madetech.com>"              #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Simon Heron"                        #  The name of the person behind github_user
+      email        = "simon.heron@digital.justice.gov.uk" #  Their email address
+      org          = "MoJ"                                #  The organisation/entity they belong to
+      reason       = "Security Scanning"                  #  Why is this person being granted access?
+      added_by     = "Ben Pirt <ben@madetech.com>"        #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2021-12-31"                         #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     }
   ]
 }
