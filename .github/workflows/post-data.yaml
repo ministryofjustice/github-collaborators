@@ -6,6 +6,7 @@ on:
 
 env:
   OPERATIONS_ENGINEERING_REPORTS_HOST: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_HOST }}
+  OPS_ENG_REPORTS_URL: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_HOST }}/github_collaborators
 
 jobs:
   post-data-to-opseng-reports:
