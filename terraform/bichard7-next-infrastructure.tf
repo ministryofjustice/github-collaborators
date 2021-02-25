@@ -34,7 +34,7 @@ module "bichard7-next-infrastructure" {
     },
     {
       github_user  = "brettminnie"
-      permission   = "push"
+      permission   = "admin"
       name         = "Brett Minnie"                             #  The name of the person behind github_user
       email        = "brett.minnie@madetech.com"                #  Their email address
       org          = "Madetech"                                 #  The organisation/entity they belong to
