@@ -52,5 +52,15 @@ module "staff-device-dhcp-server" {
       added_by     = "nick.holbrook@justice.gov.uk"
       review_after = "2021-06-01"
     },
+    {
+      github_user  = "elcorbs"
+      permission   = "admin"
+      name         = "Emma Corbett"
+      email        = "emma.corbett@madetech.com"
+      org          = "Made Tech Ltd"
+      reason       = "PTTP Tech Team"
+      added_by     = "nick.holbrook@justice.gov.uk"
+      review_after = "2021-06-01"
+    },
   ]
 }
