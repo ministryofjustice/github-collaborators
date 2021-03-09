@@ -102,5 +102,15 @@ module "yjaf-conversions" {
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
       review_after = "2021-12-31"
     },
+    {
+      github_user  = "AndrewRichards72"
+      permission   = "admin"
+      name         = "Andrew Richards"
+      email        = "andrew.richards@northgateps.com"
+      org          = "NPS (northgate)"
+      reason       = "Frontend devs needs access to make app changes"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
+      review_after = "2021-12-31"
+    },
   ]
 }
