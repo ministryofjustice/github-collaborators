@@ -72,5 +72,15 @@ module "yjaf-cmm" {
       added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
       review_after = "2021-12-31"
     },
+    {
+      github_user  = "AndrewRichards72"
+      permission   = "admin"
+      name         = "Andrew Richards"
+      email        = "andrew.richards@northgateps.com"
+      org          = "NPS (northgate)"
+      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
+      review_after = "2021-12-31"
+    },
   ]
 }
