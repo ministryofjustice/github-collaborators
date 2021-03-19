@@ -1,4 +1,4 @@
-module "bichard7-next" {
+module "bichard7-next-pnc-emulator" {
   source     = "./modules/repository-collaborators"
   repository = "bichard7-next-pnc-emulator"
   collaborators = [
