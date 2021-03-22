@@ -4,7 +4,7 @@ module "hmpps-pin-phone-monitor" {
   collaborators = [
     {
       github_user  = "dwin998"
-      permission   = "read"
+      permission   = "pull"
       name         = "Duncan Winfrey"
       email        = "duncan.winfrey@bsicsiruk.cjsm.net"
       org          = "BSI"
