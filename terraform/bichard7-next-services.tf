@@ -1,6 +1,6 @@
 module "bichard7-next-services" {
-  source        = "./modules/repository-collaborators"
-  repository    = "bichard7-next-services"
+  source     = "./modules/repository-collaborators"
+  repository = "bichard7-next-services"
   collaborators = [
     {
       github_user  = "bjpirt"
