@@ -51,7 +51,7 @@ locals {
       review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
     {
-      github_user  = "sladesamuel"
+      github_user  = "SladeSamuel"
       permission   = "push"
       name         = "Samuel Slade"                             #  The name of the person behind github_user
       email        = "samuel.slade@madetech.com"                #  Their email address
