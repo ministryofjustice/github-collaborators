@@ -63,6 +63,26 @@ module "moj-cjse-bichard7" {
       review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
     {
+      github_user  = "emadkaramad"
+      permission   = "push"
+      name         = "Emad Karamad"                             #  The name of the person behind github_user
+      email        = "emad.karamad@madetech.com"                #  Their email address
+      org          = "Madetech"                                 #  The organisation/entity they belong to
+      reason       = "CJSE Bichard Development"                 #  Why is this person being granted access?
+      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
+    {
+      github_user  = "angie"
+      permission   = "push"
+      name         = "Angie Merryweather"                             #  The name of the person behind github_user
+      email        = "angie.merryweather@madetech.com"                #  Their email address
+      org          = "Madetech"                                 #  The organisation/entity they belong to
+      reason       = "CJSE Bichard Development"                 #  Why is this person being granted access?
+      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
+    {
       github_user  = "umarqureshi"
       permission   = "pull"
       name         = "Umar Qureshi"                        #  The name of the person behind github_user
