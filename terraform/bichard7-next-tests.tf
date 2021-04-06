@@ -1,6 +1,6 @@
-module "bichard7-next-pnc-emulator" {
+module "bichard7-next-tests" {
   source     = "./modules/repository-collaborators"
-  repository = "bichard7-next-pnc-emulator"
+  repository = "bichard7-next-tests"
   collaborators = [
     {
       github_user  = "bjpirt"
