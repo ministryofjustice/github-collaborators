@@ -1,4 +1,4 @@
-module "bichard7-next-services" {
+module "bichard7-next-tests" {
   source     = "./modules/repository-collaborators"
   repository = "bichard7-next-tests"
   collaborators = [
