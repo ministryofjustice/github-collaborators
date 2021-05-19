@@ -14,7 +14,7 @@ module "yjaf-cmm" {
     },
     {
       github_user  = "TomDover-NorthgatePS"
-      permission   = "push"
+      permission   = "admin"
       name         = "Tom Dover"
       email        = "tom.dover@northgateps.com"
       org          = "Northgate"
