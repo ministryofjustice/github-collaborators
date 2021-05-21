@@ -1,6 +1,6 @@
-module "hmpps-vcms" {
+module "hmpps-engineering-jira-installer" {
   source     = "./modules/repository-collaborators"
-  repository = "hmpps-vcms"
+  repository = "hmpps-engineering-jira-installer"
   collaborators = [
     {
       github_user  = "swestb"
@@ -11,16 +11,6 @@ module "hmpps-vcms" {
       reason       = "Stuart is a new member of the team and will require the same level of access to the repos as the rest of the developers in this group" #  Why is this person being granted access?
       added_by     = "Probation Infrastructure AWS Team, awssupportteam@digital.justice.gov.uk"                                                              #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2022-05-21"                                                                                                                            #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
-    },
-    {
-      github_user  = "simoncreasy-civica"
-      permission   = "maintain"
-      name         = "Simon Creasy"                                                                                           #  The name of the person behind github_user
-      email        = "simon.creasy@civica.co.uk"                                                                              #  Their email address
-      org          = "Civica"                                                                                                 #  The organisation/entity they belong to
-      reason       = "Simon is one of the Civica developers that helps the development of the Victims Case Management System" #  Why is this person being granted access?
-      added_by     = "Probation Infrastructure AWS Team, awssupportteam@digital.justice.gov.uk"                               #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2022-05-21"                                                                                             #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
   ]
 }
