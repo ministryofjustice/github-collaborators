@@ -22,6 +22,7 @@ module "security-guidance" {
       added_by     = "adrian.warman@digital.justice.gov.uk"
       review_after = "2022-01-31"
     },
+    {
       github_user  = "jothamgMOJ"
       permission   = "push"
       name         = "Greg Jotham"
@@ -31,6 +32,5 @@ module "security-guidance" {
       added_by     = "adrian.warman@digital.justice.gov.uk"
       review_after = "2022-01-31"
     },
-    {
   ]
 }
