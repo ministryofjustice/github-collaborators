@@ -10,7 +10,7 @@ module "staff-device-shared-services-infrastructure" {
       org          = "Made Tech Ltd"
       reason       = "PTTP Tech Team"
       added_by     = "nick.holbrook@justice.gov.uk"
-      review_after = "2021-06-01"
+      review_after = "2022-01-01"
     },
     {
       github_user  = "thip"
@@ -20,17 +20,7 @@ module "staff-device-shared-services-infrastructure" {
       org          = "Made Tech Ltd"
       reason       = "PTTP Tech Team"
       added_by     = "nick.holbrook@justice.gov.uk"
-      review_after = "2021-06-01"
-    },
-    {
-      github_user  = "elcorbs"
-      permission   = "admin"
-      name         = "Emma Corbett"
-      email        = "emma.corbett@madetech.com"
-      org          = "Made Tech Ltd"
-      reason       = "PTTP Tech Team"
-      added_by     = "nick.holbrook@justice.gov.uk"
-      review_after = "2021-06-01"
+      review_after = "2022-01-01"
     },
     {
       github_user  = "emileswarts"
