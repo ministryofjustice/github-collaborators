@@ -9,8 +9,8 @@ module "staff-device-logging-infrastructure" {
       email        = "andrew.mitchell@madetech.com"
       org          = "Made Tech Ltd"
       reason       = "PTTP Tech Team"
-      added_by     = "nick.holbrook@justice.gov.uk"
-      review_after = "2021-06-01"
+      added_by     = "richard.baguley@digital.justice.gov.uk"
+      review_after = "2021-09-01"
     },
     {
       github_user  = "thip"
@@ -19,18 +19,8 @@ module "staff-device-logging-infrastructure" {
       email        = "david.capper@madetech.com"
       org          = "Made Tech Ltd"
       reason       = "PTTP Tech Team"
-      added_by     = "nick.holbrook@justice.gov.uk"
-      review_after = "2021-06-01"
-    },
-    {
-      github_user  = "elcorbs"
-      permission   = "admin"
-      name         = "Emma Corbett"
-      email        = "emma.corbett@madetech.com"
-      org          = "Made Tech Ltd"
-      reason       = "PTTP Tech Team"
-      added_by     = "nick.holbrook@justice.gov.uk"
-      review_after = "2021-06-01"
+      added_by     = "richard.baguley@digital.justice.gov.uk"
+      review_after = "2021-09-01"
     },
   ]
 }
