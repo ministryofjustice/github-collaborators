@@ -9,7 +9,7 @@ module "staff-device-shared-services-infrastructure" {
       email        = "andrew.mitchell@madetech.com"
       org          = "Made Tech Ltd"
       reason       = "PTTP Tech Team"
-      added_by     = "nick.holbrook@justice.gov.uk"
+      added_by     = "richard.baguley@digital.justice.gov.uk"
       review_after = "2022-01-01"
     },
     {
@@ -19,7 +19,7 @@ module "staff-device-shared-services-infrastructure" {
       email        = "david.capper@madetech.com"
       org          = "Made Tech Ltd"
       reason       = "PTTP Tech Team"
-      added_by     = "nick.holbrook@justice.gov.uk"
+      added_by     = "richard.baguley@digital.justice.gov.uk"
       review_after = "2022-01-01"
     },
     {
