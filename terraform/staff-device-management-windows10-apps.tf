@@ -45,12 +45,12 @@ module "staff-device-management-windows10-apps" {
     {
       github_user  = "LiliNedeleva"
       permission   = "push"
-      name         = "Lili Nedeleva"                 #  The name of the person behind github_user
-      email        = "lnedeleva@sol-tec.com"         #  Their email address
-      org          = "Sol-Tec"                       #  The organisation/entity they belong to
-      reason       = "PTTP Tech team"                #  Why is this person being granted access?
-      added_by     = "jgregory@sol-tec.com"          #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2021-12-31"                    #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Lili Nedeleva"         #  The name of the person behind github_user
+      email        = "lnedeleva@sol-tec.com" #  Their email address
+      org          = "Sol-Tec"               #  The organisation/entity they belong to
+      reason       = "PTTP Tech team"        #  Why is this person being granted access?
+      added_by     = "jgregory@sol-tec.com"  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2021-12-31"            #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
   ]
 }
