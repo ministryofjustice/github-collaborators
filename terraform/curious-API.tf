@@ -3,10 +3,10 @@ module "curious-API" {
   repository = "curious-API"
   collaborators = [
     {
-      github_user  = "graadi"
-      permission   = "push"
-      name         = "Adrian Gramada"
-      email        = "adrian.gramada@meganexus.com"
+      github_user  = "bharaatt"
+      permission   = "pull"
+      name         = "Bharat Parmar"
+      email        = "bharat.parmar@meganexus.com"
       org          = "MegaNexus"
       reason       = "MegaNexus are developing an API into Curious for HMPPS Education, Skills, Work and Employability (ESWE) project"
       added_by     = "Richard Adams <richard.adams@digital.justice.gov.uk>"
