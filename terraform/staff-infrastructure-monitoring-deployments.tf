@@ -10,7 +10,7 @@ module "staff-infrastructure-monitoring-deployments" {
       org          = "Made Tech Ltd"
       reason       = "PTTP Tech Team"
       added_by     = "richard.baguley@justice.gov.uk"
-      review_after = "2021-06-01"
+      review_after = "2021-10-31"
     },
     {
       github_user  = "Themitchell"
@@ -20,7 +20,7 @@ module "staff-infrastructure-monitoring-deployments" {
       org          = "Made Tech Ltd"
       reason       = "PTTP Tech Team"
       added_by     = "richard.baguley@justice.gov.uk"
-      review_after = "2021-06-01"
+      review_after = "2021-10-31"
     },
   ]
 }
