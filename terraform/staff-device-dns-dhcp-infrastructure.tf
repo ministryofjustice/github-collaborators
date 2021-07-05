@@ -20,7 +20,7 @@ module "staff-device-dns-dhcp-infrastructure" {
       org          = "Made Tech Ltd"
       reason       = "PTTP Tech Team"
       added_by     = "richard.baguley@digital.justice.gov.uk"
-      review_after = "2021-09-01"
+      review_after = "2021-10-31"
     },
   ]
 }
