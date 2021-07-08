@@ -16,7 +16,7 @@ module "network-access-control-infrastructure" {
       github_user  = "yusufsheiqh"
       permission   = "admin"
       name         = "Yusuf Sheikh"
-      email        = "yusuf@madetech.com "
+      email        = "yusuf@madetech.com"
       org          = "Made Tech Ltd"
       reason       = "MoJ Network Access Control Tech Team"
       added_by     = "justin.fielding@justice.gov.uk"
