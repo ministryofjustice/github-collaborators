@@ -33,7 +33,7 @@ module "mlap-sandpit" {
       review_after = "2021-11-30"
     },
     {
-      github_user  = "kevin.davies"
+      github_user  = "kevin-davies"
       permission   = "push"
       name         = "Kevin Davies"
       email        = "kevin.davies@mobilise.cloud"
