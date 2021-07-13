@@ -61,14 +61,14 @@ module "yjaf-csppi" {
       reason       = "Part of the Northgate supplier team for the YJB YJAF system"
       added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
       review_after = "2021-12-31"
-    },
+   },
     {
       github_user  = "waheedanjum"
       permission   = "push"
-      name         = "Muhammad Anjum"
-      email        = "muhammad.anjum@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the Northgate supplier team for the YJB system"
+      name         = "Muhammad Waheed Anjum"
+      email        = "muhammad.anjum@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
       review_after = "2021-12-31"
     },
