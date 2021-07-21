@@ -4,7 +4,7 @@ module "curious-API" {
   collaborators = [
     {
       github_user  = "bharaatt"
-      permission   = "pull"
+      permission   = "push"
       name         = "Bharat Parmar"
       email        = "bharat.parmar@meganexus.com"
       org          = "MegaNexus"
