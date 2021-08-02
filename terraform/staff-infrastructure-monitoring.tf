@@ -3,13 +3,13 @@ module "staff-infrastructure-monitoring" {
   repository = "staff-infrastructure-monitoring"
   collaborators = [
     {
-      github_user  = "thip"
+      github_user  = "Themitchell"
       permission   = "admin"
-      name         = "David Capper"
-      email        = "david.capper@madetech.com"
+      name         = "Andy Mitchell"
+      email        = "andrew.mitchell@madetech.com"
       org          = "Made Tech Ltd"
       reason       = "PTTP Tech Team"
-      added_by     = "richard.baguley@justice.gov.uk"
+      added_by     = "aaron.robinson1@justice.gov.uk"
       review_after = "2021-10-31"
     },
     {
