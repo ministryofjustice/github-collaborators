@@ -10,7 +10,7 @@ module "wmt-packer" {
       org          = "Kainos"
       reason       = "Kainos manage the Workload Management Tool  (WMT) application"
       added_by     = "shazad.mohammed@digital.justice.gov.uk" # TODO: replace with WMT team email address
-      review_after = "2021-04-01"
+      review_after = "2021-12-31"
     },
     {
       github_user  = "kevinfox1"
@@ -20,7 +20,7 @@ module "wmt-packer" {
       org          = "Kainos"
       reason       = "Kainos manage the Workload Management Tool  (WMT) application"
       added_by     = "shazad.mohammed@digital.justice.gov.uk" # TODO: replace with WMT team email address
-      review_after = "2021-04-01"
+      review_after = "2021-12-31"
     },
     {
       github_user  = "Sam-Rodgers"
@@ -30,7 +30,7 @@ module "wmt-packer" {
       org          = "Kainos"
       reason       = "Kainos manage the Workload Management Tool  (WMT) application"
       added_by     = "shazad.mohammed@digital.justice.gov.uk" # TODO: replace with WMT team email address
-      review_after = "2021-06-30"
+      review_after = "2021-12-31"
     },
   ]
 }
