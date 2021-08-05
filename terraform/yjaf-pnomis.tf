@@ -32,5 +32,15 @@ module "yjaf-pnomis" {
       added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
       review_after = "2021-12-31"
     },
+    {
+      github_user  = "VasilDimitrov22"
+      permission   = "push"
+      name         = "Vasil Dimitrov"
+      email        = "vasil.dimitrov@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "dev needs access to make app changes"
+      added_by     = "Joanna Harvey <joanna.harvey@necsws.com>"
+      review_after = "2022-08-04"
+    },
   ]
 }
