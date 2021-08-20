@@ -177,7 +177,7 @@ bin/import-repository-collaborators.rb acronyms`
 
 ...will create the file `terraform/acronyms.tf`
 
-It also imports any existing collaborators into the terraform state.
+It also imports any existing collaborators into the terraform state
 
 ### Import all repositories' collaborators
 
