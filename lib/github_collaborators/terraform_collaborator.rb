@@ -129,4 +129,54 @@ class GithubCollaborators
       nil
     end
   end
+
+  # Most of the functionality within this class is file based
+  # Unlike the GithubCollaborator functionality which can be pointed else where
+  # If you wish to use this elsewhere, the code must be copied to the repo with
+  # The target terraform/*.tf files
+  class TerraformCollaborators
+    attr_reader :base_url
+
+    TERRAFORM_DIR = "terraform"
+
+    def initialize(params)
+      @terraform_dir = params.fetch(:terraform_dir, TERRAFORM_DIR)
+      # Location of the Terraform folder containing collaborators
+      @base_url = params.fetch(:base_url)
+    end
+
+    # This function returns the collaborators from a tf file as an array of strings
+    # file_name: string
+    def return_collaborators_from_file(file_name)
+      # Grab repo name
+      repo = file_name[/(?<=#{@terraform_dir}\/)(.*)(?=.tf)/, 1]
+
+      if FileTest.exists?(file_name)
+        File.open file_name do |file|
+        # Grab each github_user line
+        lines = file.find_all { |line| line =~ /\s{4}github_user/ }
+        # For each github_user line, grab just the user
+        lines.each_with_object([]) do |line, arr|
+          # Grab username
+          user = /(?<=(["']\b))(?:(?=(\\?))\2.)*?(?=\1)/.match(line)[0]
+          # Create TerraformCollaborator and push to arr
+          arr.push(
+            GithubCollaborators::TerraformCollaborator.new(
+              repository: repo,
+              login: user,
+              base_url: @base_url
+            )
+          )
+          end
+        end
+      end
+    end
+
+    private
+
+    # Return absolute paths for every .tf file in the terraform directory
+    def fetch_terraform_files
+      Dir["#{@terraform_dir}/*.tf"]
+    end
+  end
 end
