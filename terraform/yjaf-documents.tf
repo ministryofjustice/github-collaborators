@@ -73,16 +73,6 @@ module "yjaf-documents" {
       review_after = "2021-12-01"
     },
     {
-      github_user  = "djv72"
-      permission   = "push"
-      name         = "David Vincent"
-      email        = "David.Vincent@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2021-12-31"
-    },
-    {
       github_user  = "fabien-white"
       permission   = "push"
       name         = "Fabien White"
