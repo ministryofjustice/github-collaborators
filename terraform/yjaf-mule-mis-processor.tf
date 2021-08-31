@@ -112,5 +112,15 @@ module "yjaf-mule-mis-processor" {
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
       review_after = "2021-12-31"
     },
+    {
+      github_user  = "InFlamesForever"
+      permission   = "push"
+      name         = "Richard Came"
+      email        = "richard.came@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
+      review_after = "2022-08-27"
+    },
   ]
 }
