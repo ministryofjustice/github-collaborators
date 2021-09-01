@@ -35,7 +35,7 @@ repos.each do |repo|
     next
   end
 
-  # Report when defined in Terraform but not GitHub
+  # Report when defined in Terraform but not GitHub.
   if gc.length != tc.length
     # Report
     puts "====================================="
