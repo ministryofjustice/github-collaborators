@@ -96,7 +96,6 @@ class GithubCollaborators
       # TODO: Above code hides errors with this function - uncomment below to see silent errors
       # puts JSON.parse(graphql.run_query(collaborators_query))
       # JSON.parse(graphql.run_query(collaborators_query))
-
     end
 
     private

@@ -20,18 +20,18 @@ repos.each do |repo|
   # Get the GitHub collaborators for current repo
   gc = external_collaborators.for_repository(repo.name)
   # Get the Terraform collaborators for current repo
-  tc = terraform_collaborators.return_collaborators_from_file("terraform/#{GithubCollaborators::tf_safe(repo.name)}.tf")
-  
+  tc = terraform_collaborators.return_collaborators_from_file("terraform/#{GithubCollaborators.tf_safe(repo.name)}.tf")
+
   # Edge cases
-  if gc.nil? or tc.nil?
+  if gc.nil? || tc.nil?
     next
   end
 
-  if gc.length == 0 and tc.length == 0 
+  if (gc.length == 0) && (tc.length == 0)
     next
   end
 
-  if tc.length == 0 
+  if tc.length == 0
     next
   end
 
@@ -43,8 +43,8 @@ repos.each do |repo|
     puts "GC Length: #{gc.length}"
     puts "TC Length: #{tc.length}"
     puts "Extra Names:"
-    tc.each do |tc_collab|     
-      puts tc_collab.login if not gc.any? { |x| x.fetch(:login) == tc_collab.login}
+    tc.each do |tc_collab|
+      puts tc_collab.login unless gc.any? { |x| x.fetch(:login) == tc_collab.login }
     end
     puts "-------------------------------------"
     puts "GC Members"
