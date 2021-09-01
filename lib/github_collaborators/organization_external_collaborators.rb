@@ -44,7 +44,6 @@ class GithubCollaborators
           permission: collab.permission,
           last_commit: last_commit(repo_name, collab.login)
         }
-
       end
     end
 

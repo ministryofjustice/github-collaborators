@@ -153,20 +153,20 @@ class GithubCollaborators
 
       if FileTest.exists?(file_name)
         File.open file_name do |file|
-        # Grab each github_user line
-        lines = file.find_all { |line| line =~ /\s{4}github_user/ }
-        # For each github_user line, grab just the user
-        lines.each_with_object([]) do |line, arr|
-          # Grab username
-          user = /(?<=(["']\b))(?:(?=(\\?))\2.)*?(?=\1)/.match(line)[0]
-          # Create TerraformCollaborator and push to arr
-          arr.push(
-            GithubCollaborators::TerraformCollaborator.new(
-              repository: repo,
-              login: user,
-              base_url: @base_url
+          # Grab each github_user line
+          lines = file.find_all { |line| line =~ /\s{4}github_user/ }
+          # For each github_user line, grab just the user
+          lines.each_with_object([]) do |line, arr|
+            # Grab username
+            user = /(?<=(["']\b))(?:(?=(\\?))\2.)*?(?=\1)/.match(line)[0]
+            # Create TerraformCollaborator and push to arr
+            arr.push(
+              GithubCollaborators::TerraformCollaborator.new(
+                repository: repo,
+                login: user,
+                base_url: @base_url
+              )
             )
-          )
           end
         end
       end
