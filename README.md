@@ -161,6 +161,14 @@ You can also use the `bin/post-data.sh` script to generate and POST the JSON dat
 
 * Does not report any external collaborators who have not yet accepted their invitation to collaborate. Pending collaborators are not reported by the github graphql API.
 
+### `bin/compare-terraform-to-github.rb`
+
+Outputs all external collaborators who are defined in the terraform code from this repo but are NOT actually set as an external collaborator at the given location.
+
+#### Caveats
+
+* This script requires a variety of permissions most users do not have - use the `worksflows/report-terraform-difference.yml` within GitHub actions if you do not have these permissions.
+
 ### `bin/list-repositories.rb`
 
 Output the names of all current (i.e. excluding deleted/archived/locked) MoJ github repositories.
