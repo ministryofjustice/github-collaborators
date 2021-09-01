@@ -1,0 +1,10 @@
+name: Repository check
+on:
+  workflow_dispatch:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - run: scripts/repository-check.sh ${{ github.event.inputs.github_user }} ${{ secrets.ADMIN_GITHUB_TOKEN }}
