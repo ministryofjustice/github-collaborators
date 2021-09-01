@@ -1,4 +1,4 @@
-name: Remove a collaborator
+name: Repository check
 on:
   workflow_dispatch:
 
