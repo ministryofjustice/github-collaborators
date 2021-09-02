@@ -145,7 +145,7 @@ class GithubCollaborators
       @base_url = params.fetch(:base_url)
     end
 
-    # This function returns the collaborators from a tf file as an array of strings
+    # This function returns the collaborators from a tf file as an array of TerraformCollaborator (singular class)
     # file_name: string
     def return_collaborators_from_file(file_name)
       # Grab repo name

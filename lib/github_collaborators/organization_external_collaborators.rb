@@ -50,7 +50,7 @@ class GithubCollaborators
     private
 
     # Returns time of last commit
-    # login: string
+    # username: string
     # repo: string
     def last_commit(repo, username)
       LastCommit.new(
