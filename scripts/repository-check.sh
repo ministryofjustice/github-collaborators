@@ -6,8 +6,8 @@ for eachfile in $yourfilenames
 do
    repo=$(basename $eachfile .tf)
    json=$(curl -s -u $username:$token https://api.github.com/repos/ministryofjustice/$repo)
-   echo $json | jq .message
-   bool=$(echo $json | jq 'has("message")')
    found=$(echo $json | jq .message)
-   if [ $bool == true ]; then echo "$repo"; fi
+   if [ "$found" == '"Not Found"' ] && [ "$repo" != 'main' ] \
+   && [ "$repo" != 'versions' ] && [ "$repo" != 'variables' ];
+   then echo "$repo not found"; fi
 done
