@@ -14,7 +14,7 @@ module "delius" {
     },
     {
       github_user  = "duncancrawford"
-      permission   = "read"
+      permission   = "pull"
       name         = "Duncan Crawford"                                                                                   #  The name of the person behind github_user
       email        = "Duncan.Crawford@digital.justice.gov.uk"                                                            #  Their email address
       org          = "Equal Experts"                                                                                     #  The organisation/entity they belong to
