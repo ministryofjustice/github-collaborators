@@ -3,16 +3,6 @@ module "yjaf-gateway" {
   repository = "yjaf-gateway"
   collaborators = [
     {
-      github_user  = "brbaje-dev"
-      permission   = "push"
-      name         = "Ben Bajek"
-      email        = "ben.bajek@northgateps.com"
-      org          = "Northgate"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2021-12-11"
-    },
-    {
       github_user  = "gregi2n"
       permission   = "admin"
       name         = "Greg Whiting"
@@ -61,26 +51,6 @@ module "yjaf-gateway" {
       reason       = "Part of the Northgate supplier team for the YJB YJAF system"
       added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
       review_after = "2022-01-27"
-    },
-    {
-      github_user  = "henrycarteruk"
-      permission   = "admin"
-      name         = "Henry Carter"
-      email        = "henry.carter@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
-      review_after = "2021-12-01"
-    },
-    {
-      github_user  = "fabien-white"
-      permission   = "push"
-      name         = "Fabien White"
-      email        = "Fabien.White@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2021-12-31"
     },
     {
       github_user  = "MylesW123"

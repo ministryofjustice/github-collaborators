@@ -3,16 +3,6 @@ module "staff-device-logging-infrastructure" {
   repository = "staff-device-logging-infrastructure"
   collaborators = [
     {
-      github_user  = "Themitchell"
-      permission   = "admin"
-      name         = "Andy Mitchell"
-      email        = "andrew.mitchell@madetech.com"
-      org          = "Made Tech Ltd"
-      reason       = "PTTP Tech Team"
-      added_by     = "richard.baguley@digital.justice.gov.uk"
-      review_after = "2021-09-01"
-    },
-    {
       github_user  = "richrace"
       permission   = "admin"
       name         = "Richard Race"

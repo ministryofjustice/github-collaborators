@@ -12,25 +12,5 @@ module "tax-tribunals-datacapture" {
       added_by     = "Sunil.Parmar@HMCTS.NET" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2021-06-01"             #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
-    {
-      github_user  = "AhsanZX97"
-      permission   = "push"
-      name         = "Ahsan Zia"              #  The name of the person behind github_user
-      email        = "ahsan.zia@hmcts.net"    #  Their email address
-      org          = "Solirius Consulting"    #  The organisation/entity they belong to
-      reason       = "Project maintainer"     #  Why is this person being granted access?
-      added_by     = "Sunil.Parmar@HMCTS.NET" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2021-06-01"             #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
-    },
-    {
-      github_user  = "Jemimahk"
-      permission   = "push"
-      name         = "Jemimah Kemirembe"
-      email        = "jemimah.kemirembe1@hmcts.net"
-      org          = "Solirius Consulting"
-      reason       = "Project maintainer"
-      added_by     = "Sunil.Parmar@HMCTS.NET"
-      review_after = "2021-08-31"
-    },
   ]
 }

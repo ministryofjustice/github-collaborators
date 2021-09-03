@@ -33,16 +33,6 @@ module "mlap-sandpit" {
       review_after = "2021-11-30"
     },
     {
-      github_user  = "kevin-davies"
-      permission   = "push"
-      name         = "Kevin Davies"
-      email        = "kevin.davies@mobilise.cloud"
-      org          = "Mobilise"
-      reason       = "MLAP Beta phase"
-      added_by     = "Bartlomiej Bezulski <bartlomiej.bezulski@digital.justice.gov.uk>"
-      review_after = "2021-11-30"
-    },
-    {
       github_user  = "lancemmobilise"
       permission   = "push"
       name         = "Lance Morris"
