@@ -1,0 +1,22 @@
+name: Report collaborators defined in Terraform who are not present in GitHub
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+        tags:
+          description: 'Placeholder'
+          required: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: bin/compare-terraform-to-github.rb
+        env:
+          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+          REPO: ${{ github.event.inputs.repository }}
+          USERNAME: ${{ github.event.inputs.github_user }}

@@ -85,11 +85,17 @@ class GithubCollaborators
       @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
     end
 
+    # TODO - this only returns the first 100
+    # Lists collaborators attached to a repo - GitHub API
     def list
       JSON.parse(graphql.run_query(collaborators_query))
         .dig("data", "organization", "repository", "collaborators", "edges")
         .to_a
         .map { |hash| Collaborator.new(hash) }
+
+      # TODO: Above code hides errors with this function - uncomment below to see silent errors
+      # puts JSON.parse(graphql.run_query(collaborators_query))
+      # JSON.parse(graphql.run_query(collaborators_query))
     end
 
     private
