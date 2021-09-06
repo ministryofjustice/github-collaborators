@@ -53,16 +53,6 @@ module "yjaf-devops-infrastructure" {
       review_after = "2021-12-11"
     },
     {
-      github_user  = "TomDover-NorthgatePS"
-      permission   = "push"
-      name         = "Tom Dover"
-      email        = "tom.dover@northgateps.com"
-      org          = "Northgate"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2021-12-11"
-    },
-    {
       github_user  = "VasilDimitrov22"
       permission   = "push"
       name         = "Vasil Dimitrov"
@@ -80,16 +70,6 @@ module "yjaf-devops-infrastructure" {
       org          = "NPS (northgate)"
       reason       = "Part of the Northgate supplier team for the YJB YJAF system"
       added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
-      review_after = "2021-12-31"
-    },
-    {
-      github_user  = "waheedanjum"
-      permission   = "push"
-      name         = "Muhammad Anjum"
-      email        = "muhammad.anjum@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the Northgate supplier team for the YJB system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
       review_after = "2021-12-31"
     },
   ]
