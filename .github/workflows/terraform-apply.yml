@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@main
       - uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 0.13.5
+          terraform_version: 0.14.11
       - run: |
           cd terraform
           terraform init -backend-config="bucket=${S3_BUCKET_NAME}" -backend-config="dynamodb_table=${DYNAMODB_TABLE}"
