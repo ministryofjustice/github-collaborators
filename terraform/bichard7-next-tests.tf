@@ -74,7 +74,7 @@ module "bichard7-next-tests" {
     },
     {
       github_user  = "praveenmadan"
-      permission   = "pull"
+      permission   = "push"
       name         = "Praveen Madan"                            #  The name of the person behind github_user
       email        = "Praveen.Madan1@homeoffice.gov.uk"         #  Their email address
       org          = "Home Office"                              #  The organisation/entity they belong to
