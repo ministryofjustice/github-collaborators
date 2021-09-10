@@ -24,6 +24,8 @@ class GithubCollaborators
     }
 
     YEAR = 365
+    MONTH = 31
+    WEEK = 7
 
     def initialize(params)
       @repository = params.fetch(:repository)
@@ -47,8 +49,15 @@ class GithubCollaborators
 
       rtn = REQUIRED_ATTRIBUTES.map { |attr, msg| msg if get_value(attr).nil? }.compact
       unless review_after.nil?
-        rtn << "Review after date has passed" if review_after < Date.today
-        rtn << "Review after date is more than a year in the future" if review_after > (Date.today + YEAR)
+        if review_after < Date.today
+          rtn << "Review after date has passed"
+        elsif review_after > (Date.today + YEAR)
+          rtn << "Review after date is more than a year in the future"
+        elsif (Date.today + MONTH) > review_after
+          rtn << "Review after date is within a month"
+        elsif (Date.today + WEEK) > review_after
+          rtn << "Review after date is within a week"
+        end
       end
       rtn
     end

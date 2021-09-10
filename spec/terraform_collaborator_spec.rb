@@ -1,6 +1,6 @@
 class GithubCollaborators
   describe TerraformCollaborator do
-    let(:review_date) { (Date.today + 30).strftime("%Y-%m-%d") }
+    let(:review_date) { (Date.today + 32).strftime("%Y-%m-%d") }
 
     let(:matthewtansini) {
       <<EOF
