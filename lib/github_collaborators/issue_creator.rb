@@ -23,12 +23,10 @@ class GithubCollaborators
     def get_issues_for_user
       url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
       response = HttpClient.new.fetch_json(url).body
-      JSON.parse(response).select { |x| x["assignee"]["login"] == github_user}
+      JSON.parse(response).select { |x| x["assignee"]["login"] == github_user }
     end
 
     private
-
-
 
     def issue_hash
       {
