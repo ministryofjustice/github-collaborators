@@ -20,7 +20,7 @@ output = {
 # Loop through failed external collaborators
 list.each do |x|
   # If issues include review date being within a month, create an issue on the repo
-  if x["issues"].include? 'Review after date is within a month'
+  if x["issues"].include? "Review after date is within a month"
     params = {
       owner: login,
       repository: x["repository"],
@@ -33,5 +33,3 @@ end
 
 # Output for report
 puts output.to_json
-
-
