@@ -24,10 +24,6 @@ class GithubCollaborators
       ic.create
     end
 
-    let(:test_json) {
-      %([{"assignee":["login": "somegithubuser"]}])
-    }
-
     it "returns present issues" do
       url = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
       response = Net::HTTPSuccess.new(1.0, '200', 'OK')
