@@ -23,5 +23,15 @@ class GithubCollaborators
 
       ic.create
     end
+
+    it "returns present issues" do
+      url = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
+      response = Net::HTTPSuccess.new(1.0, "200", "OK")
+      expect(response).to receive(:body) { '[{"assignee":{"login": "somegithubuser"}}]' }
+      expect(HttpClient).to receive(:new).and_return(http_client)
+      expect(http_client).to receive(:fetch_json).and_return(response)
+
+      expect(ic.get_issues_for_user).not_to be_empty
+    end
   end
 end
