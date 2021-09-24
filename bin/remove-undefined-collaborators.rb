@@ -29,6 +29,9 @@ end
 url = ENV.fetch("OPS_ENG_REPORTS_URL")
 json = GithubCollaborators::HttpClient.new.fetch_json(url).body
 
+if json == "":
+  return
+
 JSON.parse(json)
   .fetch("data")
   .find_all { |c| !c["defined_in_terraform"] }
