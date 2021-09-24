@@ -29,7 +29,7 @@ end
 url = ENV.fetch("OPS_ENG_REPORTS_URL")
 json = GithubCollaborators::HttpClient.new.fetch_json(url).body
 
-if json == "":
+if json == ""
   return
 
 JSON.parse(json)
