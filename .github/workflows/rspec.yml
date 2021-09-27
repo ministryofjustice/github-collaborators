@@ -20,4 +20,4 @@ jobs:
         run: rspec
       - name: Run depedency audit
         run: |
-          bundle-audit check
+          bundle exec bundler-audit
