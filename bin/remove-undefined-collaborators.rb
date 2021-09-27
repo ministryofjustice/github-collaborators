@@ -31,6 +31,7 @@ json = GithubCollaborators::HttpClient.new.fetch_json(url).body
 
 if json == ""
   return
+end
 
 JSON.parse(json)
   .fetch("data")
