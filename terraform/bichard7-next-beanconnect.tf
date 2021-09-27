@@ -85,8 +85,8 @@ module "bichard7-next-beanconnect" {
     {
       github_user  = "maheshsubramanian"
       permission   = "pull"
-      name         = "Mahesh Subramanian"                            #  The name of the person behind github_user
-      email        = "Mahesh.Subramanian1@hmcts.net"                  #  Their email address
+      name         = "Mahesh Subramanian"                       #  The name of the person behind github_user
+      email        = "Mahesh.Subramanian1@hmcts.net"            #  Their email address
       org          = "HMCTS"                                    #  The organisation/entity they belong to
       reason       = "Integration testing for Common Platform"  #  Why is this person being granted access?
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
