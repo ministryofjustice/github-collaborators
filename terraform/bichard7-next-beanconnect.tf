@@ -71,6 +71,26 @@ module "bichard7-next-beanconnect" {
       reason       = "CJSE Bichard Development"                 #  Why is this person being granted access?
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
+    {
+      github_user  = "SachinDangui"
+      permission   = "pull"
+      name         = "Sachin Dangui"                            #  The name of the person behind github_user
+      email        = "Sachin.Dangui@hmcts.net"                  #  Their email address
+      org          = "HMCTS"                                    #  The organisation/entity they belong to
+      reason       = "Integration testing for Common Platform"  #  Why is this person being granted access?
+      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
+    {
+      github_user  = "maheshsubramanian"
+      permission   = "pull"
+      name         = "Mahesh Subramanian"                       #  The name of the person behind github_user
+      email        = "Mahesh.Subramanian1@hmcts.net"            #  Their email address
+      org          = "HMCTS"                                    #  The organisation/entity they belong to
+      reason       = "Integration testing for Common Platform"  #  Why is this person being granted access?
+      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2021-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     }
   ]
 }
