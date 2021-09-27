@@ -17,3 +17,6 @@ jobs:
           gem install rspec
       - name: Run tests
         run: rspec
+      - name: Run depedency audit
+        run: |
+          bundle-audit check
