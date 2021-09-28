@@ -1,0 +1,53 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bundler-audit (0.9.0.1)
+      bundler (>= 1.2.0, < 3)
+      thor (~> 1.0)
+    cgi (0.2.0)
+    date (3.1.1)
+    diff-lcs (1.4.4)
+    erb (2.2.3)
+      cgi
+    io-wait (0.1.0)
+    json (2.5.1)
+    net-http (0.1.1)
+      net-protocol
+      uri
+    net-protocol (0.1.1)
+      io-wait
+      timeout
+    rspec (3.7.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
+    rspec-core (3.7.1)
+      rspec-support (~> 3.7.0)
+    rspec-expectations (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-mocks (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-support (3.7.1)
+    thor (1.1.0)
+    timeout (0.1.1)
+    uri (0.10.1)
+
+PLATFORMS
+  x64-mingw32
+  x86_64-linux
+
+DEPENDENCIES
+  bundler-audit (~> 0.9.0.1)
+  date (~> 3.1.0)
+  erb (~> 2.2.0)
+  json (~> 2.5.1)
+  net-http (~> 0.1.1)
+  rspec (~> 3.7.0)
+
+RUBY VERSION
+   ruby 3.0.2p107
+
+BUNDLED WITH
+   2.2.22
