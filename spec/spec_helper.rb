@@ -1,3 +1,8 @@
+require 'simplecov'
+SimpleCov.start do
+  add_filter "/spec/"
+end
+
 require_relative "../lib/github_collaborators"
 
 RSpec.configure do |config|
