@@ -16,6 +16,9 @@ jobs:
       - name: Install rspec
         run: |
           gem install rspec
+      - name: Install simplecov
+        run: |
+          gem install simplecov
       - name: Run tests
         run: rspec
       - name: Run depedency audit
