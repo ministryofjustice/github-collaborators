@@ -13,7 +13,7 @@ jobs:
   post-data-to-opseng-reports:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v2
         with:
           ref: json-parse-bug-fix
       - uses: ruby/setup-ruby@v1
