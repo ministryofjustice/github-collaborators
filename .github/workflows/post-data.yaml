@@ -7,12 +7,17 @@ on:
 env:
   OPERATIONS_ENGINEERING_REPORTS_HOST: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_HOST }}
   OPS_ENG_REPORTS_URL: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_HOST }}/github_collaborators
+  RUBY_VERSION: 3.0.2
 
 jobs:
   post-data-to-opseng-reports:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
       - run: bin/post-data.sh
         env:
           ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
