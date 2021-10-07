@@ -20,10 +20,26 @@ class GithubCollaborators
       end
     end
 
+    # Returns issues for a the user
     def get_issues_for_user
       url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
+      # Fetch all issues for repo
       response = HttpClient.new.fetch_json(url).body
-      JSON.parse(response).select { |x| x["assignee"]["login"] == github_user }
+      response_json = JSON.parse(response, {symbolize_names: true})
+
+      # Return empty array if no issues
+      if response_json.nil? || response_json.empty?
+        []
+      else
+        # Get only issues used by this application
+        issues = response_json.select { |x| x[:title].include? "Review after date" }
+        # Check if there is an issue for that user
+        if !issues.nil? && !issues&.empty?
+          response_json.select { |x| x[:assignee][:login] == github_user }
+        else
+          []
+        end
+      end
     end
 
     private
