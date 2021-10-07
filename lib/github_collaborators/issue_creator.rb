@@ -25,11 +25,11 @@ class GithubCollaborators
       url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
       # Fetch all issues for repo
       response = HttpClient.new.fetch_json(url).body
-      response_json = JSON.parse(response, {:symbolize_names => true})
+      response_json = JSON.parse(response, {symbolize_names: true})
 
       # Return empty array if no issues
       if response_json.nil? || response_json.empty?
-        return []
+        []
       else
         # Get only issues used by this application
         issues = response_json.select { |x| x[:title].include? "Review after date" }
@@ -37,7 +37,7 @@ class GithubCollaborators
         if !issues.nil? && !issues&.empty?
           response_json.select { |x| x[:assignee][:login] == github_user }
         else
-          return []
+          []
         end
       end
     end

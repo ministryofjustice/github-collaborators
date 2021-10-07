@@ -37,7 +37,7 @@ class GithubCollaborators
     it "returns [] if no issues" do
       url = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
       response = Net::HTTPSuccess.new(1.0, "200", "OK")
-      expect(response).to receive(:body) { '[]' }
+      expect(response).to receive(:body) { "[]" }
       expect(HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).and_return(response)
 
