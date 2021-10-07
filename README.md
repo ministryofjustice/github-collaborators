@@ -199,3 +199,9 @@ bin/list-repositories.rb | xargs bin/import-repository-collaborators.rb
 [triggering the action]: https://github.com/ministryofjustice/github-collaborators/actions?query=workflow%3A.github%2Fworkflows%2Fpost-data.yaml
 [Terraform]: https://www.terraform.io/downloads.html
 [this report]: https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_collaborators
+
+## Development
+
+Make sure you have `bundler` installed (`gem install bundler` if not). Run `bundle install` to set up locally.
+
+Run the tests with `bundle exec rspec`. This will generate a coverage report using simplecov. You can see it by running `open coverage/index.html`
