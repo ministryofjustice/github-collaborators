@@ -35,7 +35,7 @@ class GithubCollaborators
         issues = response_json.select { |x| x[:title].include? "Review after date" }
         # Check if there is an issue for that user
         if !issues.nil? && !issues&.empty?
-          response_json.select { |x| x[:assignee][:login] == github_user }
+          issues.select { |x| x[:assignee][:login] == github_user }
         else
           []
         end
