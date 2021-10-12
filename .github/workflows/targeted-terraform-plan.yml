@@ -23,4 +23,5 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 0.14.11
+      - run: scripts/validate-commit-files.sh
       - run: scripts/targeted-plan.sh
