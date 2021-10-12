@@ -18,7 +18,7 @@ check_file_extensions(){
   done
 
 
-  if [[ $RC_FLAG == 1]]; then
+  if [[ ${RC_FLAG} == 1 ]]; then
     exit 1
   fi
 }
