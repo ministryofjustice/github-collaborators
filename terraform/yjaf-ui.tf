@@ -112,5 +112,15 @@ module "yjaf-ui" {
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
       review_after = "2021-12-31"
     },
+    {
+      github_user  = "richardbradwell"
+      permission   = "push"
+      name         = "Richard Bradwell"
+      email        = "richard.bradwell@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "New full stack developer, needs access to repos for coding tasks"
+      added_by     = "Jo Harvey <joanna.harvey@necsws.com"
+      review_after = "2022-05-10"
+    },
   ]
 }
