@@ -1,6 +1,6 @@
-module "pfs-software-services_rdp.tf" {
+module "pfs-software-services_rdp" {
   source     = "./modules/repository-collaborators"
-  repository = "pfs-software-services_rdp.tf"
+  repository = "pfs-software-services_rdp"
   collaborators = [
     {
       github_user  = "nathanials"
