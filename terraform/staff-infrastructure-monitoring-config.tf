@@ -41,6 +41,16 @@ module "staff-infrastructure-monitoring-config" {
       reason       = "MoJ NAC Tech Team"
       added_by     = "justin.fielding@justice.gov.uk"
       review_after = "2022-01-01"
+    },
+    {
+      github_user  = "neilkidd"
+      permission   = "admin"
+      name         = "Neil Kidd"
+      email        = "neil.kidd@madetech.com"
+      org          = "Made Tech Ltd"
+      reason       = "PTTP Tech Team"
+      added_by     = "aaron.robinson@digital.justice.gov.uk"
+      review_after = "2022-04-31"
     }
   ]
 }
