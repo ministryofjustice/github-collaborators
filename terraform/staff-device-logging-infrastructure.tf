@@ -11,6 +11,16 @@ module "staff-device-logging-infrastructure" {
       reason       = "PTTP Tech Team"
       added_by     = "richard.baguley@digital.justice.gov.uk"
       review_after = "2021-10-31"
+    },
+    {
+      github_user  = "neilkidd"
+      permission   = "admin"
+      name         = "Neil Kidd"
+      email        = "neil.kidd@madetech.com"
+      org          = "Made Tech Ltd"
+      reason       = "PTTP Tech Team"
+      added_by     = "aaron.robinson@digital.justice.gov.uk"
+      review_after = "2022-04-31"
     }
   ]
 }
