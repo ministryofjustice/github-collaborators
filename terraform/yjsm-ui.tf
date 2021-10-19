@@ -62,7 +62,7 @@ module "yjsm-ui" {
       added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
       review_after = "2021-12-31"
     },
-      {
+    {
       github_user  = "brbaje-dev"
       permission   = "admin"
       name         = "Ben Bajek"
