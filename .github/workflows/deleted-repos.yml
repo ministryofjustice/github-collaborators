@@ -16,6 +16,6 @@ jobs:
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
-      - run: bin/deleted-repos.rb
+      - run: bin/report-deleted-repos.rb
         env:
           ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
