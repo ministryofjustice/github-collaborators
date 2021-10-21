@@ -92,5 +92,15 @@ module "yjsm-hub-svc" {
       added_by     = "Greg Whiting - greg.whiting@northgateps.com"
       review_after = "2022-12-31"
     },
+    {
+      github_user  = "richardbradwell"
+      permission   = "push"
+      name         = "Richard Bradwell"
+      email        = "richard.bradwell@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Currently working on system that talks to it therefore having access would help understanding"
+      added_by     = "Jo Harvey - joanna.harvey@necsws.com"
+      review_after = "2022-10-21"
+    },
   ]
 }
