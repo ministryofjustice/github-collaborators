@@ -1,0 +1,21 @@
+name: Report deleted repos
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 4 * * *"
+
+env:
+  RUBY_VERSION: 3.0.2
+
+jobs:
+  report-deleted-repos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
+      - run: bin/report-deleted-repos.rb
+        env:
+          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
