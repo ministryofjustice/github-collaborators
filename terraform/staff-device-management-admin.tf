@@ -3,7 +3,7 @@ module "staff-device-management-admin" {
   repository = "staff-device-management-admin"
   collaborators = [
     {
-      github_user  = "JimGregory-SolTec"
+      github_user  = "JimGregory-CplusC"
       permission   = "admin"
       name         = "Jim Gregory"                   #  The name of the person behind github_user
       email        = "jgregory@sol-tec.com"          #  Their email address
