@@ -10,6 +10,8 @@ GEM
     docile (1.4.0)
     erb (2.2.3)
       cgi
+    git (1.9.1)
+      rchardet (~> 1.8)
     io-wait (0.1.0)
     json (2.5.1)
     net-http (0.1.1)
@@ -18,6 +20,7 @@ GEM
     net-protocol (0.1.1)
       io-wait
       timeout
+    rchardet (1.8.0)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
@@ -40,6 +43,7 @@ GEM
     thor (1.1.0)
     timeout (0.1.1)
     uri (0.10.1)
+    uuidtools (2.2.0)
 
 PLATFORMS
   x64-mingw32
@@ -50,10 +54,12 @@ DEPENDENCIES
   bundler-audit (~> 0.9.0.1)
   date (~> 3.1.0)
   erb (~> 2.2.0)
+  git (~> 1.9)
   json (~> 2.5.1)
   net-http (~> 0.1.1)
   rspec (~> 3.7.0)
   simplecov
+  uuidtools (~> 2.2)
 
 RUBY VERSION
    ruby 3.0.2p107

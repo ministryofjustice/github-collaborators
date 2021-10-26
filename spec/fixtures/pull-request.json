@@ -1,0 +1,13 @@
+{
+  "number": 290,
+  "title": "This is a test PR",
+  "files": {
+    "edges": [
+      {
+        "node": {
+          "path": "terraform/myfile.tf"
+        }
+      }
+    ]
+  }
+}

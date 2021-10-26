@@ -2,7 +2,7 @@ name: Report deleted repos
 on:
   workflow_dispatch:
   schedule:
-    - cron: "23 4 * * *"
+    - cron: "0 */2 * * *"
 
 env:
   RUBY_VERSION: 3.0.2

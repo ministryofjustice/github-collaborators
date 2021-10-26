@@ -1,0 +1,143 @@
+{
+  "data": {
+    "organization": {
+      "repository": {
+        "name": "github-collaborators",
+        "pullRequests": {
+          "nodes": [
+            {
+              "number": 17,
+              "title": "Update yjaf-ui.tf",
+              "files": {
+                "edges": [
+                  {
+                    "node": {
+                      "path": "terraform/yjaf-ui.tf"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "number": 24,
+              "title": "Update cts-prototype.tf",
+              "files": {
+                "edges": [
+                  {
+                    "node": {
+                      "path": "terraform/cts-prototype.tf"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "number": 89,
+              "title": "Add emma as a collaborator to dns/dhcp",
+              "files": {
+                "edges": [
+                  {
+                    "node": {
+                      "path": "terraform/staff-device-dns-dhcp-admin.tf"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "number": 154,
+              "title": "Add Luke Crosby to list of security guidance collaborators.",
+              "files": {
+                "edges": [
+                  {
+                    "node": {
+                      "path": "terraform/security-guidance.tf"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "number": 158,
+              "title": "Update tax-tribunals-datacapture.tf",
+              "files": {
+                "edges": [
+                  {
+                    "node": {
+                      "path": "terraform/tax-tribunals-datacapture.tf"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "number": 197,
+              "title": "Update security-guidance.tf",
+              "files": {
+                "edges": [
+                  {
+                    "node": {
+                      "path": "terraform/security-guidance.tf"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "number": 202,
+              "title": "Add Sol-Tec team member to collaborators for PTTP apps project",
+              "files": {
+                "edges": [
+                  {
+                    "node": {
+                      "path": "terraform/staff-device-management-windows10-apps.tf"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "number": 217,
+              "title": "Add PTTP team members",
+              "files": {
+                "edges": [
+                  {
+                    "node": {
+                      "path": "terraform/staff-device-management-windows10-apps.tf"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "number": 246,
+              "title": "Add Ethan-McDowall to the prototype repository: directory-experiment ",
+              "files": {
+                "edges": [
+                  {
+                    "node": {
+                      "path": "terraform/directory-experiment.tf"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "number": 290,
+              "title": "Access to repository to store Kainos RDP code",
+              "files": {
+                "edges": [
+                  {
+                    "node": {
+                      "path": "terraform/pfs-software-services_rdp.tf"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
