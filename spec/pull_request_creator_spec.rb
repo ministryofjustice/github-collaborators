@@ -8,7 +8,7 @@ class GithubCollaborators
         branch: "mybranch"
       }
     }
-    
+
     subject(:ic) { described_class.new(params) }
 
     let(:http_client) { double(HttpClient) }

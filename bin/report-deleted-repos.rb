@@ -23,7 +23,7 @@ end
 # This probably deserves its own class but keeping it here for now until we need more major functionality in this area
 def create_branch_for_file(file)
   # Init local Git
-  g = Git.open('.')
+  g = Git.open(".")
 
   # Generate random uuid for branch name
   branch_name = UUIDTools::UUID.timestamp_create.to_s
@@ -40,12 +40,12 @@ def create_branch_for_file(file)
 
   # Push
   g.push(
-      remote = g.remote('origin'),
-      branch = branch_name
+    remote = g.remote("origin"),
+    branch = branch_name
   )
 
   # Cleanup
-  g.checkout('main')
+  g.checkout("main")
 
   # Return branch name for PR creation
   branch_name
@@ -94,7 +94,7 @@ puts "Current repo files that need deleting but do not have a PR"
 puts repo_delta
 
 # Create PRs
-repo_delta.each { | repo | 
+repo_delta.each { |repo|
   branch_name = create_branch_for_file("#{terraform_dir}/#{repo}.tf")
 
   # Give GitHub some time
