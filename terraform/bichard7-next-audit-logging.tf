@@ -65,7 +65,7 @@ module "bichard7-next-audit-logging" {
     {
       github_user  = "bleakcon"
       permission   = "push"
-      name         = "Samuel Blackwell"               #  The name of the person behind github_user
+      name         = "Samuel Blackwell"                         #  The name of the person behind github_user
       email        = "samuel.blackwell@madetech.com"            #  Their email address
       org          = "Madetech"                                 #  The organisation/entity they belong to
       reason       = "CJSE Bichard Development"                 #  Why is this person being granted access?
