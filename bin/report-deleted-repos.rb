@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require_relative "../lib/github_collaborators"
 require 'git'
+require_relative "../lib/github_collaborators"
 
 login = "ministryofjustice"
 base_url = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
@@ -108,5 +108,5 @@ repo_delta.each { |repo|
     branch: branch_name
   }
 
-  GithubCollaborators::PullRequestCreator.new(params).create
+  #GithubCollaborators::PullRequestCreator.new(params).create
 }
