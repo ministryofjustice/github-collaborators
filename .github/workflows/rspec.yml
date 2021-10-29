@@ -13,6 +13,9 @@ jobs:
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
+      - name: Install git
+        run: |
+          gem install git
       - name: Install rspec
         run: |
           gem install rspec
