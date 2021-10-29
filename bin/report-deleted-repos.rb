@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require_relative "../lib/github_collaborators"
+require 'git'
 
 login = "ministryofjustice"
 base_url = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
