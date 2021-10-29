@@ -12,15 +12,12 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
-      - name: bundle install
-      - name: Install rspec
-        run: |
-          gem install rspec
+      - run: bundle install
       - name: Install simplecov
         run: |
           gem install simplecov
       - name: Run tests
-        run: rspec
+        run: bundle exec rspec
       - name: Run depedency audit
         run: |
           bundle exec bundler-audit
