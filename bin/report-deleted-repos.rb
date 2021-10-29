@@ -33,10 +33,10 @@ def create_branch_for_file(file)
   g.checkout(branch_name)
 
   # Stage file
-  g.add(file_name)
+  g.add(file)
 
   # Commit
-  g.commit("Remove #{file_name} as repository has been deleted/archived")
+  g.commit("Remove #{file} as repository has been deleted/archived")
 
   # Push
   g.push(
