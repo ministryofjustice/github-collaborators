@@ -10,8 +10,5 @@ gem 'bundler-audit', '~>0.9.0.1'
 gem 'simplecov', require: false, group: :test
 
 
-gem "uuidtools", "~> 2.2"
 
 gem "bundler", "~> 2.2"
-
-gem "git", "~> 1.9"
