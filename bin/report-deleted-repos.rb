@@ -108,5 +108,5 @@ repo_delta.each { |repo|
     branch: branch_name
   }
 
-  #GithubCollaborators::PullRequestCreator.new(params).create
+  GithubCollaborators::PullRequestCreator.new(params).create
 }
