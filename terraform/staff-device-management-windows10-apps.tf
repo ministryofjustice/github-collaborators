@@ -34,7 +34,7 @@ module "staff-device-management-windows10-apps" {
     },
     {
       github_user  = "LiliNedeleva"
-      permission   = "push"
+      permission   = "admin"
       name         = "Lili Nedeleva"         #  The name of the person behind github_user
       email        = "lnedeleva@sol-tec.com" #  Their email address
       org          = "Sol-Tec"               #  The organisation/entity they belong to
