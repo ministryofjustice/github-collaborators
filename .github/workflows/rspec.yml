@@ -12,7 +12,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
-      - name: bundle install
+      - run: bundle install
       - name: Install rspec
         run: |
           gem install rspec

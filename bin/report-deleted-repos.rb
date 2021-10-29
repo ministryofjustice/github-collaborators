@@ -25,6 +25,9 @@ def create_branch_for_file(file)
   # Init local Git
   g = Git.open(".")
 
+  g.config('user.name', 'Operations Engineering Bot')
+  g.config('user.email', 'dummy@email.com')
+
   # Generate random uuid for branch name
   branch_name = UUIDTools::UUID.timestamp_create.to_s
 
