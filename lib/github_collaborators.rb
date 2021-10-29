@@ -1,3 +1,5 @@
+require 'rubygems'
+require 'bundler/setup'
 require "date"
 require "erb"
 require "json"

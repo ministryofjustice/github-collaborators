@@ -12,14 +12,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
-          bundler-cache: true
-      # The Git and uuidtools installation are both work arounds, this should all be handled by the bundler TODO
-      - name: Install git
-        run: |
-          gem install git
-      - name: Install uuidtools
-        run: |
-          gem install uuidtools
+      - name: bundle install
       - name: Install rspec
         run: |
           gem install rspec
