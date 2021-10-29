@@ -9,6 +9,5 @@ gem 'net-http', '~>0.1.1'
 gem 'bundler-audit', '~>0.9.0.1'
 gem 'simplecov', require: false, group: :test
 
-gem "git", "~> 1.9"
 
 gem "uuidtools", "~> 2.2"
