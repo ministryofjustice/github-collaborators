@@ -11,3 +11,7 @@ gem 'simplecov', require: false, group: :test
 
 
 gem "uuidtools", "~> 2.2"
+
+gem "bundler", "~> 2.2"
+
+gem "git", "~> 1.9"
