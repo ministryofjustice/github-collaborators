@@ -13,14 +13,11 @@ jobs:
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
       - run: bundle install
-      - name: Install rspec
-        run: |
-          gem install rspec
       - name: Install simplecov
         run: |
           gem install simplecov
       - name: Run tests
-        run: rspec
+        run: bundle exec rspec
       - name: Run depedency audit
         run: |
           bundle exec bundler-audit
