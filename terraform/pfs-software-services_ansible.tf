@@ -3,7 +3,7 @@ module "pfs-software-services_ansible" {
   repository = "pfs-software-services_ansible"
   collaborators = [
     {
-      github_user  = "nathanials"
+      github_user  = "Nathanials"
       permission   = "admin"
       name         = "Nathanials Stewart"                                                                              #  The name of the person behind github_user
       email        = "n.stewart@kainos.com"                                                                            #  Their email address
