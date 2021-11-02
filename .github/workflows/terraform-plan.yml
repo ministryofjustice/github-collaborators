@@ -1,7 +1,6 @@
 name: Terraform plan
-on: 
-  pull_request:
-    paths: 'terraform/**'
+on:
+  workflow_dispatch:
 
 env:
   # AWS_REGION:  "eu-west-2"
@@ -18,9 +17,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
-      - uses: hashicorp/setup-terraform@v1
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'terraform/**'
+
+      - if: steps.changes.outputs.src == 'true'
+        uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 0.14.11
+
+      - if: steps.changes.outputs.src == 'true'
       - name: terraform plan
         run: |
           cd terraform
