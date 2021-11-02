@@ -25,6 +25,10 @@ jobs:
           cd terraform
           terraform init
           terraform apply -auto-approve
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
       - name: Update OpsEng collaborators report
         run: bin/post-data.sh
         env:
