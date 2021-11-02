@@ -30,7 +30,7 @@ jobs:
           terraform_version: 0.14.11
 
       - if: steps.changes.outputs.src == 'true'
-      - name: terraform plan
+        name: terraform plan
         run: |
           cd terraform
           terraform init
