@@ -63,16 +63,6 @@ module "yjaf-devops-infrastructure" {
       review_after = "2021-12-31"
     },
     {
-      github_user  = "boydingham"
-      permission   = "push"
-      name         = "Boyd Cunningham"
-      email        = "Boyd.cunningham@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
-      review_after = "2021-12-31"
-    },
-    {
       github_user  = "ttipler"
       permission   = "admin"
       name         = "Thomas Tipler"
