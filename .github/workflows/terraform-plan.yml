@@ -1,6 +1,7 @@
 name: Terraform plan
-on:
-  workflow_dispatch:
+on: 
+  pull_request:
+    paths: 'terraform/**'
 
 env:
   # AWS_REGION:  "eu-west-2"
