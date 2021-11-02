@@ -3,9 +3,6 @@ on:
   workflow_dispatch:
 
 env:
-  # AWS_REGION:  "eu-west-2"
-  # S3_BUCKET_NAME: "cloud-platform-36623f774b9641d8697d65bdf6b030f5"
-  # DYNAMODB_TABLE: "cp-b6970ba60ed66537"
   TERRAFORM: terraform
   AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
