@@ -132,5 +132,15 @@ module "yjaf-bed-unlock" {
       added_by     = "Greg Whiting - greg.whiting@northgateps.com"
       review_after = "2022-12-31"
     },
+    {
+      github_user  = "ConwayNEC"
+      permission   = "push"
+      name         = "Conway Hyacienth"
+      email        = "conway.hyacienth@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "New Front End Developer on YJAF (NEC team)"
+      added_by     = "Jo Harvey - joanna.harvey@necsws.com"
+      review_after = "2022-11-03"
+    },
   ]
 }
