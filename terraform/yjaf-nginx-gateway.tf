@@ -92,5 +92,15 @@ module "yjaf-nginx-gateway" {
       added_by     = "Jo Harvey - joanna.harvey@necsws.com"
       review_after = "2022-11-03"
     },
+    {
+      github_user  = "jondent"
+      permission   = "push"
+      name         = "Jon Dent"
+      email        = "jon.dent@yjb.gov.uk"
+      org          = "Youth Justice Board"
+      reason       = "Technical Assurance Architect (managed service)"
+      added_by     = "Jake Mulley (MOJ)"
+      review_after = "2022-01-31"
+    },
   ]
 }
