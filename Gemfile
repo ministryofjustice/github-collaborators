@@ -4,7 +4,7 @@ ruby '3.0.2'
 gem 'rspec', '~>3.7.0'
 gem 'date', '~>3.2.0'
 gem 'erb', '~>2.2.0'
-gem 'json', '~>2.5.1'
+gem 'json', '~>2.6.1'
 gem 'net-http', '~>0.2.0'
 gem 'bundler-audit', '~>0.9.0.1'
 gem 'simplecov', require: false, group: :test
