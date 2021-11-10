@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '3.0.2'
 
 gem 'rspec', '~>3.7.0'
-gem 'date', '~>3.1.0'
+gem 'date', '~>3.2.0'
 gem 'erb', '~>2.2.0'
 gem 'json', '~>2.5.1'
 gem 'net-http', '~>0.1.1'
