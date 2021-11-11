@@ -112,5 +112,15 @@ module "yjsm-hub-svc" {
       added_by     = "Jake Mulley (MOJ)"
       review_after = "2022-01-31"
     },
+    {
+      github_user  = "InFlamesForever"
+      permission   = "push"
+      name         = "Richard Came"
+      email        = "richard.came@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Backend dev"
+      added_by     = "Joanna Harvey - joanna.harvey@necsws.com"
+      review_after = "2022-11-11"
+    },
   ]
 }
