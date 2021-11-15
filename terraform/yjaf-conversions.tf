@@ -33,16 +33,6 @@ module "yjaf-conversions" {
       review_after = "2022-01-27"
     },
     {
-      github_user  = "AndrewRichards72"
-      permission   = "admin"
-      name         = "Andrew Richards"
-      email        = "andrew.richards@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Frontend devs needs access to make app changes"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2021-12-31"
-    },
-    {
       github_user  = "VasilDimitrov22"
       permission   = "push"
       name         = "Vasil Dimitrov"

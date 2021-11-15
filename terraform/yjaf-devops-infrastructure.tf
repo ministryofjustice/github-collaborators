@@ -43,16 +43,6 @@ module "yjaf-devops-infrastructure" {
       review_after = "2021-12-11"
     },
     {
-      github_user  = "AndrewRichards72"
-      permission   = "push"
-      name         = "Andrew Richards"
-      email        = "andrew.richards@northgateps.com"
-      org          = "Northgate"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2021-12-11"
-    },
-    {
       github_user  = "VasilDimitrov22"
       permission   = "push"
       name         = "Vasil Dimitrov"
