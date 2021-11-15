@@ -33,16 +33,6 @@ module "yjaf-documents" {
       review_after = "2021-12-11"
     },
     {
-      github_user  = "JWGNPS"
-      permission   = "push"
-      name         = "James Grunewald"
-      email        = "james.grunewald@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
-      review_after = "2022-01-27"
-    },
-    {
       github_user  = "VasilDimitrov22"
       permission   = "push"
       name         = "Vasil Dimitrov"
