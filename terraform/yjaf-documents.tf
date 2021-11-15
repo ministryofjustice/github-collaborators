@@ -53,16 +53,6 @@ module "yjaf-documents" {
       review_after = "2022-01-27"
     },
     {
-      github_user  = "MylesW123"
-      permission   = "push"
-      name         = "Myles Waller"
-      email        = "Myles.Waller@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2021-12-31"
-    },
-    {
       github_user  = "VasilDimitrov22"
       permission   = "push"
       name         = "Vasil Dimitrov"
