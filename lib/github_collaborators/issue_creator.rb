@@ -34,7 +34,7 @@ class GithubCollaborators
         # Get only issues used by this application
         issues = response_json.select { |x| x[:title].include? "Review after date" }
         # Check if there is an issue for that user
-        if !issues.nil? && !issues&.empty?
+        if !issues.nil? || !issues&.empty?
           issues.select { |x| x[:assignee][:login] == github_user }
         else
           []
