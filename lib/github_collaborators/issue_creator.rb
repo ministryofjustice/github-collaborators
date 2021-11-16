@@ -36,9 +36,9 @@ class GithubCollaborators
 
         # This is a work around for when users unassign themself from the ticket without updating their review_after
         # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
-        bad_issues = issues.select{ |x| x[:assignees].length() == 0 }
+        bad_issues = issues.select { |x| x[:assignees].length == 0 }
         bad_issues.each { |x| remove_issue(x[:number]) }
-        issues.delete_if { |x| x[:assignees].length() == 0 }
+        issues.delete_if { |x| x[:assignees].length == 0 }
 
         # Check if there is an issue for that user
         if !issues.nil? && !issues&.empty?
