@@ -33,8 +33,15 @@ class GithubCollaborators
       else
         # Get only issues used by this application
         issues = response_json.select { |x| x[:title].include? "Review after date" }
+
+        # This is a work around for when users unassign themself from the ticket without updating their review_after
+        # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
+        bad_issues = issues.select{ |x| x[:assignees].length() == 0 }
+        bad_issues.each { |x| remove_issue(x[:number]) }
+        issues.delete_if { |x| x[:assignees].length() == 0 }
+
         # Check if there is an issue for that user
-        if !issues.nil? || !issues&.empty?
+        if !issues.nil? && !issues&.empty?
           issues.select { |x| x[:assignee][:login] == github_user }
         else
           []
@@ -43,6 +50,16 @@ class GithubCollaborators
     end
 
     private
+
+    def remove_issue(issue_id)
+      url = "https://api.github.com/repos/#{owner}/#{repository}/issues/#{issue_id}"
+
+      params = {
+        state: "closed"
+      }
+
+      HttpClient.new.patch_json(url, params.to_json)
+    end
 
     def issue_hash
       {
