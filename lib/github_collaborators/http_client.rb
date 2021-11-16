@@ -19,6 +19,13 @@ class GithubCollaborators
       http.request(request)
     end
 
+    def patch_json(url, json)
+      http, uri = client(url)
+      request = Net::HTTP::Patch.new(uri.request_uri, headers)
+      request.body = json
+      http.request(request)
+    end
+
     def delete(url)
       http, uri = client(url)
       request = Net::HTTP::Delete.new(uri.request_uri, headers)
