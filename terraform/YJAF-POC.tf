@@ -20,7 +20,7 @@ module "YJAF-POC" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "Greg Whiting - greg.whiting@northgateps.com"
-      review_after = "2022-12-31"
+      review_after = "2022-07-31"
     },
     {
       github_user  = "ttipler"
@@ -30,7 +30,7 @@ module "YJAF-POC" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "Greg Whiting - greg.whiting@northgateps.com"
-      review_after = "2022-12-31"
+      review_after = "2022-07-31"
     },
     {
       github_user  = "jondent"

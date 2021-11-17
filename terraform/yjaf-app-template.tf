@@ -70,7 +70,7 @@ module "yjaf-app-template" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "Greg Whiting - greg.whiting@northgateps.com"
-      review_after = "2022-12-31"
+      review_after = "2022-07-31"
     },
     {
       github_user  = "ttipler"
@@ -80,7 +80,7 @@ module "yjaf-app-template" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "Greg Whiting - greg.whiting@northgateps.com"
-      review_after = "2022-12-31"
+      review_after = "2022-07-31"
     },
     {
       github_user  = "ConwayNEC"
@@ -90,7 +90,7 @@ module "yjaf-app-template" {
       org          = "NEC Software Solutions"
       reason       = "New Front End Developer on YJAF (NEC team)"
       added_by     = "Jo Harvey - joanna.harvey@necsws.com"
-      review_after = "2022-11-03"
+      review_after = "2022-07-31"
     },
     {
       github_user  = "jondent"
