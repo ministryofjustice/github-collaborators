@@ -7,7 +7,7 @@ on:
 env:
   OPERATIONS_ENGINEERING_REPORTS_HOST: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_HOST }}
   OPS_ENG_REPORTS_URL: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_HOST }}/github_collaborators
-  RUBY_VERSION: 3.0.2
+  RUBY_VERSION: 3.0.3
 
 jobs:
   post-data-to-opseng-reports:
