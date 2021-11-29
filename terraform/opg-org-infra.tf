@@ -1,6 +1,6 @@
-module "opg-sirius-infrastructure" {
+module "opg-org-infra" {
   source     = "./modules/repository-collaborators"
-  repository = "opg-sirius-infrastructure"
+  repository = "opg-org-infra"
   collaborators = [
     {
       github_user  = "bsi-thudson"
