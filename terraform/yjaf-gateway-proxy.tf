@@ -32,5 +32,25 @@ module "yjaf-gateway-proxy" {
       added_by     = "Thomas Tipler - thomas.tipler@northgateps.com"
       review_after = "2022-12-25"
     },
+    {
+      github_user  = "TomDover-NorthgatePS"
+      permission   = "push"
+      name         = "Tom Dover"
+      email        = "tom.dover@northgateps.com"
+      org          = "NEC"
+      reason       = "Need access to repo for coding tasks"
+      added_by     = "Thomas Tipler - thomas.tipler@northgateps.com - Devops for northgate"
+      review_after = "2022-12-31"
+    },
+    {
+      github_user  = "richardbradwell"
+      permission   = "push"
+      name         = "Richard Bradwell"
+      email        = "richard.bradwell@necsws.com"
+      org          = "NEC"
+      reason       = "Need access to repo for coding tasks"
+      added_by     = "Thomas Tipler - thomas.tipler@northgateps.com - Devops for northgate"
+      review_after = "2022-12-31"
+    },
   ]
 }
