@@ -18,9 +18,9 @@ module "yjaf-bands" {
       name         = "Jeremy Griffin"
       email        = "jeremy.griffin@northgateps.com"
       org          = "Northgate"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
+      reason       = "YJAF developer. Needing access to the work on BackEnd coding tasks"
       added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2021-12-11"
+      review_after = "2022-12-02"
     },
     {
       github_user  = "TomDover-NorthgatePS"
