@@ -18,4 +18,4 @@ jobs:
         run: ruby ben.rb
         env:
           PULL_REQUEST: ${{ toJson(github.event.pull_request) }}
-          ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
