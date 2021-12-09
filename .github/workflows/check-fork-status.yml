@@ -1,0 +1,21 @@
+name: Check Fork Status
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize]
+
+env:
+  RUBY_VERSION: 3.0.3
+
+jobs:
+  check-fork:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+      - name: Check if pull request in a fork
+        run: ruby ben.rb
+        env:
+          PULL_REQUEST: ${{ toJson(github.event.pull_request) }}
+          ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
