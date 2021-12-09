@@ -1,6 +1,7 @@
 module "MOJ-PTTP-DevicesAndApps-Pipeline-Windows10Apps" {
   source     = "./modules/repository-collaborators"
   repository = "MOJ.PTTP.DevicesAndApps.Pipeline.Windows10Apps"
+  collaborators = [
     {
       github_user  = "JimGregory-CplusC"
       permission   = "admin"
