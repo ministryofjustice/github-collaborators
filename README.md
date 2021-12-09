@@ -4,6 +4,8 @@ Manage MoJ GitHub external collaborators via code.
 
 ## Requesting collaborator access
 
+> PRs from forks do NOT work with the current automated process, please only create PRs from a branch.
+
 If you want to allow access to an MoJ GitHub repository for an external collaborator, please raise a pull request making the required changes to the corresponding `terraform/[repository-name].tf` file in this repository.
 
 If you are not confident editing terraform code, you can [raise an issue](https://github.com/ministryofjustice/github-collaborators/issues/new?labels=Access+Request&template=access-request.md) to request access for a collaborator, and we will make the changes for you.
