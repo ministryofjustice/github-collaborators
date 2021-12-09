@@ -45,7 +45,7 @@ def comment_body
     }
 end
 
-# Grab needed data from GitHub Actions payload
+# Grab needed data from GitHub Actions payload 
 pr_json       = JSON.parse(ENV.fetch("PULL_REQUEST"))
 pr_is_fork    = pr_json.dig("head", "repo", "fork")
 pr_issue_url  = pr_json.fetch("issue_url", "href")
