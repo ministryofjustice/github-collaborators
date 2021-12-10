@@ -15,7 +15,7 @@ jobs:
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
       - name: Check if pull request in a fork 
-        run: ruby ben.rb
+        run: ruby bin/check-fork-status.rb
         env:
           PULL_REQUEST: ${{ toJson(github.event.pull_request) }}
           ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
