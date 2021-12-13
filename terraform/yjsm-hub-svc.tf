@@ -102,5 +102,15 @@ module "yjsm-hub-svc" {
       added_by     = "Joanna Harvey - joanna.harvey@necsws.com"
       review_after = "2022-11-11"
     },
+    {
+      github_user  = "javaidarshadnec"
+      permission   = "push"
+      name         = "Javaid Arshad"
+      email        = "javaid.arshad@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "New YJAF Full Stack Developer"
+      added_by     = "Jo Harvey joanna.harvey@necsws.com"
+      review_after = "2022-12-12"
+    },
   ]
 }
