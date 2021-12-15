@@ -5,7 +5,6 @@ require_relative "../lib/github_collaborators"
 # Grab GitHub token
 token = ENV.fetch("ADMIN_GITHUB_TOKEN")
 
-# CHANGE THIS
 # GitHub settings
 owner = "ministryofjustice"
 repository = "github-collaborators"
