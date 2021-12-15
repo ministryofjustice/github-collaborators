@@ -75,8 +75,8 @@ module "bichard7-next-shared-infrastructure" {
     {
       github_user  = "jaskaransarkaria"
       permission   = "push"
-      name         = "Jazz Sarkaria"                         #  The name of the person behind github_user
-      email        = "jazz.sarkaria@madetech.com"            #  Their email address
+      name         = "Jazz Sarkaria"                            #  The name of the person behind github_user
+      email        = "jazz.sarkaria@madetech.com"               #  Their email address
       org          = "Madetech"                                 #  The organisation/entity they belong to
       reason       = "CJSE Bichard Development"                 #  Why is this person being granted access?
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
