@@ -22,6 +22,5 @@ class GithubCollaborators
     specify { expect(tbc.added_by).to eq("ben6 ben") }
     specify { expect(tbc.review_after).to eq("2022-10-10") }
     specify { expect(tbc.repositories).to eq(["ben1", "ben2"]) }
-
   end
 end
