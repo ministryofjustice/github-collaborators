@@ -1,9 +1,6 @@
 # This class takes the body generated from a GitHub ticket created from /.github/ISSUE_TEMPLATE/create-pr-from-issue.yaml
 # It then structures this data to be used in creating Terraform collaborator blocks for the repo github-collaborators
 
-
-# TODO:
-#   Add unit tests
 class GithubCollaborators
     class TerraformBlockCreator
         attr_reader :data
