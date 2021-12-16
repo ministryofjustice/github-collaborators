@@ -1,0 +1,79 @@
+name: Create a External Collaborator Pull Request
+description: >-
+  Creating an issue with this template will automatically create a valid pull
+  request for an external collaborator
+title: 'Please create an external collaborator pull request '
+labels:
+  - collaborator
+body:
+  - type: input
+    id: username
+    attributes:
+      label: username
+      description: GitHub username
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: name
+      description: Name of the user
+    validations:
+      required: true
+  - type: input
+    id: email
+    attributes:
+      label: email
+      description: Email of the user
+    validations:
+      required: true
+  - type: input
+    id: org
+    attributes:
+      label: org
+      description: Which org does this user represent?
+    validations:
+      required: true
+  - type: input
+    id: reason
+    attributes:
+      label: reason
+      description: What reason does this user need access for?
+    validations:
+      required: true
+  - type: input
+    id: added_by
+    attributes:
+      label: added_by
+      description: >-
+        Who is requesting access for this user? Please use format Name <email>
+        e.g. "Ben Ashton <ben.ashton@digital.justice.gov.uk>"
+    validations:
+      required: true
+  - type: input
+    id: review_after
+    attributes:
+      label: review_after
+      description: >-
+        When does access for this user have to be reviewed? Please use format
+        YYYY-MM-DD e.g. 2022-10-10. No longer than 12 months in the future.
+    validations:
+      required: true
+  - type: dropdown
+    id: permission
+    attributes:
+      label: permission
+      description: What permission does the user need?
+      options:
+        - maintain
+        - admin
+        - readonly
+    validations:
+      required: true
+  - type: textarea
+    id: repositories
+    attributes:
+      label: repositories
+      description: 'Please add the repos you wish to add this user to, one per line'
+    validations:
+      required: true

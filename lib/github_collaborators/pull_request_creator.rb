@@ -14,13 +14,13 @@ class GithubCollaborators
       @branch = params.fetch(:branch)
     end
 
-    def create
+    # Create pull request
+    def create(pull_hash = self.pull_hash)
       url = "https://api.github.com/repos/#{owner}/#{repository}/pulls"
       HttpClient.new.post_json(url, pull_hash.to_json)
     end
 
-    private
-
+    # Body of the PR
     def pull_hash
       {
         title: "Remove #{pull_file} as repository being deleted ",
