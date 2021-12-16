@@ -22,6 +22,7 @@ require_relative "./github_collaborators/issue_creator"
 require_relative "./github_collaborators/http_client"
 require_relative "./github_collaborators/pull_requests"
 require_relative "./github_collaborators/pull_request_creator"
+require_relative "./github_collaborators/terraform_block_creator"
 
 PAGE_SIZE = 100
 
