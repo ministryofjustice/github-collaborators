@@ -5,7 +5,6 @@ require_relative "../lib/github_collaborators"
 # Grab GitHub token
 token = ENV.fetch("ADMIN_GITHUB_TOKEN")
 
-# CHANGE THIS
 # GitHub settings
 owner = "ministryofjustice"
 repository = "github-collaborators"
@@ -73,3 +72,4 @@ params = {
 }
 
 GithubCollaborators::PullRequestCreator.new(params).create(pull_hash=pull_hash(params.fetch(:branch)))
+
