@@ -16,7 +16,7 @@ jobs:
           ruby-version: ${{ env.RUBY_VERSION }}
       - run: bundle install
       - name: Check if pull request in a fork
-        run: ruby create-pr-from-issue.rb
+        run: ruby bin/create-pr-from-issue.rb
         env:
           ISSUE: ${{ toJson(github.event.issue) }}
           ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
