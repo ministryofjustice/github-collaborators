@@ -140,7 +140,7 @@ fields["repositories"].each { |repo|
     }
 }
 
-# At this point the files for have been changed and a PR needs to be opened
+# At this point the required files have been changed and a PR needs to be opened
 # PR Section
 
 # Create branch and open PR
