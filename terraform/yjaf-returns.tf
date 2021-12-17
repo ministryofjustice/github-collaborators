@@ -52,7 +52,7 @@ module "yjaf-returns" {
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
       review_after = "2021-12-31"
     },
-        {
+    {
       github_user  = "waheedanjum"
       permission   = "push"
       name         = "Muhammad Waheed Anjum"
