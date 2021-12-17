@@ -8,15 +8,16 @@ import sys
 firstarg=sys.argv[1]
 secondarg=sys.argv[2]
 
-print(firstarg)
-print(secondarg)
+# print(firstarg[0:7])
+# print(secondarg[0:7])
 
 # Get the merge diff results
-ps = subprocess.Popen(('git', 'diff' , '-U0', '--diff-filter=ACMRT', firstarg, secondarg), stdout=subprocess.PIPE)
+ps = subprocess.Popen(('git', 'diff' , '-U0', '--diff-filter=ACMRT', firstarg[0:7], secondarg[0:7]), stdout=subprocess.PIPE)
 ps.wait()
 if ps.stdout != "":
     # Look for the added_by lineq
     grep_output = subprocess.check_output(('grep', '+      added_by'), stdin=ps.stdout, text=True)
+    # print(grep_output)
 
     # Count number of email @ symbols
     emails_symbols_found = grep_output.count('@')
