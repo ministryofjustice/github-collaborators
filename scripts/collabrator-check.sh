@@ -10,6 +10,7 @@ if [ ${#email_domains[@]} == 0 ]; then
     exit 0
 else
     emails_detected=0
+    echo "Checking user email domains"
     # Loop through the discovered email addresses
     for email_domain in "${email_domains[@]}"
     do

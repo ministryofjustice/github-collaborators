@@ -1,4 +1,4 @@
-name: action on a peer review
+name: Check user email domain 
 
 on: pull_request
   # pull_request:
@@ -6,11 +6,11 @@ on: pull_request
     #   - master
 
 jobs:
-  action-on-a-pr:
+  check-user-email-domain:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      
+
       - name: Do check
         run: scripts/collabrator-check.sh
