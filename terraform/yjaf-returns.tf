@@ -29,7 +29,7 @@ module "yjaf-returns" {
       email        = "vasil.dimitrov@northgateps.com"
       org          = "NPS (northgate)"
       reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
+      added_by     = "Greg Whiting <greg.whiting@nortsdf4wfhgateps.com> Devops for northgate"
       review_after = "2021-12-31"
     },
     {
