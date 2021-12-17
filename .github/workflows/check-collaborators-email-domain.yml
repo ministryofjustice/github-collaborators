@@ -13,4 +13,4 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Do check
-      - run: scripts/collabrator-check.sh
+        run: scripts/collabrator-check.sh
