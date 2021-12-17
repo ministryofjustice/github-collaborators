@@ -15,7 +15,7 @@ secondarg=sys.argv[2]
 ps = subprocess.Popen(('git', 'diff' , '-U0', '--diff-filter=ACMRT', firstarg[0:7], secondarg[0:7]), stdout=subprocess.PIPE)
 ps.wait()
 if ps.stdout != "":
-    # Look for the added_by lineq
+    # Look for the added_by line
     grep_output = subprocess.check_output(('grep', '+      added_by'), stdin=ps.stdout, text=True)
     # print(grep_output)
 
@@ -30,10 +30,11 @@ if ps.stdout != "":
     # print ("@justice.gov.uk found ", justice_emails_found, " times" )
 
     if emails_symbols_found == (digital_justice_emails_found + justice_emails_found) :
-        # print ("Pass")
+        print ("Check Passed")
         sys.exit(0)
     else:
-        # print ("Fail")
+        print ("Check Failed: The expected email domains that should be used are @digital.justice.gov.uk or @justice.gov.uk")
         sys.exit(1)
 else:
+    print ("Check N/A")
     sys.exit(0)
