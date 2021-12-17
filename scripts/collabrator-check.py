@@ -3,8 +3,6 @@
 import subprocess
 import sys
 
-# email_domains=( $( git diff -U0 --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '+      added_by' | grep -EFiEio '\b@[a-z0-9A-Z.]+.[a-z0-9A-Z]{2,4}\b' | xargs ) )
-
 firstarg=sys.argv[1]
 secondarg=sys.argv[2]
 
@@ -19,6 +17,10 @@ if ps.stdout != "":
     grep_output = subprocess.check_output(('grep', '+      added_by'), stdin=ps.stdout, text=True)
     # print(grep_output)
 
+    # Count number of changed lines
+    changed_lines = grep_output.count('added_by')
+    print("There are ", changed_lines, " changed lines")
+
     # Count number of email @ symbols
     emails_symbols_found = grep_output.count('@')
     # print("There are ", emails_symbols_found, " @ in the changes")
@@ -30,8 +32,12 @@ if ps.stdout != "":
     # print ("@justice.gov.uk found ", justice_emails_found, " times" )
 
     if emails_symbols_found == (digital_justice_emails_found + justice_emails_found) :
-        print ("Check Passed")
-        sys.exit(0)
+        if emails_symbols_found == changed_lines:
+            print ("Check Passed")
+            sys.exit(0)
+        else:
+            print ("Check Failed: An email is missing is the added_by line of a .tf file")
+            sys.exit(1)     
     else:
         print ("Check Failed: The expected email domains that should be used are @digital.justice.gov.uk or @justice.gov.uk")
         sys.exit(1)
