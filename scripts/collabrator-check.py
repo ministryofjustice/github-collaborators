@@ -6,7 +6,7 @@ import sys
 # email_domains=( $( git diff -U0 --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '+      added_by' | grep -EFiEio '\b@[a-z0-9A-Z.]+.[a-z0-9A-Z]{2,4}\b' | xargs ) )
 
 # Get the merge diff results
-ps = subprocess.Popen(('git', 'diff' , '-U0'), stdout=subprocess.PIPE)
+ps = subprocess.Popen(('git', 'diff' , '-U0', '--diff-filter=ACMRT', '${{ github.event.pull_request.base.sha }}', '${{ github.sha }}' ), stdout=subprocess.PIPE)
 ps.wait()
 if ps.stdout != "":
     # Look for the added_by line
