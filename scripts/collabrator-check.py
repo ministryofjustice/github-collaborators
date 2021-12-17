@@ -19,7 +19,7 @@ if ps.stdout != "":
 
     # Count number of changed lines
     changed_lines = grep_output.count('added_by')
-    print("There are ", changed_lines, " changed lines")
+    # print("There are ", changed_lines, " changed lines")
 
     # Count number of email @ symbols
     emails_symbols_found = grep_output.count('@')
@@ -36,7 +36,7 @@ if ps.stdout != "":
             print ("Check Passed")
             sys.exit(0)
         else:
-            print ("Check Failed: An email is missing is the added_by line of a .tf file")
+            print ("Check Failed: An email is missing in the added_by line of a .tf file")
             sys.exit(1)     
     else:
         print ("Check Failed: The expected email domains that should be used are @digital.justice.gov.uk or @justice.gov.uk")
