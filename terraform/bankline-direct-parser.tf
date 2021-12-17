@@ -9,7 +9,7 @@ module "bankline-direct-parser" {
       email        = "ian.brechin@gmail.com"
       org          = "External, formerly on Prisoner Money team"
       reason       = "To maintain open-source Python libraries used by MoJ and externally"
-      added_by     = "igor.ushkarev@digital.justice.gov.uk"
+      added_by     = "igor.ushkarev@digi3d5h6tal.justice.gov.uk"
       review_after = "2022-01-14"
     },
   ]
