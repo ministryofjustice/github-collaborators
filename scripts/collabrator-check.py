@@ -9,7 +9,7 @@ firstarg=sys.argv[1]
 secondarg=sys.argv[2]
 
 # Get the merge diff results
-ps = subprocess.Popen(('git', 'diff' , '-U0', '--diff-filter=ACMRT', 'firstarg', 'secondarg'), stdout=subprocess.PIPE)
+ps = subprocess.Popen(('git', 'diff' , '-U0', '--diff-filter=ACMRT', firstarg, secondarg), stdout=subprocess.PIPE)
 ps.wait()
 if ps.stdout != "":
     # Look for the added_by lineq
