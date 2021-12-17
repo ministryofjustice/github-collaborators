@@ -5,11 +5,14 @@ import sys
 
 # email_domains=( $( git diff -U0 --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '+      added_by' | grep -EFiEio '\b@[a-z0-9A-Z.]+.[a-z0-9A-Z]{2,4}\b' | xargs ) )
 
+firstarg=sys.argv[1]
+secondarg=sys.argv[2]
+
 # Get the merge diff results
-ps = subprocess.Popen(('git', 'diff' , '-U0', '--diff-filter=ACMRT', '$\{\{ github.event.pull_request.base.sha \}\}', '$\{\{ github.sha \}\}' ), stdout=subprocess.PIPE)
+ps = subprocess.Popen(('git', 'diff' , '-U0', '--diff-filter=ACMRT', 'firstarg', 'secondarg'), stdout=subprocess.PIPE)
 ps.wait()
 if ps.stdout != "":
-    # Look for the added_by line
+    # Look for the added_by lineq
     grep_output = subprocess.check_output(('grep', '+      added_by'), stdin=ps.stdout, text=True)
 
     # Count number of email @ symbols

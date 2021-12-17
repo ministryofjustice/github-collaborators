@@ -16,4 +16,4 @@ jobs:
         uses: "actions/setup-python@v2"
 
       - name: Do check
-        run: python3 scripts/collabrator-check.py
+        run: python3 scripts/collabrator-check.py ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
