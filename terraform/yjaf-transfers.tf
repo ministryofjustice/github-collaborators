@@ -132,5 +132,15 @@ module "yjaf-transfers" {
       added_by     = "Jo Harvey joanna.harvey@necsws.com"
       review_after = "2022-12-12"
     },
+    {
+      github_user  = "javaidarshadnec"
+      permission   = "push"
+      name         = "Javaid Arshad"
+      email        = "javaid.arshad@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "New YJAF Full Stack Developer"
+      added_by     = "Jo Harvey joanna.harvey@necsws.com"
+      review_after = "2022-12-12"
+    },
   ]
 }
