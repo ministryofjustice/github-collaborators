@@ -25,34 +25,35 @@ if ps.stdout != "":
         print ("Check N/A")
         sys.exit(0)
     else:
-        # Count the number of changed lines
-        num_changed_lines = grep_output.count('added_by')
-        # print("There are ", changed_lines, " changed lines")
-
         # Count the number of email @ symbols
         num_email_symbols = grep_output.count('@')
-        # print("There are ", num_email_symbols, " @ in the changes")
+        print("There are ", num_email_symbols, " @ in the changes")
 
         # Count the number of 'digital.justice.gov.uk' email domains
         digital_justice_emails_found = grep_output.count('@digital.justice.gov.uk')
-        # print ("@digital.justice.gov.uk found ", digital_justice_emails_found, " times" )
+        print ("@digital.justice.gov.uk found ", digital_justice_emails_found, " times" )
 
         # Count the number of 'justice.gov.uk' email domains
         justice_emails_found = grep_output.count('@justice.gov.uk')
-        # print ("@justice.gov.uk found ", justice_emails_found, " times" )
+        print ("@justice.gov.uk found ", justice_emails_found, " times" )
 
         # Ensure the number of discovered expected email addresses matches the number of discovered email symbols
-        if num_email_symbols == (digital_justice_emails_found + justice_emails_found) :
-            # This checks ensures an email address was used in the 'added_by' line rather than a persons name 
-            if num_email_symbols == num_changed_lines:
-                print ("Check Passed")
-                sys.exit(0)
-            else:
-                print ("Check Failed: An email address is missing in the 'added_by' line of a .tf file")
-                sys.exit(1)     
-        else:
+        if num_email_symbols != (digital_justice_emails_found + justice_emails_found) :   
             print ("Check Failed: The expected email domains that should be used in the 'added_by' line of a .tf file are @digital.justice.gov.uk or @justice.gov.uk")
             sys.exit(1)
+        
+        # Some .tf have this comment code that can provide a false positive
+        found_comment = grep_output.count("'Awesome Team <awesome.team@digital.justice.gov.uk>'")
+        print("The found comment is ", found_comment)
+
+        # This checks ensures an email address was used in the 'added_by' line rather than a persons name 
+        if num_email_symbols < 2 and found_comment:
+            print ("Check Failed: An email address is missing in the 'added_by' line of a .tf file")
+            sys.exit(1)  
+        else:
+            # Check finished.
+            print ("Check Passed")
+            sys.exit(0)
 else:
     # No git diff result, check finished.
     print ("Check N/A")
