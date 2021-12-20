@@ -42,6 +42,16 @@ module "yjaf-returns" {
       added_by     = " "
       review_after = "2021-12-31"
     },
+        {
+      github_user  = "waheedanjum"
+      permission   = "push"
+      name         = "Muhammad Waheed Anjum"
+      email        = "muhammad.anjum@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
+      added_by     = " bob"
+      review_after = "2021-12-31"
+    },
     {
       github_user  = "griffinjuknps"
       permission   = "admin"
