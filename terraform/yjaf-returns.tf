@@ -49,7 +49,7 @@ module "yjaf-returns" {
       email        = "jeremy.griffin@northgateps.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF developer. Needing access to the work on BackEnd coding tasks"
-      added_by     = "<gareth.davies@digital.jussdfsdftice.gov.uk> on behalf of the YJB"
+      added_by     = " on behalf of the YJB"
       review_after = "2022-12-02"
     },
     {
