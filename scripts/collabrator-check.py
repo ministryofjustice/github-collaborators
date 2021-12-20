@@ -6,8 +6,8 @@ import sys
 base_git_sha=sys.argv[1]
 branch_git_sha=sys.argv[2]
 
-# print(firstarg[0:7])
-# print(secondarg[0:7])
+# print(base_git_sha[0:7])
+# print(branch_git_sha[0:7])
 
 # Get the merge diff results using the git sha of the base branch and the new branch. The filter checks for files that have
 # been added, modified, etc and filters out deleted changes. It will put the result into a pipe to be used with grep below.
@@ -19,19 +19,20 @@ if ps.stdout != "":
     try:
         # Look for the 'added_by' line in the diff results
         grep_output = subprocess.check_output(('grep', '+      added_by'), stdin=ps.stdout, text=True)
-        print(grep_output)
     except:
         # Grep didn't find an 'added_by' line, check finished.
         print ("Check N/A")
         sys.exit(0)
     else:
 
-        # Some .tf file have this comment code so remove it at the start of the check
+        print(grep_output)
+
+        # Some .tf files have this comment, so remove it at the start of the check
         grep_output = grep_output.replace("awesome.team@digital.justice.gov.uk", "abc")
 
         # Count the number of email @ symbols in the diff output
         num_email_symbols = grep_output.count('@')
-        print("There are ", num_email_symbols, " @ in the changes")
+        # print("There are ", num_email_symbols, " @ in the changes")
 
         # The check for no email symbols
         if num_email_symbols == 0 :
@@ -40,11 +41,11 @@ if ps.stdout != "":
 
         # Count the number of 'digital.justice.gov.uk' email domains
         digital_justice_emails_found = grep_output.count('@digital.justice.gov.uk')
-        print ("@digital.justice.gov.uk found ", digital_justice_emails_found, " times" )
+        # print ("@digital.justice.gov.uk found ", digital_justice_emails_found, " times" )
 
         # Count the number of 'justice.gov.uk' email domains
         justice_emails_found = grep_output.count('@justice.gov.uk')
-        print ("@justice.gov.uk found ", justice_emails_found, " times" )
+        # print ("@justice.gov.uk found ", justice_emails_found, " times" )
 
         # Ensure the number of discovered expected email addresses matches the number of discovered email symbols
         if num_email_symbols != (digital_justice_emails_found + justice_emails_found) :
@@ -53,7 +54,7 @@ if ps.stdout != "":
 
         # Count the number of added_by lines
         num_changed_lines = grep_output.count('added_by')
-        print("There are ", num_changed_lines, " changed lines")
+        # print("There are ", num_changed_lines, " changed lines")
 
         # Ensure the number of changed lines matches the number of discovered email symbols
         if num_changed_lines != (digital_justice_emails_found + justice_emails_found) :
