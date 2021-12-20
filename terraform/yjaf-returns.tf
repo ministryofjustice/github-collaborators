@@ -49,11 +49,7 @@ module "yjaf-returns" {
       email        = "jeremy.griffin@northgateps.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF developer. Needing access to the work on BackEnd coding tasks"
-<<<<<<< HEAD
       added_by     = "<gareth.davies@justice.gov.uk> on behalf of the YJB"  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-=======
-      added_by     = "<gareth.davies@bob.com> on behalf of the YJB" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
->>>>>>> dd4f068473f92980169fedc737fa640cfbb07cf3
       review_after = "2022-12-02"
     },
     {
