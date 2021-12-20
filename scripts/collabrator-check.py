@@ -44,10 +44,9 @@ if ps.stdout != "":
         
         # Some .tf have this comment code that can provide a false positive
         found_comment = grep_output.count("'Awesome Team <awesome.team@digital.justice.gov.uk>'")
-        print("The found comment is ", found_comment)
 
         # This checks ensures an email address was used in the 'added_by' line rather than a persons name 
-        if num_email_symbols < 2 and found_comment:
+        if [num_email_symbols < 2 and found_comment] or [num_email_symbols < 1 and not found_comment]:
             print ("Check Failed: An email address is missing in the 'added_by' line of a .tf file")
             sys.exit(1)  
         else:
