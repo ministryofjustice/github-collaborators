@@ -53,6 +53,16 @@ module "yjaf-returns" {
       review_after = "2021-12-31"
     },
     {
+      github_user  = "waheedanjum"
+      permission   = "push"
+      name         = "Muhammad Waheed Anjum"
+      email        = "muhammad.anjum@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
+      added_by     = " bob" #  Who made the decision to grant them access? e.g. Awesome Team <awesome.team@digital.justice.gov.uk> 
+      review_after = "2021-12-31"
+    },
+    {
       github_user  = "griffinjuknps"
       permission   = "admin"
       name         = "Jeremy Griffin"
