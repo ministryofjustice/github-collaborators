@@ -42,7 +42,7 @@ module "yjaf-returns" {
       added_by     = " "
       review_after = "2021-12-31"
     },
-        {
+    {
       github_user  = "waheedanjum"
       permission   = "push"
       name         = "Muhammad Waheed Anjum"
