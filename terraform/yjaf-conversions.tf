@@ -129,16 +129,6 @@ module "yjaf-conversions" {
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
-      added_by     = "Jo Harvey joanna.harvey@necsws.com"
-      review_after = "2022-12-12"
-    },
-    {
-      github_user  = "javaidarshadnec"
-      permission   = "admin"
-      name         = "Javaid Arshad"
-      email        = "javaid.arshad@necsws.com"
-      org          = "NEC"
-      reason       = "New hire on the YJAF project"
       added_by     = "Antony Bishop antony.bishop@digital.justice.gov.uk"
       review_after = "2022-12-31"
     },
