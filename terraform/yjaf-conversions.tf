@@ -129,8 +129,8 @@ module "yjaf-conversions" {
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
-      added_by     = "Jo Harvey joanna.harvey@necsws.com"
-      review_after = "2022-12-12"
+      added_by     = "Antony Bishop antony.bishop@digital.justice.gov.uk"
+      review_after = "2022-12-31"
     },
   ]
 }
