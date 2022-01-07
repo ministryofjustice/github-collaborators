@@ -10,7 +10,7 @@ GEM
     docile (1.4.0)
     erb (2.2.3)
       cgi
-    git (1.10.1)
+    git (1.10.2)
       rchardet (~> 1.8)
     io-wait (0.2.0)
     json (2.6.1)
