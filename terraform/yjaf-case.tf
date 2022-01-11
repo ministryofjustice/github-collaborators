@@ -103,16 +103,6 @@ module "yjaf-case" {
       review_after = "2022-07-31"
     },
     {
-      github_user  = "ConwayNEC"
-      permission   = "push"
-      name         = "Conway Hyacienth"
-      email        = "conway.hyacienth@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "New Front End Developer on YJAF (NEC team)"
-      added_by     = "Jo Harvey - joanna.harvey@necsws.com"
-      review_after = "2022-11-03"
-    },
-    {
       github_user  = "jondent"
       permission   = "push"
       name         = "Jon Dent"
