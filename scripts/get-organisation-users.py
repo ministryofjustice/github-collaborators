@@ -160,6 +160,72 @@ def team_user_names_query(after_cursor=None, team_name=None):
     return gql(query)
 
 
+# A GraphQL query to get the list of repo a user has contributed to.
+def user_repo_contributions_query(after_cursor=None, user_name=None):
+    query = """
+{
+  user(login: USER_LOGIN) {
+    repositoriesContributedTo(first: 100, after:AFTER) {
+      edges {
+        node {
+          owner {
+            login
+          }
+          name
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}
+    """.replace(
+        # This is the next page ID to start the fetch from
+        "AFTER",
+        '"{}"'.format(after_cursor) if after_cursor else "null",
+    ).replace(
+        "USER_LOGIN",
+        '"{}"'.format(user_name) if user_name else "null",
+    )
+
+    return gql(query)
+
+
+def fetch_user_repo_contributions(username):
+    has_next_page = True
+    after_cursor = None
+    repo_contribution_list = []
+
+    try:
+        client = Client(transport=transport, fetch_schema_from_transport=False)
+
+        while has_next_page:
+            query = user_repo_contributions_query(after_cursor, username)
+            data = client.execute(query)
+
+            # Loop through the repos the user has contributed to that are part of the organisation
+            for repo in data["user"]["repositoriesContributedTo"]["edges"]:
+                if repo["node"]["owner"]["login"] == "ministryofjustice":
+                    repo_contribution_list.append(repo["node"]["name"])
+
+            # Read the GH API page info section to see if there is more data to read
+            has_next_page = data["user"]["repositoriesContributedTo"]["pageInfo"][
+                "hasNextPage"
+            ]
+            after_cursor = data["user"]["repositoriesContributedTo"]["pageInfo"][
+                "endCursor"
+            ]
+
+    except:
+        print(
+            "Exception: Problem with the GH API call in fetch_user_repo_contributions()"
+        )
+
+    return repo_contribution_list
+
+
 def fetch_team_names():
     has_next_page = True
     after_cursor = None
@@ -265,10 +331,7 @@ def fetch_teams():
         team_repos_list = fetch_team_repos(team_name)
         teams_list.append(teams(team_name, team_users_list, team_repos_list))
 
-    for team in teams_list:
-        print(team.team_repos)
-
-    # return teams_list
+    return teams_list
 
 
 def fetch_users():
@@ -333,38 +396,74 @@ def fetch_users():
     except:
         print("Exception: Problem with the GH API call.")
 
-    print_output(
-        unverified_users, non_approved_email_domain_users, minimal_user_activity_list
-    )
-    # return unverified_users, non_approved_email_domain_users, minimal_user_activity_list
+    return unverified_users, non_approved_email_domain_users, minimal_user_activity_list
 
 
-def print_output(
-    unverified_users, non_approved_email_domain_users, minimal_user_activity_list
-):
+def print_output():
+    (
+        unverified_users,
+        non_approved_email_domain_users,
+        minimal_user_activity_list,
+    ) = fetch_users()
+
+    teams_list = fetch_teams()
+
     user_created_within_a_month = (datetime.now() - timedelta(weeks=4)).isoformat()
     for user in minimal_user_activity_list:
 
-        # This check is to allow new users one month to contribute to the repo
+        # This check is to allow new users one month to contribute to the organisation
         if user["createdAt"] > user_created_within_a_month:
             continue
 
         if user in unverified_users:
             print(
-                "Warning: No email found for {0} and this user has made minimal contributions to the organisation in the last nine months, consider removing the user or turn the user into a collaborator?".format(
+                "Warning: No email found for user and the user has made minimal contributions to the organisation in the last nine months, consider changing the user into a collaborator?".format(
                     user["name"]
                 )
             )
             unverified_users.remove(user)
-            print("GH name is {0}".format(user["name"]))
-            print("GH url is {0}".format(user["url"]))
-            print("GH login is {0}".format(user["login"]))
+            print("GH name: {0}".format(user["name"]))
+            print("GH url: {0}".format(user["url"]))
+            print("GH login: {0}".format(user["login"]))
+
+            for team in teams_list:
+                if user["login"] in team.team_users:
+                    print(
+                        "The user is a member of the team: {0}".format(team.team_name)
+                    )
+                    if team.team_repos:
+                        print("That team has access to these repos:")
+                        for repo in team.team_repos:
+                            print("\t" + repo)
+
+            user_repo_contributions = fetch_user_repo_contributions(user["login"])
+            if user_repo_contributions:
+                print("The user has contributed to these repos:")
+                for repo in user_repo_contributions:
+                    print("\t" + repo)
+            print("")
             print("")
 
     for user in unverified_users:
-        print("Warning: No email found for {0}".format(user["name"]))
-        print("GH url is {0}".format(user["url"]))
-        print("GH login is {0}".format(user["login"]))
+        print("Warning: No email found for this user.")
+        print("GH name: {0}".format(user["name"]))
+        print("GH url: {0}".format(user["url"]))
+        print("GH login: {0}".format(user["login"]))
+
+        for team in teams_list:
+            if user["login"] in team.team_users:
+                print("The user is a member of the team: {0}".format(team.team_name))
+                if team.team_repos:
+                    print("That team has access to these repos:")
+                    for repo in team.team_repos:
+                        print("\t" + repo)
+
+        user_repo_contributions = fetch_user_repo_contributions(user["login"])
+        if user_repo_contributions:
+            print("The user has contributed to these repos:")
+            for repo in user_repo_contributions:
+                print("\t" + repo)
+        print("")
         print("")
 
     for user in non_approved_email_domain_users:
@@ -377,15 +476,10 @@ def print_output(
         print("GH login is {0}".format(user["login"]))
         print("Found email is : {0}".format(user["organizationVerifiedDomainEmails"]))
         print("")
+        print("")
 
 
-# (
-#     unverified_users,
-#     non_approved_email_domain_users,
-#     minimal_user_activity_list,
-# ) = fetch_users()
-
-fetch_teams()
+print_output()
 
 print("Check Finished")
 sys.exit(0)
