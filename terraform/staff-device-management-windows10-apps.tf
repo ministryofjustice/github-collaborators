@@ -53,7 +53,7 @@ module "staff-device-management-windows10-apps" {
       review_after = "2022-12-31"                      #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
     {
-      github_user  = "#####"
+      github_user  = "cyrusirandoust"
       permission   = "push"
       name         = "Cyrus Irandoust"                     #  The name of the person behind github_user
       email        = "cyrus.irandoust@contentandcloud.com" #  Their email address
