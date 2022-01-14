@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from datetime import datetime, timedelta
 import sys
 from gql import gql, Client
@@ -7,7 +6,10 @@ from gql.transport.aiohttp import AIOHTTPTransport
 # Get the GH Action token
 oauth_token = sys.argv[1]
 
-# Setup a transport to the GH GraphQL API
+today_date = datetime.now().isoformat()
+from_date = (datetime.now() - timedelta(weeks=(9 * 4))).isoformat()
+
+# Setup a transport and client to interact with the GH GraphQL API
 try:
     transport = AIOHTTPTransport(
         url="https://api.github.com/graphql",
@@ -16,52 +18,74 @@ try:
 except:
     print("Exception: Problem with the API URL or GH Token")
 
+try:
+    client = Client(transport=transport, fetch_schema_from_transport=False)
+except:
+    print("Exception: Problem with the Client.")
 
-# Creates a GraphQL query with a pagination offset value
+
+# A GraphQL query to get the organisation users info
 # param: after_cursor is the pagination offset value gathered from the previous API request
-# returns: the GraphQL query that will be used
-def organisation_user_query(today_date, from_date, after_cursor=None):
+# returns: the GraphQL query result
+def organisation_user_query(after_cursor=None):
+    query = """
+    query {
+        organization(login: "ministryofjustice") {
+            membersWithRole(first: 100, after:AFTER) {
+                edges {
+                    node {
+                        organizationVerifiedDomainEmails(login: "ministryofjustice")
+                        login
+                        name
+                        url
+                        createdAt
+                    }
+                }
+                pageInfo {
+                    endCursor
+                    hasNextPage
+                }
+            }
+        }
+    }
+    """.replace(
+        # This is the next page ID to start the fetch from
+        "AFTER",
+        '"{}"'.format(after_cursor) if after_cursor else "null",
+    )
+
+    return gql(query)
+
+
+# A GraphQL query to get the user contributions to the organisation in the last nine months
+# param: user_login the user login name
+# returns: the GraphQL query result
+def user_contribution_query(user_login=None):
     query = (
         """
     query {
-    organization(login: "ministryofjustice") {
-        membersWithRole(first: 15, after:AFTER) {
-        edges {
-            node {
-            organizationVerifiedDomainEmails(login: "ministryofjustice")
-            login
-            name
-            url
+        user(login: USER_LOGIN) {
             contributionsCollection(from: FROM_DATE_TIME, to: TO_DATE_TIME, organizationID: "MDEyOk9yZ2FuaXphdGlvbjIyMDM1NzQ=") {
-                totalCommitContributions
-                totalIssueContributions
-                totalPullRequestContributions
                 totalPullRequestReviewContributions
+                totalPullRequestContributions
+                totalIssueContributions
+                totalCommitContributions
             }
-            createdAt
-            }
         }
-        pageInfo {
-            endCursor
-            hasNextPage
-        }
-        }
-    }
     }
     """.replace(
-            # This is the next page user ID to start the fetch from
-            "AFTER",
-            '"{}"'.format(after_cursor) if after_cursor else "null",
+            "USER_LOGIN",
+            '"{}"'.format(user_login) if user_login else "null",
         )
         .replace(
-            # Today date
+            # Todays date
             "TO_DATE_TIME",
-            '"{}"'.format(today_date) if today_date else "null",
+            '"{}"'.format(today_date),
         )
         .replace(
-            # Today date minus nine months, this is max grace period a user has to contribute to the organisation repos
+            # Todays date minus nine months
             "FROM_DATE_TIME",
-            '"{}"'.format(from_date) if from_date else "null",
+            '"{}"'.format(from_date),
         )
     )
 
@@ -69,25 +93,27 @@ def organisation_user_query(today_date, from_date, after_cursor=None):
 
 
 # A GraphQL query to get the list of organisation team names
+# param: after_cursor is the pagination offset value gathered from the previous API request
+# returns: the GraphQL query result
 def organisation_teams_name_query(after_cursor=None):
     query = """
-{
-  organization(login: "ministryofjustice") {
-    teams(first: 100, after:AFTER) {
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
-      edges {
-        node {
-          slug
+    query {
+        organization(login: "ministryofjustice") {
+            teams(first: 100, after:AFTER) {
+                pageInfo {
+                    endCursor
+                    hasNextPage
+                }
+                edges {
+                    node {
+                        slug
+                    }
+                }
+            }
         }
-      }
     }
-  }
-}
         """.replace(
-        # This is the next page team ID to start the fetch from
+        # This is the next page ID to start the fetch from
         "AFTER",
         '"{}"'.format(after_cursor) if after_cursor else "null",
     )
@@ -95,26 +121,29 @@ def organisation_teams_name_query(after_cursor=None):
     return gql(query)
 
 
-# A GraphQL query to get the list of repos a team has access to.
+# A GraphQL query to get the list of repos a team has access to in the organisation
+# param: after_cursor is the pagination offset value gathered from the previous API request
+# param: team_name is the name of the team that has the associated repo/s
+# returns: the GraphQL query result
 def team_repos_query(after_cursor=None, team_name=None):
     query = """
-{
-  organization(login: "ministryofjustice") {
-    team(slug: TEAM_NAME) {
-      repositories(first: 100, after:AFTER) {
-        edges {
-          node {
-            name
-          }
+    query {
+        organization(login: "ministryofjustice") {
+            team(slug: TEAM_NAME) {
+                repositories(first: 100, after:AFTER) {
+                    edges {
+                        node {
+                            name
+                        }
+                    }
+                    pageInfo {
+                        endCursor
+                        hasNextPage
+                    }
+                }
+            }
         }
-        pageInfo {
-          endCursor
-          hasNextPage
-        }
-      }
     }
-  }
-}
     """.replace(
         # This is the next page ID to start the fetch from
         "AFTER",
@@ -127,27 +156,30 @@ def team_repos_query(after_cursor=None, team_name=None):
     return gql(query)
 
 
-# A GraphQL query to get the list of users in a team.
+# A GraphQL query to get the list of user names within each organisation team.
+# param: after_cursor is the pagination offset value gathered from the previous API request
+# param: team_name is the name of the team that has the associated user/s
+# returns: the GraphQL query result
 def team_user_names_query(after_cursor=None, team_name=None):
     query = """
-{
-  organization(login: "ministryofjustice") {
-    team(slug: TEAM_NAME) {
-      members(first: 100, after:AFTER) {
-        edges {
-          node {
-            login
-            name
-          }
+    query {
+        organization(login: "ministryofjustice") {
+            team(slug: TEAM_NAME) {
+                members(first: 100, after:AFTER) {
+                    edges {
+                        node {
+                            login
+                            name
+                        }
+                    }
+                    pageInfo {
+                        hasNextPage
+                        endCursor
+                    }
+                }
+            }
         }
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-      }
     }
-  }
-}
     """.replace(
         # This is the next page ID to start the fetch from
         "AFTER",
@@ -160,158 +192,177 @@ def team_user_names_query(after_cursor=None, team_name=None):
     return gql(query)
 
 
-# A GraphQL query to get the list of repo a user has contributed to.
-def user_repo_contributions_query(after_cursor=None, user_name=None):
+# A GraphQL query to get the list of repo/s a user has contributed to.
+# param: after_cursor is the pagination offset value gathered from the previous API request
+# param: user_login is the name of the user
+# returns: the GraphQL query result
+def user_repo_contributions_query(after_cursor=None, user_login=None):
     query = """
-{
-  user(login: USER_LOGIN) {
-    repositoriesContributedTo(first: 100, after:AFTER) {
-      edges {
-        node {
-          owner {
-            login
-          }
-          name
+    query {
+        user(login: USER_LOGIN) {
+            repositoriesContributedTo(first: 100, after:AFTER) {
+                edges {
+                    node {
+                        owner {
+                            login
+                        }
+                        name
+                    }
+                }
+                pageInfo {
+                    hasNextPage
+                    endCursor
+                }
+            }
         }
-      }
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
     }
-  }
-}
     """.replace(
         # This is the next page ID to start the fetch from
         "AFTER",
         '"{}"'.format(after_cursor) if after_cursor else "null",
     ).replace(
         "USER_LOGIN",
-        '"{}"'.format(user_name) if user_name else "null",
+        '"{}"'.format(user_login) if user_login else "null",
     )
 
     return gql(query)
 
 
-def fetch_user_repo_contributions(username):
+# A wrapper function to run a GraphQL query to get the list of organisation users
+# returns: a list of users info within the organisation
+def fetch_users():
+    users_list = []
+    has_next_page = True
+    after_cursor = None
+
+    while has_next_page:
+        query = organisation_user_query(after_cursor)
+        data = client.execute(query)
+
+        # Loop through the organization members
+        for user in data["organization"]["membersWithRole"]["edges"]:
+            users_list.append(user["node"])
+
+        # Read the GH API page info section to see if there is more data to read
+        has_next_page = data["organization"]["membersWithRole"]["pageInfo"][
+            "hasNextPage"
+        ]
+        after_cursor = data["organization"]["membersWithRole"]["pageInfo"]["endCursor"]
+
+    return users_list
+
+
+# A wrapper function to run a GraphQL query to get the total contribution a user has made to the organisation
+# param: user_name is the name of the user
+# returns: the metrics data that a user has contributed to the organisation
+def fetch_user_contribution_to_organisation(user_name):
+    query = user_contribution_query(user_name)
+    return client.execute(query)
+
+
+# A wrapper function to run a GraphQL query to get the list of repo/s a user has contributed to
+# param: user_name is the name of the user
+# returns: a list of repo names the user has contributed to
+def fetch_user_repo_contributions(user_name):
     has_next_page = True
     after_cursor = None
     repo_contribution_list = []
 
-    try:
-        client = Client(transport=transport, fetch_schema_from_transport=False)
+    while has_next_page:
+        query = user_repo_contributions_query(after_cursor, user_name)
+        data = client.execute(query)
 
-        while has_next_page:
-            query = user_repo_contributions_query(after_cursor, username)
-            data = client.execute(query)
+        # Retrieve the repos the user has contributed to that are part of the organisation
+        for repo in data["user"]["repositoriesContributedTo"]["edges"]:
+            if repo["node"]["owner"]["login"] == "ministryofjustice":
+                repo_contribution_list.append(repo["node"]["name"])
 
-            # Loop through the repos the user has contributed to that are part of the organisation
-            for repo in data["user"]["repositoriesContributedTo"]["edges"]:
-                if repo["node"]["owner"]["login"] == "ministryofjustice":
-                    repo_contribution_list.append(repo["node"]["name"])
-
-            # Read the GH API page info section to see if there is more data to read
-            has_next_page = data["user"]["repositoriesContributedTo"]["pageInfo"][
-                "hasNextPage"
-            ]
-            after_cursor = data["user"]["repositoriesContributedTo"]["pageInfo"][
-                "endCursor"
-            ]
-
-    except:
-        print(
-            "Exception: Problem with the GH API call in fetch_user_repo_contributions()"
-        )
+        # Read the GH API page info section to see if there is more data to read
+        has_next_page = data["user"]["repositoriesContributedTo"]["pageInfo"][
+            "hasNextPage"
+        ]
+        after_cursor = data["user"]["repositoriesContributedTo"]["pageInfo"][
+            "endCursor"
+        ]
 
     return repo_contribution_list
 
 
+# A wrapper function to run a GraphQL query to get the list of teams in the organisation
+# returns: a list of the organisation repos names
 def fetch_team_names():
     has_next_page = True
     after_cursor = None
     team_name_list = []
 
-    try:
-        client = Client(transport=transport, fetch_schema_from_transport=False)
+    while has_next_page:
+        query = organisation_teams_name_query(after_cursor)
+        data = client.execute(query)
 
-        while has_next_page:
-            query = organisation_teams_name_query(after_cursor)
-            data = client.execute(query)
+        # Retrieve the name of the teams
+        for team in data["organization"]["teams"]["edges"]:
+            team_name_list.append(team["node"]["slug"])
 
-            # Loop through the organization members
-            for team in data["organization"]["teams"]["edges"]:
-                team_name_list.append(team["node"]["slug"])
-
-            # Read the GH API page info section to see if there is more data to read
-            has_next_page = data["organization"]["teams"]["pageInfo"]["hasNextPage"]
-            after_cursor = data["organization"]["teams"]["pageInfo"]["endCursor"]
-
-    except:
-        print("Exception: Problem with the GH API call in fetch_team_names()")
+        # Read the GH API page info section to see if there is more data to read
+        has_next_page = data["organization"]["teams"]["pageInfo"]["hasNextPage"]
+        after_cursor = data["organization"]["teams"]["pageInfo"]["endCursor"]
 
     return team_name_list
 
 
+# A wrapper function to run a GraphQL query to get the list of users within an organisation team
+# param: team_name is the team within the organisation to check
+# returns: a list of the team user names
 def fetch_team_users(team_name):
     has_next_page = True
     after_cursor = None
     team_user_name_list = []
 
-    try:
-        client = Client(transport=transport, fetch_schema_from_transport=False)
+    while has_next_page:
+        query = team_user_names_query(after_cursor, team_name)
+        data = client.execute(query)
 
-        while has_next_page:
-            query = team_user_names_query(after_cursor, team_name)
-            data = client.execute(query)
+        # Retrieve the usernames of the team members
+        for team in data["organization"]["team"]["members"]["edges"]:
+            team_user_name_list.append(team["node"]["login"])
 
-            # Loop through the organization members
-            for team in data["organization"]["team"]["members"]["edges"]:
-                team_user_name_list.append(team["node"]["login"])
-
-            # Read the GH API page info section to see if there is more data to read
-            has_next_page = data["organization"]["team"]["members"]["pageInfo"][
-                "hasNextPage"
-            ]
-            after_cursor = data["organization"]["team"]["members"]["pageInfo"][
-                "endCursor"
-            ]
-
-    except:
-        print("Exception: Problem with the GH API call in fetch_team_users()")
+        # Read the GH API page info section to see if there is more data to read
+        has_next_page = data["organization"]["team"]["members"]["pageInfo"][
+            "hasNextPage"
+        ]
+        after_cursor = data["organization"]["team"]["members"]["pageInfo"]["endCursor"]
 
     return team_user_name_list
 
 
+# A wrapper function to run a GraphQL query to get the list of repo within in an organisation team
+# param: team_name is the team within the organisation to check
+# returns: the list of team repo names
 def fetch_team_repos(team_name):
     has_next_page = True
     after_cursor = None
     team_repo_list = []
 
-    try:
-        client = Client(transport=transport, fetch_schema_from_transport=False)
+    while has_next_page:
+        query = team_repos_query(after_cursor, team_name)
+        data = client.execute(query)
 
-        while has_next_page:
-            query = team_repos_query(after_cursor, team_name)
-            data = client.execute(query)
+        # Retrieve the name of the teams repos
+        for team in data["organization"]["team"]["repositories"]["edges"]:
+            team_repo_list.append(team["node"]["name"])
 
-            # Loop through the organization members
-            for team in data["organization"]["team"]["repositories"]["edges"]:
-                team_repo_list.append(team["node"]["name"])
-
-            # Read the GH API page info section to see if there is more data to read
-            has_next_page = data["organization"]["team"]["repositories"]["pageInfo"][
-                "hasNextPage"
-            ]
-            after_cursor = data["organization"]["team"]["repositories"]["pageInfo"][
-                "endCursor"
-            ]
-
-    except:
-        print("Exception: Problem with the GH API call in fetch_team_repos()")
+        # Read the GH API page info section to see if there is more data to read
+        has_next_page = data["organization"]["team"]["repositories"]["pageInfo"][
+            "hasNextPage"
+        ]
+        after_cursor = data["organization"]["team"]["repositories"]["pageInfo"][
+            "endCursor"
+        ]
 
     return team_repo_list
 
 
+# Basically a struct to store organisation team info ie name, users, repos
 class teams:
     team_name: str
     team_users: list
@@ -323,6 +374,8 @@ class teams:
         self.team_repos = z
 
 
+# Wrapper function to retrieve the organisation team info ie name, users, repos
+# returns: all the organisation teams data ie name, users, repos
 def fetch_teams():
     teams_list = []
     teams_names_list = fetch_team_names()
@@ -334,99 +387,97 @@ def fetch_teams():
     return teams_list
 
 
-def fetch_users():
-    unverified_users = []
-    non_approved_email_domain_users = []
-    minimal_user_activity_list = []
-    has_next_page = True
-    after_cursor = None
-    today_date = datetime.now().isoformat()
-    from_date = (datetime.now() - timedelta(weeks=(9 * 4))).isoformat()
-
-    try:
-        client = Client(transport=transport, fetch_schema_from_transport=False)
-
-        while has_next_page:
-            query = organisation_user_query(today_date, from_date, after_cursor)
-            data = client.execute(query)
-
-            # Loop through the organization members
-            for user in data["organization"]["membersWithRole"]["edges"]:
-                # Look for users that have minimal activity in the last nine months
-                if not (
-                    user["node"]["contributionsCollection"]["totalCommitContributions"]
-                    > 10
-                    or user["node"]["contributionsCollection"][
-                        "totalIssueContributions"
-                    ]
-                    > 10
-                    or user["node"]["contributionsCollection"][
-                        "totalPullRequestContributions"
-                    ]
-                    > 10
-                    or user["node"]["contributionsCollection"][
-                        "totalPullRequestReviewContributions"
-                    ]
-                    > 10
-                ):
-                    minimal_user_activity_list.append(user["node"])
-
-                # Check user has an verified email with the organization
-                if not user["node"]["organizationVerifiedDomainEmails"]:
-                    unverified_users.append(user["node"])
-                else:
-                    # Check verified email users are using an approved email domain
-                    user_email = user["node"]["organizationVerifiedDomainEmails"][0]
-                    user_email = user_email.lower()
-                    if not (
-                        user_email.__contains__("@digital.justice.gov.uk")
-                        or user_email.__contains__("@justice.gov.uk")
-                        or user_email.__contains__("@cica.gov.uk")
-                    ):
-                        non_approved_email_domain_users.append(user["node"])
-
-            # Read the GH API page info section to see if there is more data to read
-            has_next_page = data["organization"]["membersWithRole"]["pageInfo"][
-                "hasNextPage"
-            ]
-            after_cursor = data["organization"]["membersWithRole"]["pageInfo"][
-                "endCursor"
-            ]
-
-    except:
-        print("Exception: Problem with the GH API call.")
-
-    return unverified_users, non_approved_email_domain_users, minimal_user_activity_list
+# A check to see if user has contributed to the organisation in the last nine months
+# param: user is the user to check
+# returns: Bool true is the user has contributed more than ten times in the last nine months
+def has_user_contributed(user):
+    data = fetch_user_contribution_to_organisation(user["login"])
+    if (
+        data["user"]["contributionsCollection"]["totalCommitContributions"] > 10
+        or data["user"]["contributionsCollection"]["totalIssueContributions"] > 10
+        or data["user"]["contributionsCollection"]["totalPullRequestContributions"] > 10
+        or data["user"]["contributionsCollection"][
+            "totalPullRequestReviewContributions"
+        ]
+        > 10
+    ):
+        return True
+    else:
+        return False
 
 
-def print_output():
-    (
-        unverified_users,
-        non_approved_email_domain_users,
-        minimal_user_activity_list,
-    ) = fetch_users()
+# A check to see if the user has an approved email domain
+# param: user is the user to check
+# returns: Bool true is the user has an approved organisation email
+def user_has_approved_email_domain(user):
+    user_email = user["organizationVerifiedDomainEmails"][0]
+    user_email = user_email.lower()
+    if (
+        user_email.__contains__("@digital.justice.gov.uk")
+        or user_email.__contains__("@justice.gov.uk")
+        or user_email.__contains__("@cica.gov.uk")
+    ):
+        return True
+    else:
+        return False
 
-    teams_list = fetch_teams()
 
+# A check to see if the user has an verified email with the organization
+# param: user is the user to check
+# returns: Bool true is the user has verified their email with the organisation
+def user_has_verified_email(user):
+    if user["organizationVerifiedDomainEmails"]:
+        return True
+    else:
+        return False
+
+
+# A check to see if the user is new to GH within a month
+# param: user is the user to check
+# returns: Bool true is the user has been created within a month
+def is_user_new(user):
     user_created_within_a_month = (datetime.now() - timedelta(weeks=4)).isoformat()
-    for user in minimal_user_activity_list:
+    if user["createdAt"] > user_created_within_a_month:
+        return True
+    else:
+        return False
 
-        # This check is to allow new users one month to contribute to the organisation
-        if user["createdAt"] > user_created_within_a_month:
-            continue
 
-        if user in unverified_users:
-            print(
-                "Warning: No email found for user and the user has made minimal contributions to the organisation in the last nine months, consider changing the user into a collaborator?".format(
-                    user["name"]
-                )
+# Prints a warning message and related user info
+# param: warning is the message to print
+# param: user is the user to check
+def print_warning_message(warning, user):
+    print(warning)
+    print("GH name: {0}".format(user["name"]))
+    print("GH url: {0}".format(user["url"]))
+    print("GH login: {0}".format(user["login"]))
+
+
+# The main functionality is done here
+def run():
+    organisation_users_list = fetch_users()
+    organisation_teams_list = fetch_teams()
+
+    for user in organisation_users_list:
+        if user_has_verified_email(user) and not user_has_approved_email_domain(user):
+            print_warning_message(
+                "Warning: This user is using a non-approved email domain.", user
             )
-            unverified_users.remove(user)
-            print("GH name: {0}".format(user["name"]))
-            print("GH url: {0}".format(user["url"]))
-            print("GH login: {0}".format(user["login"]))
+            print(
+                "Found email is: {0}".format(user["organizationVerifiedDomainEmails"])
+            )
+            print("\n")
+        elif not user_has_verified_email(user):
+            if not has_user_contributed(user) and not is_user_new(user):
+                print_warning_message(
+                    "Warning: No email found for this user and the user has made minimal contributions to the organisation in the last nine months, consider changing the user into a collaborator?",
+                    user,
+                )
+            else:
+                print_warning_message("Warning: No email found for this user.", user)
 
-            for team in teams_list:
+            # Print the name of the repos for each team the user is a member of
+            for team in organisation_teams_list:
                 if user["login"] in team.team_users:
                     print(
                         "The user is a member of the team: {0}".format(team.team_name)
@@ -436,50 +487,15 @@ def print_output():
                         for repo in team.team_repos:
                             print("\t" + repo)
 
+            # Print the repo/s the user has contributed to within the organisation
             user_repo_contributions = fetch_user_repo_contributions(user["login"])
             if user_repo_contributions:
                 print("The user has contributed to these repos:")
                 for repo in user_repo_contributions:
                     print("\t" + repo)
-            print("")
-            print("")
-
-    for user in unverified_users:
-        print("Warning: No email found for this user.")
-        print("GH name: {0}".format(user["name"]))
-        print("GH url: {0}".format(user["url"]))
-        print("GH login: {0}".format(user["login"]))
-
-        for team in teams_list:
-            if user["login"] in team.team_users:
-                print("The user is a member of the team: {0}".format(team.team_name))
-                if team.team_repos:
-                    print("That team has access to these repos:")
-                    for repo in team.team_repos:
-                        print("\t" + repo)
-
-        user_repo_contributions = fetch_user_repo_contributions(user["login"])
-        if user_repo_contributions:
-            print("The user has contributed to these repos:")
-            for repo in user_repo_contributions:
-                print("\t" + repo)
-        print("")
-        print("")
-
-    for user in non_approved_email_domain_users:
-        print(
-            "Warning: This user is using a non-approved email domain: {0}".format(
-                user["name"]
-            )
-        )
-        print("GH url is {0}".format(user["url"]))
-        print("GH login is {0}".format(user["login"]))
-        print("Found email is : {0}".format(user["organizationVerifiedDomainEmails"]))
-        print("")
-        print("")
+            print("\n")
 
 
-print_output()
-
+run()
 print("Check Finished")
 sys.exit(0)
