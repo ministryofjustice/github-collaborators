@@ -30,7 +30,7 @@ module "yjaf-infra-aws-mgmt" {
       org          = "Youth Justice Board"
       reason       = "Technical Assurance Architect (managed service)"
       added_by     = "Jake Mulley (MOJ)"
-      review_after = "2022-01-31"
+      review_after = "2022-06-18"
     },
   ]
 }
