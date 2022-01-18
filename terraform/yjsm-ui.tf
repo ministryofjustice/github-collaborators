@@ -40,7 +40,7 @@ module "yjsm-ui" {
       org          = "NPS (northgate)"
       reason       = "Part of the Northgate supplier team for the YJB YJAF system"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2021-12-31"
+      review_after = "2022-06-18"
     },
     {
       github_user  = "brbaje-dev"
@@ -70,7 +70,7 @@ module "yjsm-ui" {
       org          = "Youth Justice Board"
       reason       = "Technical Assurance Architect (managed service)"
       added_by     = "Jake Mulley (MOJ)"
-      review_after = "2022-01-31"
+      review_after = "2022-06-18"
     },
     {
       github_user  = "javaidarshadnec"
