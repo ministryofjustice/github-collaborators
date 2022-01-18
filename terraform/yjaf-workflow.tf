@@ -40,7 +40,7 @@ module "yjaf-workflow" {
       org          = "NPS (northgate)"
       reason       = "Part of the Northgate supplier team for the YJB YJAF system"
       added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
-      review_after = "2021-12-31"
+      review_after = "2022-06-18"
     },
     {
       github_user  = "waheedanjum"
@@ -50,7 +50,7 @@ module "yjaf-workflow" {
       org          = "NEC Software Solutions"
       reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2021-12-31"
+      review_after = "2022-06-18"
     },
     {
       github_user  = "djv72"
@@ -60,7 +60,7 @@ module "yjaf-workflow" {
       org          = "NEC Software Solutions"
       reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2021-12-31"
+      review_after = "2022-06-18"
     },
     {
       github_user  = "InFlamesForever"
@@ -120,7 +120,7 @@ module "yjaf-workflow" {
       org          = "Youth Justice Board"
       reason       = "Technical Assurance Architect (managed service)"
       added_by     = "Jake Mulley (MOJ)"
-      review_after = "2022-01-31"
+      review_after = "2022-06-18"
     },
     {
       github_user  = "javaidarshadnec"
