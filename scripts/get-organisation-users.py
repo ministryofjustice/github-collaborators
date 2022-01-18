@@ -1,7 +1,12 @@
-from datetime import datetime, timedelta
 import sys
+import time
+import traceback
+from datetime import datetime, timedelta
+from ghapi.all import GhApi
 from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
+
+# See https://ghapi.fast.ai/fullapi.html for the full ghapi library api calls.
 
 # Get the GH Action token
 oauth_token = sys.argv[1]
@@ -15,13 +20,68 @@ try:
         url="https://api.github.com/graphql",
         headers={"Authorization": "Bearer {}".format(oauth_token)},
     )
-except:
+except Exception:
     print("Exception: Problem with the API URL or GH Token")
+    try:
+        exc_info = sys.exc_info()
+    finally:
+        traceback.print_exception(*exc_info)
+        del exc_info
 
 try:
     client = Client(transport=transport, fetch_schema_from_transport=False)
-except:
+except Exception:
     print("Exception: Problem with the Client.")
+    try:
+        exc_info = sys.exc_info()
+    finally:
+        traceback.print_exception(*exc_info)
+        del exc_info
+
+exception_list = ["houndci-bot"]
+
+api = GhApi(
+    owner="ministryofjustice",
+    repo="no-verified-domain-email-repo",
+    token=oauth_token,
+)
+
+
+# A GraphQL query to get the repo list of issues
+# param: after_cursor is the pagination offset value gathered from the previous API request
+# returns: the GraphQL query result
+def repo_issues_query(after_cursor=None):
+    query = """
+    {
+        repository(name: "no-verified-domain-email-repo", owner: "ministryofjustice") {
+            issues(first: 100, after:AFTER) {
+                pageInfo {
+                    endCursor
+                    hasNextPage
+                }
+                edges {
+                    node {
+                        number
+                        state
+                        assignees(first: 10) {
+                            edges {
+                                node {
+                                    login
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    """.replace(
+        # This is the next page ID to start the fetch from
+        "AFTER",
+        '"{}"'.format(after_cursor) if after_cursor else "null",
+    )
+
+    return gql(query)
 
 
 # A GraphQL query to get the organisation users info
@@ -252,6 +312,28 @@ def fetch_users():
     return users_list
 
 
+# A wrapper function to run a GraphQL query to get the list of issues in a repo
+# returns: a list of issues for a repo
+def fetch_repo_issues():
+    issue_list = []
+    has_next_page = True
+    after_cursor = None
+
+    while has_next_page:
+        query = repo_issues_query(after_cursor)
+        data = client.execute(query)
+
+        # Loop through the issues
+        for issue in data["repository"]["issues"]["edges"]:
+            issue_list.append(issue["node"])
+
+        # Read the GH API page info section to see if there is more data to read
+        has_next_page = data["repository"]["issues"]["pageInfo"]["hasNextPage"]
+        after_cursor = data["repository"]["issues"]["pageInfo"]["endCursor"]
+
+    return issue_list
+
+
 # A wrapper function to run a GraphQL query to get the total contribution a user has made to the organisation
 # param: user_name is the name of the user
 # returns: the metrics data that a user has contributed to the organisation
@@ -416,6 +498,7 @@ def user_has_approved_email_domain(user):
         user_email.__contains__("@digital.justice.gov.uk")
         or user_email.__contains__("@justice.gov.uk")
         or user_email.__contains__("@cica.gov.uk")
+        or user_email.__contains__("@hmcts.net")
     ):
         return True
     else:
@@ -453,10 +536,12 @@ def print_warning_message(warning, user):
     print("GH login: {0}".format(user["login"]))
 
 
-# The main functionality is done here
-def run():
-    organisation_users_list = fetch_users()
-    organisation_teams_list = fetch_teams()
+# tbc
+# param: tbc
+# param: tbc
+# returns: A list of the user usernames that do no have a correct email
+def find_unverified_email_users(organisation_users_list, organisation_teams_list):
+    user_list = []
 
     for user in organisation_users_list:
         if user_has_verified_email(user) and not user_has_approved_email_domain(user):
@@ -467,6 +552,8 @@ def run():
                 "Found email is: {0}".format(user["organizationVerifiedDomainEmails"])
             )
             print("\n")
+            # Add this user to the return list
+            user_list.append(user["login"])
         elif not user_has_verified_email(user):
             if not has_user_contributed(user) and not is_user_new(user):
                 print_warning_message(
@@ -494,6 +581,182 @@ def run():
                 for repo in user_repo_contributions:
                     print("\t" + repo)
             print("\n")
+            # Add this user to the return list
+            user_list.append(user["login"])
+    return user_list
+
+
+# tbc
+# tbc
+# tbc
+def remove_user_from_team_and_repo(team, unverified_email_users):
+
+    # Get the no-verified-domain-email-repo issues list
+    repo_issues = fetch_repo_issues()
+
+    # Delete users in the no-verified-domain-email team that have verified there email address recently
+    for user_name in team.team_users:
+        if user_name in unverified_email_users:
+            pass
+            # The user is hasnt verified an email yet so continue
+        else:
+            # Close any no-verified-domain-email-repo issue/s for the user
+            for issue in repo_issues:
+                try:
+                    # Check the user hasnt unassigned themselves from the issue
+                    if issue["assignees"]["edges"]:
+                        # Check issue is assigned to the user
+                        if issue["assignees"]["edges"][0]["node"]["login"] == user_name:
+                            # Check issue is open
+                            if issue["state"] == "OPEN":
+                                # Set the issue to closed
+                                api.issues.update(
+                                    owner="ministryofjustice",
+                                    repo="no-verified-domain-email-repo",
+                                    issue_number=issue["number"],
+                                    state="closed",
+                                )
+                                # Delay for GH API
+                                time.sleep(5)
+                except Exception:
+                    print(
+                        "Warning: Exception in closing a no-verified-domain-email-repo issue"
+                    )
+                    try:
+                        exc_info = sys.exc_info()
+                    finally:
+                        traceback.print_exception(*exc_info)
+                        del exc_info
+                        # Longer delay for GH API
+                        time.sleep(30)
+
+            # Remove the user from the no-verified-domain-email team as they are a verified user
+            try:
+                api.teams.remove_membership_for_user_in_org(
+                    "ministryofjustice", "no-verified-domain-email", user_name
+                )
+                # Delay for GH API
+                time.sleep(5)
+            except Exception:
+                print(
+                    "Warning: Exception in removing a user from the no-verified-domain-email team"
+                )
+                try:
+                    exc_info = sys.exc_info()
+                finally:
+                    traceback.print_exception(*exc_info)
+                    del exc_info
+                    # Longer for GH API
+                    time.sleep(30)
+            print(
+                "Removing the user from the no-verified-domain-email team: " + user_name
+            )
+            print("")
+
+
+# tbc
+# tbc
+def create_an_issue(user_name):
+    print("Adding an issue for " + user_name + " to the no-verified-domain-email-repo")
+
+    try:
+        api.issues.create(
+            owner="ministryofjustice",
+            repo="no-verified-domain-email-repo",
+            title="Add your MoJ email address to your Github account",
+            body="Your access to the ministryofjustice GitHub organisation will be revoked if you don't add a @digital.justice.gov.uk, @justice.gov.uk, @cica.gov.uk or @hmcts.net email address to your GitHub account. This is an automated process please do not change any settings, only make the email change in your settings area.",
+            assignee=user_name,
+        )
+        # Delay for GH API
+        time.sleep(5)
+    except Exception:
+        print(
+            "Warning: Exception in creating an no-verified-domain-email-repo issue for a user"
+        )
+        try:
+            exc_info = sys.exc_info()
+        finally:
+            traceback.print_exception(*exc_info)
+            del exc_info
+            # Longer delay for GH API
+            time.sleep(30)
+
+
+# tbc
+# tbc
+# tbc
+def add_user_to_team_and_repo(team, unverified_email_users):
+    # Add users to the no-verified-domain-email team that do not have a verified email address
+    for user_name in unverified_email_users:
+        if user_name in team.team_users or user_name in exception_list:
+            # User already in the team or on the exception list
+            pass
+        else:
+            print("Adding the user to the no-verified-domain-email team: " + user_name)
+            try:
+                api.teams.add_or_update_membership_for_user_in_org(
+                    "ministryofjustice",
+                    "no-verified-domain-email",
+                    user_name,
+                    "member",
+                )
+                # Delay for GH API
+                time.sleep(5)
+            except Exception:
+                print(
+                    "Warning: Exception in Adding the user to the no-verified-domain-email team"
+                )
+                try:
+                    exc_info = sys.exc_info()
+                finally:
+                    traceback.print_exception(*exc_info)
+                    del exc_info
+                    # Longer elay for GH API
+                    time.sleep(30)
+
+            create_an_issue(user_name)
+
+
+# tbc
+# tbc
+def check_user_has_repo_issue(team):
+    # Get the list of issues and store the names of the assignees.
+    issue_assigned_names_list = []
+    repo_issues = fetch_repo_issues()
+    for issue in repo_issues:
+        if issue["assignees"]["edges"]:
+            issue_assigned_names_list.append(
+                issue["assignees"]["edges"][0]["node"]["login"]
+            )
+
+    # Check each team member has been assigned an issue within the repo
+    for team_user in team.team_users:
+        if team_user in issue_assigned_names_list:
+            pass
+            # User has an issue in the issue list
+        else:
+            create_an_issue(team_user)
+
+
+#  tbc
+def run():
+    # Get the MoJ organisation teams and users info
+    organisation_users_list = fetch_users()
+    organisation_teams_list = fetch_teams()
+
+    # Get the users that do not have a verified email address
+    unverified_email_users = find_unverified_email_users(
+        organisation_users_list, organisation_teams_list
+    )
+
+    for team in organisation_teams_list:
+        if team.team_name == "no-verified-domain-email":
+            # Remove the users that have updated a verified email address
+            remove_user_from_team_and_repo(team, unverified_email_users)
+            # Add the users that do not have a verified email address
+            add_user_to_team_and_repo(team, unverified_email_users)
+            # Sanity check that every team member has an open issue in the repo
+            check_user_has_repo_issue(team)
 
 
 run()
