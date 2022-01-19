@@ -5,6 +5,7 @@ description: >-
 title: 'Please create an external collaborator pull request '
 labels:
   - collaborator
+  - pr-create-issue
 body:
   - type: input
     id: username
