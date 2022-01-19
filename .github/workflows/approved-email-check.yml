@@ -23,14 +23,14 @@ jobs:
             cache: 'pip'
 
       - name: "Install dependencies"
-        run: |
+      - run: |
           python3 -m pip install --upgrade pip
           python3 -m venv venv
           source venv/bin/activate
           python3 -m pip install websockets aiohttp==3.8.1 gql==3.0.0rc1 ghapi
 
       - name: Do check
-        run: python3 scripts/approved-email-check.py ${{ secrets.ADMIN_GITHUB_TOKEN }} > output.txt
+      - run: python3 scripts/approved-email-check.py ${{ secrets.ADMIN_GITHUB_TOKEN }} > output.txt
 
       - name: Upload artifact
       - uses: actions/upload-artifact@v2
