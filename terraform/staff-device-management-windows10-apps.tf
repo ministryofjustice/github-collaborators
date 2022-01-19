@@ -65,12 +65,12 @@ module "staff-device-management-windows10-apps" {
     {
       github_user  = "raghavkuchipudi"
       permission   = "readonly"
-      name         = "Raghav Kuchipudi"         
-      email        = "raghav.kuchipudi@contentandcloud.com"        
-      org          = "Content and Cloud"          
-      reason       = "New team member / PTTP tech team"       
-      added_by     = "matthew.white1@justice.gov.uk"     
-      review_after = "2022-12-31" 
+      name         = "Raghav Kuchipudi"
+      email        = "raghav.kuchipudi@contentandcloud.com"
+      org          = "Content and Cloud"
+      reason       = "New team member / PTTP tech team"
+      added_by     = "matthew.white1@justice.gov.uk"
+      review_after = "2022-12-31"
     },
   ]
 }
