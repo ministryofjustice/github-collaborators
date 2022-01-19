@@ -64,7 +64,7 @@ module "staff-device-management-windows10-apps" {
     },
     {
       github_user  = "raghavkuchipudi"
-      permission   = "readonly"
+      permission   = "pull"
       name         = "Raghav Kuchipudi"
       email        = "raghav.kuchipudi@contentandcloud.com"
       org          = "Content and Cloud"
