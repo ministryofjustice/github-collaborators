@@ -68,7 +68,7 @@ body:
       options:
         - maintain
         - admin
-        - readonly
+        - pull
     validations:
       required: true
   - type: textarea
