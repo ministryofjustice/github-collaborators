@@ -895,10 +895,6 @@ def sanitize_repo_issue(organisation_users_list):
             # User is part of the organisation
         else:
             # User is not part of the organisation so close any no-verified-domain-email-repo issue/s for the user
-            print(
-                "The user is no longer part of the organisation so closing their no-verified-domain-email-repo issue/s: "
-                + user_name
-            )
             close_repo_issues_for_user(repo_issues, user_name)
 
 
