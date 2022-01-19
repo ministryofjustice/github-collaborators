@@ -11,8 +11,24 @@ from gql.transport.aiohttp import AIOHTTPTransport
 # Get the GH Action token
 oauth_token = sys.argv[1]
 
+# Calculate the dates for API queries
 today_date = datetime.now().isoformat()
 from_date = (datetime.now() - timedelta(weeks=(9 * 4))).isoformat()
+
+
+def print_stack_trace(message):
+    """This will attempt to print a stack trace when an exception occurs
+
+    Args:
+        message ([type]): A message to print when exception occurs
+    """
+    print(message)
+    try:
+        exc_info = sys.exc_info()
+    finally:
+        traceback.print_exception(*exc_info)
+        del exc_info
+
 
 # Setup a transport and client to interact with the GH GraphQL API
 try:
@@ -21,25 +37,17 @@ try:
         headers={"Authorization": "Bearer {}".format(oauth_token)},
     )
 except Exception:
-    print("Exception: Problem with the API URL or GH Token")
-    try:
-        exc_info = sys.exc_info()
-    finally:
-        traceback.print_exception(*exc_info)
-        del exc_info
+    print_stack_trace("Exception: Problem with the API URL or GH Token")
 
 try:
     client = Client(transport=transport, fetch_schema_from_transport=False)
 except Exception:
-    print("Exception: Problem with the Client.")
-    try:
-        exc_info = sys.exc_info()
-    finally:
-        traceback.print_exception(*exc_info)
-        del exc_info
+    print_stack_trace("Exception: Problem with the Client.")
 
+# This is a list of usernames to ignore when adding users to the no-verified-domain-email team / repo
 exception_list = ["houndci-bot"]
 
+# The GH REST API interface
 api = GhApi(
     owner="ministryofjustice",
     repo="no-verified-domain-email-repo",
@@ -47,10 +55,15 @@ api = GhApi(
 )
 
 
-# A GraphQL query to get the repo list of issues
-# param: after_cursor is the pagination offset value gathered from the previous API request
-# returns: the GraphQL query result
-def repo_issues_query(after_cursor=None):
+def repo_issues_query(after_cursor=None) -> gql:
+    """A GraphQL query to get the repo list of issues for no-verified-domain-email-repo
+
+    Args:
+        after_cursor ([type], optional): Is the pagination offset value gathered from the previous API request. Defaults to None.
+
+    Returns:
+        gql: The GraphQL query result
+    """
     query = """
     {
         repository(name: "no-verified-domain-email-repo", owner: "ministryofjustice") {
@@ -84,10 +97,15 @@ def repo_issues_query(after_cursor=None):
     return gql(query)
 
 
-# A GraphQL query to get the organisation users info
-# param: after_cursor is the pagination offset value gathered from the previous API request
-# returns: the GraphQL query result
-def organisation_user_query(after_cursor=None):
+def organisation_user_query(after_cursor=None) -> gql:
+    """A GraphQL query to get the organisation users info
+
+    Args:
+        after_cursor ([type], optional): Is the pagination offset value gathered from the previous API request. Defaults to None.
+
+    Returns:
+        gql: The GraphQL query result
+    """
     query = """
     query {
         organization(login: "ministryofjustice") {
@@ -117,10 +135,15 @@ def organisation_user_query(after_cursor=None):
     return gql(query)
 
 
-# A GraphQL query to get the user contributions to the organisation in the last nine months
-# param: user_login the user login name
-# returns: the GraphQL query result
-def user_contribution_query(user_login=None):
+def user_contribution_query(user_login=None) -> gql:
+    """A GraphQL query to get the user contributions to the organisation in the last nine months
+
+    Args:
+        user_login ([type], optional): The user login name. Defaults to None.
+
+    Returns:
+        gql: The GraphQL query result
+    """
     query = (
         """
     query {
@@ -152,10 +175,15 @@ def user_contribution_query(user_login=None):
     return gql(query)
 
 
-# A GraphQL query to get the list of organisation team names
-# param: after_cursor is the pagination offset value gathered from the previous API request
-# returns: the GraphQL query result
-def organisation_teams_name_query(after_cursor=None):
+def organisation_teams_name_query(after_cursor=None) -> gql:
+    """A GraphQL query to get the list of organisation team names
+
+    Args:
+        after_cursor ([type], optional): Is the pagination offset value gathered from the previous API request. Defaults to None.
+
+    Returns:
+        gql: The GraphQL query result
+    """
     query = """
     query {
         organization(login: "ministryofjustice") {
@@ -181,11 +209,16 @@ def organisation_teams_name_query(after_cursor=None):
     return gql(query)
 
 
-# A GraphQL query to get the list of repos a team has access to in the organisation
-# param: after_cursor is the pagination offset value gathered from the previous API request
-# param: team_name is the name of the team that has the associated repo/s
-# returns: the GraphQL query result
-def team_repos_query(after_cursor=None, team_name=None):
+def team_repos_query(after_cursor=None, team_name=None) -> gql:
+    """A GraphQL query to get the list of repos a team has access to in the organisation
+
+    Args:
+        after_cursor ([type], optional): Is the pagination offset value gathered from the previous API request. Defaults to None.
+        team_name ([type], optional): Is the name of the team that has the associated repo/s. Defaults to None.
+
+    Returns:
+        gql: The GraphQL query result
+    """
     query = """
     query {
         organization(login: "ministryofjustice") {
@@ -216,11 +249,16 @@ def team_repos_query(after_cursor=None, team_name=None):
     return gql(query)
 
 
-# A GraphQL query to get the list of user names within each organisation team.
-# param: after_cursor is the pagination offset value gathered from the previous API request
-# param: team_name is the name of the team that has the associated user/s
-# returns: the GraphQL query result
-def team_user_names_query(after_cursor=None, team_name=None):
+def team_user_names_query(after_cursor=None, team_name=None) -> gql:
+    """A GraphQL query to get the list of user names within each organisation team.
+
+    Args:
+        after_cursor ([type], optional): Is the pagination offset value gathered from the previous API request. Defaults to None.
+        team_name ([type], optional): Is the name of the team that has the associated user/s. Defaults to None.
+
+    Returns:
+        gql: The GraphQL query result
+    """
     query = """
     query {
         organization(login: "ministryofjustice") {
@@ -252,11 +290,16 @@ def team_user_names_query(after_cursor=None, team_name=None):
     return gql(query)
 
 
-# A GraphQL query to get the list of repo/s a user has contributed to.
-# param: after_cursor is the pagination offset value gathered from the previous API request
-# param: user_login is the name of the user
-# returns: the GraphQL query result
-def user_repo_contributions_query(after_cursor=None, user_login=None):
+def user_repo_contributions_query(after_cursor=None, user_login=None) -> gql:
+    """A GraphQL query to get the list of repo/s a user has contributed to.
+
+    Args:
+        after_cursor ([type], optional): Is the pagination offset value gathered from the previous API request. Defaults to None.
+        user_login ([type], optional): Is the name of the user. Defaults to None.
+
+    Returns:
+        gql: The GraphQL query result
+    """
     query = """
     query {
         user(login: USER_LOGIN) {
@@ -288,9 +331,12 @@ def user_repo_contributions_query(after_cursor=None, user_login=None):
     return gql(query)
 
 
-# A wrapper function to run a GraphQL query to get the list of organisation users
-# returns: a list of users info within the organisation
-def fetch_users():
+def fetch_users() -> list:
+    """A wrapper function to run a GraphQL query to get the list of users within the organisation
+
+    Returns:
+        list: a list of users info within the organisation
+    """
     users_list = []
     has_next_page = True
     after_cursor = None
@@ -312,9 +358,12 @@ def fetch_users():
     return users_list
 
 
-# A wrapper function to run a GraphQL query to get the list of issues in a repo
-# returns: a list of issues for a repo
-def fetch_repo_issues():
+def fetch_repo_issues() -> list:
+    """A wrapper function to run a GraphQL query to get the list of issues in a repo
+
+    Returns:
+        list: A list of issues for a repo
+    """
     issue_list = []
     has_next_page = True
     after_cursor = None
@@ -334,18 +383,28 @@ def fetch_repo_issues():
     return issue_list
 
 
-# A wrapper function to run a GraphQL query to get the total contribution a user has made to the organisation
-# param: user_name is the name of the user
-# returns: the metrics data that a user has contributed to the organisation
-def fetch_user_contribution_to_organisation(user_name):
+def fetch_user_contribution_to_organisation(user_name) -> dict:
+    """A wrapper function to run a GraphQL query to get the total contribution a user has made to the organisation
+
+    Args:
+        user_name ([type]): Is the name of the user
+
+    Returns:
+        dict: the metrics data that a user has contributed to the organisation
+    """
     query = user_contribution_query(user_name)
     return client.execute(query)
 
 
-# A wrapper function to run a GraphQL query to get the list of repo/s a user has contributed to
-# param: user_name is the name of the user
-# returns: a list of repo names the user has contributed to
-def fetch_user_repo_contributions(user_name):
+def fetch_user_repo_contributions(user_name) -> list:
+    """A wrapper function to run a GraphQL query to get the list of repo/s a user has contributed to
+
+    Args:
+        user_name ([type]): The user name of the user
+
+    Returns:
+        list: A list of repo names the user has contributed to
+    """
     has_next_page = True
     after_cursor = None
     repo_contribution_list = []
@@ -370,9 +429,12 @@ def fetch_user_repo_contributions(user_name):
     return repo_contribution_list
 
 
-# A wrapper function to run a GraphQL query to get the list of teams in the organisation
-# returns: a list of the organisation repos names
-def fetch_team_names():
+def fetch_team_names() -> list:
+    """A wrapper function to run a GraphQL query to get the list of teams in the organisation
+
+    Returns:
+        list: A list of the organisation repos names
+    """
     has_next_page = True
     after_cursor = None
     team_name_list = []
@@ -392,10 +454,15 @@ def fetch_team_names():
     return team_name_list
 
 
-# A wrapper function to run a GraphQL query to get the list of users within an organisation team
-# param: team_name is the team within the organisation to check
-# returns: a list of the team user names
-def fetch_team_users(team_name):
+def fetch_team_users(team_name) -> list:
+    """A wrapper function to run a GraphQL query to get the list of users within an organisation team
+
+    Args:
+        team_name ([type]): Is the team within the organisation to check
+
+    Returns:
+        list: A list of the team user names
+    """
     has_next_page = True
     after_cursor = None
     team_user_name_list = []
@@ -417,10 +484,15 @@ def fetch_team_users(team_name):
     return team_user_name_list
 
 
-# A wrapper function to run a GraphQL query to get the list of repo within in an organisation team
-# param: team_name is the team within the organisation to check
-# returns: the list of team repo names
-def fetch_team_repos(team_name):
+def fetch_team_repos(team_name) -> list:
+    """A wrapper function to run a GraphQL query to get the list of repo within in an organisation team
+
+    Args:
+        team_name ([type]): Is the team within the organisation to check
+
+    Returns:
+        list: A list of team repo names
+    """
     has_next_page = True
     after_cursor = None
     team_repo_list = []
@@ -444,8 +516,9 @@ def fetch_team_repos(team_name):
     return team_repo_list
 
 
-# Basically a struct to store organisation team info ie name, users, repos
 class teams:
+    """Basically a struct to store organisation team info ie name, users, repos"""
+
     team_name: str
     team_users: list
     team_repos: list
@@ -456,9 +529,12 @@ class teams:
         self.team_repos = z
 
 
-# Wrapper function to retrieve the organisation team info ie name, users, repos
-# returns: all the organisation teams data ie name, users, repos
-def fetch_teams():
+def fetch_teams() -> list:
+    """Wrapper function to retrieve the organisation team info ie name, users, repos
+
+    Returns:
+        list: A list that contains all the organisation teams data ie name, users, repos
+    """
     teams_list = []
     teams_names_list = fetch_team_names()
     for team_name in teams_names_list:
@@ -469,10 +545,15 @@ def fetch_teams():
     return teams_list
 
 
-# A check to see if user has contributed to the organisation in the last nine months
-# param: user is the user to check
-# returns: Bool true is the user has contributed more than ten times in the last nine months
-def has_user_contributed(user):
+def has_user_contributed(user) -> bool:
+    """A check to see if user has contributed to the organisation in the last nine months
+
+    Args:
+        user ([type]): Is the user to check
+
+    Returns:
+        bool: True if the user has contributed more than ten times in the last nine months
+    """
     data = fetch_user_contribution_to_organisation(user["login"])
     if (
         data["user"]["contributionsCollection"]["totalCommitContributions"] > 10
@@ -488,10 +569,15 @@ def has_user_contributed(user):
         return False
 
 
-# A check to see if the user has an approved email domain
-# param: user is the user to check
-# returns: Bool true is the user has an approved organisation email
-def user_has_approved_email_domain(user):
+def user_has_approved_email_domain(user) -> bool:
+    """A check to see if the user has an approved email domain
+
+    Args:
+        user ([type]): Is the user to check
+
+    Returns:
+        bool: True if the user has an approved organisation email
+    """
     user_email = user["organizationVerifiedDomainEmails"][0]
     user_email = user_email.lower()
     if (
@@ -505,20 +591,30 @@ def user_has_approved_email_domain(user):
         return False
 
 
-# A check to see if the user has an verified email with the organization
-# param: user is the user to check
-# returns: Bool true is the user has verified their email with the organisation
-def user_has_verified_email(user):
+def user_has_verified_email(user) -> bool:
+    """A check to see if the user has an verified email with the organization
+
+    Args:
+        user ([type]): Is the user to check
+
+    Returns:
+        bool: True if the user has verified their email with the organisation
+    """
     if user["organizationVerifiedDomainEmails"]:
         return True
     else:
         return False
 
 
-# A check to see if the user is new to GH within a month
-# param: user is the user to check
-# returns: Bool true is the user has been created within a month
-def is_user_new(user):
+def is_user_new(user) -> bool:
+    """A check to see if the user is new to GH within a month
+
+    Args:
+        user ([type]): Is the user to check
+
+    Returns:
+        bool: True if the user has been created within a month
+    """
     user_created_within_a_month = (datetime.now() - timedelta(weeks=4)).isoformat()
     if user["createdAt"] > user_created_within_a_month:
         return True
@@ -526,22 +622,32 @@ def is_user_new(user):
         return False
 
 
-# Prints a warning message and related user info
-# param: warning is the message to print
-# param: user is the user to check
-def print_warning_message(warning, user):
-    print(warning)
+def print_warning_message(message, user):
+    """Prints a warning message and related user info
+
+    Args:
+        message ([type]): Is the message to print
+        user ([type]): Is the user to check
+    """
+    print(message)
     print("GH name: {0}".format(user["name"]))
     print("GH url: {0}".format(user["url"]))
     print("GH login: {0}".format(user["login"]))
 
 
-# tbc
-# param: tbc
-# param: tbc
-# returns: A list of the user usernames that do no have a correct email
-def find_unverified_email_users(organisation_users_list, organisation_teams_list):
-    user_list = []
+def find_unverified_email_users(
+    organisation_users_list, organisation_teams_list
+) -> list:
+    """Check a user is using the correct email domain and has a verified email address within their GH account
+
+    Args:
+        organisation_users_list ([type]): A list of the users within the organisation
+        organisation_teams_list ([type]): A list of the teams within the organisation
+
+    Returns:
+        list: A list of the user usernames that do no have a correct email
+    """
+    non_approved_user_list = []
 
     for user in organisation_users_list:
         if user_has_verified_email(user) and not user_has_approved_email_domain(user):
@@ -553,7 +659,7 @@ def find_unverified_email_users(organisation_users_list, organisation_teams_list
             )
             print("\n")
             # Add this user to the return list
-            user_list.append(user["login"])
+            non_approved_user_list.append(user["login"])
         elif not user_has_verified_email(user):
             if not has_user_contributed(user) and not is_user_new(user):
                 print_warning_message(
@@ -582,14 +688,61 @@ def find_unverified_email_users(organisation_users_list, organisation_teams_list
                     print("\t" + repo)
             print("\n")
             # Add this user to the return list
-            user_list.append(user["login"])
-    return user_list
+            non_approved_user_list.append(user["login"])
+    return non_approved_user_list
 
 
-# tbc
-# tbc
-# tbc
+def close_issue(issue_number):
+    """Close an issue within the no-verified-domain-email-repo
+
+    Args:
+        issue_number (bool): The issue to close
+    """
+    #
+    api.issues.update(
+        owner="ministryofjustice",
+        repo="no-verified-domain-email-repo",
+        issue_number=issue_number,
+        state="closed",
+    )
+    # Delay for GH API
+    time.sleep(5)
+
+
+def close_repo_issues_for_user(repo_issues, user_name):
+    """This will close an open issue/s for a particular user in the no-verified-domain-email-repo
+
+    Args:
+        repo_issues([type]): The list of repo issues in the no-verified-domain-email-repo
+        user_name([type]): The user username
+    """
+    for issue in repo_issues:
+        try:
+            # Check issue is open
+            if issue["state"] == "OPEN":
+                # Check the user hasnt un-assigned themselves from the issue
+                if issue["assignees"]["edges"]:
+                    # Check issue is assigned to the user
+                    if issue["assignees"]["edges"][0]["node"]["login"] == user_name:
+                        close_issue(issue["number"])
+                else:
+                    # Found a un-assigned issue, close it, a new one for the user will be created in the future
+                    close_issue(issue["number"])
+        except Exception:
+            print_stack_trace(
+                "Warning: Exception in closing a no-verified-domain-email-repo issue"
+            )
+            # Back off from GH API
+            time.sleep(30)
+
+
 def remove_user_from_team_and_repo(team, unverified_email_users):
+    """Removes the user from the no-verified-domain-email team and repo issue
+
+    Args:
+        team ([type]): The list of organisation teams
+        unverified_email_users ([type]): The list of users that do not have a correct email domain or are not verified
+    """
 
     # Get the no-verified-domain-email-repo issues list
     repo_issues = fetch_repo_issues()
@@ -601,34 +754,7 @@ def remove_user_from_team_and_repo(team, unverified_email_users):
             # The user is hasnt verified an email yet so continue
         else:
             # Close any no-verified-domain-email-repo issue/s for the user
-            for issue in repo_issues:
-                try:
-                    # Check the user hasnt unassigned themselves from the issue
-                    if issue["assignees"]["edges"]:
-                        # Check issue is assigned to the user
-                        if issue["assignees"]["edges"][0]["node"]["login"] == user_name:
-                            # Check issue is open
-                            if issue["state"] == "OPEN":
-                                # Set the issue to closed
-                                api.issues.update(
-                                    owner="ministryofjustice",
-                                    repo="no-verified-domain-email-repo",
-                                    issue_number=issue["number"],
-                                    state="closed",
-                                )
-                                # Delay for GH API
-                                time.sleep(5)
-                except Exception:
-                    print(
-                        "Warning: Exception in closing a no-verified-domain-email-repo issue"
-                    )
-                    try:
-                        exc_info = sys.exc_info()
-                    finally:
-                        traceback.print_exception(*exc_info)
-                        del exc_info
-                        # Longer delay for GH API
-                        time.sleep(30)
+            close_repo_issues_for_user(repo_issues, user_name)
 
             # Remove the user from the no-verified-domain-email team as they are a verified user
             try:
@@ -638,26 +764,28 @@ def remove_user_from_team_and_repo(team, unverified_email_users):
                 # Delay for GH API
                 time.sleep(5)
             except Exception:
-                print(
+                print_stack_trace(
                     "Warning: Exception in removing a user from the no-verified-domain-email team"
                 )
-                try:
-                    exc_info = sys.exc_info()
-                finally:
-                    traceback.print_exception(*exc_info)
-                    del exc_info
-                    # Longer for GH API
-                    time.sleep(30)
+                # Back off from GH API
+                time.sleep(30)
+
             print(
-                "Removing the user from the no-verified-domain-email team: " + user_name
+                "Removed the user from the no-verified-domain-email team: " + user_name
             )
             print("")
 
 
-# tbc
-# tbc
 def create_an_issue(user_name):
-    print("Adding an issue for " + user_name + " to the no-verified-domain-email-repo")
+    """Create an issue for the user within the no-verified-domain-email-repo
+
+    Args:
+        user_name ([type]): The username of the user to add to the no-verified-domain-email-repo issue
+    """
+
+    print(
+        "Adding an issue to the no-verified-domain-email-repo for the user:" + user_name
+    )
 
     try:
         api.issues.create(
@@ -670,23 +798,20 @@ def create_an_issue(user_name):
         # Delay for GH API
         time.sleep(5)
     except Exception:
-        print(
+        print_stack_trace(
             "Warning: Exception in creating an no-verified-domain-email-repo issue for a user"
         )
-        try:
-            exc_info = sys.exc_info()
-        finally:
-            traceback.print_exception(*exc_info)
-            del exc_info
-            # Longer delay for GH API
-            time.sleep(30)
+        # Back off from GH API
+        time.sleep(30)
 
 
-# tbc
-# tbc
-# tbc
 def add_user_to_team_and_repo(team, unverified_email_users):
-    # Add users to the no-verified-domain-email team that do not have a verified email address
+    """Add a user to the no-verified-domain-email team and the no-verified-domain-email-repo
+
+    Args:
+        team ([type]): The list of organisation teams
+        unverified_email_users ([type]): The list of users that do not have a correct email domain or are not verified
+    """
     for user_name in unverified_email_users:
         if user_name in team.team_users or user_name in exception_list:
             # User already in the team or on the exception list
@@ -703,31 +828,42 @@ def add_user_to_team_and_repo(team, unverified_email_users):
                 # Delay for GH API
                 time.sleep(5)
             except Exception:
-                print(
+                print_stack_trace(
                     "Warning: Exception in Adding the user to the no-verified-domain-email team"
                 )
-                try:
-                    exc_info = sys.exc_info()
-                finally:
-                    traceback.print_exception(*exc_info)
-                    del exc_info
-                    # Longer elay for GH API
-                    time.sleep(30)
+                # Back off from GH API
+                time.sleep(30)
 
             create_an_issue(user_name)
 
 
-# tbc
-# tbc
-def check_user_has_repo_issue(team):
-    # Get the list of issues and store the names of the assignees.
+def get_issue_assigned_names(repo_issues) -> list:
+    """Get the list of issues from the no-verified-domain-email-repo and create a list of the names of the assignees
+
+    Args:
+        repo_issues([type]): The list of repo issues in the no-verified-domain-email-repo
+
+    Returns:
+        list: The list of user usernames assigned to the issues in the repo
+    """
     issue_assigned_names_list = []
-    repo_issues = fetch_repo_issues()
     for issue in repo_issues:
         if issue["assignees"]["edges"]:
             issue_assigned_names_list.append(
                 issue["assignees"]["edges"][0]["node"]["login"]
             )
+    return issue_assigned_names_list
+
+
+def check_unverified_email_user_has_repo_issue(team):
+    """This checks the an unverified email user has an assined issue in the no-verified-domain-email-repo and if not create one for them
+
+    Args:
+        team ([type]): The list of organisation teams
+    """
+    # Get the no-verified-domain-email-repo issues list
+    repo_issues = fetch_repo_issues()
+    issue_assigned_names_list = get_issue_assigned_names(repo_issues)
 
     # Check each team member has been assigned an issue within the repo
     for team_user in team.team_users:
@@ -738,8 +874,37 @@ def check_user_has_repo_issue(team):
             create_an_issue(team_user)
 
 
-#  tbc
+def sanitize_repo_issue(organisation_users_list):
+    """This checks no-verified-domain-email-repo list of issues for users that are no longer part of the organisation and closes those issues
+
+    Args:
+        organisation_users_list ([type]): The list of organisation user usernames
+    """
+    # Get the no-verified-domain-email-repo issues list
+    repo_issues = fetch_repo_issues()
+    issue_assigned_names_list = get_issue_assigned_names(repo_issues)
+
+    organisation_user_name_list = []
+    for organisation_user in organisation_users_list:
+        organisation_user_name_list.append(organisation_user["login"])
+
+    # Check each team member has been assigned an issue within the repo
+    for user_name in issue_assigned_names_list:
+        if user_name in organisation_user_name_list:
+            pass
+            # User is part of the organisation
+        else:
+            # User is not part of the organisation so close any no-verified-domain-email-repo issue/s for the user
+            print(
+                "The user is no longer part of the organisation so closing their no-verified-domain-email-repo issue/s: "
+                + user_name
+            )
+            close_repo_issues_for_user(repo_issues, user_name)
+
+
 def run():
+    """A function for the main functionality of the script"""
+
     # Get the MoJ organisation teams and users info
     organisation_users_list = fetch_users()
     organisation_teams_list = fetch_teams()
@@ -755,8 +920,10 @@ def run():
             remove_user_from_team_and_repo(team, unverified_email_users)
             # Add the users that do not have a verified email address
             add_user_to_team_and_repo(team, unverified_email_users)
-            # Sanity check that every team member has an open issue in the repo
-            check_user_has_repo_issue(team)
+            # Check that every team member has an open issue in the repo
+            check_unverified_email_user_has_repo_issue(team)
+            # Check an open issue in the repo has an organisation user
+            sanitize_repo_issue(organisation_users_list)
 
 
 run()
