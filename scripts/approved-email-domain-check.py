@@ -529,6 +529,20 @@ class teams:
         self.team_repos = z
 
 
+def get_team(team_name) -> teams:
+    """Gets the team info from GH
+
+    Args:
+        team_name ([type]): Name of the team
+
+    Returns:
+        teams: A teams object
+    """
+    team_users_list = fetch_team_users(team_name)
+    team_repos_list = fetch_team_repos(team_name)
+    return (teams(team_name, team_users_list, team_repos_list))
+
+
 def fetch_teams() -> list:
     """Wrapper function to retrieve the organisation team info ie name, users, repos
 
@@ -538,9 +552,7 @@ def fetch_teams() -> list:
     teams_list = []
     teams_names_list = fetch_team_names()
     for team_name in teams_names_list:
-        team_users_list = fetch_team_users(team_name)
-        team_repos_list = fetch_team_repos(team_name)
-        teams_list.append(teams(team_name, team_users_list, team_repos_list))
+        teams_list.append(get_team(team_name))
 
     return teams_list
 
@@ -729,9 +741,8 @@ def close_repo_issues_for_user(repo_issues, user_name):
                     # Found a un-assigned issue, close it, a new one for the user will be created in the future
                     close_issue(issue["number"])
         except Exception:
-            print_stack_trace(
-                "Warning: Exception in closing a no-verified-domain-email-repo issue"
-            )
+            message = "Warning: Exception in closing a no-verified-domain-email-repo issue for " + user_name
+            print_stack_trace(message)
             # Back off from GH API
             time.sleep(30)
 
@@ -751,7 +762,7 @@ def remove_user_from_team_and_repo(team, unverified_email_users):
     for user_name in team.team_users:
         if user_name in unverified_email_users:
             pass
-            # The user is hasnt verified an email yet so continue
+            # The user hasnt verified an email yet so continue
         else:
             # Close any no-verified-domain-email-repo issue/s for the user
             close_repo_issues_for_user(repo_issues, user_name)
@@ -763,17 +774,17 @@ def remove_user_from_team_and_repo(team, unverified_email_users):
                 )
                 # Delay for GH API
                 time.sleep(5)
-            except Exception:
-                print_stack_trace(
-                    "Warning: Exception in removing a user from the no-verified-domain-email team"
+
+                print(
+                    "Removed the user from the no-verified-domain-email team: " + user_name
                 )
+                print("")
+
+            except Exception:
+                message = "Warning: Exception in removing a user from the no-verified-domain-email team: " + user_name
+                print_stack_trace(message)
                 # Back off from GH API
                 time.sleep(30)
-
-            print(
-                "Removed the user from the no-verified-domain-email team: " + user_name
-            )
-            print("")
 
 
 def create_an_issue(user_name):
@@ -798,9 +809,8 @@ def create_an_issue(user_name):
         # Delay for GH API
         time.sleep(5)
     except Exception:
-        print_stack_trace(
-            "Warning: Exception in creating an no-verified-domain-email-repo issue for a user"
-        )
+        message = "Warning: Exception in creating an no-verified-domain-email-repo issue for " + user_name
+        print_stack_trace(message)
         # Back off from GH API
         time.sleep(30)
 
@@ -828,9 +838,8 @@ def add_user_to_team_and_repo(team, unverified_email_users):
                 # Delay for GH API
                 time.sleep(5)
             except Exception:
-                print_stack_trace(
-                    "Warning: Exception in Adding the user to the no-verified-domain-email team"
-                )
+                message = "Warning: Exception in adding a user to the no-verified-domain-email team: " + user_name
+                print_stack_trace(message)
                 # Back off from GH API
                 time.sleep(30)
 
@@ -857,7 +866,7 @@ def get_issue_assigned_names(repo_issues) -> list:
 
 
 def check_unverified_email_user_has_repo_issue(team):
-    """This checks the an unverified email user has an assined issue in the no-verified-domain-email-repo and if not create one for them
+    """Check an unverified email user has an issue in the no-verified-domain-email-repo and if not create one for them
 
     Args:
         team ([type]): The list of organisation teams
@@ -911,16 +920,20 @@ def run():
         organisation_users_list, organisation_teams_list
     )
 
-    for team in organisation_teams_list:
-        if team.team_name == "no-verified-domain-email":
-            # Remove the users that have updated a verified email address
-            remove_user_from_team_and_repo(team, unverified_email_users)
-            # Add the users that do not have a verified email address
-            add_user_to_team_and_repo(team, unverified_email_users)
-            # Check that every team member has an open issue in the repo
-            check_unverified_email_user_has_repo_issue(team)
-            # Check an open issue in the repo has an organisation user
-            sanitize_repo_issue(organisation_users_list)
+    # Remove the users that have updated a verified email address
+    no_verified_domain_email_team = get_team("no-verified-domain-email")
+    remove_user_from_team_and_repo(no_verified_domain_email_team, unverified_email_users)
+
+    # Add the users that do not have a verified email address
+    no_verified_domain_email_team = get_team("no-verified-domain-email")
+    add_user_to_team_and_repo(no_verified_domain_email_team, unverified_email_users)
+
+    # Check that every team member has an open issue in the repo
+    no_verified_domain_email_team = get_team("no-verified-domain-email")
+    check_unverified_email_user_has_repo_issue(no_verified_domain_email_team)
+    
+    # Check an open issue in the repo has an organisation user
+    sanitize_repo_issue(organisation_users_list)
 
 
 run()
