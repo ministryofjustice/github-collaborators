@@ -849,9 +849,10 @@ def get_issue_assigned_names(repo_issues) -> list:
     issue_assigned_names_list = []
     for issue in repo_issues:
         if issue["assignees"]["edges"]:
-            issue_assigned_names_list.append(
-                issue["assignees"]["edges"][0]["node"]["login"]
-            )
+            if issue["state"] == "OPEN":
+                issue_assigned_names_list.append(
+                    issue["assignees"]["edges"][0]["node"]["login"]
+                )
     return issue_assigned_names_list
 
 
