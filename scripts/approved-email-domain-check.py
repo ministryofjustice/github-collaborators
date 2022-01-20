@@ -866,7 +866,7 @@ def get_issue_assigned_names(repo_issues) -> list:
 
 
 def check_unverified_email_user_has_repo_issue(team):
-    """This checks the an unverified email user has an assined issue in the no-verified-domain-email-repo and if not creates one for them
+    """Check an unverified email user has an issue in the no-verified-domain-email-repo and if not create one for them
 
     Args:
         team ([type]): The list of organisation teams
