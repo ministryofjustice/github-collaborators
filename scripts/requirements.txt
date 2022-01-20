@@ -1,0 +1,4 @@
+aiohttp==3.8.1
+ghapi
+gql==3.0.0rc1
+websockets
