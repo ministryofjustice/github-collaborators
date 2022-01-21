@@ -41,6 +41,16 @@ module "staff-infrastructure-azure-landing-zone-spoke-eucs" {
       reason       = "PTTP Tech team"                  #  Why is this person being granted access?
       added_by     = "jim.gregory@contentandcloud.com" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2022-12-31"                      #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
+    {
+      github_user  = "raghavkuchipudi"
+      permission   = "pull"
+      name         = "Raghav Kuchipudi"
+      email        = "raghav.kuchipudi@contentandcloud.com"
+      org          = "Content and Cloud"
+      reason       = "New team member / PTTP tech team"
+      added_by     = "matthew.white1@justice.gov.uk"
+      review_after = "2022-12-31"
     }
   ]
 }
