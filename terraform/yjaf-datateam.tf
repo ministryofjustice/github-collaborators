@@ -3,7 +3,7 @@ module "yjaf-datateam" {
   repository = "yjaf-datateam"
   collaborators = [
     {
-      github_user  = "SamMohammeduk"
+      github_user  = "sammohammeduk"
       permission   = "push"
       name         = "Sam Mohammed"
       email        = "sam.mohammed@necsws.com"
