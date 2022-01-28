@@ -82,5 +82,25 @@ module "yjsm-ui" {
       added_by     = "Jo Harvey joanna.harvey@necsws.com"
       review_after = "2022-12-12"
     },
+    {
+      github_user  = "InFlamesForever"
+      permission   = "push"
+      name         = "Richard Came"
+      email        = "richard.came@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Developers on YJSM need access to amend the UI"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2022-12-12"
+    },
+    {
+      github_user  = "richardbradwell"
+      permission   = "push"
+      name         = "Richard Bradwell"
+      email        = "richard.bradwell@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Developers on YJSM need access to amend the UI"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2022-12-12"
+    },
   ]
 }
