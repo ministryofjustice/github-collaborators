@@ -39,7 +39,7 @@ Please supply all the requested information, so that your request can be process
 
 <!-- Reason why the external collaborator needs access -->
 
-## Which MoJ team/person is responsible for this request?
+## Which MoJ team/person is responsible for this request? This must be someone with a "*.justice.gov.uk" email address.
 
 This should be in the form `Awesome Team <awesome.team@digital.justice.gov.uk>`.
 
