@@ -2,9 +2,9 @@ name: Check an organisation user has an approved and verified email domain
 
 # Allows you to run this workflow manually from the Actions tab
 on:
-  schedule:
-    # At the end of every day
-    - cron: "0 0 * * *"
+#   schedule:
+#     # At the end of every day
+#     - cron: "0 0 * * *"
   workflow_dispatch:
 
 jobs:
