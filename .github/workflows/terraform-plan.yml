@@ -30,4 +30,4 @@ jobs:
         run: |
           cd terraform
           terraform init
-          terraform plan
+          terraform plan -lock-timeout=300s
