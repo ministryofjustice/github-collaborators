@@ -75,22 +75,29 @@ class GithubCollaborators
 
         # This method inserts the Terraform blocks defined by this class into the relevant terraform/*.tf files
         def insert
+            if repositories.nil?
+                STDERR.puts("ABORTED. terraform_block_creator:80 data[repositories] is nil. ")
+                exit(1)
+            else
+                # For each repository 
+                repositories.each { |repo|
 
-            # For each repository 
-            repositories.each { |repo|
+                    if File.exists(repo_file(repo))
 
-                # Read the relevant file into array
-                file = File.read(repo_file(repo))
-                        .split("\n")
-                
-                # Create insert contents and insert, length - 2 gives the correct location in the file
-                file.insert((file.length) - 2, create_insert)
+                        # Read the relevant file into array
+                        file = File.read(repo_file(repo))
+                                .split("\n")
 
-                # Write file
-                File.open(repo_file(repo), "w") { 
-                    |f| f.puts(file)  
+                        # Create insert contents and insert, length - 2 gives the correct location in the file
+                        file.insert((file.length) - 2, create_insert)
+
+                        # Write file
+                        File.open(repo_file(repo), "w") { 
+                            |f| f.puts(file)  
+                        }
+                    end
                 }
-            }
+            end
         end
 
         private 
