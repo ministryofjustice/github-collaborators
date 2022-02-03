@@ -18,7 +18,7 @@ main() {
 
   for r in $(changed_repositories); do
     echo "Running terraform plan for ${r}"
-    ${TERRAFORM} plan -target=module.${r}
+    ${TERRAFORM} plan -target=module.${r} -lock-timeout=660s
   done
 }
 

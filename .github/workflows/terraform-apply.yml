@@ -24,7 +24,7 @@ jobs:
       - run: |
           cd terraform
           terraform init
-          terraform apply -auto-approve
+          terraform apply -auto-approve -lock-timeout=660s
       # We are going to try only running the report daily to speed up the collaborator apply step
       # Review: 2022-01-25
       # - uses: ruby/setup-ruby@v1
