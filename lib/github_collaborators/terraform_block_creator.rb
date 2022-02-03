@@ -95,11 +95,6 @@ class GithubCollaborators
                         File.open(repo_file(repo), "w") { 
                             |f| f.puts(file)  
                         }
-                    else
-                        # Write to blank file
-                        File.open(repo_file(repo), "w") { 
-                            |f| f.puts(file)  
-                        }
                     end
                 }
             end
