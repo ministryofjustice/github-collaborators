@@ -75,7 +75,6 @@ class GithubCollaborators
 
         # This method inserts the Terraform blocks defined by this class into the relevant terraform/*.tf files
         def insert
-            
             if repositories.nil?
                 STDERR.puts("ABORTED. terraform_block_creator:80 data[repositories] is nil. ")
                 exit(1)
