@@ -72,5 +72,15 @@ module "staff-device-management-windows10-apps" {
       added_by     = "matthew.white1@justice.gov.uk"
       review_after = "2022-12-31"
     },
+    {
+      github_user  = "Liam-M-TA"
+      permission   = "push"
+      name         = "Liam Mann"
+      email        = "liam.mann@justice.gov.uk"
+      org          = "Through Technology"
+      reason       = "Data and Info Tech Arch"
+      added_by     = "matthew.white1@justice.gov.uk"
+      review_after = "2022-12-31"
+    }
   ]
 }
