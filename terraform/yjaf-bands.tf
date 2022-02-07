@@ -43,16 +43,6 @@ module "yjaf-bands" {
       review_after = "2022-06-18"
     },
     {
-      github_user  = "waheedanjum"
-      permission   = "push"
-      name         = "Muhammad Waheed Anjum"
-      email        = "muhammad.anjum@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2022-06-18"
-    },
-    {
       github_user  = "djv72"
       permission   = "push"
       name         = "David Vincent"
@@ -101,16 +91,6 @@ module "yjaf-bands" {
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "Greg Whiting - greg.whiting@northgateps.com"
       review_after = "2022-07-31"
-    },
-    {
-      github_user  = "ConwayNEC"
-      permission   = "push"
-      name         = "Conway Hyacienth"
-      email        = "conway.hyacienth@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "New Front End Developer on YJAF (NEC team)"
-      added_by     = "Jo Harvey - joanna.harvey@necsws.com"
-      review_after = "2022-11-03"
     },
     {
       github_user  = "jondent"
