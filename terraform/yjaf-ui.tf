@@ -53,16 +53,6 @@ module "yjaf-ui" {
       review_after = "2022-06-18"
     },
     {
-      github_user  = "waheedanjum"
-      permission   = "push"
-      name         = "Muhammad Anjum"
-      email        = "muhammad.anjum@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the Northgate supplier team for the YJB system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2022-06-18"
-    },
-    {
       github_user  = "djv72"
       permission   = "push"
       name         = "David Vincent"
@@ -101,16 +91,6 @@ module "yjaf-ui" {
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "Greg Whiting - greg.whiting@northgateps.com"
       review_after = "2022-07-31"
-    },
-    {
-      github_user  = "ConwayNEC"
-      permission   = "push"
-      name         = "Conway Hyacienth"
-      email        = "conway.hyacienth@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "New Front End Developer on YJAF (NEC team)"
-      added_by     = "Jo Harvey - joanna.harvey@necsws.com"
-      review_after = "2022-11-04"
     },
     {
       github_user  = "jondent"
