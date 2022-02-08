@@ -82,7 +82,7 @@ class GithubCollaborators
                 # For each repository 
                 repositories.each { |repo|
 
-                    if File.exists(repo_file(repo))
+                    if File.exist?(repo_file(repo))
 
                         # Read the relevant file into array
                         file = File.read(repo_file(repo))
