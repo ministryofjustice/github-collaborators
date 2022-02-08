@@ -115,12 +115,12 @@ module "yjsm-hubadmin" {
     {
       github_user  = "craig-ashford"
       permission   = "maintain"
-      name         = "Craig Ashford"         
-      email        = "craig.ashford@necsws.com"        
-      org          = "NEC SWS"          
-      reason       = "New front end developer on YJAF team"       
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"     
-      review_after = "2023-02-07" 
+      name         = "Craig Ashford"
+      email        = "craig.ashford@necsws.com"
+      org          = "NEC SWS"
+      reason       = "New front end developer on YJAF team"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-02-07"
     },
   ]
 }
