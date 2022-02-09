@@ -104,7 +104,7 @@ module "yjsm-ui" {
     },
     {
       github_user  = "craig-ashford"
-      permission   = "maintain"
+      permission   = "push"
       name         = "Craig Ashford"
       email        = "craig.ashford@necsws.com"
       org          = "NEC SWS"
