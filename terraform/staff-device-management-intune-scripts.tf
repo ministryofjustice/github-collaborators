@@ -54,7 +54,7 @@ module "staff-device-management-intune-scripts" {
     },
     {
       github_user  = "raghavkuchipudi"
-      permission   = "pull"
+      permission   = "push"
       name         = "Raghav Kuchipudi"
       email        = "raghav.kuchipudi@contentandcloud.com"
       org          = "Content and Cloud"
