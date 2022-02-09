@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '3.0.3'
 
-gem 'rspec', '~>3.10.0'
+gem 'rspec', '~>3.11.0'
 gem 'date', '~>3.2.2'
 gem 'cgi', '>= 0.3.1'
 gem 'erb', '~>2.2.0'
