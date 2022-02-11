@@ -62,5 +62,15 @@ module "yjaf-gateway-proxy" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2022-08-09"
     },
+    {
+      github_user  = "oliviergaubert"
+      permission   = "admin"
+      name         = "Olivier Gaubert"
+      email        = "olivier.gaubert@necsws.com"
+      org          = "NEC"
+      reason       = "Part of the Northgate supplier team who are now NEC for the YJB YJAF system"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2022-12-31"
+    },
   ]
 }
