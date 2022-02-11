@@ -6,11 +6,11 @@ module "yjsm-hubadmin" {
       github_user  = "oliviergaubert"
       permission   = "admin"
       name         = "Olivier Gaubert"
-      email        = "Olivier.Gaubert@northgateps.com"
-      org          = "Northgate"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2022-12-13"
+      email        = "olivier.gaubert@necsws.com"
+      org          = "NEC"
+      reason       = "Part of the Northgate supplier team who are now NEC for the YJB YJAF system"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2022-12-31"
     },
     {
       github_user  = "gregi2n"
@@ -121,6 +121,16 @@ module "yjsm-hubadmin" {
       reason       = "New front end developer on YJAF team"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-02-07"
+    },
+    {
+      github_user  = "turtle-nec"
+      permission   = "push"
+      name         = "Drew Maughan"
+      email        = "drew.maughan@necsws.com"
+      org          = "NEC"
+      reason       = "Part of the Northgate supplier team who are now NEC for the YJB YJAF system"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-02-11"
     },
   ]
 }

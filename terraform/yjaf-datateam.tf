@@ -22,5 +22,15 @@ module "yjaf-datateam" {
       added_by     = "antony.bishop@digital.justice.gov.uk"
       review_after = "2022-12-19"
     },
+    {
+      github_user  = "oliviergaubert"
+      permission   = "admin"
+      name         = "Olivier Gaubert"
+      email        = "olivier.gaubert@necsws.com"
+      org          = "NEC"
+      reason       = "Part of the Northgate supplier team who are now NEC for the YJB YJAF system"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2022-12-31"
+    },
   ]
 }
