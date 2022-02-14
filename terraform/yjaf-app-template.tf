@@ -34,7 +34,7 @@ module "yjaf-app-template" {
     },
     {
       github_user  = "InFlamesForever"
-      permission   = "push"
+      permission   = "admin"
       name         = "Richard Came"
       email        = "richard.came@necsws.com"
       org          = "NEC Software Solutions"
@@ -44,7 +44,7 @@ module "yjaf-app-template" {
     },
     {
       github_user  = "richardbradwell"
-      permission   = "push"
+      permission   = "admin"
       name         = "Richard Bradwell"
       email        = "richard.bradwell@necsws.com"
       org          = "NEC Software Solutions"
