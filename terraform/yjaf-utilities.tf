@@ -89,7 +89,7 @@ module "yjaf-utilities" {
       email        = "richard.came@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2022-08-27"
     },
     {
@@ -99,7 +99,7 @@ module "yjaf-utilities" {
       email        = "richard.bradwell@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
-      added_by     = "Jo Harvey <joanna.harvey@necsws.com"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2022-10-05"
     },
   ]
