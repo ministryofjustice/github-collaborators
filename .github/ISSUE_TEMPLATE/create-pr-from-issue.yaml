@@ -1,8 +1,8 @@
-name: Create a External Collaborator Pull Request
+name: Create a Outside Collaborator Pull Request
 description: >-
   Creating an issue with this template will automatically create a valid pull
-  request for an external collaborator
-title: 'Please create an external collaborator pull request '
+  request for an outside collaborator
+title: 'Please create an outside collaborator pull request '
 labels:
   - collaborator
   - pr-create-issue

@@ -9,7 +9,7 @@ raise "USAGE: #{$0} [repo name1] [repo name2] ..." if repositories.empty?
 GithubCollaborators::RepositoryCollaboratorImporter.new(
   terraform_dir: "terraform",
   terraform_executable: ENV.fetch("TERRAFORM"),
-  org_ext_collabs: GithubCollaborators::OrganizationExternalCollaborators.new(
+  org_ext_collabs: GithubCollaborators::OrganizationOutsideCollaborators.new(
     login: "ministryofjustice",
     base_url: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
   ),

@@ -1,12 +1,12 @@
-# GitHub External Collaborators
+# GitHub Outside Collaborators
 
-Manage MoJ GitHub external collaborators via code.
+Manage MoJ GitHub Outside collaborators via code.
 
 ## Requesting collaborator access
 
 > PRs from forks do NOT work with the current automated process, please only create PRs from a branch.
 
-If you want to allow access to an MoJ GitHub repository for an external collaborator, please raise a pull request making the required changes to the corresponding `terraform/[repository-name].tf` file in this repository.
+If you want to allow access to an MoJ GitHub repository for an outside collaborator, please raise a pull request making the required changes to the corresponding `terraform/[repository-name].tf` file in this repository.
 
 If you are not confident editing terraform code, you can [raise an issue](https://github.com/ministryofjustice/github-collaborators/issues/new?labels=Access+Request&template=access-request.md) to request access for a collaborator, and we will make the changes for you.
 
@@ -14,7 +14,7 @@ If you are not confident editing terraform code, you can [raise an issue](https:
 
 Sometimes we need to grant access to one of more of our github repositories to people who are not part of the "ministryofjustice" github organisation. This often happens when we engage third-party suppliers to carry out work on our behalf.
 
-Github has the concept of "external collaborators" for this purpose. We can grant a certain level of access to a specific repository to an individual github user account.
+Github has the concept of "outside collaborators" which are Github users that are not part of the organisation and have acces to an organisation repository. We can grant a certain level of access to a specific repository to an individual github user account.
 
 Rather than manage this via "clickops" this repository enables us to manage these relationships via terraform code. This also means we can attach metadata to the collaborator relationship, to explain its purpose. This will help to ensure that collaborators are removed when they no longer need access to the relevant github repositories.
 
@@ -25,7 +25,7 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 * Github actions run `terraform plan` and `terraform apply` to keep the collaborations in GitHub in sync with the terraform source code
 * Ruby code in the `bin/` and `lib/` directories (with unit tests in the `spec/` directory) queries GitHub via the GraphQL API and retrieves all the collaborator relationships which exist
 * A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are included in a JSON report which is the basis for [this report].
-* A utility script will import existing external collaborators from specified github repositories, create the corresponding terraform code, and import into terraform state
+* A utility script will import existing outside collaborators from specified github repositories, create the corresponding terraform code, and import into terraform state
 
 ## Removing collaborators
 
@@ -112,7 +112,7 @@ See the usage details below.
 
 > This has already been done for all repository collaborators which existed as at 2020-11-24
 
-If you have manually added an external collaborator to a repository which is already defined in this repository, you should edit the terraform file as usual, but you will also need to import the existing collaborator into the terraform state like this:
+If you have manually added an outside collaborator to a repository which is already defined in this repository, you should edit the terraform file as usual, but you will also need to import the existing collaborator into the terraform state like this:
 
 ```
 terraform import module.<repository name>.github_repository_collaborator.collaborator[\"github username\"]> <repository name>:<github username>
@@ -121,7 +121,7 @@ terraform import module.<repository name>.github_repository_collaborator.collabo
 e.g.
 
 ```
-terraform import module.testing-external-collaborators.github_repository_collaborator.collaborator[\"toonsend\"] testing-external-collaborators:toonsend
+terraform import module.testing-outside-collaborators.github_repository_collaborator.collaborator[\"toonsend\"] testing-outside-collaborators:toonsend
 ```
 
 ## Pre-requisites
@@ -147,12 +147,12 @@ See [env.example](./env.example) for more more information.
 
 ## Usage
 
-### `bin/external-collaborators.rb`
+### `bin/outside-collaborators.rb`
 
 This script is run on a schedule by a [github action](.github/workflows/post-data.yaml) You can also run it manually either by [triggering the action], or running locally like this:
 
 ```
-bin/external-collaborators.rb
+bin/outside-collaborators.rb
 ```
 
 This outputs a JSON document suitable for POSTing to the [Operations Engineering Reports] web application.
@@ -161,11 +161,11 @@ You can also use the `bin/post-data.sh` script to generate and POST the JSON dat
 
 #### Caveats
 
-* Does not report any external collaborators who have not yet accepted their invitation to collaborate. Pending collaborators are not reported by the github graphql API.
+* Does not report any outside collaborators who have not yet accepted their invitation to collaborate. Pending collaborators are not reported by the github graphql API.
 
 ### `bin/compare-terraform-to-github.rb`
 
-Outputs all external collaborators who are defined in the terraform code from this repo but are NOT actually set as an external collaborator at the given location.
+Outputs all outside collaborators who are defined in the terraform code from this repo but are NOT actually set as an outside collaborator at the given location.
 
 #### Caveats
 
@@ -177,7 +177,7 @@ Output the names of all current (i.e. excluding deleted/archived/locked) MoJ git
 
 ### ` bin/import-repository-collaborators.rb`
 
-This script takes a list of names of MoJ github repositories, and creates a file for each repository, in the `terraform` directory, defining all of that repository's external collaborators.
+This script takes a list of names of MoJ github repositories, and creates a file for each repository, in the `terraform` directory, defining all of that repository's outside collaborators.
 
 e.g. running
 

@@ -9,11 +9,6 @@ gem 'json', '~>2.6.1'
 gem 'net-http', '~>0.2.0'
 gem 'bundler-audit', '~>0.9.0.1'
 gem 'simplecov', require: false, group: :test
-
-
-
 gem "bundler", "~> 2.2"
-
 gem "git", "~> 1.10"
-
 gem "uuidtools", "~> 2.2"

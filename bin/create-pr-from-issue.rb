@@ -47,13 +47,13 @@ end
 # Returns string for PR body
 def pull_hash(branch)
   {
-    title: "External Collaborator PR",
+    title: "Outside Collaborator PR",
     head: branch,
     base: "main",
     body: <<~EOF
       Hi there
       
-      Please merge this pull request to add the attached external collaborators to GitHub.
+      Please merge this pull request to add the attached outside collaborators to GitHub.
       
       If you have any questions, please post in #ask-operations-engineering on Slack.
     EOF

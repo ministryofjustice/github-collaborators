@@ -15,8 +15,8 @@ class GithubCollaborators
     #     "source"=>
     #      {"homepageUrl"=>nil,
     #       "id"=>"MDEwOlJlcG9zaXRvcnkzMTA2MTkyNzY=",
-    #       "name"=>"testing-external-collaborators",
-    #       "nameWithOwner"=>"ministryofjustice/testing-external-collaborators"}},
+    #       "name"=>"testing-outside-collaborators",
+    #       "nameWithOwner"=>"ministryofjustice/testing-outside-collaborators"}},
     #    {"permission"=>"ADMIN",
     #     "source"=>
     #      {"editTeamUrl"=>
@@ -52,7 +52,7 @@ class GithubCollaborators
       data.dig("node", "url")
     end
 
-    # This will only be correct if this is an external collaborator.
+    # This will only be correct if this is an outside collaborator.
     # Organisation members with access to the repository are likely to have
     # multiple permissions, and there is no guarantee that the first permission
     # (which this method returns) is the highest privilege permission.
@@ -67,7 +67,7 @@ class GithubCollaborators
     # If the only permissionSources this collaborator has is permission on the
     # repository (i.e. no "Organization" or "Team" permissions), then they have
     # been granted acess specifically to this repository (so they're probably an
-    # external collaborator, but we would need to check a) if they are a member
+    # outside collaborator, but we would need to check a) if they are a member
     # of the organization and b) if they have an organization email address, if
     # we want to confirm that.
     def is_direct_collaborator?

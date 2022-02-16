@@ -1,5 +1,5 @@
 class GithubCollaborators
-  describe OrganizationExternalCollaborators do
+  describe OrganizationOutsideCollaborators do
     let(:params) {
       {
         login: "myorg",
@@ -46,11 +46,11 @@ class GithubCollaborators
       allow(LastCommit).to receive(:new).and_return(last_commit)
     end
 
-    it "lists external collaborators" do
+    it "lists outside collaborators" do
       expect(org_ext_collabs.list).to eq(ext_collabs)
     end
 
-    it "lists external collaborators for a repo" do
+    it "lists outside collaborators for a repo" do
       expect(org_ext_collabs.for_repository("aaa")).to eq([alice_hash])
     end
   end

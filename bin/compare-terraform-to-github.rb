@@ -10,7 +10,7 @@ repos = GithubCollaborators::Repositories.new(
   login: "ministryofjustice"
 ).current
 
-external_collaborators = GithubCollaborators::OrganizationExternalCollaborators.new(
+outside_collaborators = GithubCollaborators::OrganizationOutsideCollaborators.new(
   login: "ministryofjustice",
   base_url: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
 )
@@ -18,7 +18,7 @@ external_collaborators = GithubCollaborators::OrganizationExternalCollaborators.
 # For each repo
 repos.each do |repo|
   # Get the GitHub collaborators for current repo
-  gc = external_collaborators.for_repository(repo.name)
+  gc = outside_collaborators.for_repository(repo.name)
   # Get the Terraform collaborators for current repo
   tc = terraform_collaborators.return_collaborators_from_file("terraform/#{GithubCollaborators.tf_safe(repo.name)}.tf")
 
