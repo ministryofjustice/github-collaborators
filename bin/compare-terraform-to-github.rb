@@ -17,7 +17,7 @@ outside_collaborators = GithubCollaborators::OrganizationOutsideCollaborators.ne
 
 # For each repo
 repos.each do |repo|
-  # Get the GitHub collaborators for current repo
+  # Get the GitHub outside collaborators for current repo
   gc = outside_collaborators.for_repository(repo.name)
   # Get the Terraform collaborators for current repo
   tc = terraform_collaborators.return_collaborators_from_file("terraform/#{GithubCollaborators.tf_safe(repo.name)}.tf")

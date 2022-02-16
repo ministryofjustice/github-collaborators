@@ -2,6 +2,7 @@ name: Check an organisation user has an approved and verified email domain
 
 # Allows you to run this workflow manually from the Actions tab
 on:
+# Feature is currently disabled as some GH MoJ users do not have an MoJ email address.
 #   schedule:
 #     # At the end of every day
 #     - cron: "0 0 * * *"

@@ -1,4 +1,4 @@
-name: Remove a collaborator
+name: Remove a collaborator from a repository
 on:
   workflow_dispatch:
     inputs:
@@ -6,7 +6,7 @@ on:
         description: Repository name, e.g. "myrepo"
         required: true
       github_user:
-        description: GitHub username of collaborator
+        description: GitHub username of the collaborator
         required: true
 
 jobs:

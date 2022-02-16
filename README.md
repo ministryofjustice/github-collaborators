@@ -1,6 +1,6 @@
 # GitHub Outside Collaborators
 
-Manage MoJ GitHub Outside collaborators via code.
+Manage MoJ GitHub Organisation outside collaborators via code.
 
 ## Requesting collaborator access
 
@@ -14,7 +14,7 @@ If you are not confident editing terraform code, you can [raise an issue](https:
 
 Sometimes we need to grant access to one of more of our github repositories to people who are not part of the "ministryofjustice" github organisation. This often happens when we engage third-party suppliers to carry out work on our behalf.
 
-Github has the concept of "outside collaborators" which are Github users that are not part of the organisation and have acces to an organisation repository. We can grant a certain level of access to a specific repository to an individual github user account.
+Github allows users called outside collaborators who are not part of the organisation access to an organisations repositories. We can grant a certain level of access to a specific repository to an individual github user account.
 
 Rather than manage this via "clickops" this repository enables us to manage these relationships via terraform code. This also means we can attach metadata to the collaborator relationship, to explain its purpose. This will help to ensure that collaborators are removed when they no longer need access to the relevant github repositories.
 
@@ -24,7 +24,7 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 
 * Github actions run `terraform plan` and `terraform apply` to keep the collaborations in GitHub in sync with the terraform source code
 * Ruby code in the `bin/` and `lib/` directories (with unit tests in the `spec/` directory) queries GitHub via the GraphQL API and retrieves all the collaborator relationships which exist
-* A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are included in a JSON report which is the basis for [this report].
+* A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are included in a JSON report which is the basis for [this report](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/).
 * A utility script will import existing outside collaborators from specified github repositories, create the corresponding terraform code, and import into terraform state
 
 ## Removing collaborators
@@ -37,7 +37,7 @@ Raise and merge a PR removing the collaborator from the list of collaborators in
 
 This will be the case if access was granted by a repository administrator via the github UI.
 
-> You should not need to do this manually - there is a github action which runs daily, and removes all collaborators who are not defined in terraform code.
+> You should not need to do this manually - there is a github action which runs daily, and removes all the collaborators who are not defined in terraform code.
 
 To remove such a collaborator, use [this GitHub Action](https://github.com/ministryofjustice/github-collaborators/actions?query=workflow%3A%22Remove+a+collaborator%22)
 
@@ -197,13 +197,14 @@ bin/list-repositories.rb | xargs bin/import-repository-collaborators.rb
 
 > This takes quite a long time.
 
-[Operations Engineering Reports]: https://github.com/ministryofjustice/operations-engineering-reports
-[triggering the action]: https://github.com/ministryofjustice/github-collaborators/actions?query=workflow%3A.github%2Fworkflows%2Fpost-data.yaml
-[Terraform]: https://www.terraform.io/downloads.html
-[this report]: https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_collaborators
-
 ## Development
 
 Make sure you have `bundler` installed (`gem install bundler` if not). Run `bundle install` to set up locally.
 
 Run the tests with `bundle exec rspec`. This will generate a coverage report using simplecov. You can see it by running `open coverage/index.html`
+
+
+[Operations Engineering Reports]: https://github.com/ministryofjustice/operations-engineering-reports
+[triggering the action]: https://github.com/ministryofjustice/github-collaborators/actions?query=workflow%3A.github%2Fworkflows%2Fpost-data.yaml
+[Terraform]: https://www.terraform.io/downloads.html
+[this report]: https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_collaborators
