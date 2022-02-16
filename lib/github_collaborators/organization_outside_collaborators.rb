@@ -9,18 +9,21 @@ class GithubCollaborators
 
     # Reports any collaborators with problems e.g. review_after etc
     def list
-      # For every repository in target GitHub org
+      # For every repository in MoJ GitHub organisation
       repositories.each_with_object([]) { |repo, arr|
+        # TODO: Delete printout
         puts repo.name
-        # For every outside collaborator
-        outside_collaborators(repo.name).each do |collab|
+        # For every unknown collaborator
+        get_non_organisation_users(repo.name).each do |collab|
           tc = TerraformCollaborator.new(
             repository: repo.name,
             login: collab.login,
             base_url: base_url
           )
+          # TODO: Delete printout
           puts collab.login
           if tc.status == TerraformCollaborator::FAIL
+            # TODO: Delete printout
             puts " ^^^ Failed"
             arr.push(
               tc.to_hash.merge(
@@ -36,11 +39,11 @@ class GithubCollaborators
       }
     end
 
-    # Returns outside collaborators for a certain repo, sample response:
+    # Returns unknown collaborators for a certain repository, sample response:
     # {:login=>"benashton", :login_url=>"https://github.com/benashton", :permission=>"admin", :last_commit=>nil}
     # repo_name: string
     def for_repository(repo_name)
-      outside_collaborators(repo_name).map do |collab|
+      get_non_organisation_users(repo_name).map do |collab|
         {
           login: collab.login,
           login_url: collab.url,
@@ -63,19 +66,19 @@ class GithubCollaborators
       ).date
     end
 
-    # Returns a list of all active repos as Repositories objects (does not include locked, archived etc)
+    # Returns a list of all active repositories as Repositories objects (does not include locked, archived etc)
     def repositories
       @repos ||= Repositories.new(login: login).current
     end
 
-    # Returns a list users who are not members of the organization for a given repo
+    # Returns a list users who are not members of the organization for a given repository
     # Not this has nothing to do with the TerraformCollaborators which is based of the tf files, this is from the GitHub API directly
     # repo_name: string
-    def non_organisation_users(repo_name)
+    def get_non_organisation_users(repo_name)
       collaborators(repo_name).reject { |collab| organization.is_member?(collab.login) }
     end
 
-    # Returns a list of the users who are collaborators for a given repo
+    # Returns a list of the users who are collaborators for a given repository
     # Not this has nothing to do with the TerraformCollaborators which is based of the tf files, this is from the GitHub API directly
     # repo_name: string
     def collaborators(repo_name)
