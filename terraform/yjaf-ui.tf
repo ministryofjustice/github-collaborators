@@ -132,5 +132,15 @@ module "yjaf-ui" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2022-08-27"
     },
+    {
+      github_user  = "ben-test"
+      permission   = "admin"
+      name         = "ben test"         
+      email        = "ben.test@digital.justice.gov.uk"        
+      org          = "test"          
+      reason       = "test"       
+      added_by     = "test"     
+      review_after = "2023-02-07" 
+    },
   ]
 }
