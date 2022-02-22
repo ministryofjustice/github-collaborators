@@ -15,7 +15,7 @@ class GithubCollaborators
     let(:bbb) { double(Repository, name: "bbb", url: "bbb_url") }
     let(:repositories) { double(Repositories, current: [aaa, bbb]) }
 
-    let(:alice) { double(Collaborator, login: "alice", url: "alice_url", permission: "admin") }
+    let(:alice) { double(Collaborator, login: "alice", url: "alice_url", permission: "admin", id:"someID") }
 
     let(:alice_hash) { {login: "alice", login_url: "alice_url", permission: "admin", last_commit: last_commit_date} }
     let(:alice_collab) { double(TerraformCollaborator, to_hash: alice_hash, status: "fail") }

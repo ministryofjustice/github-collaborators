@@ -3,7 +3,7 @@ class GithubCollaborators
     let(:org) { "myorg" }
     let(:repo) { "myrepo" }
     let(:login) { "whoever" }
-    let(:id) { "myid" }
+    let(:id) { "MDQ6VXNlcjkwMDU2OTM=" }
 
     let(:params) {
       {
@@ -15,7 +15,6 @@ class GithubCollaborators
       }
     }
 
-    let(:userjson) { File.read("spec/fixtures/user-id.json") }
     let(:json) { File.read("spec/fixtures/last-commit.json") }
 
     let(:graphql) { double(GithubGraphQlClient) }
@@ -23,7 +22,7 @@ class GithubCollaborators
     subject(:lc) { described_class.new(params) }
 
     before do
-      allow(graphql).to receive(:run_query).and_return(userjson, json)
+      allow(graphql).to receive(:run_query).and_return(json)
     end
 
     specify { expect(lc.date).to eq("2020-12-24T04:23:22Z") }
