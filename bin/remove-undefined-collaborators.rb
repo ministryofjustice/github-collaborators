@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-# Fetch the "insufficiently defined collaborators" report as JSON, and remove
-# any collaborators who are not defined in terraform.
+# Fetch the data as JSON from the Operations Engineering Collaborator Report website,
+# and remove any collaborators who are not defined in terraform.
 
 require_relative "../lib/github_collaborators"
 

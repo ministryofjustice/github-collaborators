@@ -1,4 +1,4 @@
-name: Check user email domain 
+name: Check the approving GH MoJ user has a MoJ email domain 
 
 on: pull_request
 
@@ -15,4 +15,4 @@ jobs:
         uses: "actions/setup-python@v2"
 
       - name: Do check
-        run: python3 scripts/collabrator-check.py ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
+        run: python3 scripts/check-user-email-domain.py ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}

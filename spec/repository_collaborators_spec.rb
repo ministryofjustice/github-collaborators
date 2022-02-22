@@ -2,7 +2,7 @@ class GithubCollaborators
   describe RepositoryCollaborators do
     let(:params) {
       {
-        owner: "myorg",
+        login: "myorg",
         repository: "myrepo",
         graphql: graphql
       }
@@ -13,7 +13,11 @@ class GithubCollaborators
       ["DangerDawson", "damacus", "digitalronin"]
     }
 
-    let(:graphql) { double(GithubGraphQlClient, run_query: json) }
+    let(:graphql) { GithubGraphQlClient.new(github_token: "fake") }
+    
+    before do
+      allow(graphql).to receive(:run_query).and_return(json)
+    end
 
     let(:repo_collabs) { described_class.new(params) }
 

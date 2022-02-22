@@ -1,5 +1,5 @@
 ---
-name: External collaborator access request
+name: Outside collaborator access request
 about: Request access to an MoJ GitHub repository
 ---
 
@@ -13,19 +13,19 @@ Please supply all the requested information, so that your request can be process
 
 ## What is the GitHub username of the person who needs access?
 
-<!-- External collaborator's GitHub username -->
+<!-- Outside collaborator's GitHub username -->
 
 ## What is their full name?
 
-<!-- External collaborator's full name -->
+<!-- Outside collaborator's full name -->
 
 ## What is their email address?
 
-<!-- External collaborator's email address -->
+<!-- Outside collaborator's email address -->
 
 ## What company/organisation do they belong to (e.g. "MadeTech", "Department for Education")?
 
-<!-- External collaborator's organisation -->
+<!-- Outside collaborator's organisation -->
 
 ## What level of access should they have?
 
@@ -37,7 +37,7 @@ Please supply all the requested information, so that your request can be process
 
 ## Why is this access being requested?
 
-<!-- Reason why the external collaborator needs access -->
+<!-- Reason why the outside collaborator needs access -->
 
 ## Which MoJ team/person is responsible for this request? This must be someone with a "*.justice.gov.uk" email address.
 

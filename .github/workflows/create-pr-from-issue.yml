@@ -1,4 +1,4 @@
-name: Create a PR from an issue - External Collaborators
+name: Create a PR from an issue - Outside Collaborators
 on:
   issues:
     types: [opened]

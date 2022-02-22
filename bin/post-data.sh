@@ -1,6 +1,6 @@
 #!/bin/sh
 
-bin/external-collaborators.rb > data.json
+bin/outside-collaborators.rb > data.json
 
 curl -vvv \
   -H "Content-Type: application/json" \

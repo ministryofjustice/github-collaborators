@@ -4,7 +4,7 @@ variable "repository" {
 }
 
 variable "collaborators" {
-  description = "Details of all the external collaborators of a repository"
+  description = "Details of all the outside collaborators of a repository"
   type = list(object({
     github_user  = string #  The github_user who needs to access the repository
     permission   = string #  The level of access: pull|push|admin

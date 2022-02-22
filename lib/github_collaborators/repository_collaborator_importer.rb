@@ -12,7 +12,7 @@ class GithubCollaborators
 
     def import(repo_names)
       repo_names.each do |repository|
-        collaborators = external_collaborators(repository)
+        collaborators = outside_collaborators(repository)
         if collaborators.any?
           @logger.warn "Importing collaborators for #{repository}"
           create_terraform_file(repository, collaborators)
@@ -23,7 +23,7 @@ class GithubCollaborators
 
     private
 
-    def external_collaborators(repository)
+    def outside_collaborators(repository)
       @org_ext_collabs.for_repository(repository)
     end
 
@@ -59,10 +59,10 @@ class GithubCollaborators
           source     = "./modules/repository-collaborators"
           repository = "<%= repository %>"
           collaborators = [
-          <% collaborators.each do |collab| %>
+          <% collaborators.each do |collaborator| %>
           {
-              github_user  = "<%= collab[:login] %>"
-              permission   = "<%= collab[:permission] %>"
+              github_user  = "<%= collaborator[:login] %>"
+              permission   = "<%= collaborator[:permission] %>"
               name         = "" #  The name of the person behind github_user
               email        = "" #  Their email address
               org          = "" #  The organisation/entity they belong to

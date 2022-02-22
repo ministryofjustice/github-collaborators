@@ -63,13 +63,13 @@ class GithubCollaborators
 
     def issue_hash
       {
-        title: "Please define external collaborators in code",
+        title: "Please define outside collaborators in code",
         assignees: [github_user],
         body: <<~EOF
           Hi there
           
           We now have a process to manage github collaborators in code:
-          https://github.com/ministryofjustice/github-collaborators/blob/main/README.md#github-external-collaborators
+          https://github.com/ministryofjustice/github-collaborators/blob/main/README.md#github-outside-collaborators
           
           Please follow the procedure described there to grant @#{github_user} access to this repository.
           
@@ -86,7 +86,7 @@ class GithubCollaborators
           Hi there
           
           The user @#{github_user} has its access for this repository maintained in code here:
-          https://github.com/ministryofjustice/github-collaborators/blob/main/README.md#github-external-collaborators
+          https://github.com/ministryofjustice/github-collaborators/blob/main/README.md#github-outside-collaborators
 
           The review_after date is due to expire within one month, please update this via a PR if they still require access.
           
