@@ -142,5 +142,15 @@ module "yjaf-assets" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-02-11"
     },
+    {
+      github_user  = "SamMohammedUK"
+      permission   = "push"
+      name         = "Sam Mohammed"
+      email        = "contact@sammohammed.uk"
+      org          = "NEC SWS"
+      reason       = "Working on the assets project"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-02-21"
+    },
   ]
 }
