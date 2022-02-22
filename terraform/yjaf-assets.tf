@@ -34,7 +34,7 @@ module "yjaf-assets" {
     },
     {
       github_user  = "TomDover-NorthgatePS"
-      permission   = "push"
+      permission   = "admin"
       name         = "Tom Dover"
       email        = "tom.dover@northgateps.com"
       org          = "NEC Software Solutions"
@@ -114,7 +114,7 @@ module "yjaf-assets" {
     },
     {
       github_user  = "javaidarshadnec"
-      permission   = "push"
+      permission   = "admin"
       name         = "Javaid Arshad"
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
@@ -141,6 +141,16 @@ module "yjaf-assets" {
       reason       = "Part of the Northgate supplier team who are now NEC for the YJB YJAF system"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-02-11"
+    },
+    {
+      github_user  = "SamMohammedUK"
+      permission   = "push"
+      name         = "Sam Mohammed"
+      email        = "contact@sammohammed.uk"
+      org          = "NEC SWS"
+      reason       = "Working on the assets project"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-02-21"
     },
   ]
 }

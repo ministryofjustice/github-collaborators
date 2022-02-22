@@ -34,7 +34,7 @@ module "yjsm-ui" {
     },
     {
       github_user  = "djv72"
-      permission   = "push"
+      permission   = "admin"
       name         = "David Vincent"
       email        = "David.Vincent@northgateps.com"
       org          = "NPS (northgate)"
@@ -74,7 +74,7 @@ module "yjsm-ui" {
     },
     {
       github_user  = "javaidarshadnec"
-      permission   = "push"
+      permission   = "admin"
       name         = "Javaid Arshad"
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
@@ -104,7 +104,7 @@ module "yjsm-ui" {
     },
     {
       github_user  = "craig-ashford"
-      permission   = "push"
+      permission   = "admin"
       name         = "Craig Ashford"
       email        = "craig.ashford@necsws.com"
       org          = "NEC SWS"
@@ -124,7 +124,7 @@ module "yjsm-ui" {
     },
     {
       github_user  = "turtle-nec"
-      permission   = "push"
+      permission   = "admin"
       name         = "Drew Maughan"
       email        = "drew.maughan@necsws.com"
       org          = "NEC"
