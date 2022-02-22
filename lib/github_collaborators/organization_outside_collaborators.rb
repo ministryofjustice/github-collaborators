@@ -65,7 +65,7 @@ class GithubCollaborators
     def repositories
       @repos ||= Repositories.new(login: login).current
     end
-    
+
     # Returns a list of outside collaborators and additionally checks they are not MoJ organisation Members
     # Not this has nothing to do with the TerraformCollaborators which is based of the tf files, this is from the GitHub API directly
     # repo_name: string

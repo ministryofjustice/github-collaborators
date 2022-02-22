@@ -59,17 +59,17 @@ class GithubCollaborators
           arr = data.fetch("nodes").map { |d| Repository.new(d) }
           [arr, data]
         else
-          STDERR.puts('repositories:get_all_repos(): graphql query data missing')
-          abort()
-         end
+          warn("repositories:get_all_repos(): graphql query data missing")
+          abort
+        end
       end
     end
 
     def get_repos(end_cursor = nil)
       json = graphql.run_query(repositories_query(end_cursor))
       sleep(2)
-      if json.include?('errors')
-        STDERR.puts('repositories:get_repos(): graphql query contains errors')
+      if json.include?("errors")
+        warn("repositories:get_repos(): graphql query contains errors")
         if json.include?("RATE_LIMITED")
           sleep(300)
           get_repos(end_cursor)

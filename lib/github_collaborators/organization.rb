@@ -44,17 +44,17 @@ class GithubCollaborators
           arr = data.fetch("edges").map { |d| Member.new(d) }
           [arr, data]
         else
-          STDERR.puts('organization:get_all_organisation_members(): graphql query data missing')
-          abort()
-         end
+          warn("organization:get_all_organisation_members(): graphql query data missing")
+          abort
+        end
       end
     end
 
     def get_organisation_members(end_cursor = nil)
       json = graphql.run_query(organisation_members_query(end_cursor))
       sleep(2)
-      if json.include?('errors')
-        STDERR.puts('organization:get_organisation_members(): graphql query contains errors')
+      if json.include?("errors")
+        warn("organization:get_organisation_members(): graphql query contains errors")
         if json.include?("RATE_LIMITED")
           sleep(300)
           get_organisation_members(end_cursor)

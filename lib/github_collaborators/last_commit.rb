@@ -20,24 +20,22 @@ class GithubCollaborators
     def fetch_date
       json = graphql.run_query(last_commit_date_query)
       sleep(2)
-      if json.include?('errors')
-        STDERR.puts('Last_commit:fetch_date(): graphql query contains errors')
+      if json.include?("errors")
+        warn("Last_commit:fetch_date(): graphql query contains errors")
         if json.include?("RATE_LIMITED")
           sleep(300)
-          fetch_date()
+          fetch_date
         else
           abort(json)
         end
-      else
-        if json
-          JSON.parse(json)
-            .dig("data", "repository", "defaultBranchRef", "target", "history", "edges")
+      elsif json
+        JSON.parse(json)
+          .dig("data", "repository", "defaultBranchRef", "target", "history", "edges")
             &.first
             &.dig("node", "committedDate")
-        else
-          STDERR.puts('last_commit:fetch_date(): graphql query data missing')
-          abort()
-         end 
+      else
+        warn("last_commit:fetch_date(): graphql query data missing")
+        abort
       end
     end
 

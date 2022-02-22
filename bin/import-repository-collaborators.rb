@@ -12,5 +12,5 @@ GithubCollaborators::RepositoryCollaboratorImporter.new(
   org_ext_collabs: GithubCollaborators::OrganizationOutsideCollaborators.new(
     login: "ministryofjustice",
     base_url: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
-  ),
+  )
 ).import(repositories)
