@@ -5,80 +5,25 @@
         "collaborators": {
           "edges": [
             {
+              "permission": "ADMIN",
               "node": {
                 "login": "digitalronin",
                 "url": "https://github.com/digitalronin"
-              },
-              "permissionSources": [
-                {
-                  "permission": "ADMIN",
-                  "source": {
-                    "websiteUrl": "https://www.justice.gov.uk/",
-                    "id": "MDEyOk9yZ2FuaXphdGlvbjIyMDM1NzQ=",
-                    "name": "Ministry of Justice"
-                  }
-                },
-                {
-                  "permission": "ADMIN",
-                  "source": {
-                    "homepageUrl": null,
-                    "id": "MDEwOlJlcG9zaXRvcnkzMTA2MTkyNzY=",
-                    "name": "testing-outside-collaborators",
-                    "nameWithOwner": "ministryofjustice/testing-outside-collaborators"
-                  }
-                },
-                {
-                  "permission": "ADMIN",
-                  "source": {
-                    "editTeamUrl": "https://github.com/orgs/ministryofjustice/teams/operations-engineering/edit",
-                    "id": "MDQ6VGVhbTQxOTIxMTU=",
-                    "name": "Operations Engineering",
-                    "combinedSlug": "ministryofjustice/operations-engineering"
-                  }
-                }
-              ]
+              }
             },
             {
+              "permission": "ADMIN",
               "node": {
                 "login": "damacus",
                 "url": "https://github.com/damacus"
-              },
-              "permissionSources": [
-                {
-                  "permission": "ADMIN",
-                  "source": {
-                    "websiteUrl": "https://www.justice.gov.uk/",
-                    "id": "MDEyOk9yZ2FuaXphdGlvbjIyMDM1NzQ=",
-                    "name": "Ministry of Justice"
-                  }
-                },
-                {
-                  "permission": "ADMIN",
-                  "source": {
-                    "homepageUrl": null,
-                    "id": "MDEwOlJlcG9zaXRvcnkzMTA2MTkyNzY=",
-                    "name": "testing-outside-collaborators",
-                    "nameWithOwner": "ministryofjustice/testing-outside-collaborators"
-                  }
-                }
-              ]
+              }
             },
             {
+              "permission": "WRITE",
               "node": {
                 "login": "DangerDawson",
                 "url": "https://github.com/DangerDawson"
-              },
-              "permissionSources": [
-                {
-                  "permission": "WRITE",
-                  "source": {
-                    "homepageUrl": null,
-                    "id": "MDEwOlJlcG9zaXRvcnkzMTA2MTkyNzY=",
-                    "name": "testing-outside-collaborators",
-                    "nameWithOwner": "ministryofjustice/testing-outside-collaborators"
-                  }
-                }
-              ]
+              }
             }
           ]
         }

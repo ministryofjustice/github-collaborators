@@ -71,7 +71,6 @@ class GithubCollaborators
       if json.include?('errors')
         STDERR.puts('repositories:get_repos(): graphql query contains errors')
         if json.include?("RATE_LIMITED")
-          STDERR.puts(json)
           sleep(300)
           get_repos(end_cursor)
         else
