@@ -3,12 +3,14 @@ class GithubCollaborators
     let(:org) { "myorg" }
     let(:repo) { "myrepo" }
     let(:login) { "whoever" }
+    let(:id) { "myid" }
 
     let(:params) {
       {
         org: org,
         repo: repo,
         login: login,
+        id: id,
         graphql: graphql
       }
     }
