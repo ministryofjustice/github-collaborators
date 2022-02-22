@@ -24,7 +24,7 @@ module "yjaf-ui" {
     },
     {
       github_user  = "TomDover-NorthgatePS"
-      permission   = "push"
+      permission   = "admin"
       name         = "Tom Dover"
       email        = "tom.dover@northgateps.com"
       org          = "Northgate"
@@ -54,7 +54,7 @@ module "yjaf-ui" {
     },
     {
       github_user  = "djv72"
-      permission   = "push"
+      permission   = "admin"
       name         = "David Vincent"
       email        = "david.vincent@necsws.com"
       org          = "NEC Software Solutions"
@@ -104,7 +104,7 @@ module "yjaf-ui" {
     },
     {
       github_user  = "javaidarshadnec"
-      permission   = "push"
+      permission   = "admin"
       name         = "Javaid Arshad"
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
@@ -114,7 +114,7 @@ module "yjaf-ui" {
     },
     {
       github_user  = "turtle-nec"
-      permission   = "push"
+      permission   = "admin"
       name         = "Drew Maughan"
       email        = "drew.maughan@necsws.com"
       org          = "NEC"
@@ -131,6 +131,16 @@ module "yjaf-ui" {
       reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2022-08-27"
+    },
+    {
+      github_user  = "craig-ashford"
+      permission   = "admin"
+      name         = "Craig Ashford"
+      email        = "craig.ashford@necsws.com"
+      org          = "NEC SWS"
+      reason       = "Need access to dependabot"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2022-02-21"
     },
   ]
 }

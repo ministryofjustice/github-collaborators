@@ -34,7 +34,7 @@ module "yjaf-assets" {
     },
     {
       github_user  = "TomDover-NorthgatePS"
-      permission   = "push"
+      permission   = "admin"
       name         = "Tom Dover"
       email        = "tom.dover@northgateps.com"
       org          = "NEC Software Solutions"
@@ -114,7 +114,7 @@ module "yjaf-assets" {
     },
     {
       github_user  = "javaidarshadnec"
-      permission   = "push"
+      permission   = "admin"
       name         = "Javaid Arshad"
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"

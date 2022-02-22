@@ -84,7 +84,7 @@ module "yjaf-nginx-pentaho" {
     },
     {
       github_user  = "javaidarshadnec"
-      permission   = "push"
+      permission   = "admin"
       name         = "Javaid Arshad"
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
