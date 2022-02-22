@@ -2,36 +2,6 @@ class GithubCollaborators
   class Collaborator
     attr_reader :data
 
-    # data is a hash, from the github graphql API, like this:
-    #
-    # {"node"=>{"login"=>"SteveMarshall"},
-    #  "permissionSources"=>
-    #   [{"permission"=>"ADMIN",
-    #     "source"=>
-    #      {"websiteUrl"=>"https://www.justice.gov.uk/",
-    #       "id"=>"MDEyOk9yZ2FuaXphdGlvbjIyMDM1NzQ=",
-    #       "name"=>"Ministry of Justice"}},
-    #    {"permission"=>"ADMIN",
-    #     "source"=>
-    #      {"homepageUrl"=>nil,
-    #       "id"=>"MDEwOlJlcG9zaXRvcnkzMTA2MTkyNzY=",
-    #       "name"=>"testing-outside-collaborators",
-    #       "nameWithOwner"=>"ministryofjustice/testing-outside-collaborators"}},
-    #    {"permission"=>"ADMIN",
-    #     "source"=>
-    #      {"editTeamUrl"=>
-    #        "https://github.com/orgs/ministryofjustice/teams/operations-engineering/edit",
-    #       "id"=>"MDQ6VGVhbTQxOTIxMTU=",
-    #       "name"=>"Operations Engineering",
-    #       "combinedSlug"=>"ministryofjustice/operations-engineering"}}]}
-    #
-    # This user has access to the repo because:
-    #   * They are an Organization admin
-    #   * They are in the "Operations Engineering" team
-    # They also show up as having direct permission on the repository. This is
-    # misleading - they only have access to the repository because of their
-    # Organization permission and team membership.
-
     GITHUB_TO_TERRAFORM_PERMISSIONS = {
       "read" => "pull",
       "triage" => "triage",
@@ -52,72 +22,77 @@ class GithubCollaborators
       data.dig("node", "url")
     end
 
-    # This will only be correct if this is an outside collaborator.
-    # Organisation members with access to the repository are likely to have
-    # multiple permissions, and there is no guarantee that the first permission
-    # (which this method returns) is the highest privilege permission.
-    def permission
-      perm = data.fetch("permissionSources")
-        .map { |i| i["permission"] }
-        .first
-        .downcase
-      GITHUB_TO_TERRAFORM_PERMISSIONS.fetch(perm)
+    def id
+      data.dig("node", "id")
     end
 
-    # If the only permissionSources this collaborator has is permission on the
-    # repository (i.e. no "Organization" or "Team" permissions), then they have
-    # been granted acess specifically to this repository (so they're probably an
-    # outside collaborator, but we would need to check a) if they are a member
-    # of the organization and b) if they have an organization email address, if
-    # we want to confirm that.
-    def is_direct_collaborator?
-      permission_sources = data.fetch("permissionSources")
-      permission_sources.size == 1 && permission_sources.first.fetch("source").has_key?("nameWithOwner") # nameWithOwner means this is a Repository permission
+    def permission
+      perm = data.fetch("permission").downcase!
+      GITHUB_TO_TERRAFORM_PERMISSIONS.fetch(perm)
     end
   end
 
   class RepositoryCollaborators
-    attr_reader :graphql, :repository, :owner
+    attr_reader :graphql, :repository, :login
 
     def initialize(params)
-      @owner = params.fetch(:owner)
+      @login = params.fetch(:login)
       @repository = params.fetch(:repository)
       @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
     end
 
-    # TODO - this only returns the first 100
-    # Lists collaborators attached to a repo - GitHub API
     def list
-      JSON.parse(graphql.run_query(collaborators_query))
-        .dig("data", "organization", "repository", "collaborators", "edges")
-        .to_a
-        .map { |hash| Collaborator.new(hash) }
-
-      # TODO: Above code hides errors with this function - uncomment below to see silent errors
-      # puts JSON.parse(graphql.run_query(collaborators_query))
-      # JSON.parse(graphql.run_query(collaborators_query))
+      @list ||= get_all_outside_collaborators
     end
 
-    private
+    def get_all_outside_collaborators
+      arr = []
+      graphql.get_paginated_results do |end_cursor|
+        data = get_outside_collaborators(end_cursor)
+        if data
+          arr = data.fetch("edges").map { |d| Collaborator.new(d) }
+          [arr, data]
+        else
+          STDERR.puts('repository_collaborators:get_all_outside_collaborators(): graphql query data missing')
+          abort()
+         end
+      end
+      arr
+    end
 
-    def collaborators_query
+    def get_outside_collaborators(end_cursor = nil)
+      json = graphql.run_query(outside_collaborators_query_pagination(end_cursor))
+      sleep(2)
+      if json.include?('errors')
+        STDERR.puts('repository_collaborators:get_outside_collaborators(): graphql query contains errors')
+        if json.include?("RATE_LIMITED")
+          sleep(300)
+          get_outside_collaborators(end_cursor)
+        else
+          abort(json)
+        end
+      else
+        JSON.parse(json).dig("data", "organization", "repository", "collaborators")
+      end
+    end
+
+    def outside_collaborators_query_pagination(end_cursor)
+      after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
       %[
       {
-        organization(login: "#{owner}") {
+        organization(login: "#{login}") {
           repository(name: "#{repository}") {
-            collaborators(first: 100) {
+            collaborators(first:100 affiliation: OUTSIDE #{after}) {
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
               edges {
+                permission
                 node {
                   login
                   url
-                }
-                permissionSources {
-                  permission
-                  source {
-                    ... on Organization { websiteUrl id name }
-                    ... on Repository { homepageUrl id name nameWithOwner }
-                    ... on Team { editTeamUrl id name combinedSlug }
-                  }
+                  id
                 }
               }
             }

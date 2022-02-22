@@ -59,10 +59,10 @@ class GithubCollaborators
           source     = "./modules/repository-collaborators"
           repository = "<%= repository %>"
           collaborators = [
-          <% collaborators.each do |collab| %>
+          <% collaborators.each do |collaborator| %>
           {
-              github_user  = "<%= collab[:login] %>"
-              permission   = "<%= collab[:permission] %>"
+              github_user  = "<%= collaborator[:login] %>"
+              permission   = "<%= collaborator[:permission] %>"
               name         = "" #  The name of the person behind github_user
               email        = "" #  Their email address
               org          = "" #  The organisation/entity they belong to

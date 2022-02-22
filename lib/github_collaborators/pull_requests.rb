@@ -51,7 +51,18 @@ class GithubCollaborators
 
     def get_pull_requests
       json = graphql.run_query(pull_request_query)
-      JSON.parse(json).dig("data", "organization", "repository", "pullRequests")
+      sleep(2)
+      if json.include?('errors')
+        STDERR.puts('pull_requests:get_pull_requests(): graphql query contains errors')
+        if json.include?("RATE_LIMITED")
+          sleep(300)
+          get_pull_requests()
+        else
+          abort(json)
+        end
+      else
+        JSON.parse(json).dig("data", "organization", "repository", "pullRequests")
+      end
     end
 
     def pull_request_query

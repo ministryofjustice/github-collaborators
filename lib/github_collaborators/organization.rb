@@ -22,13 +22,13 @@ class GithubCollaborators
   class Organization
     attr_reader :graphql, :login
 
-    def initialize(params)
-      @login = params.fetch(:login)
-      @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
+    def initialize(login)
+      @login = login
+      @graphql = GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
     end
 
     def members
-      @list ||= get_all_members
+      @list ||= get_all_organisation_members
     end
 
     def is_member?(login)
@@ -37,20 +37,36 @@ class GithubCollaborators
 
     private
 
-    def get_all_members
+    def get_all_organisation_members
       graphql.get_paginated_results do |end_cursor|
-        data = get_members(end_cursor)
-        arr = data.fetch("edges").map { |d| Member.new(d) }
-        [arr, data]
+        data = get_organisation_members(end_cursor)
+        if data
+          arr = data.fetch("edges").map { |d| Member.new(d) }
+          [arr, data]
+        else
+          STDERR.puts('organization:get_all_organisation_members(): graphql query data missing')
+          abort()
+         end
       end
     end
 
-    def get_members(end_cursor = nil)
-      json = graphql.run_query(members_query(end_cursor))
-      JSON.parse(json).dig("data", "organization", "membersWithRole")
+    def get_organisation_members(end_cursor = nil)
+      json = graphql.run_query(organisation_members_query(end_cursor))
+      sleep(2)
+      if json.include?('errors')
+        STDERR.puts('organization:get_organisation_members(): graphql query contains errors')
+        if json.include?("RATE_LIMITED")
+          sleep(300)
+          get_organisation_members(end_cursor)
+        else
+          abort(json)
+        end
+      else
+        JSON.parse(json).dig("data", "organization", "membersWithRole")
+      end
     end
 
-    def members_query(end_cursor)
+    def organisation_members_query(end_cursor)
       after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
       %[
     {

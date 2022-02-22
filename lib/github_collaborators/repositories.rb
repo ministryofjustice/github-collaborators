@@ -55,14 +55,31 @@ class GithubCollaborators
     def get_all_repos
       graphql.get_paginated_results do |end_cursor|
         data = get_repos(end_cursor)
-        arr = data.fetch("nodes").map { |d| Repository.new(d) }
-        [arr, data]
+        if data
+          arr = data.fetch("nodes").map { |d| Repository.new(d) }
+          [arr, data]
+        else
+          STDERR.puts('repositories:get_all_repos(): graphql query data missing')
+          abort()
+         end
       end
     end
 
     def get_repos(end_cursor = nil)
       json = graphql.run_query(repositories_query(end_cursor))
-      JSON.parse(json).dig("data", "organization", "repositories")
+      sleep(2)
+      if json.include?('errors')
+        STDERR.puts('repositories:get_repos(): graphql query contains errors')
+        if json.include?("RATE_LIMITED")
+          STDERR.puts(json)
+          sleep(300)
+          get_repos(end_cursor)
+        else
+          abort(json)
+        end
+      else
+        JSON.parse(json).dig("data", "organization", "repositories")
+      end
     end
 
     def repositories_query(end_cursor)
