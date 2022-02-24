@@ -74,6 +74,8 @@ class GithubCollaborators
           Please follow the procedure described there to grant @#{github_user} access to this repository.
           
           If you have any questions, please post in #ask-operations-engineering on Slack.
+          
+          If the outside collaborator is not needed, close this issue, they have already been removed from this repository.
         EOF
       }
     end
