@@ -23,6 +23,7 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 * The `terraform/` directory contains a file per repository that has collaborators, defining the collaboration with metadata. The name of the file is the repository name with any `.` characters replaced with `-` to render the name acceptable for terraform. i.e. the file for repository `foo.bar` will be `terraform/foo-bar.tf`
 
 * Github actions run `terraform plan` and `terraform apply` to keep the collaborations in GitHub in sync with the terraform source code
+* The `terraform plan` and `terraform apply` use the Terraform module [github_repository_collaborator](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_collaborator) to add Outside Collaborators, who are defined in the terraform source code, to the MoJ Github Organisation repositories.
 * Ruby code in the `bin/` and `lib/` directories (with unit tests in the `spec/` directory) queries GitHub via the GraphQL API and retrieves all the collaborator relationships which exist
 * A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are included in a JSON report which is the basis for [this report].
 * A utility script will import existing outside collaborators from specified github repositories, create the corresponding terraform code, and import into terraform state
