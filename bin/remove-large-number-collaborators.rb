@@ -32,7 +32,6 @@ outside_collaborator_list.each do |x|
 end
 
 outside_collaborator_list.each do |collaborator|
-
   repository = collaborator.dig("repository")
   github_user = collaborator.dig("login")
 
@@ -50,5 +49,4 @@ outside_collaborator_list.each do |collaborator|
   GithubCollaborators::IssueCreator.new(params).create
   sleep 5
   GithubCollaborators::AccessRemover.new(params).remove
-
 end
