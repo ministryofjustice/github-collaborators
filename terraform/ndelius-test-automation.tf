@@ -14,7 +14,7 @@ module "ndelius-test-automation-swestb" {
     },
   ]
 }
-  
+
 module "ndelius-test-automation-mlaskowski4" {
   source     = "./modules/repository-collaborators"
   repository = "ndelius-test-automation"
