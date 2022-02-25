@@ -1,4 +1,4 @@
-module "ndelius-test-automation-swestb" {
+module "ndelius-test-automation" {
   source     = "./modules/repository-collaborators"
   repository = "ndelius-test-automation"
   collaborators = [
@@ -12,13 +12,6 @@ module "ndelius-test-automation-swestb" {
       added_by     = "Probation Infrastructure AWS Team, awssupportteam@digital.justice.gov.uk"                                                              #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2022-05-21"                                                                                                                            #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
-  ]
-}
-
-module "ndelius-test-automation-mlaskowski4" {
-  source     = "./modules/repository-collaborators"
-  repository = "ndelius-test-automation"
-  collaborators = [
     {
       github_user  = "mlaskowski4"
       permission   = "admin"
