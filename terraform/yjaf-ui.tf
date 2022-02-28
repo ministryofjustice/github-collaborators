@@ -140,7 +140,7 @@ module "yjaf-ui" {
       org          = "NEC SWS"
       reason       = "Need access to dependabot"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2022-02-21"
+      review_after = "2023-02-21"
     },
   ]
 }
