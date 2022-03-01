@@ -1,6 +1,6 @@
-module "staff-device-mangement-windows10-mass-storage-controls" {
+module "staff-device-management-windows10-mass-storage-controls" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-mangement-windows10-mass-storage-controls"
+  repository = "staff-device-management-windows10-mass-storage-controls"
   collaborators = [
     {
       github_user  = "JimGregory-CplusC"
