@@ -14,7 +14,7 @@ module "bichard7-next-audit-logging" {
     },
     {
       github_user  = "sioldham"
-      permission   = "push"
+      permission   = "puasdadsasdasdasdasdsh"
       name         = "Simon Oldham"                             #  The name of the person behind github_user
       email        = "simon.oldham@madetech.com"                #  Their email address
       org          = "Madetech"                                 #  The organisation/entity they belong to
