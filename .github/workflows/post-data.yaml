@@ -2,7 +2,7 @@ name: Create and send the outside collaborators JSON data and remove manually ad
 on:
   workflow_dispatch:
   schedule:
-    - cron: "23 4 * * *"
+    - cron: "23 2 * * *"
 
 env:
   OPERATIONS_ENGINEERING_REPORTS_HOST: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_HOST }}
@@ -40,7 +40,7 @@ jobs:
           path: output.txt
       - name: Report failure to Slack
         if: always()
-      - uses: ravsamhq/notify-slack-action@v1
+        uses: ravsamhq/notify-slack-action@v1
         with:
           status: ${{ job.status }}
           notify_when: 'failure'
