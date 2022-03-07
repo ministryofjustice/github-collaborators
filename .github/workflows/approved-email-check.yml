@@ -15,9 +15,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-            python-version: '3.10'
-            architecture: 'x64'
-            cache: 'pip'
+          python-version: '3.10'
+          architecture: 'x64'
+          cache: 'pip'
       - run: |
           python3 -m pip install -r scripts/requirements.txt
           python3 scripts/approved-email-domain-check.py ${{ secrets.ADMIN_GITHUB_TOKEN }} > output.txt

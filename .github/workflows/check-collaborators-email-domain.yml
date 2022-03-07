@@ -1,4 +1,4 @@
-name: Check the approving GH MoJ user has a MoJ email domain 
+name: Check the approving GH MoJ user has a MoJ email domain
 
 on: pull_request
 
@@ -10,7 +10,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      
+
       - name: Python
         uses: "actions/setup-python@v2"
 
