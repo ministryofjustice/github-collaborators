@@ -1,4 +1,5 @@
 name: Create and send the outside collaborators JSON data and remove manually added collaborators
+
 on:
   workflow_dispatch:
   schedule:
