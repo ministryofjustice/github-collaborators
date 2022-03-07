@@ -30,4 +30,3 @@ jobs:
           notification_title: 'Failed GitHub Action Run'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
