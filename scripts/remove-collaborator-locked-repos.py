@@ -180,7 +180,7 @@ def run():
                 collaborators_repo_list.append(repository.is_repository_locked)
         an_open_repo = False
         if an_open_repo not in collaborators_repo_list:
-            print("Remove user from organisation:" + outside_collaborator.login)
+            print("Remove user from organisation: " + outside_collaborator.login)
 
 
 print("Start")
