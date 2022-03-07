@@ -40,7 +40,7 @@ jobs:
           path: output.txt
       - name: Report failure to Slack
         if: always()
-        uses: ravsamhq/notify-slack-action@v1
+      - uses: ravsamhq/notify-slack-action@v1
         with:
           status: ${{ job.status }}
           notify_when: 'failure'
