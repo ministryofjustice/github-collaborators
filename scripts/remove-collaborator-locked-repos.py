@@ -168,6 +168,18 @@ def fetch_repositories() -> list:
     return repositories_list
 
 
+def remove_collaborator(collaborator):
+    """Remove the collaborator from the organisation
+
+    Args:
+        collaborator (collaborator): The collaborator object
+    """
+    print("Remove user from organisation: " + collaborator.login)
+    gh = Github(oauth_token)
+    org = gh.get_organization("ministryofjustice")
+    org.remove_outside_collaborator(collaborator)
+
+
 def run():
     repositories = fetch_repositories()
     gh = Github(oauth_token)
@@ -180,7 +192,8 @@ def run():
                 collaborators_repo_list.append(repository.is_repository_locked)
         an_open_repo = False
         if an_open_repo not in collaborators_repo_list:
-            print("Remove user from organisation:" + outside_collaborator.login)
+            # all repositories are locked so remove the collaborator
+            remove_collaborator(outside_collaborator)
 
 
 print("Start")
