@@ -1,6 +1,6 @@
-module "transition" {
+module "yjaf-transitions " {
   source     = "./modules/repository-collaborators"
-  repository = "transition"
+  repository = "yjaf-transitions"
   collaborators = [
     {
       github_user  = "InFlamesForever"
