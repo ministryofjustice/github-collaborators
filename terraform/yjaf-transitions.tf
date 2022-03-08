@@ -1,4 +1,4 @@
-module "yjaf-transitions " {
+module "yjaf-transitions" {
   source     = "./modules/repository-collaborators"
   repository = "yjaf-transitions"
   collaborators = [
