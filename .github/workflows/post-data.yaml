@@ -20,12 +20,12 @@ jobs:
           bundler-cache: true
       - run: bin/post-data.sh
         env:
-          ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
           OPERATIONS_ENGINEERING_REPORTS_API_KEY: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_API_KEY }}
       - name: Remove manually-added collaborators
         run: bin/remove-undefined-collaborators.rb
         env:
-          ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
           OWNER: "ministryofjustice"
           bundler-cache: true
       - name: Remove collaborators attached to locked repositories
@@ -35,7 +35,7 @@ jobs:
           architecture: 'x64'
           cache: 'pip'
       - run: python3 -m pip install -r scripts/requirements.txt
-      - run: python3 scripts/remove-collaborator-locked-repos.py ${{ secrets.GITHUB_TOKEN }} > output.txt
+      - run: python3 scripts/remove-collaborator-locked-repos.py ${{ secrets.ADMIN_GITHUB_TOKEN }} > output.txt
       - name: Report failure to Slack
         if: always()
         uses: ravsamhq/notify-slack-action@v1

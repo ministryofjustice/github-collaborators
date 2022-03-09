@@ -19,4 +19,4 @@ jobs:
       - run: bundle install
       - run: bin/report-deleted-repos.rb
         env:
-          ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}

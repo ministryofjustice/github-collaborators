@@ -18,6 +18,6 @@ jobs:
           bundler-cache: true
       - run: bin/remove-large-number-collaborators.rb
         env:
-          ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
           OPERATIONS_ENGINEERING_REPORTS_API_KEY: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_API_KEY }}
           OWNER: "ministryofjustice"
