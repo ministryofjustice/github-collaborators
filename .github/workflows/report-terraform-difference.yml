@@ -17,6 +17,6 @@ jobs:
 
       - run: bin/compare-terraform-to-github.rb
         env:
-          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+          ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.event.inputs.repository }}
           USERNAME: ${{ github.event.inputs.github_user }}
