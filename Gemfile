@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '3.0.3'
+ruby '3.1.1'
 
 gem 'rspec', '~>3.11.0'
 gem 'date', '~>3.2.2'
