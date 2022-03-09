@@ -9,6 +9,9 @@ on:
         description: GitHub username of the collaborator
         required: true
 
+env:
+  RUBY_VERSION: 3.1.0
+
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -19,3 +22,4 @@ jobs:
           ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
           REPO: ${{ github.event.inputs.repository }}
           USERNAME: ${{ github.event.inputs.github_user }}
+          bundler-cache: true

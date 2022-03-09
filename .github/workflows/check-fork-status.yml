@@ -4,7 +4,7 @@ on:
     types: [opened, edited, reopened, synchronize]
 
 env:
-  RUBY_VERSION: 3.0.3
+  RUBY_VERSION: 3.1.0
 
 jobs:
   check-fork:
@@ -14,6 +14,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
       - name: Check if pull request in a fork
         run: ruby bin/check-fork-status.rb
         env:

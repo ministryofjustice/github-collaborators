@@ -51,20 +51,20 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  bundler (~> 2.2)
-  bundler-audit (~> 0.9.0.1)
-  cgi (>= 0.3.1)
-  date (~> 3.2.2)
-  erb (~> 2.2.0)
-  git (~> 1.10)
-  json (~> 2.6.1)
-  net-http (~> 0.2.0)
-  rspec (~> 3.11.0)
+  bundler
+  bundler-audit
+  cgi
+  date
+  erb
+  git
+  json
+  net-http
+  rspec
   simplecov
-  uuidtools (~> 2.2)
+  uuidtools
 
 RUBY VERSION
-   ruby 3.0.3p157
+   ruby 3.1.0
 
 BUNDLED WITH
-   2.3.7
+   2.3.8
