@@ -8,13 +8,18 @@ on:
         description: 'Placeholder'
         required: false
 
+env:
+  RUBY_VERSION: 3.0.3
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
       - run: bin/compare-terraform-to-github.rb
         env:
           ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
