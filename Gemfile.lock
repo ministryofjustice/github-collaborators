@@ -46,9 +46,7 @@ GEM
     uuidtools (2.2.0)
 
 PLATFORMS
-  x64-mingw32
   x86_64-darwin-20
-  x86_64-linux
 
 DEPENDENCIES
   bundler
@@ -64,7 +62,7 @@ DEPENDENCIES
   uuidtools
 
 RUBY VERSION
-   ruby 3.1.0
+   ruby 3.1.0p0
 
 BUNDLED WITH
-   2.3.7
+   2.3.8

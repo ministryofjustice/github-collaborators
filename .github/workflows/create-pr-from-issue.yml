@@ -4,7 +4,7 @@ on:
     types: [opened]
 
 env:
-  RUBY_VERSION: 3.0.3
+  RUBY_VERSION: 3.1.0
 
 jobs:
   create-pr:
@@ -15,6 +15,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
       - run: bundle install
       - name: Check if pull request in a fork
         run: ruby bin/create-pr-from-issue.rb

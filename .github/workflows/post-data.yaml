@@ -7,7 +7,7 @@ on:
 env:
   OPERATIONS_ENGINEERING_REPORTS_HOST: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_HOST }}
   OPS_ENG_REPORTS_URL: ${{ secrets.OPERATIONS_ENGINEERING_REPORTS_HOST }}/github_collaborators
-  RUBY_VERSION: 3.0.3
+  RUBY_VERSION: 3.1.0
 
 jobs:
   post-data-to-opseng-reports:
@@ -27,6 +27,7 @@ jobs:
         env:
           ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: "ministryofjustice"
+          bundler-cache: true
       - name: Remove collaborators attached to locked repositories
         uses: actions/setup-python@v2
         with:

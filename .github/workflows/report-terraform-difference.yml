@@ -20,6 +20,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
       - run: bin/compare-terraform-to-github.rb
         env:
           ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
