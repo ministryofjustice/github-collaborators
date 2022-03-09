@@ -20,7 +20,7 @@ jobs:
           cache: 'pip'
       - run: |
           python3 -m pip install -r scripts/requirements.txt
-          python3 scripts/approved-email-domain-check.py ${{ secrets.ADMIN_GITHUB_TOKEN }} > output.txt
+          python3 scripts/approved-email-domain-check.py ${{ secrets.GITHUB_TOKEN }} > output.txt
       - uses: actions/upload-artifact@v2
         with:
           path: output.txt
