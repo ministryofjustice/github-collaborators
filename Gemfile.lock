@@ -46,7 +46,9 @@ GEM
     uuidtools (2.2.0)
 
 PLATFORMS
+  x64-mingw32
   x86_64-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   bundler
