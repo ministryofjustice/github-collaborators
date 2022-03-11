@@ -12,14 +12,7 @@ GEM
       cgi
     git (1.10.2)
       rchardet (~> 1.8)
-    io-wait (0.2.1)
     json (2.6.1)
-    net-http (0.2.0)
-      net-protocol
-      uri
-    net-protocol (0.1.2)
-      io-wait
-      timeout
     rchardet (1.8.0)
     rspec (3.11.0)
       rspec-core (~> 3.11.0)
@@ -41,8 +34,6 @@ GEM
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     thor (1.2.1)
-    timeout (0.2.0)
-    uri (0.11.0)
     uuidtools (2.2.0)
 
 PLATFORMS
@@ -53,12 +44,10 @@ PLATFORMS
 DEPENDENCIES
   bundler
   bundler-audit
-  cgi
   date
   erb
   git
   json
-  net-http
   rspec
   simplecov
   uuidtools

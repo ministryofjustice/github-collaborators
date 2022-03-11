@@ -39,15 +39,15 @@ repos.each do |repo|
   if gc.length != tc.length
     # Report
     puts "====================================="
-    puts "Difference in repo #{repo.name}"
-    puts "GC Length: #{gc.length}"
-    puts "TC Length: #{tc.length}"
+    puts "Difference in repo: #{repo.name}"
+    puts "Outside Collaborators Length: #{gc.length}"
+    puts "Terraform Collaborators Length: #{tc.length}"
     puts "Extra Names:"
     tc.each do |tc_collab|
       puts tc_collab.login unless gc.any? { |x| x.fetch(:login) == tc_collab.login }
     end
     puts "-------------------------------------"
-    puts "GC Members"
+    puts "Outside Collaborators:"
     gc.each do |i|
       puts i.fetch(:login)
     end
