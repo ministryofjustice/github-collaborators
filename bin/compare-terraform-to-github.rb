@@ -15,10 +15,13 @@ outside_collaborators = GithubCollaborators::OrganizationOutsideCollaborators.ne
   base_url: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
 )
 
+collaborators_who_are_members = Array.new
+
 # For each repo
 repos.each do |repo|
   # Get the GitHub outside collaborators for current repo
   gc = outside_collaborators.for_repository(repo.name)
+
   # Get the Terraform collaborators for current repo
   tc = terraform_collaborators.return_collaborators_from_file("terraform/#{GithubCollaborators.tf_safe(repo.name)}.tf")
 
@@ -35,22 +38,75 @@ repos.each do |repo|
     next
   end
 
-  # Report when defined in Terraform but not GitHub.
   if gc.length != tc.length
-    # Report
-    puts "====================================="
-    puts "Difference in repo: #{repo.name}"
-    puts "Outside Collaborators Length: #{gc.length}"
-    puts "Terraform Collaborators Length: #{tc.length}"
-    puts "Extra Names:"
-    tc.each do |tc_collab|
-      puts tc_collab.login unless gc.any? { |x| x.fetch(:login) == tc_collab.login }
+
+    # Some collaborators have been upgraded to full organization members, this checks for them.
+    tc.each do |tc_collaborator|
+      if outside_collaborators.is_an_org_member(tc_collaborator.login) == true
+        collaborators_who_are_members.push(tc_collaborator.login)
+        gc.push({
+          login: tc_collaborator.login,
+          login_url: nil,
+          permission: nil,
+          last_commit: nil
+        })
+        
+      end
     end
-    puts "-------------------------------------"
-    puts "Outside Collaborators:"
-    gc.each do |i|
-      puts i.fetch(:login)
+
+    # Do the check again with the new value added above
+    if gc.length != tc.length
+      # Report when collaborator/s are defined in Terraform but not GitHub.
+      puts "====================================="
+      puts "Difference in repository: #{repo.name}"
+      puts "Number of Outside Collaborators: #{gc.length}"
+      puts "Defined in Terraform: #{tc.length}"
+      puts "The Outside Collaborator/s not attached to the repository but defined in Terraform:"
+      
+      # Get the pending collaborator invites for the repository
+      pending_invites = Array.new
+      url = "https://api.github.com/repos/ministryofjustice/#{repo.name}/invitations"
+      json = GithubCollaborators::HttpClient.new.fetch_json(url).body
+      if json != ""
+        JSON.parse(json)
+          .find_all { |c| c["invitee"]["login"] }
+          .map { |c| pending_invites.push(c) }
+      end
+      
+      # Print collaborator name + pending invite or name only
+      tc.each do |tc_collaborator|
+          if pending_invites.length != 0
+            print "#{tc_collaborator.login}" unless gc.any? { |x| x.fetch(:login) == tc_collaborator.login }
+            pending_invites.each do |x| 
+              if x["invitee"]["login"] == tc_collaborator.login
+                print ": Has a pending invite \n"
+              end
+            end
+          else
+            puts tc_collaborator.login unless gc.any? { |x| x.fetch(:login) == tc_collaborator.login }
+          end
+      end
+
+      # Print all the repository outside collaborators if any exist
+      if gc.length > 0
+        puts "-------------------------------------"
+        puts "The #{gc.length} Outside Collaborator/s for this repository are:"
+        gc.each do |i|
+          puts i.fetch(:login)
+        end
+        puts "====================================="
+        puts ""
+      else
+        puts "====================================="
+        puts ""
+      end
     end
-    puts "====================================="
   end
+end
+
+# Print collaborator login who are also a member of the org
+puts "These Outside Collaborators are defined within Terraform and are full Organization Members:"
+collaborators_who_are_members = collaborators_who_are_members.uniq
+for collaborator in collaborators_who_are_members
+  puts "#{collaborator}"
 end
