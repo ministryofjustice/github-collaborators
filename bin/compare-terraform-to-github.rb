@@ -42,7 +42,7 @@ repos.each do |repo|
     gc.each do |gc_collaborator|
       puts gc_collaborator.fetch(:login)
     end
-  else if gc.length != tc.length
+  elsif gc.length != tc.length
 
     # Some collaborators have been upgraded to full organization members, this checks for them.
     tc.each do |tc_collaborator|
