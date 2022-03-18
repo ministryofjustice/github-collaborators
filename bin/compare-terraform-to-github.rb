@@ -35,10 +35,16 @@ repos.each do |repo|
   end
 
   if tc.length == 0
-    next
-  end
-
-  if gc.length != tc.length
+    puts "====================================="
+    puts "Repository: #{repo.name}"
+    puts "Number of Outside Collaborators: #{gc.length}"
+    puts "These Outside Collaborator/s are not defined in Terraform:"
+    gc.each do |gc_collaborator|
+      puts gc_collaborator.fetch(:login)
+    end
+    puts "====================================="
+    puts ""
+  elsif gc.length != tc.length
 
     # Some collaborators have been upgraded to full organization members, this checks for them.
     tc.each do |tc_collaborator|
