@@ -1,6 +1,9 @@
 name: Report collaborators defined in Terraform who are not present in GitHub
 
 on:
+  schedule:
+    # Sunday 3pm
+    - cron: "0 15 * * 0"
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
