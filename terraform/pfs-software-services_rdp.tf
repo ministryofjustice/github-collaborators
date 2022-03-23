@@ -15,8 +15,8 @@ module "pfs-software-services_rdp" {
     {
       github_user  = "SimonGivan"
       permission   = "admin"
-      name         = "Simon Givan"                                                                          #  The name of the person behind github_user
-      email        = "s.givan@kainos.com"                                                           #  Their email address
+      name         = "Simon Givan"                                                                         #  The name of the person behind github_user
+      email        = "s.givan@kainos.com"                                                                  #  Their email address
       org          = "Kainos"                                                                              #  The organisation/entity they belong to
       reason       = "Kainos is working on transfering code from a kainos owned repo to an MOJ owned repo" #  Why is this person being granted access?
       added_by     = "Incell Infrastructure team, federico.staiano1@justice.gov.uk"                        #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
