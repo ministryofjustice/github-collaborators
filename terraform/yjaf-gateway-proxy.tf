@@ -86,7 +86,7 @@ module "yjaf-gateway-proxy" {
       github_user  = "javaidarshadnec"
       permission   = "push"
       name         = "Javaid Arshad"
-      email        = "avaid Arshad"
+      email        = "javaid.arshad@necsws.com"
       org          = "YJB"
       reason       = "For work on the gateway-proxy project"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
