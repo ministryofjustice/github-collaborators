@@ -17,7 +17,7 @@ jobs:
   terraform-apply:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 0.14.11
