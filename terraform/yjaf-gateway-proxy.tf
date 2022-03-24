@@ -82,5 +82,15 @@ module "yjaf-gateway-proxy" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-03-14"
     },
+    {
+      github_user  = "javaidarshadnec"
+      permission   = "push"
+      name         = "Javaid Arshad"
+      email        = "javaid.arshad@necsws.com"
+      org          = "YJB"
+      reason       = "For work on the gateway-proxy project"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-03-22"
+    },
   ]
 }
