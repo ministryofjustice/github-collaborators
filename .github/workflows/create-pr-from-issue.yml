@@ -4,7 +4,7 @@ on:
     types: [opened]
 
 env:
-  RUBY_VERSION: 3.0.3
+  RUBY_VERSION: 3.1.0
 
 jobs:
   create-pr:
@@ -15,9 +15,19 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
       - run: bundle install
       - name: Check if pull request in a fork
         run: ruby bin/create-pr-from-issue.rb
         env:
           ISSUE: ${{ toJson(github.event.issue) }}
           ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Report failure to Slack
+        if: always()
+        uses: ravsamhq/notify-slack-action@v1
+        with:
+          status: ${{ job.status }}
+          notify_when: 'failure'
+          notification_title: 'Failed GitHub Action Run'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

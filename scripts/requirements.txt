@@ -1,4 +1,5 @@
-aiohttp==3.8.1
+aiohttp
 ghapi
-gql==3.0.0rc1
+gql
 websockets
+PyGithub

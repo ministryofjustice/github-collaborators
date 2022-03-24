@@ -1,12 +1,18 @@
 name: Report collaborators defined in Terraform who are not present in GitHub
 
 on:
+  schedule:
+    # Sunday 3pm
+    - cron: "0 15 * * 0"
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-        tags:
-          description: 'Placeholder'
-          required: false
+      tags:
+        description: 'Placeholder'
+        required: false
+
+env:
+  RUBY_VERSION: 3.1.0
 
 jobs:
   build:
@@ -14,7 +20,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
       - run: bin/compare-terraform-to-github.rb
         env:
           ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}

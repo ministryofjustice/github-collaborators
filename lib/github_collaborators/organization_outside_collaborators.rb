@@ -47,6 +47,10 @@ class GithubCollaborators
       end
     end
 
+    def is_an_org_member(user_login)
+      @organization.is_member?(user_login)
+    end
+
     private
 
     # Returns time of last commit
