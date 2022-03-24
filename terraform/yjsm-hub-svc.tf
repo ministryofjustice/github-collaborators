@@ -122,5 +122,15 @@ module "yjsm-hub-svc" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-02-11"
     },
+    {
+      github_user  = "griffinjuknps"
+      permission   = "admin"
+      name         = "Jeremy Griffin"
+      email        = "jeremy.griffin@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "YJAF developer. Needing access to the work on backend coding tasks"
+      added_by     = "<operations-engineering@digital.justice.gov.uk> on behalf of the YJB"
+      review_after = "2022-12-02"
+    }
   ]
 }
