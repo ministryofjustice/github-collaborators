@@ -1,6 +1,6 @@
-module "staff-device-management-intune-scripts" {
+module "staff-device-management-intune-scripts-prod" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-management-intune-scripts"
+  repository = "staff-device-management-intune-scripts-prod"
   collaborators = [
     {
       github_user  = "JimGregory-CplusC"
@@ -39,7 +39,7 @@ module "staff-device-management-intune-scripts" {
       email        = "lili.nedeleva@contentandcloud.com" #  Their email address
       org          = "Content and Cloud"                 #  The organisation/entity they belong to
       reason       = "PTTP Tech team"                    #  Why is this person being granted access?
-      added_by     = "jgregory@contentandcloud.com"      #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      added_by     = "matthew.white1@justice.gov.uk"      #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2022-12-31"                        #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
     {
@@ -49,7 +49,7 @@ module "staff-device-management-intune-scripts" {
       email        = "josh.calkin@contentandcloud.com" #  Their email address
       org          = "Content and Cloud"               #  The organisation/entity they belong to
       reason       = "PTTP Tech team"                  #  Why is this person being granted access?
-      added_by     = "jgregory@contentandcloud.com"    #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      added_by     = "matthew.white1@justice.gov.ukm"    #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2022-12-31"                      #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     }
   ]
