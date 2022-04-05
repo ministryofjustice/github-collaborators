@@ -1,6 +1,6 @@
-module "staff-device-management-intune-scripts" {
+module "staff-device-management-intune-scripts-prod" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-management-intune-scripts"
+  repository = "staff-device-management-intune-scripts-prod"
   collaborators = [
     {
       github_user  = "JimGregory-CplusC"

@@ -61,26 +61,6 @@ module "staff-device-management-windows10-apps" {
       reason       = "PTTP Tech team"                      #  Why is this person being granted access?
       added_by     = "matthew.white1@justice.gov.uk"       #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2022-12-31"                          #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
-    },
-    {
-      github_user  = "raghavkuchipudi"
-      permission   = "push"
-      name         = "Raghav Kuchipudi"
-      email        = "raghav.kuchipudi@contentandcloud.com"
-      org          = "Content and Cloud"
-      reason       = "New team member / PTTP tech team"
-      added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2022-12-31"
-    },
-    {
-      github_user  = "Liam-M-TA"
-      permission   = "push"
-      name         = "Liam Mann"
-      email        = "liam.mann@justice.gov.uk"
-      org          = "Through Technology"
-      reason       = "Data and Info Tech Arch"
-      added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2022-12-31"
     }
   ]
 }
