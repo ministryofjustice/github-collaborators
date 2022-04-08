@@ -43,7 +43,7 @@ module "hmpps-vcms" {
       review_after = "2022-05-21"                                                                   #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
     {
-      github_user  = "codesureuk"
+      github_user  = "CodeSureUK"
       permission   = "maintain"
       name         = "Toby Liddicoat"                                                               #  The name of the person behind github_user
       email        = "toby.liddicoat@civica.co.uk"                                                  #  Their email address
