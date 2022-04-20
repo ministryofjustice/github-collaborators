@@ -8,5 +8,5 @@ gem 'json'
 gem 'bundler-audit'
 gem 'simplecov', require: false, group: :test
 gem "bundler"
-gem "git"
+gem "git", ">= 1.11.0"
 gem "uuidtools"
