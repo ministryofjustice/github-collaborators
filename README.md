@@ -209,6 +209,6 @@ Run the tests with `bundle exec rspec`. This will generate a coverage report usi
 
 
 [Operations Engineering Reports]: https://github.com/ministryofjustice/operations-engineering-reports
-[triggering the action]: https://github.com/ministryofjustice/github-collaborators/actions?query=workflow%3A.github%2Fworkflows%2Fpost-data.yaml
+[triggering the action]: https://github.com/ministryofjustice/github-collaborators/actions/workflows/post-data.yaml
 [Terraform]: https://www.terraform.io/downloads.html
 [this report]: https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_collaborators
