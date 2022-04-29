@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 0
 
       - name: Python
-        uses: "actions/setup-python@v3"
+        uses: actions/setup-python@v3
 
       - name: Do check
         run: python3 scripts/check-user-email-domain.py ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
