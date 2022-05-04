@@ -83,6 +83,16 @@ module "bichard7-next" {
       review_after = "2022-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
     {
+      github_user  = "joe-fol"
+      permission   = "push"
+      name         = "Joe Folkard"                              #  The name of the person behind github_user
+      email        = "joe.folkard@madetech.com"                 #  Their email address
+      org          = "Madetech"                                 #  The organisation/entity they belong to
+      reason       = "CJSE Bichard Development"                 #  Why is this person being granted access?
+      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2022-12-31"                               #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
+    {
       github_user  = "SachinDangui"
       permission   = "pull"
       name         = "Sachin Dangui"                            #  The name of the person behind github_user
