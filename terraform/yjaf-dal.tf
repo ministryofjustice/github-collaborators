@@ -29,8 +29,8 @@ module "yjaf-dal" {
       email        = "tom.dover@northgateps.com"
       org          = "Northgate"
       reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2022-12-13"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-04-11"
     },
     {
       github_user  = "VasilDimitrov22"
