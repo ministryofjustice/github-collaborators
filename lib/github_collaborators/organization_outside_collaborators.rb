@@ -11,6 +11,10 @@ class GithubCollaborators
     def list
       # For every repository in MoJ GitHub organisation
       repositories.each_with_object([]) { |repo, arr|
+
+        # If a issue has been raised and a grace period has expired then close issue
+        GithubCollaborators::IssueClose.new.close_expired_issues(repo.name)
+
         # For all outside collaborators attached to a repository
         get_repository_outside_collaborators(repo.name).each do |user|
           tc = TerraformCollaborator.new(
