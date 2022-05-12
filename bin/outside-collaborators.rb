@@ -30,5 +30,6 @@ outside_collaborator_list.each do |x|
     GithubCollaborators::IssueCreator.new(params).create_review_date
   end
 end
+
 # Output for report
 puts output.to_json
