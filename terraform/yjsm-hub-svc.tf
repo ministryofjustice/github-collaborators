@@ -23,16 +23,6 @@ module "yjsm-hub-svc" {
       review_after = "2022-12-13"
     },
     {
-      github_user  = "brbaje-dev"
-      permission   = "admin"
-      name         = "Ben Bajek"
-      email        = "ben.bajek@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
-      review_after = "2022-12-13"
-    },
-    {
       github_user  = "henrycarteruk"
       permission   = "admin"
       name         = "Henry Carter"

@@ -19,13 +19,17 @@ output = {
 
 # Loop through the list of outside collaborators
 outside_collaborator_list.each do |x|
+  # If issue has been raised and a grace period has expired then close issue
+  params = {
+    owner: login,
+    repository: x["repository"],
+    github_user: x["login"]
+  }
+  # Look into removing expired issues
+  GithubCollaborators::IssueCreator.new(params).close_expired_issues
+
   # If issues include review date being within a month, create an issue on the repo
   if x["issues"].include? "Review after date is within a month"
-    params = {
-      owner: login,
-      repository: x["repository"],
-      github_user: x["login"]
-    }
     # Create issue
     GithubCollaborators::IssueCreator.new(params).create_review_date
   end
