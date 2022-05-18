@@ -10,7 +10,7 @@ module "mt940-writer" {
       org          = "External, formerly on Prisoner Money team"
       reason       = "To maintain open-source Python libraries used by MoJ and externally"
       added_by     = "igor.ushkarev@digital.justice.gov.uk"
-      review_after = "2022-06-17"
+      review_after = "2023-05-18"
     },
   ]
 }
