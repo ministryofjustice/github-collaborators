@@ -62,5 +62,25 @@ module "yjaf-transitions" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-03-24"
     },
+    {
+      github_user  = "craig-ashford"
+      permission   = "maintain"
+      name         = "Craig Ashford"
+      email        = "craig.ashford@necsws.com"
+      org          = "NEC SWS"
+      reason       = "New front end developer on YJAF team"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2022-11-19"
+    },
+    {
+      github_user  = "djv72"
+      permission   = "push"
+      name         = "David Vincent"
+      email        = "david.vincent@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
+      review_after = "2022-11-19"
+    },
   ]
 }
