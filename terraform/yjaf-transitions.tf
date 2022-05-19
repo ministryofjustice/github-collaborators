@@ -70,7 +70,7 @@ module "yjaf-transitions" {
       org          = "NEC SWS"
       reason       = "New front end developer on YJAF team"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2022-05-19"
+      review_after = "2022-11-19"
     },
   ]
 }
