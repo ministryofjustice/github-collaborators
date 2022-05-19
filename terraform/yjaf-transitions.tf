@@ -80,7 +80,7 @@ module "yjaf-transitions" {
       org          = "NEC Software Solutions"
       reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2022-06-18"
+      review_after = "2022-11-19"
     },
   ]
 }
