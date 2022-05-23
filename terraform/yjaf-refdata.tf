@@ -90,7 +90,7 @@ module "yjaf-refdata" {
       org          = "Youth Justice Board"
       reason       = "Technical Assurance Architect (managed service)"
       added_by     = "Jake Mulley (MOJ)"
-      review_after = "2022-06-18"
+      review_after = "2022-12-18"
     },
     {
       github_user  = "javaidarshadnec"
