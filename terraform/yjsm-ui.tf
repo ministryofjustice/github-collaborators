@@ -121,16 +121,6 @@ module "yjsm-ui" {
       reason       = "Part of the Northgate supplier team who are now NEC for the YJB YJAF system"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-02-11"
-    },
-    {
-      github_user  = "AndrewTRichards"
-      permission   = "admin"
-      name         = "Andrew Richards"
-      email        = "a.t.richards@btopenworld.com"
-      org          = "NEC"
-      reason       = "New starter (well returning Dev) working on all YJAF projects etc"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2023-05-26"
-    },
+    }
   ]
 }

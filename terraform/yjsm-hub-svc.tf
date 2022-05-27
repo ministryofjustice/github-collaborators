@@ -122,15 +122,5 @@ module "yjsm-hub-svc" {
       added_by     = "<operations-engineering@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2022-12-02"
     },
-    {
-      github_user  = "AndrewTRichards"
-      permission   = "admin"
-      name         = "Andrew Richards"
-      email        = "a.t.richards@btopenworld.com"
-      org          = "NEC"
-      reason       = "New starter (well returning Dev) working on all YJAF projects etc"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2023-05-26"
-    },
   ]
 }
