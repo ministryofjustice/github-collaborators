@@ -121,6 +121,6 @@ module "yjsm-ui" {
       reason       = "Part of the Northgate supplier team who are now NEC for the YJB YJAF system"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-02-11"
-    }
+    },
   ]
 }
