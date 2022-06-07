@@ -40,7 +40,7 @@ module "yjsm-ui" {
       org          = "NPS (northgate)"
       reason       = "Part of the Northgate supplier team for the YJB YJAF system"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2022-06-18"
+      review_after = "2022-12-18"
     },
     {
       github_user  = "ttipler"

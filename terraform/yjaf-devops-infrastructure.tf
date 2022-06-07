@@ -40,7 +40,7 @@ module "yjaf-devops-infrastructure" {
       org          = "NPS (northgate)"
       reason       = "Part of the Northgate supplier team for the YJB YJAF system"
       added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
-      review_after = "2022-06-18"
+      review_after = "2022-12-18"
     },
     {
       github_user  = "ttipler"
