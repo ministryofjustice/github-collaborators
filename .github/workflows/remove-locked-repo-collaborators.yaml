@@ -1,0 +1,28 @@
+name: Remove collaborators attached to locked repositories
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * 0-7"
+
+jobs:
+  remove-locked-repo-collaborators:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Remove collaborators attached to locked repositories
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+          architecture: 'x64'
+          cache: 'pip'
+      - run: python3 -m pip install -r scripts/requirements.txt
+      - run: python3 scripts/remove-collaborator-locked-repos.py ${{ secrets.ADMIN_GITHUB_TOKEN }} > output.txt
+      - name: Report failure to Slack
+        if: always()
+        uses: ravsamhq/notify-slack-action@v1
+        with:
+          status: ${{ job.status }}
+          notify_when: 'failure'
+          notification_title: 'Failed GitHub Action Run'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
