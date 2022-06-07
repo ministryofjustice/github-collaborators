@@ -43,16 +43,6 @@ module "yjsm-hub-svc" {
       review_after = "2022-07-31"
     },
     {
-      github_user  = "richardbradwell"
-      permission   = "admin"
-      name         = "Richard Bradwell"
-      email        = "richard.bradwell@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Currently working on system that talks to it therefore having access would help understanding"
-      added_by     = "Jo Harvey - joanna.harvey@necsws.com"
-      review_after = "2022-10-21"
-    },
-    {
       github_user  = "TomDover-NorthgatePS"
       permission   = "admin"
       name         = "Tom Dover"

@@ -43,16 +43,6 @@ module "yjaf-datateam" {
       review_after = "2022-08-27"
     },
     {
-      github_user  = "richardbradwell"
-      permission   = "admin"
-      name         = "Richard Bradwell"
-      email        = "richard.bradwell@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2022-10-05"
-    },
-    {
       github_user  = "craig-ashford"
       permission   = "maintain"
       name         = "Craig Ashford"
