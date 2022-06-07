@@ -63,16 +63,6 @@ module "yjaf-ui" {
       review_after = "2022-12-18"
     },
     {
-      github_user  = "richardbradwell"
-      permission   = "admin"
-      name         = "Richard Bradwell"
-      email        = "richard.bradwell@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "New full stack developer, needs access to repos for coding tasks"
-      added_by     = "Jo Harvey <joanna.harvey@necsws.com"
-      review_after = "2022-05-10"
-    },
-    {
       github_user  = "ttipler"
       permission   = "admin"
       name         = "Thomas Tipler"

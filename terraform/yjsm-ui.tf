@@ -83,16 +83,6 @@ module "yjsm-ui" {
       review_after = "2022-12-12"
     },
     {
-      github_user  = "richardbradwell"
-      permission   = "admin"
-      name         = "Richard Bradwell"
-      email        = "richard.bradwell@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Developers on YJSM need access to amend the UI"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2022-12-12"
-    },
-    {
       github_user  = "craig-ashford"
       permission   = "admin"
       name         = "Craig Ashford"
