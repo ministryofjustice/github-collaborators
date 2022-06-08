@@ -34,6 +34,16 @@ module "hmpps-vcms" {
       review_after = "2022-05-21"                                                                   #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
     {
+      github_user  = "ahmedwaqaralam"
+      permission   = "maintain"
+      name         = "Ahmed Alam"                                                                        #  The name of the person behind github_user
+      email        = "ahmed.alam@civica.co.uk"                                                           #  Their email address
+      org          = "Civica"                                                                            #  The organisation/entity they belong to
+      reason       = "Civica developer that helps the development of the Victims Case Management System" #  Why is this person being granted access?
+      added_by     = "Probation Infrastructure AWS Team, awssupportteam@digital.justice.gov.uk"          #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2022-11-21"                                                                        #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
+    {
       github_user  = "CodeSureUK"
       permission   = "maintain"
       name         = "Toby Liddicoat"                                                               #  The name of the person behind github_user
