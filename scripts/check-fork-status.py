@@ -1,17 +1,15 @@
 # It is VERY important that the repo setting Actions > General > Fork pull request workflows from outside collaborators is set
 # to "Require approval for first-time contributors"
+import os
 import sys
 import time
 from github import Github
 
-oauth_token = 0
-pr_json_data = None
+pr_json_data = os.getenv("PR_DATA")
+oauth_token = os.getenv("TOKEN")
 
-if len(sys.argv) == 3:
-    pr_json_data = sys.argv[1]
-    oauth_token = sys.argv[2]
-else:
-    print("Missing a script input parameter")
+if pr_json_data is None or oauth_token is None:
+    print("Script input parameter is None")
     sys.exit()
 
 comment_message = """
