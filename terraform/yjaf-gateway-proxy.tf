@@ -94,7 +94,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "RobGibsonCapita"
-      permission   = "read"
+      permission   = "pull"
       name         = "Rob Gibson"
       email        = "Robert.gibson2@capita.com"
       org          = "Capita"
@@ -104,7 +104,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "RichardWheatleyCapita"
-      permission   = "read"
+      permission   = "pull"
       name         = "Richard Wheatley"
       email        = "richard.wheatley2@capita.com"
       org          = "Capita"
@@ -114,7 +114,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "kieran-tanner"
-      permission   = "read"
+      permission   = "pull"
       name         = "Kieran Tanner"
       email        = "kieran.tanner@oneadvanced.com"
       org          = "OneAdvanced"
@@ -124,7 +124,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "paulfitzgerald-advanced"
-      permission   = "read"
+      permission   = "pull"
       name         = "Paul Fitzgerald"
       email        = "paul.fitzgerald@oneadvanced.com"
       org          = "OneAdvanced"
@@ -134,7 +134,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "tmamedova"
-      permission   = "read"
+      permission   = "pull"
       name         = "Tamilla Medova"
       email        = "tamilla.mamedova@oneadvanced.com"
       org          = "OneAdvanced"
@@ -144,7 +144,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "vkolesnikovas"
-      permission   = "read"
+      permission   = "pull"
       name         = "Vidmantas Kolesnikovas"
       email        = "Vidmantas.Kolesnikovas@oneadvanced.com"
       org          = "OneAdvanced"
@@ -154,7 +154,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "BryanMaguireAdvanced"
-      permission   = "read"
+      permission   = "pull"
       name         = "Bryan Maguire"
       email        = "bryan.maguire@oneadvanced.com"
       org          = "OneAdvanced"
@@ -164,7 +164,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "Ahmedali-necsws"
-      permission   = "read"
+      permission   = "pull"
       name         = "Ahmed Ali"
       email        = "ahmed.ali@necsws.com"
       org          = "NEC"
@@ -174,7 +174,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "balpurewal"
-      permission   = "read"
+      permission   = "pull"
       name         = "Baldip Purewal"
       email        = "baldip.purewal@necsws.com"
       org          = "NEC"
@@ -184,7 +184,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "griffinjuknps"
-      permission   = "read"
+      permission   = "pull"
       name         = "Jeremy Griffin"
       email        = "jeremy.griffin@necsws.com"
       org          = "NEC"
@@ -194,7 +194,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "suraj-necsws"
-      permission   = "read"
+      permission   = "pull"
       name         = "Sraj Misal"
       email        = "suraj.misal@necsws.com"
       org          = "NEC"
@@ -204,7 +204,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "HowieDouglasAccessGroup"
-      permission   = "read"
+      permission   = "pull"
       name         = "Howie Douglas"
       email        = "howie.douglas@theaccessgroup.com"
       org          = "AccessGroup"
