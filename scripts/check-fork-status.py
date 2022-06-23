@@ -34,7 +34,9 @@ def run():
         if pr_is_fork:
             try:
                 gh = Github(oauth_token)
-                repo = gh.get_repo(pr_json_data["head"]["repo"]["name"])
+                repo_name = "ministryofjustice/" + \
+                    pr_json_data["head"]["repo"]["name"]
+                repo = gh.get_repo(repo_name)
                 pull = repo.get_pull(pr_json_data["number"])
                 pull.create_issue_comment(comment_message)
                 # Delay for GH API
