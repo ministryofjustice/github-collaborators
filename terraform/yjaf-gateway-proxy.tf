@@ -92,5 +92,125 @@ module "yjaf-gateway-proxy" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-05-26"
     },
+    {
+      github_user  = "RobGibsonCapita"
+      permission   = "pull"
+      name         = "Rob Gibson"
+      email        = "Robert.gibson2@capita.com"
+      org          = "Capita"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
+    {
+      github_user  = "RichardWheatleyCapita"
+      permission   = "pull"
+      name         = "Richard Wheatley"
+      email        = "richard.wheatley2@capita.com"
+      org          = "Capita"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
+    {
+      github_user  = "kieran-tanner"
+      permission   = "pull"
+      name         = "Kieran Tanner"
+      email        = "kieran.tanner@oneadvanced.com"
+      org          = "OneAdvanced"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
+    {
+      github_user  = "paulfitzgerald-advanced"
+      permission   = "pull"
+      name         = "Paul Fitzgerald"
+      email        = "paul.fitzgerald@oneadvanced.com"
+      org          = "OneAdvanced"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
+    {
+      github_user  = "tmamedova"
+      permission   = "pull"
+      name         = "Tamilla Medova"
+      email        = "tamilla.mamedova@oneadvanced.com"
+      org          = "OneAdvanced"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
+    {
+      github_user  = "vkolesnikovas"
+      permission   = "pull"
+      name         = "Vidmantas Kolesnikovas"
+      email        = "Vidmantas.Kolesnikovas@oneadvanced.com"
+      org          = "OneAdvanced"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
+    {
+      github_user  = "BryanMaguireAdvanced"
+      permission   = "pull"
+      name         = "Bryan Maguire"
+      email        = "bryan.maguire@oneadvanced.com"
+      org          = "OneAdvanced"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
+    {
+      github_user  = "Ahmedali-necsws"
+      permission   = "pull"
+      name         = "Ahmed Ali"
+      email        = "ahmed.ali@necsws.com"
+      org          = "NEC"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
+    {
+      github_user  = "balpurewal"
+      permission   = "pull"
+      name         = "Baldip Purewal"
+      email        = "baldip.purewal@necsws.com"
+      org          = "NEC"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
+    {
+      github_user  = "griffinjuknps"
+      permission   = "pull"
+      name         = "Jeremy Griffin"
+      email        = "jeremy.griffin@necsws.com"
+      org          = "NEC"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
+    {
+      github_user  = "suraj-necsws"
+      permission   = "pull"
+      name         = "Sraj Misal"
+      email        = "suraj.misal@necsws.com"
+      org          = "NEC"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
+    {
+      github_user  = "HowieDouglasAccessGroup"
+      permission   = "pull"
+      name         = "Howie Douglas"
+      email        = "howie.douglas@theaccessgroup.com"
+      org          = "AccessGroup"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-23"
+    },
   ]
 }
