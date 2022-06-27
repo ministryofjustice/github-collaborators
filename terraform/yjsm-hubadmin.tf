@@ -122,5 +122,15 @@ module "yjsm-hubadmin" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-05-26"
     },
+    {
+      github_user  = "vikasnecsws"
+      permission   = "admin"
+      name         = "Vikas Omar"
+      email        = "vikas.omar@necsws.com"
+      org          = "NEC"
+      reason       = "New starter working on YJAF projects"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-01-27"
+    },
   ]
 }
