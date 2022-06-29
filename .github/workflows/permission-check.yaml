@@ -1,0 +1,16 @@
+name: Ensure PRs are using the correct permission tags from Terraform
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths: 'terraform/**'
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: main
+      - run: scripts/permission-check.sh
