@@ -1,7 +1,7 @@
 name: Ensure PRs are using the correct permission tags from Terraform
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
       - main
     paths: 'terraform/**'
