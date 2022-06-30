@@ -4,7 +4,7 @@ module "bai2" {
   collaborators = [
     {
       github_user  = "ibrechin"
-      permission   = "admin"
+      permission   = "read"
       name         = "Ian Brechin"
       email        = "ian.brechin@gmail.com"
       org          = "External, formerly on Prisoner Money team"
