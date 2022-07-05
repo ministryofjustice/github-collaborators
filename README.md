@@ -1,6 +1,5 @@
 [![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=for-the-badge&logo=github&label=MoJ%20Compliant&query=%24.data%5B%3F%28%40.name%20%3D%3D%20%22github-collaborators%22%29%5D.status&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fgithub_repositories)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_repositories#github-collaborators "Link to report")
 
-
 # GitHub Outside Collaborators
 
 Manage MoJ GitHub Organisation outside collaborators via code.
@@ -23,21 +22,21 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 
 ## How it works
 
-* The `terraform/` directory contains a file per repository that has collaborators, defining the collaboration with metadata. The name of the file is the repository name with any `.` characters replaced with `-` to render the name acceptable for terraform. i.e. the file for repository `foo.bar` will be `terraform/foo-bar.tf`
+- The `terraform/` directory contains a file per repository that has collaborators, defining the collaboration with metadata. The name of the file is the repository name with any `.` characters replaced with `-` to render the name acceptable for terraform. i.e. the file for repository `foo.bar` will be `terraform/foo-bar.tf`
 
-* Github actions run `terraform plan` and `terraform apply` to keep the collaborations in GitHub in sync with the terraform source code
-* The `terraform plan` and `terraform apply` use the Terraform module [github_repository_collaborator](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_collaborator) to add Outside Collaborators, who are defined in the terraform source code, to the MoJ Github Organisation repositories.
-* Ruby code in the `bin/` and `lib/` directories (with unit tests in the `spec/` directory) queries GitHub via the GraphQL API and retrieves all the collaborator relationships which exist
-* A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are included in a JSON report which is the basis for [this report].
-* A utility script will import existing outside collaborators from specified github repositories, create the corresponding terraform code, and import into terraform state
+- Github actions run `terraform plan` and `terraform apply` to keep the collaborations in GitHub in sync with the terraform source code
+- The `terraform plan` and `terraform apply` use the Terraform module [github_repository_collaborator](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_collaborator) to add Outside Collaborators, who are defined in the terraform source code, to the MoJ Github Organisation repositories.
+- Ruby code in the `bin/` and `lib/` directories (with unit tests in the `spec/` directory) queries GitHub via the GraphQL API and retrieves all the collaborator relationships which exist
+- A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are included in a JSON report which is the basis for [this report].
+- A utility script will import existing outside collaborators from specified github repositories, create the corresponding terraform code, and import into terraform state
 
 ## Removing collaborators
 
-* If the collaborator is defined in terraform code
+- If the collaborator is defined in terraform code
 
 Raise and merge a PR removing the collaborator from the list of collaborators in the terraform source code file for the repository.
 
-* If the collaborator is not defined in terraform code
+- If the collaborator is not defined in terraform code
 
 This will be the case if access was granted by a repository administrator via the github UI.
 
@@ -130,22 +129,23 @@ terraform import module.testing-outside-collaborators.github_repository_collabor
 
 ## Pre-requisites
 
-* [Terraform] 0.13+
+- [Terraform] 0.13+
 
 ### Environment Variables
 
-* `ADMIN_GITHUB_TOKEN` must contain a GitHub personal access token (PAC) enabled for MoJ SSO, with the following scopes:
-  * admin:org
-  * repo
-  * read:user
-  * user:email
+- `ADMIN_GITHUB_TOKEN` must contain a GitHub personal access token (PAC) enabled for MoJ SSO, with the following scopes:
 
-* `OPERATIONS_ENGINEERING_REPORTS_API_KEY` must contain the API key required to POST data to the [Operations Engineering Reports] web application.
-* `OPS_ENG_REPORTS_URL` must contain the URL of the [Operations Engineering Reports] web application endpoint to which the generated JSON data should be POSTed.
+  - admin:org
+  - repo
+  - read:user
+  - user:email
 
-* `TERRAFORM` must define the terraform executable (e.g. `/usr/local/bin/terraform0.13.5`)
+- `OPERATIONS_ENGINEERING_REPORTS_API_KEY` must contain the API key required to POST data to the [Operations Engineering Reports] web application.
+- `OPS_ENG_REPORTS_URL` must contain the URL of the [Operations Engineering Reports] web application endpoint to which the generated JSON data should be POSTed.
 
-* `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` - credentials with access to the S3 bucket holding the terraform state file
+- `TERRAFORM` must define the terraform executable (e.g. `/usr/local/bin/terraform0.13.5`)
+
+- `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` - credentials with access to the S3 bucket holding the terraform state file
 
 See [env.example](./env.example) for more more information.
 
@@ -165,7 +165,7 @@ You can also use the `bin/post-data.sh` script to generate and POST the JSON dat
 
 #### Caveats
 
-* Does not report any outside collaborators who have not yet accepted their invitation to collaborate. Pending collaborators are not reported by the github graphql API.
+- Does not report any outside collaborators who have not yet accepted their invitation to collaborate. Pending collaborators are not reported by the github graphql API.
 
 ### `scripts/compare-terraform-to-github.py`
 
@@ -173,7 +173,7 @@ Outputs all outside collaborators who are defined in the terraform code from thi
 
 #### Caveats
 
-* This script requires a variety of permissions most users do not have - use the `workflows/report-terraform-difference.yml` within GitHub actions if you do not have these permissions.
+- This script requires a variety of permissions most users do not have - use the `workflows/report-terraform-difference.yml` within GitHub actions if you do not have these permissions.
 
 ### `bin/list-repositories.rb`
 
@@ -207,8 +207,7 @@ Make sure you have `bundler` installed (`gem install bundler` if not). Run `bund
 
 Run the tests with `bundle exec rspec`. This will generate a coverage report using simplecov. You can see it by running `open coverage/index.html`
 
-
-[Operations Engineering Reports]: https://github.com/ministryofjustice/operations-engineering-reports
+[operations engineering reports]: https://github.com/ministryofjustice/operations-engineering-reports
 [triggering the action]: https://github.com/ministryofjustice/github-collaborators/actions/workflows/post-data.yaml
-[Terraform]: https://www.terraform.io/downloads.html
+[terraform]: https://www.terraform.io/downloads.html
 [this report]: https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_collaborators
