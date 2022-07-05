@@ -3,8 +3,8 @@
 import subprocess
 import sys
 
-base_git_sha=sys.argv[1]
-branch_git_sha=sys.argv[2]
+base_git_sha = sys.argv[1]
+branch_git_sha = sys.argv[2]
 
 # print(base_git_sha[0:7])
 # print(branch_git_sha[0:7])
@@ -21,7 +21,7 @@ if ps.stdout != "":
         grep_output = subprocess.check_output(('grep', '+      added_by'), stdin=ps.stdout, text=True)
     except:
         # Grep didn't find an 'added_by' line, check finished.
-        print ("Check N/A")
+        print("Check N/A")
         sys.exit(0)
     else:
 
@@ -36,7 +36,7 @@ if ps.stdout != "":
 
         # The check for no email symbols
         if num_email_symbols == 0 :
-            print ("Check Failed: No email domains discovered in the 'added_by' line of a .tf file. Expected @digital.justice.gov.uk or @justice.gov.uk")
+            print("Check Failed: No email domains discovered in the 'added_by' line of a .tf file. Expected @digital.justice.gov.uk or @justice.gov.uk")
             sys.exit(1)
 
         # Count the number of 'digital.justice.gov.uk' email domains
@@ -49,7 +49,7 @@ if ps.stdout != "":
 
         # Ensure the number of discovered expected email addresses matches the number of discovered email symbols
         if num_email_symbols != (digital_justice_emails_found + justice_emails_found) :
-            print ("Check Failed: The expected email domains that should be used in the 'added_by' line of a .tf file are @digital.justice.gov.uk or @justice.gov.uk")
+            print("Check Failed: The expected email domains that should be used in the 'added_by' line of a .tf file are @digital.justice.gov.uk or @justice.gov.uk")
             sys.exit(1)
 
         # Count the number of added_by lines
@@ -58,13 +58,13 @@ if ps.stdout != "":
 
         # Ensure the number of changed lines matches the number of discovered email symbols
         if num_changed_lines != (digital_justice_emails_found + justice_emails_found) :
-            print ("Check Failed: There is a missing email domain on the 'added_by' line of a .tf file. Expected @digital.justice.gov.uk or @justice.gov.uk")
-            sys.exit(1)          
+            print("Check Failed: There is a missing email domain on the 'added_by' line of a .tf file. Expected @digital.justice.gov.uk or @justice.gov.uk")
+            sys.exit(1)
 
         # Check finished.
-        print ("Check Passed")
+        print("Check Passed")
         sys.exit(0)
 else:
     # No git diff result, check finished.
-    print ("Check N/A")
+    print("Check N/A")
     sys.exit(0)
