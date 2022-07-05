@@ -16,5 +16,5 @@ jobs:
         with:
           python-version: "3.10"
       - run: |
-          python3 -m pip install -r scripts/python/requirements.txt
+          python3 -m pip install -r scripts/requirements.txt
           python3 scripts/compare-terraform-to-github.py ${{ secrets.ADMIN_GITHUB_TOKEN }}
