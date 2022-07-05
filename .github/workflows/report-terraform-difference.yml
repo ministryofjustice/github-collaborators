@@ -1,0 +1,25 @@
+name: Report collaborators defined in Terraform who are not present in GitHub
+
+on:
+  schedule:
+    # Sunday 3pm
+    - cron: "0 15 * * 0"
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Placeholder'
+        required: false
+
+env:
+  RUBY_VERSION: 3.1.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - run: scripts/compare-terraform-to-github.py ${{ secrets.ADMIN_GITHUB_TOKEN }}
