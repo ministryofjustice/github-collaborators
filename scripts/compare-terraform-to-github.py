@@ -54,7 +54,6 @@ def get_terraform_repositories() -> list:
             filepath = "terraform/" + filename
             end = filename.find(".")
             repository_name = filename[:end]
-            print(filepath)
             with open(filepath) as f:
                 data = f.readlines()
             for line in data:
