@@ -11,9 +11,6 @@ on:
         description: 'Placeholder'
         required: false
 
-env:
-  RUBY_VERSION: 3.1.0
-
 jobs:
   build:
     runs-on: ubuntu-latest
