@@ -211,7 +211,7 @@ module "yjaf-gateway-proxy" {
       reason       = "3rd Party Access for network"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-01-23"
-     },
+    },
     {
       github_user  = "abaldwin-caci"
       permission   = "pull"
@@ -221,7 +221,7 @@ module "yjaf-gateway-proxy" {
       reason       = "3rd Party Access for network"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-02-06"
-     },
+    },
     {
       github_user  = "SCHUNGCACI"
       permission   = "pull"
@@ -231,7 +231,7 @@ module "yjaf-gateway-proxy" {
       reason       = "3rd Party Access for network"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-02-06"
-     },
+    },
     {
       github_user  = "adcouth"
       permission   = "pull"
