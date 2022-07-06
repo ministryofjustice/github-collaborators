@@ -211,6 +211,36 @@ module "yjaf-gateway-proxy" {
       reason       = "3rd Party Access for network"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-01-23"
+     },
+    {
+      github_user  = "abaldwin-caci"
+      permission   = "pull"
+      name         = "Andrew Baldwin"
+      email        = "abaldwin@caci.co.uk"
+      org          = "CICA"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-02-06"
+     },
+    {
+      github_user  = "SCHUNGCACI"
+      permission   = "pull"
+      name         = "Sai Chung"
+      email        = "schung@caci.co.uk"
+      org          = "CICA"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-02-06"
+     },
+    {
+      github_user  = "adcouth"
+      permission   = "pull"
+      name         = "Anly DCouth"
+      email        = "adcouth@caci.co.uk"
+      org          = "CICA"
+      reason       = "3rd Party Access for network"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-02-06"
     },
   ]
 }
