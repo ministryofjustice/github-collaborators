@@ -74,7 +74,7 @@ module "bichard7-next-user-service" {
     },
     {
       github_user  = "jaskaransarkaria"
-      permission   = "push"
+      permission   = "admin"
       name         = "Jazz Sarkaria"                            #  The name of the person behind github_user
       email        = "jazz.sarkaria@madetech.com"               #  Their email address
       org          = "Madetech"                                 #  The organisation/entity they belong to
