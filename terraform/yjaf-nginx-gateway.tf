@@ -99,7 +99,7 @@ module "yjaf-nginx-gateway" {
       email        = "vasil.dimitrov@northgateps.com"
       org          = "NPS (northgate)"
       reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2022-12-18"
     },
   ]
