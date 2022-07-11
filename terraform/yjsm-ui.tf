@@ -33,16 +33,6 @@ module "yjsm-ui" {
       review_after = "2022-12-13"
     },
     {
-      github_user  = "djv72"
-      permission   = "admin"
-      name         = "David Vincent"
-      email        = "David.Vincent@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk"
-      review_after = "2022-12-18"
-    },
-    {
       github_user  = "ttipler"
       permission   = "admin"
       name         = "Thomas Tipler"
