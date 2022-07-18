@@ -24,7 +24,6 @@ end
 ############################################################
 
 remove_collaborator(
-  "repository" => "#{ENV.fetch("REPO")}",
-  "login" => "#{ENV.fetch("USERNAME")}",
+  "repository" => ENV.fetch("REPO").to_s,
+  "login" => ENV.fetch("USERNAME").to_s
 )
-
