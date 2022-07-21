@@ -40,7 +40,7 @@ module "yjaf-serious-incidents" {
       org          = "NEC"
       reason       = "Access is needed for development of a new feature for yjaf"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2023-05-25"
+      review_after = "2023-07-21"
     },
     {
       github_user  = "craig-ashford"
