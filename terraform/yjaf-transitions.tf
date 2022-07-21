@@ -40,7 +40,7 @@ module "yjaf-transitions" {
       org          = "NEC SWS"
       reason       = "Working on pipeline for deployment of microservice"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2023-03-24"
+      review_after = "2023-07-21"
     },
     {
       github_user  = "gregi2n"

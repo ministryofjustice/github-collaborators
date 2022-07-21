@@ -60,7 +60,7 @@ module "yjaf-views" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "Greg Whiting - greg.whiting@northgateps.com"
-      review_after = "2022-07-31"
+      review_after = "2023-07-21"
     },
     {
       github_user  = "jondent"
