@@ -83,7 +83,7 @@ module "modernisation-platform-environments" {
       review_after = "2022-11-01"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
     {
-      github_user  = "tom-whi"
+      github_user  = "Tom-Whi"
       permission   = "push"
       name         = "Tom Whiteley"                                                                                #  The name of the person behind github_user
       email        = "Tom.Whiteley@roctechnologies.com"                                                            #  Their email address
