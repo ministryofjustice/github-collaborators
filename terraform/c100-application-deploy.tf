@@ -4,7 +4,7 @@ module "c100-application-deploy" {
   collaborators = [
     {
       github_user  = "timja"
-      permission   = "write"
+      permission   = "push"
       name         = "Tim Jacomb"                         # The name of the person behind github_user
       email        = "tim.jacomb@hmcts.net"               # Their email address
       org          = "HMCTS"                              # The organisation/entity they belong to
