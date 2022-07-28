@@ -1,4 +1,4 @@
-name: Ensure PRs are using the correct permission tags from Terraform
+name: Check correct permission tags are used in Terraform files
 on:
   workflow_dispatch:
   pull_request:
