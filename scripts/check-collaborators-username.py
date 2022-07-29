@@ -1,44 +1,50 @@
-import json
 import requests
 import sys
 from github import Github
 
-if len(sys.argv) == 3:
+if len(sys.argv) == 4:
     # Get the GH Action token
-    base_branch_sha = sys.argv[1]
-    head_branch_sha = sys.argv[2]
+    oauth_token = sys.argv[1]
+    base_branch_sha = sys.argv[2]
+    head_branch_sha = sys.argv[3]
 else:
     print("Missing a script input parameter")
     sys.exit()
 
 
-def get_git_diff():
-    # Get the merge diff results using the git sha of the base branch and the new branch. The filter checks for files that have
-    # been added, modified, etc and filters out deleted changes. It will put the result into a pipe to be used with grep below.
-    ps = subprocess.Popen(('git', 'diff', '-U0', '--diff-filter=ACMRT', head_branch_sha[0:7], base_branch_sha[0:7]), stdout=subprocess.PIPE)
-    ps.wait()
-    # The diff will return a string value if there were changes.
-    if ps.stdout != "":
-        # Need a try exception block here because grep returns a negative result if it doesn't find the expected value.
-        try:
-            # Look for the 'added_by' line in the diff results
-            grep_output = subprocess.check_output(('grep', 'github_user'), stdin=ps.stdout, text=True)
-        except:
-            # Grep didn't find an 'added_by' line, check finished.
-            print("Check N/A")
-            sys.exit(0)
-        else:
-            print(grep_output)
+def get_collaborator_names() -> list:
+    """Get the names of collaborators in the .tf files that changed in PR
+
+    Returns:
+        list: usernames of collaborators
+    """
+    collaborator_names = {""}
+    collaborator_names.pop()
+    with open("modified_files.txt") as f:
+        filenames = f.readlines()
+    for filename in filenames:
+        filename = filename[:filename.find("\n")]
+        with open(filename) as f:
+            lines = f.readlines()
+        for line in lines:
+            if 'github_user  = "' in line:
+                start = line.find('"')
+                start += 1
+                end = line.find('"', start)
+                username = line[start:end]
+                collaborator_names.add(username)
+    return list(set(collaborator_names))
 
 
 def run():
-    # git diff-tree -r --no-commit-id --name-only --diff-filter=ACMRT $base_branch_sha $head_branch_sha > modified_files.txt
-    get_git_diff()
-    username = "NickWalt01"
-    api_url = "https://api.github.com/users/" + username
-    response = requests.get(api_url)
-    if username in response.text:
-        print("found user")
+    collaborators = get_collaborator_names()
+    for collaborator in collaborators:
+        api_url = "https://api.github.com/users/" + collaborator
+        headers = {'Authorization': oauth_token}
+        response = requests.get(api_url, headers=headers)
+        if collaborator not in response.text:
+            print("User not found: " + collaborator)
+            sys.exit(1)
 
 
 print("Start")
