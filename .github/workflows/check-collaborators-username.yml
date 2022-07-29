@@ -21,4 +21,4 @@ jobs:
           git diff-tree -r --no-commit-id --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} > modified_files.txt
           chmod 755 modified_files.txt
           python3 -m pip install -r scripts/requirements.txt
-          python3 scripts/check-collaborators-username.py ${{ secrets.ADMIN_GITHUB_TOKEN }}
+          python3 scripts/check-collaborators-username.py ${{ secrets.GITHUB_TOKEN }}
