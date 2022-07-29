@@ -2,11 +2,9 @@ import requests
 import sys
 from github import Github
 
-if len(sys.argv) == 4:
+if len(sys.argv) == 2:
     # Get the GH Action token
     oauth_token = sys.argv[1]
-    base_branch_sha = sys.argv[2]
-    head_branch_sha = sys.argv[3]
 else:
     print("Missing a script input parameter")
     sys.exit()
