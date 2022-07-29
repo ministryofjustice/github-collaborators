@@ -1,0 +1,24 @@
+name: Check collaborators username within a PR
+
+on: pull_request
+
+jobs:
+  check-collaborators-username:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Do check
+        run: |
+          git diff-tree -r --no-commit-id --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} > modified_files.txt
+          chmod 755 modified_files.txt
+          python3 -m pip install -r scripts/requirements.txt
+          python3 scripts/check-collaborators-username.py ${{ secrets.GITHUB_TOKEN }}
