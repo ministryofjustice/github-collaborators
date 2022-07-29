@@ -21,16 +21,17 @@ def get_collaborator_names() -> list:
     with open("modified_files.txt") as f:
         filenames = f.readlines()
     for filename in filenames:
-        filename = filename[:filename.find("\n")]
-        with open(filename) as f:
-            lines = f.readlines()
-        for line in lines:
-            if 'github_user  = "' in line:
-                start = line.find('"')
-                start += 1
-                end = line.find('"', start)
-                username = line[start:end]
-                collaborator_names.add(username)
+        if ".tf" in filename:
+            filename = filename[:filename.find("\n")]
+            with open(filename) as f:
+                lines = f.readlines()
+            for line in lines:
+                if 'github_user  = "' in line:
+                    start = line.find('"')
+                    start += 1
+                    end = line.find('"', start)
+                    username = line[start:end]
+                    collaborator_names.add(username)
     return list(set(collaborator_names))
 
 
