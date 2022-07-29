@@ -11,7 +11,7 @@ if len(sys.argv) == 4:
     github_user = sys.argv[3]
 else:
     print("Missing a script input parameter")
-    sys.exit()
+    sys.exit(1)
 
 
 def print_stack_trace(message):
