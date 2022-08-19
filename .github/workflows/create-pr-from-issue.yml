@@ -24,7 +24,7 @@ jobs:
           ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Report failure to Slack
         if: always()
-        uses: ravsamhq/notify-slack-action@v1
+        uses: ravsamhq/notify-slack-action@v2
         with:
           status: ${{ job.status }}
           notify_when: 'failure'
