@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.8.1)
+      public_suffix (>= 2.0.2, < 6.0)
     bundler-audit (0.9.1)
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
@@ -10,9 +12,11 @@ GEM
     docile (1.4.0)
     erb (2.2.3)
       cgi
-    git (1.11.0)
+    git (1.12.0)
+      addressable (~> 2.8)
       rchardet (~> 1.8)
     json (2.6.2)
+    public_suffix (5.0.0)
     rchardet (1.8.0)
     rspec (3.11.0)
       rspec-core (~> 3.11.0)
