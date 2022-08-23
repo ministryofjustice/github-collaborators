@@ -91,6 +91,16 @@ module "modernisation-platform-environments" {
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform" #  Why is this person being granted access?
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"                  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2022-11-01"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
+    {
+      github_user  = "agilisys-agardner"
+      permission   = "push"
+      name         = "Andrew Gardener"                                                                             #  The name of the person behind github_user
+      email        = "andrew.gardner@agilisys.co.uk"                                                               #  Their email address
+      org          = "Agilisys"                                                                                    #  The organisation/entity they belong to
+      reason       = "Get access to data-and-insights-hub on Modernisation Platform"                               #  Why is this person being granted access?
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"                  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2023-02-23"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     }
   ]
 }
