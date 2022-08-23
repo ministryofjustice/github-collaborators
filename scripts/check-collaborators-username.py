@@ -36,6 +36,7 @@ def get_collaborator_names() -> list:
 
 
 def run():
+    cannot_find_user = False
     collaborators = get_collaborator_names()
     for collaborator in collaborators:
         api_url = "https://api.github.com/users/" + collaborator
@@ -43,7 +44,9 @@ def run():
         response = requests.get(api_url, headers=headers)
         if collaborator not in response.text:
             print("User not found: " + collaborator)
-            sys.exit(1)
+            cannot_find_user = True
+    if cannot_find_user:
+        sys.exit(1)
 
 
 print("Start")
