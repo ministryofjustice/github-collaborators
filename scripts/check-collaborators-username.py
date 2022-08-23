@@ -42,7 +42,7 @@ def run():
         api_url = "https://api.github.com/users/" + collaborator
         headers = {'Authorization': oauth_token}
         response = requests.get(api_url, headers=headers)
-        if collaborator.lower() not in response.text.lower(): 
+        if collaborator.lower() not in response.text.lower():
             print("User not found: " + collaborator)
             cannot_find_user = True
     if cannot_find_user:
