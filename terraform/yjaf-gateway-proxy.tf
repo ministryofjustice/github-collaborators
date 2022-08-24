@@ -40,7 +40,7 @@ module "yjaf-gateway-proxy" {
       org          = "NEC"
       reason       = "Need access to repo for coding tasks"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2022-08-09"
+      review_after = "2023-02-24"
     },
     {
       github_user  = "oliviergaubert"
