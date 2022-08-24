@@ -50,7 +50,7 @@ module "yjaf-devops-infrastructure" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "Greg Whiting - greg.whiting@northgateps.com"
-      review_after = "2022-07-31"
+      review_after = "2023-02-24"
     },
     {
       github_user  = "jondent"
@@ -61,16 +61,6 @@ module "yjaf-devops-infrastructure" {
       reason       = "Technical Assurance Architect (managed service)"
       added_by     = "Jake Mulley (MOJ)"
       review_after = "2022-12-18"
-    },
-    {
-      github_user  = "InFlamesForever"
-      permission   = "admin"
-      name         = "Richard Came"
-      email        = "richard.came@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "YJAF developer. Needing access to the work on BackEnd coding Tasks"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2022-08-27"
     },
     {
       github_user  = "AndrewTRichards"
