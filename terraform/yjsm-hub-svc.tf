@@ -63,16 +63,6 @@ module "yjsm-hub-svc" {
       review_after = "2022-12-18"
     },
     {
-      github_user  = "InFlamesForever"
-      permission   = "admin"
-      name         = "Richard Came"
-      email        = "richard.came@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Backend dev"
-      added_by     = "Joanna Harvey - joanna.harvey@necsws.com"
-      review_after = "2022-11-11"
-    },
-    {
       github_user  = "javaidarshadnec"
       permission   = "admin"
       name         = "Javaid Arshad"

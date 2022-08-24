@@ -63,16 +63,6 @@ module "yjsm-ui" {
       review_after = "2022-12-12"
     },
     {
-      github_user  = "InFlamesForever"
-      permission   = "admin"
-      name         = "Richard Came"
-      email        = "richard.came@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Developers on YJSM need access to amend the UI"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2022-12-12"
-    },
-    {
       github_user  = "craig-ashford"
       permission   = "admin"
       name         = "Craig Ashford"
