@@ -2,7 +2,7 @@ module "pfs-software-services_rdp" {
   source     = "./modules/repository-collaborators"
   repository = "pfs-software-services_rdp"
   collaborators = [
-       {
+    {
       github_user  = "SimonGivan"
       permission   = "admin"
       name         = "Simon Givan"                                                                         #  The name of the person behind github_user
