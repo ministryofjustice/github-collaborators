@@ -52,5 +52,15 @@ module "yjaf-datateam" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-05-26"
     },
+    {
+      github_user  = "javaidarshadnec"
+      permission   = "admin"
+      name         = "Javaid Arshad"
+      email        = "javaid.arshad@necsws.com"
+      org          = "NEC SWS"
+      reason       = "Requesting access so I can perhaps start sharing DB workload with Andrew"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-08-31"
+    },
   ]
 }
