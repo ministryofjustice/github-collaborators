@@ -3,7 +3,7 @@ module "pfs-software-services_terraform" {
   repository = "pfs-software-services_terraform"
   collaborators = [
 
-   
+
     {
       github_user  = "SimonGivan"
       permission   = "admin"
