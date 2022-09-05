@@ -15,7 +15,7 @@ module "staff-device-management-virtualdesktop" {
     {
       github_user  = "BenSnapeCC"
       permission   = "push"
-      name         = "Ben Snape"                #  The name of the person behind github_user
+      name         = "Ben Snape"                     #  The name of the person behind github_user
       email        = "ben.snape@contentandcloud.com" #  Their email address
       org          = "Content and Cloud"             #  The organisation/entity they belong to
       reason       = "PTTP Tech Team"                #  Why is this person being granted access?
