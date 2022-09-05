@@ -122,5 +122,15 @@ module "yjaf-transfers" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-06-07"
     },
+    {
+      github_user  = "angelanec"
+      permission   = "admin"
+      name         = "Angela Site"
+      email        = "angela.site@necsws.com"
+      org          = "NEC"
+      reason       = "YJAF (new developer)"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-09-01"
+    },
   ]
 }
