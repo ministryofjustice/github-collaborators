@@ -72,5 +72,15 @@ module "yjaf-datateam" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-06-07"
     },
+    {
+      github_user  = "angelanec"
+      permission   = "admin"
+      name         = "Angela Site"
+      email        = "angela.site@necsws.com"
+      org          = "NEC"
+      reason       = "Perform CRUD actions on YJAF"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2023-06-07"
+    },
   ]
 }
