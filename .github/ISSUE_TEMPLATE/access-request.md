@@ -39,7 +39,7 @@ Please supply all the requested information, so that your request can be process
 
 <!-- Reason why the outside collaborator needs access -->
 
-## Which MoJ team/person is responsible for this request? This must be someone with a "*.justice.gov.uk" email address.
+## Which MoJ team/person is responsible for this request? This must be someone with a "\*.justice.gov.uk" email address.
 
 This should be in the form `Awesome Team <awesome.team@digital.justice.gov.uk>`.
 
@@ -52,4 +52,3 @@ Team details are preferred, rather than individuals, to make it easier to follow
 Date after which this collaborator's access should be reviewed. This should be a date in the format: 2021-01-15, no more than one year into the future.
 
 <!-- Review date -->
-

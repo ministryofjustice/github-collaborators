@@ -1,6 +1,10 @@
 class GithubCollaborators
+  print_format = "%Y-%m-%d"
+  has_fail_status = "has fail status"
+  has_an_issue = "has an issue"
+
   describe TerraformCollaborator do
-    let(:review_date) { (Date.today + 32).strftime("%Y-%m-%d") }
+    let(:review_date) { (Date.today + 32).strftime(print_format) }
 
     let(:matthewtansini) {
       <<EOF
@@ -77,11 +81,11 @@ EOF
         }
       }
 
-      it "has fail status" do
+      it has_fail_status do
         expect(tc.status).to eq("fail")
       end
 
-      it "has an issue" do
+      it has_an_issue do
         expect(tc.issues).to eq(["Collaborator not defined in terraform"])
       end
 
@@ -92,26 +96,26 @@ EOF
 
     context "when review date is too far ahead" do
       let(:login) { "matthewtansini" }
-      let(:review_date) { (Date.today + 500).strftime("%Y-%m-%d") }
+      let(:review_date) { (Date.today + 500).strftime(print_format) }
 
-      it "has fail status" do
+      it has_fail_status do
         expect(tc.status).to eq("fail")
       end
 
-      it "has an issue" do
+      it has_an_issue do
         expect(tc.issues).to eq(["Review after date is more than a year in the future"])
       end
     end
 
     context "when review date has passed" do
       let(:login) { "matthewtansini" }
-      let(:review_date) { (Date.today - 10).strftime("%Y-%m-%d") }
+      let(:review_date) { (Date.today - 10).strftime(print_format) }
 
-      it "has fail status" do
+      it has_fail_status do
         expect(tc.status).to eq("fail")
       end
 
-      it "has an issue" do
+      it has_an_issue do
         expect(tc.issues).to eq(["Review after date has passed"])
       end
     end
@@ -153,7 +157,7 @@ EOF
         expect(tc.review_after).to be_nil
       end
 
-      it "has fail status" do
+      it has_fail_status do
         expect(tc.status).to eq("fail")
       end
 
@@ -200,11 +204,11 @@ EOF
 
       specify { expect(tc.exists?).to be(false) }
 
-      it "has fail status" do
+      it has_fail_status do
         expect(tc.status).to eq("fail")
       end
 
-      it "has an issue" do
+      it has_an_issue do
         expect(tc.issues).to eq(["Collaborator not defined in terraform"])
       end
 
@@ -220,7 +224,7 @@ EOF
         expect(tc.review_after).to be_nil
       end
 
-      it "has fail status" do
+      it has_fail_status do
         expect(tc.status).to eq("fail")
       end
     end

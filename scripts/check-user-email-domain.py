@@ -6,9 +6,6 @@ import sys
 base_git_sha = sys.argv[1]
 branch_git_sha = sys.argv[2]
 
-# print(base_git_sha[0:7])
-# print(branch_git_sha[0:7])
-
 # Get the merge diff results using the git sha of the base branch and the new branch. The filter checks for files that have
 # been added, modified, etc and filters out deleted changes. It will put the result into a pipe to be used with grep below.
 ps = subprocess.Popen(('git', 'diff', '-U0', '--diff-filter=ACMRT',

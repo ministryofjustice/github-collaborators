@@ -2,7 +2,7 @@ name: Create a Outside Collaborator Pull Request
 description: >-
   Creating an issue with this template will automatically create a valid pull
   request for an outside collaborator
-title: 'Please create an outside collaborator pull request '
+title: "Please create an outside collaborator pull request "
 labels:
   - collaborator
   - pr-create-issue
@@ -75,6 +75,6 @@ body:
     id: repositories
     attributes:
       label: repositories
-      description: 'Please add the repos you wish to add this user to, one per line'
+      description: "Please add the repos you wish to add this user to, one per line"
     validations:
       required: true

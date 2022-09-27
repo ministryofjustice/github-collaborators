@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   pull_request:
     types: [opened, edited, reopened, synchronize]
-    paths: 'terraform/**'
+    paths: "terraform/**"
 
 env:
   TERRAFORM: terraform
@@ -27,7 +27,7 @@ jobs:
         uses: ravsamhq/notify-slack-action@v2
         with:
           status: ${{ job.status }}
-          notify_when: 'failure'
-          notification_title: 'Failed GitHub Action Run'
+          notify_when: "failure"
+          notification_title: "Failed GitHub Action Run"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

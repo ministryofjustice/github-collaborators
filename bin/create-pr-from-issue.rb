@@ -2,12 +2,8 @@
 
 require_relative "../lib/github_collaborators"
 
-# Grab GitHub token
-token = ENV.fetch("ADMIN_GITHUB_TOKEN")
-
 # GitHub settings
 owner = "ministryofjustice"
-repository = "github-collaborators"
 
 # Creates a branch and commits all changed files
 # This probably deserves its own class but keeping it here for now until we need more major functionality in this area
@@ -26,16 +22,13 @@ def create_branch_for_pr
   g.checkout(branch_name)
 
   # Stage file
-  g.add(paths = "terraform/*")
+  g.add("terraform/*")
 
   # Commit
   g.commit("Pull request to add new outside collaborator")
 
   # Push
-  g.push(
-    remote = g.remote("origin"),
-    branch = branch_name
-  )
+  g.push(g.remote("origin"), branch_name)
 
   # Cleanup
   g.checkout("main")
@@ -61,7 +54,7 @@ def pull_hash(branch)
 end
 
 # Grab the new collaborators and insert them into file
-new_terraform_blocks = GithubCollaborators::TerraformBlockCreator.new(JSON.parse(ENV.fetch("ISSUE"))).insert
+GithubCollaborators::TerraformBlockCreator.new(JSON.parse(ENV.fetch("ISSUE"))).insert
 
 # Create branch and open PR
 params = {
@@ -71,4 +64,4 @@ params = {
   branch: create_branch_for_pr
 }
 
-GithubCollaborators::PullRequestCreator.new(params).create(pull_hash = pull_hash(params.fetch(:branch)))
+GithubCollaborators::PullRequestCreator.new(params).create(pull_hash(params.fetch(:branch)))
