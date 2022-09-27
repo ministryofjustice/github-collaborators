@@ -18,14 +18,14 @@ metadata:
   title: Github Outside Collaborators Reports Pipeline
   description: Pipeline that collects all GitHub Outside Collaborators and posts them to the Operations Engineering Reports site
   links:
-  - url: https://github.com/ministryofjustice/github-collaborators/blob/main/bin/post-data.sh
-    title: Pipeline code
+    - url: https://github.com/ministryofjustice/github-collaborators/blob/main/bin/post-data.sh
+      title: Pipeline code
 spec:
   owner: group:operations-engineering
   type: pipeline
   lifecycle: production
   system: system:github-collaborators
   dependsOn:
-  - system:ops-eng-reports
+    - system:ops-eng-reports
   consumesApis:
-  - api:ops-eng-reports-api
+    - api:ops-eng-reports-api

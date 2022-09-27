@@ -82,7 +82,7 @@ def repository_query(after_cursor=None, repo_name=None) -> gql:
     return gql(query)
 
 
-def fetch_repository_data(repository_name) -> list:
+def fetch_repository_data(repository_name) -> tuple:
     """A wrapper function to run a GraphQL query to get the list of outside collaborators of a repository and locked status
 
     Args:
@@ -162,7 +162,8 @@ def fetch_repositories() -> list:
         )
         time.sleep(1)
         repositories_list.append(
-            repository(repository_name, collaborators_list, is_repository_locked)
+            repository(repository_name, collaborators_list,
+                       is_repository_locked)
         )
 
     return repositories_list

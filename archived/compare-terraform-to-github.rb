@@ -35,14 +35,14 @@ repos.each do |repo|
   end
 
   if tc.length == 0
-    puts "====================================="
+    puts "=" * 37
     puts "Repository: #{repo.name}"
     puts "Number of Outside Collaborators: #{gc.length}"
     puts "These Outside Collaborator/s are not defined in Terraform:"
     gc.each do |gc_collaborator|
       puts gc_collaborator.fetch(:login)
     end
-    puts "====================================="
+    puts "=" * 37
     puts ""
   elsif gc.length != tc.length
 
@@ -95,17 +95,14 @@ repos.each do |repo|
 
       # Print all the repository outside collaborators if any exist
       if gc.length > 0
-        puts "-------------------------------------"
+        puts "-" * 37
         puts "The #{gc.length} Outside Collaborator/s for this repository are:"
         gc.each do |i|
           puts i.fetch(:login)
         end
-        puts "====================================="
-        puts ""
-      else
-        puts "====================================="
-        puts ""
       end
+      puts "=" * 37
+      puts ""
     end
   end
 end

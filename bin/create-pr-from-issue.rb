@@ -26,7 +26,7 @@ def create_branch_for_pr
   g.checkout(branch_name)
 
   # Stage file
-  g.add(paths = "terraform/*")
+  g.add("terraform/*")
 
   # Commit
   g.commit("Pull request to add new outside collaborator")

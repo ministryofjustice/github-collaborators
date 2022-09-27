@@ -89,7 +89,7 @@ def get_outside_collaborators() -> list:
     return usernames
 
 
-def get_github_repositories(terraform_repositories) -> Repository:
+def get_github_repositories(terraform_repositories) -> list:
     """Get the Github repositories data ie name, collaborators, pending invites
 
     Args:

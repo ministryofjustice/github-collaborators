@@ -20,4 +20,3 @@ class GithubCollaborators
     end
   end
 end
-
