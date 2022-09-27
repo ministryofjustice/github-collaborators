@@ -119,7 +119,7 @@ class GithubCollaborators
 
       @str ||= begin
         # extract all the "collaborators" lines from the terraform source
-        lines = @tfsource.split("\n").each_with_object([]) { |line, arr| arr << line if (line =~ / collaborators =/) .. (line =~ /]/); }
+        lines = @tfsource.split("\n").each_with_object([]) { |line, arr| arr << line if (line =~ / collaborators =/) .. (line =~ /]/); } # rubocop:disable Lint/FlipFlop
 
         # break into individual collaborator string chunks (plus some trailing junk)
         collabs = lines.join("\n").split("}")
@@ -131,7 +131,7 @@ class GithubCollaborators
 
     def get_value(val)
       collaborator_source.split("\n").grep(/#{val}\s+=/).each do |line|
-        if m = /#{val}.*"([^"]+?)"/.match(line)
+        if m = /#{val}.*"([^"]+?)"/.match(line) # rubocop:disable Lint/AssignmentInCondition
           return m[1]
         end
       end

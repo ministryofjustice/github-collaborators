@@ -31,7 +31,7 @@ class GithubCollaborators
               )
             )
           end
-          arr
+          arr # rubocop:disable Lint/Void
         end
       }
     end
