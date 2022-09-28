@@ -11,12 +11,6 @@ outside_collaborator_list = GithubCollaborators::OrganizationOutsideCollaborator
   base_url: base_url
 ).list
 
-# Prepare payload for report
-output = {
-  data: outside_collaborator_list,
-  updated_at: Time.now.strftime("%Y-%m-%d %H:%M:%S")
-}
-
 # Loop through the list of outside collaborators
 outside_collaborator_list.each do |x|
   # If issue has been raised and a grace period has expired then close issue
@@ -34,6 +28,3 @@ outside_collaborator_list.each do |x|
     GithubCollaborators::IssueCreator.new(params).create_review_date
   end
 end
-
-# Output for report
-puts output.to_json
