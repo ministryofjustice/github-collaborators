@@ -112,5 +112,15 @@ module "yjaf-ui" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-02-22"
     },
+    {
+      github_user  = "angelanec"
+      permission   = "admin"
+      name         = "Angela Site"
+      email        = "angela.site@necsws.com"
+      org          = "NEC"
+      reason       = "YJAF"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2022-12-28"
+    },
   ]
 }
