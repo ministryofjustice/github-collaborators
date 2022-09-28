@@ -43,16 +43,6 @@ module "yjsm-hub-svc" {
       review_after = "2023-07-21"
     },
     {
-      github_user  = "TomDover-NorthgatePS"
-      permission   = "admin"
-      name         = "Tom Dover"
-      email        = "tom.dover@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Tom is lead developer for this piece of work"
-      added_by     = "Joanna Harvey - joanna.harvey@necsws.com"
-      review_after = "2022-10-21"
-    },
-    {
       github_user  = "jondent"
       permission   = "push"
       name         = "Jon Dent"
