@@ -13,16 +13,6 @@ module "yjaf-transitions" {
       review_after = "2023-03-07"
     },
     {
-      github_user  = "TomDover-NorthgatePS"
-      permission   = "admin"
-      name         = "Tom Dover"
-      email        = "tom.dover@necsws.com"
-      org          = "NEC SWS"
-      reason       = "Working on transition project"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2023-03-07"
-    },
-    {
       github_user  = "ttipler"
       permission   = "admin"
       name         = "Thomas Tipler"
