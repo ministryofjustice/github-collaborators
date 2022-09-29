@@ -23,16 +23,6 @@ module "yjaf-ui" {
       review_after = "2022-12-13"
     },
     {
-      github_user  = "TomDover-NorthgatePS"
-      permission   = "admin"
-      name         = "Tom Dover"
-      email        = "tom.dover@northgateps.com"
-      org          = "Northgate"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
-      added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2022-12-13"
-    },
-    {
       github_user  = "oliviergaubert"
       permission   = "admin"
       name         = "Olivier Gaubert"
@@ -121,6 +111,16 @@ module "yjaf-ui" {
       reason       = "YJAF (new developer)"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-02-22"
+    },
+    {
+      github_user  = "angelanec"
+      permission   = "admin"
+      name         = "Angela Site"
+      email        = "angela.site@necsws.com"
+      org          = "NEC"
+      reason       = "YJAF"
+      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      review_after = "2022-12-28"
     },
   ]
 }
