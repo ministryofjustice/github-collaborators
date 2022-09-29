@@ -96,7 +96,7 @@ module "bichard7-next-infrastructure-docker-images" {
       github_user  = "donnyhyon"
       permission   = "push"
       name         = "Donnie Hyon"                              #  The name of the person behind github_user
-      email        = "donny.hyon@madetech.com"                 #  Their email address
+      email        = "donny.hyon@madetech.com"                  #  Their email address
       org          = "Madetech"                                 #  The organisation/entity they belong to
       reason       = "CJSE Bichard Development"                 #  Why is this person being granted access?
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
