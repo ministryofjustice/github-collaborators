@@ -53,7 +53,7 @@ repos.each do |repo|
         gc.push({
           login: tc_collaborator.login,
           login_url: nil,
-          permission: nil,
+          permission: nil
         })
 
       end

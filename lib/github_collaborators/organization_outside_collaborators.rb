@@ -26,7 +26,7 @@ class GithubCollaborators
               tc.to_hash.merge(
                 repo_url: repo.url,
                 login_url: user.url,
-                permission: user.permission,
+                permission: user.permission
               )
             )
           end
@@ -43,7 +43,7 @@ class GithubCollaborators
         {
           login: user.login,
           login_url: user.url,
-          permission: user.permission,
+          permission: user.permission
         }
       end
     end
