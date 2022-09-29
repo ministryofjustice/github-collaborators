@@ -14,11 +14,11 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: github-collaborators-reports-pipeline
-  title: Github Outside Collaborators Reports Pipeline
-  description: Pipeline that collects all GitHub Outside Collaborators and posts them to the Operations Engineering Reports site
+  name: github-collaborators-check
+  title: Github Outside Collaborators Check
+  description: Pipeline that checks GitHub Outside Collaborators, removes unknown collaborators and raise GitHub repository issues.
   links:
-    - url: https://github.com/ministryofjustice/github-collaborators/blob/main/bin/post-data.sh
+    - url: https://github.com/ministryofjustice/github-collaborators/blob/main/bin/outside-collaborators-check.sh
       title: Pipeline code
 spec:
   owner: group:operations-engineering

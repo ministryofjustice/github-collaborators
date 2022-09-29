@@ -26,8 +26,7 @@ class GithubCollaborators
               tc.to_hash.merge(
                 repo_url: repo.url,
                 login_url: user.url,
-                permission: user.permission,
-                last_commit: last_commit(repo.name, user.login, user.id)
+                permission: user.permission
               )
             )
           end
@@ -37,15 +36,14 @@ class GithubCollaborators
     end
 
     # Returns the outside collaborators for a certain repository, sample response:
-    # {:login=>"benashton", :login_url=>"https://github.com/benashton", :permission=>"admin", :last_commit=>nil}
+    # {:login=>"benashton", :login_url=>"https://github.com/benashton", :permission=>"admin"}
     # repo_name: string
     def for_repository(repo_name)
       get_repository_outside_collaborators(repo_name).map do |user|
         {
           login: user.login,
           login_url: user.url,
-          permission: user.permission,
-          last_commit: last_commit(repo_name, user.login, user.id)
+          permission: user.permission
         }
       end
     end
@@ -55,18 +53,6 @@ class GithubCollaborators
     end
 
     private
-
-    # Returns time of last commit
-    # username: string
-    # repo: string
-    def last_commit(repo, username, id)
-      LastCommit.new(
-        org: login,
-        login: username,
-        repo: repo,
-        id: id
-      ).date
-    end
 
     # Returns a list of all active repositories as Repositories objects (does not include locked, archived etc)
     def repositories

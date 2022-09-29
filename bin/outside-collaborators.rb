@@ -11,29 +11,36 @@ outside_collaborator_list = GithubCollaborators::OrganizationOutsideCollaborator
   base_url: base_url
 ).list
 
-# Prepare payload for report
-output = {
-  data: outside_collaborator_list,
-  updated_at: Time.now.strftime("%Y-%m-%d %H:%M:%S")
-}
-
 # Loop through the list of outside collaborators
 outside_collaborator_list.each do |x|
-  # If issue has been raised and a grace period has expired then close issue
   params = {
     owner: login,
     repository: x["repository"],
     github_user: x["login"]
   }
-  # Look into removing expired issues
+
+  # If issue has been raised and a grace period has expired then close issue
   GithubCollaborators::IssueCreator.new(params).close_expired_issues
 
-  # If issues include review date being within a month, create an issue on the repo
+  # Create an issue on the repo when "Review after date is within a month" is true
   if x["issues"].include? "Review after date is within a month"
     # Create issue
     GithubCollaborators::IssueCreator.new(params).create_review_date
   end
-end
 
-# Output for report
-puts output.to_json
+  # Remove unknown collaborators
+  if x["defined_in_terraform"] == false
+    puts "Removing collaborator #{x["login"]} from repository #{x["repository"]}"
+    # We must create the issue before removing access, because the issue is
+    # assigned to the removed collaborator, so that they (hopefully) get a
+    # notification about it.
+    GithubCollaborators::IssueCreator.new(params).create
+    sleep 3
+    GithubCollaborators::AccessRemover.new(params).remove
+  end
+
+  # To Do: Add code here to create slack alert if 'Review after date has passed' is true (once)
+  # To Do: Create a PR with the user removed from the repos when 'Review after date has passed' is true (once)
+  # To Do: Add code here to create slack alert if 'Review after date is within a month' is true (once)
+  # To Do: Add code here to create slack alert if 'Review after date is within a week' is true (once)
+end

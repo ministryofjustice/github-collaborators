@@ -26,9 +26,9 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 
 - Github actions run `terraform plan` and `terraform apply` to keep the collaborations in GitHub in sync with the terraform source code
 - The `terraform plan` and `terraform apply` use the Terraform module [github_repository_collaborator](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_collaborator) to add Outside Collaborators, who are defined in the terraform source code, to the MoJ Github Organisation repositories.
-- Ruby code in the `bin/` and `lib/` directories (with unit tests in the `spec/` directory) queries GitHub via the GraphQL API and retrieves all the collaborator relationships which exist
-- A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are included in a JSON report which is the basis for [this report].
-- A utility script will import existing outside collaborators from specified github repositories, create the corresponding terraform code, and import into terraform state
+- Ruby code in the `bin/` and `lib/` directories (with unit tests in the `spec/` directory) queries GitHub via the GraphQL API and retrieves all the collaborator relationships which exist.
+- A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are removed from found repositories.
+- A utility script will import existing outside collaborators from specified github repositories, create the corresponding terraform code, and import into terraform state.
 
 ## Removing collaborators
 
@@ -140,9 +140,6 @@ terraform import module.testing-outside-collaborators.github_repository_collabor
   - read:user
   - user:email
 
-- `OPERATIONS_ENGINEERING_REPORTS_API_KEY` must contain the API key required to POST data to the [Operations Engineering Reports] web application.
-- `OPS_ENG_REPORTS_URL` must contain the URL of the [Operations Engineering Reports] web application endpoint to which the generated JSON data should be POSTed.
-
 - `TERRAFORM` must define the terraform executable (e.g. `/usr/local/bin/terraform0.13.5`)
 
 - `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY` - credentials with access to the S3 bucket holding the terraform state file
@@ -153,19 +150,17 @@ See [env.example](./env.example) for more more information.
 
 ### `bin/outside-collaborators.rb`
 
-This script is run on a schedule by a [github action](.github/workflows/post-data.yaml) You can also run it manually either by [triggering the action], or running locally like this:
+This script is run on a schedule by a [github action](.github/workflows/outside-collaborators-check.yaml) You can also run it manually either by [triggering the action], or running locally like this:
 
 ```
 bin/outside-collaborators.rb
 ```
 
-This outputs a JSON document suitable for POSTing to the [Operations Engineering Reports] web application.
-
-You can also use the `bin/post-data.sh` script to generate and POST the JSON data manually.
+This script checks collaborators in Terraform against collaborators in GitHub repositories. Unknown collaborators are removed from those repositories. Issues will be raised on repositories when collaborator expiry date is up for renewal or expired.
 
 #### Caveats
 
-- Does not report any outside collaborators who have not yet accepted their invitation to collaborate. Pending collaborators are not reported by the github graphql API.
+- Does not report include outside collaborators who have not yet accepted their invitation to collaborate. Pending collaborators are not reported by the github graphql API.
 
 ### `scripts/compare-terraform-to-github.py`
 
@@ -208,6 +203,6 @@ Make sure you have `bundler` installed (`gem install bundler` if not). Run `bund
 Run the tests with `bundle exec rspec`. This will generate a coverage report using simplecov. You can see it by running `open coverage/index.html`
 
 [operations engineering reports]: https://github.com/ministryofjustice/operations-engineering-reports
-[triggering the action]: https://github.com/ministryofjustice/github-collaborators/actions/workflows/post-data.yaml
+[triggering the action]: https://github.com/ministryofjustice/github-collaborators/actions/workflows/outside-collaborators-check.yaml
 [terraform]: https://www.terraform.io/downloads.html
 [this report]: https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_collaborators

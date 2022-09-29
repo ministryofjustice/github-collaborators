@@ -67,6 +67,7 @@ body:
       description: What permission does the user need?
       options:
         - maintain
+        - push
         - admin
         - pull
     validations:
