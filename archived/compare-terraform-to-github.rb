@@ -54,7 +54,6 @@ repos.each do |repo|
           login: tc_collaborator.login,
           login_url: nil,
           permission: nil,
-          last_commit: nil
         })
 
       end
