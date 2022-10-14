@@ -43,16 +43,6 @@ module "yjaf-gateway-proxy" {
       review_after = "2022-12-31"
     },
     {
-      github_user  = "jondent"
-      permission   = "admin"
-      name         = "Jon Dent"
-      email        = "Jon.Dent@yjb.gov.uk"
-      org          = "YJB"
-      reason       = "Developer on gateway proxy development and rollout"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2023-03-14"
-    },
-    {
       github_user  = "javaidarshadnec"
       permission   = "admin"
       name         = "Javaid Arshad"
