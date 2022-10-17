@@ -1,6 +1,6 @@
 class Expired
   def create_line(collaborator)
-    review_date = DateTime.strptime(collaborator["review_date"], "%Y-%m-%d")
+    review_date = collaborator["review_date"]
     age = (Date.today - review_date).to_i
     expired_when = if review_date == Date.today
       "today"
