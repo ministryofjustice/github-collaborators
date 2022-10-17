@@ -21,6 +21,8 @@ jobs:
         env:
           ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
           OWNER: "ministryofjustice"
+          REALLY_POST_TO_SLACK: ${{ secrets.REALLY_POST_TO_SLACK }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Report failure to Slack
         if: always()
         uses: ravsamhq/notify-slack-action@v2

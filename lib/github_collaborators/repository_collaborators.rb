@@ -22,10 +22,6 @@ class GithubCollaborators
       data.dig("node", "url")
     end
 
-    def id
-      data.dig("node", "id")
-    end
-
     def permission
       perm = data.fetch("permission").downcase!
       GITHUB_TO_TERRAFORM_PERMISSIONS.fetch(perm)
@@ -92,7 +88,6 @@ class GithubCollaborators
                 node {
                   login
                   url
-                  id
                 }
               }
             }

@@ -3,6 +3,7 @@ require "bundler/setup"
 require "date"
 require "erb"
 require "json"
+require "http"
 require "net/http"
 require "uri"
 require "git"
@@ -23,6 +24,9 @@ require_relative "./github_collaborators/http_client"
 require_relative "./github_collaborators/pull_requests"
 require_relative "./github_collaborators/pull_request_creator"
 require_relative "./github_collaborators/terraform_block_creator"
+require_relative "./github_collaborators/notifier"
+require_relative "./github_collaborators/expired"
+require_relative "./github_collaborators/will_expire_by"
 
 PAGE_SIZE = 100
 
