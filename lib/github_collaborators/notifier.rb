@@ -45,7 +45,7 @@ class Notifier
     }
 
     # Print CI message
-    puts "** Message to sending to Slack:"
+    puts "** Message sending to Slack:"
     puts message
     puts ""
     puts "** JSON Payload:"
