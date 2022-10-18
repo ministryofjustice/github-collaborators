@@ -6,10 +6,6 @@ class GithubCollaborators
       @data = data
     end
 
-    def id
-      data.fetch("id")
-    end
-
     def name
       data.fetch("name")
     end
@@ -88,7 +84,6 @@ class GithubCollaborators
       organization(login: "#{login}") {
         repositories(first: #{PAGE_SIZE} #{after}) {
           nodes {
-            id
             name
             url
             isLocked

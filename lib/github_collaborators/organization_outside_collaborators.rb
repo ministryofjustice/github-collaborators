@@ -8,10 +8,27 @@ class GithubCollaborators
       @organization ||= Organization.new(params.fetch(:login))
     end
 
+    # Sample response
+    # [
+    #   {
+    #     "repository"=>"vcms-test-automation",
+    #     "login"=>"user-name",
+    #     "status"=>"fail",
+    #     "issues"=>[
+    #       "Review after date is more than a year in the future"
+    #     ],
+    #     "href"=>"https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/vcms-test-automation.tf",
+    #     "defined_in_terraform"=>true,
+    #     "review_date"=>"2022-10-10",
+    #     :repo_url=>"https://github.com/ministryofjustice/vcms-test-automation",
+    #     :login_url=>"https://github.com/user-name",
+    #     :permission=>"push"
+    #   },
+    # ]
     def list
       # For every repository in MoJ GitHub organisation
       repositories.each_with_object([]) { |repo, arr|
-        # If a issue has been raised and a grace period has expired then close issue
+        # If an issue has been raised and a grace period has expired then close issue
         GithubCollaborators::IssueClose.new.close_expired_issues(repo.name)
 
         # For all outside collaborators attached to a repository
@@ -37,7 +54,6 @@ class GithubCollaborators
 
     # Returns the outside collaborators for a certain repository, sample response:
     # {:login=>"benashton", :login_url=>"https://github.com/benashton", :permission=>"admin"}
-    # repo_name: string
     def for_repository(repo_name)
       get_repository_outside_collaborators(repo_name).map do |user|
         {
@@ -61,14 +77,12 @@ class GithubCollaborators
 
     # Returns a list of outside collaborators and additionally checks they are not MoJ organisation Members
     # Not this has nothing to do with the TerraformCollaborators which is based of the tf files, this is from the GitHub API directly
-    # repo_name: string
     def get_repository_outside_collaborators(repo_name)
       outside_collaborators(repo_name).reject { |user| @organization.is_member?(user.login) }
     end
 
     # Returns a list of outside collaborators for a given repository
-    # Not this has nothing to do with the TerraformCollaborators which is based of the tf files, this is from the GitHub API directly
-    # repo_name: string
+    # Note this has nothing to do with the TerraformCollaborators which is based of the tf files, this is from the GitHub API directly
     def outside_collaborators(repo_name)
       RepositoryCollaborators.new(
         login: login,

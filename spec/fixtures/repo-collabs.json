@@ -8,24 +8,21 @@
               "permission": "ADMIN",
               "node": {
                 "login": "digitalronin",
-                "url": "https://github.com/digitalronin",
-                "id": "someId1"
+                "url": "https://github.com/digitalronin"
               }
             },
             {
               "permission": "ADMIN",
               "node": {
                 "login": "damacus",
-                "url": "https://github.com/damacus",
-                "id": "someId2"
+                "url": "https://github.com/damacus"
               }
             },
             {
               "permission": "WRITE",
               "node": {
                 "login": "DangerDawson",
-                "url": "https://github.com/DangerDawson",
-                "id": "someId3"
+                "url": "https://github.com/DangerDawson"
               }
             }
           ],

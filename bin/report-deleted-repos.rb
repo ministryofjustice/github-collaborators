@@ -3,7 +3,6 @@
 require_relative "../lib/github_collaborators"
 
 login = "ministryofjustice"
-base_url = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
 
 # Set repo Terraform directory
 terraform_dir = "terraform"
@@ -42,10 +41,7 @@ def create_branch_for_file(file)
   g.commit("Remove #{file} as repository has been deleted/archived")
 
   # Push
-  g.push(
-    remote = g.remote("origin"),
-    branch = branch_name
-  )
+  g.push(g.remote("origin"), branch_name)
 
   # Cleanup
   g.checkout("main")

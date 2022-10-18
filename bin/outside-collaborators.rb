@@ -38,9 +38,40 @@ outside_collaborator_list.each do |x|
     sleep 3
     GithubCollaborators::AccessRemover.new(params).remove
   end
-
-  # To Do: Add code here to create slack alert if 'Review after date has passed' is true (once)
-  # To Do: Create a PR with the user removed from the repos when 'Review after date has passed' is true (once)
-  # To Do: Add code here to create slack alert if 'Review after date is within a month' is true (once)
-  # To Do: Add code here to create slack alert if 'Review after date is within a week' is true (once)
 end
+
+enabled = ENV.fetch("REALLY_POST_TO_SLACK", 0) == "1"
+
+# Get list of users whose review date have one week remaining
+one_week_remaining_users = []
+outside_collaborator_list.each do |x|
+  x["issues"].each do |issue|
+    if issue == "Review after date is within a week"
+      one_week_remaining_users.push(x)
+    end
+  end
+end
+
+# Raise Slack message
+if one_week_remaining_users.length > 0
+  notification = WillExpireBy.new
+  Notifier.new(notification, enabled, one_week_remaining_users).run
+end
+
+# Get list of users whose review date has expired
+expired_users = []
+outside_collaborator_list.each do |x|
+  x["issues"].each do |issue|
+    if issue == "Review after date has passed"
+      expired_users.push(x)
+    end
+  end
+end
+
+# Raise Slack message
+if expired_users.length > 0
+  notification = Expired.new
+  Notifier.new(notification, enabled, expired_users).run
+end
+
+# To Do: Create a PR with the user removed from the repos when 'Review after date has passed' is true (once)

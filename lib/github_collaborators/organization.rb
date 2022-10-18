@@ -13,10 +13,6 @@ class GithubCollaborators
     def name
       data.dig("node", "name")
     end
-
-    def role
-      data.fetch("role")
-    end
   end
 
   class Organization
@@ -77,7 +73,6 @@ class GithubCollaborators
               login
               name
             }
-            role
           }
           pageInfo {
             hasNextPage
