@@ -31,7 +31,7 @@ module "hmpps-vcms" {
       org          = "Civica"                                                                       #  The organisation/entity they belong to
       reason       = "Civica developer for Victims Case Management System"                          #  Why is this person being granted access?
       added_by     = "Probation Infrastructure AWS Team, maximillian.lakanu@digital.justice.gov.uk" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2022-05-21"                                                                   #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      review_after = "2022-12-27"                                                                   #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     },
     {
       github_user  = "ahmedwaqaralam"
