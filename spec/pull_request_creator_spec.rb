@@ -4,7 +4,7 @@ class GithubCollaborators
       {
         owner: "ministryofjustice",
         repository: "somerepo",
-        hash_body: {title:"Remove myfile as repository being deleted", head:"mybranch",base:"main",body:"Hi there\n\nThe repository that is maintained by the file myfile has been deleted/archived\n\nPlease merge this pull request to delete the file.\n\nIf you have any questions, please post in #ask-operations-engineering on Slack.\n"}
+        hash_body: {title: "Remove myfile as repository being deleted", head: "mybranch", base: "main", body: "Hi there\n\nThe repository that is maintained by the file myfile has been deleted/archived\n\nPlease merge this pull request to delete the file.\n\nIf you have any questions, please post in #ask-operations-engineering on Slack.\n"}
       }
     }
 

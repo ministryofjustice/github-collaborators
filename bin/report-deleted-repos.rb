@@ -111,7 +111,6 @@ puts repo_delta
 
 # Create PRs
 repo_delta.each { |repo|
-
   file_name = "#{terraform_dir}/#{repo}.tf"
   branch_name = create_branch_for_file(file_name)
   hash_data = create_hash(file_name, branch_name)
