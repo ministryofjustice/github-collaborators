@@ -6,7 +6,6 @@ require_relative "../lib/github_collaborators"
 owner = "ministryofjustice"
 
 # Creates a branch and commits all changed files
-# This probably deserves its own class but keeping it here for now until we need more major functionality in this area
 def create_branch_for_pr
   # Init local Git
   g = Git.open(".")
@@ -37,11 +36,11 @@ def create_branch_for_pr
   branch_name
 end
 
-# Returns string for PR body
-def pull_hash(branch)
+# Body of the PR
+def create_hash(branch_name)
   {
     title: "Outside Collaborator PR",
-    head: branch,
+    head: branch_name,
     base: "main",
     body: <<~EOF
       Hi there
@@ -56,12 +55,14 @@ end
 # Grab the new collaborators and insert them into file
 GithubCollaborators::TerraformBlockCreator.new(JSON.parse(ENV.fetch("ISSUE"))).insert
 
+branch_name = create_branch_for_pr
+hash_data = create_hash(branch_name)
+
 # Create branch and open PR
 params = {
   owner: owner,
   repository: "github-collaborators",
-  pull_file: nil,
-  branch: create_branch_for_pr
+  hash_body: hash_data
 }
 
-GithubCollaborators::PullRequestCreator.new(params).create(pull_hash(params.fetch(:branch)))
+GithubCollaborators::PullRequestCreator.new(params).create

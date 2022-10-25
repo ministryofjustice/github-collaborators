@@ -19,7 +19,6 @@ def get_repo_name(repo_file)
 end
 
 # Creates a branch to remove a singular file
-# This probably deserves its own class but keeping it here for now until we need more major functionality in this area
 def create_branch_for_file(file)
   # Init local Git
   g = Git.open(".")
@@ -48,6 +47,24 @@ def create_branch_for_file(file)
 
   # Return branch name for PR creation
   branch_name
+end
+
+# Body of the PR
+def create_hash(pull_file, branch)
+  {
+    title: "Remove #{pull_file} as repository being deleted ",
+    head: branch,
+    base: "main",
+    body: <<~EOF
+      Hi there
+      
+      The repository that is maintained by the file #{pull_file} has been deleted/archived
+      
+      Please merge this pull request to delete the file.
+      
+      If you have any questions, please post in #ask-operations-engineering on Slack.
+    EOF
+  }
 end
 
 # Get list of Terraform defined repos
@@ -94,7 +111,10 @@ puts repo_delta
 
 # Create PRs
 repo_delta.each { |repo|
-  branch_name = create_branch_for_file("#{terraform_dir}/#{repo}.tf")
+
+  file_name = "#{terraform_dir}/#{repo}.tf"
+  branch_name = create_branch_for_file(file_name)
+  hash_data = create_hash(file_name, branch_name)
 
   # Give GitHub some time
   sleep 5
@@ -102,8 +122,7 @@ repo_delta.each { |repo|
   params = {
     owner: login,
     repository: "github-collaborators",
-    pull_file: "#{terraform_dir}/#{repo}.tf",
-    branch: branch_name
+    hash_body: hash_data
   }
 
   GithubCollaborators::PullRequestCreator.new(params).create
