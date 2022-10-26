@@ -6,17 +6,19 @@ class Notifier
   end
 
   def run
-    payload = message_payload
-
     unless post_to_slack?
       puts "** SKIPPING POST: Not posting anything, this is a dry run"
       return
     end
 
-    if ENV.has_key? "SLACK_WEBHOOK_URL"
-      HTTP.post(ENV["SLACK_WEBHOOK_URL"], body: JSON.dump(payload))
-    else
-      raise "Unable to post to Slack the SLACK_WEBHOOK_URL is missing."
+    if @collaborators.length > 0
+      payload = message_payload
+
+      if ENV.has_key? "SLACK_WEBHOOK_URL"
+        HTTP.post(ENV["SLACK_WEBHOOK_URL"], body: JSON.dump(payload))
+      else
+        raise "Unable to post to Slack the SLACK_WEBHOOK_URL is missing."
+      end
     end
   end
 
