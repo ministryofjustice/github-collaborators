@@ -22,11 +22,15 @@ class GithubCollaborators
     end
 
     # Returns first file in the PR
-    # This works because the PRs we create only contain one file
     def file
       data.dig("files", "edges")
       &.first
       &.dig("node", "path")
+    end
+
+    # Returns all the files in the PR
+    def files
+      arr = data.dig("files", "edges").map { |d| d.dig("node", "path")}
     end
   end
 
@@ -75,7 +79,7 @@ class GithubCollaborators
                 nodes {
                   number
                   title
-                  files(first: 1) {
+                  files(first: 100) {
                       edges {
                           node {
                               path
