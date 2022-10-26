@@ -94,7 +94,7 @@ puts repo_delta
 # Open PRs for all the deleted repos
 
 # Grab current open PRs
-pull_requests = GithubCollaborators::PullRequests.new(login: login).list
+pull_requests = GithubCollaborators::PullRequests.new.list
 
 # Delete from actionable array if PR already created
 # Two scenarios:

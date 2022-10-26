@@ -2,7 +2,6 @@ class GithubCollaborators
   describe PullRequests do
     let(:params) {
       {
-        login: "mylogin",
         graphql: graphql
       }
     }

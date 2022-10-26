@@ -35,10 +35,9 @@ class GithubCollaborators
   end
 
   class PullRequests
-    attr_reader :graphql, :login
+    attr_reader :graphql
 
     def initialize(params)
-      @login = params.fetch(:login)
       @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
     end
 
