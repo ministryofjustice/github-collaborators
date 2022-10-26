@@ -30,7 +30,7 @@ class GithubCollaborators
 
     # Returns all the files in the PR
     def files
-      data.dig("files", "edges").map { |d| d.dig("node", "path")}
+      data.dig("files", "edges").map { |d| d.dig("node", "path") }
     end
   end
 
