@@ -12,6 +12,7 @@ class GithubCollaborators
     def create
       url = "https://api.github.com/repos/#{@owner}/#{@repository}/pulls"
       HttpClient.new.post_json(url, @hash_body.to_json)
+      sleep 1
     end
   end
 end

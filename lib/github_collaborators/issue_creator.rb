@@ -11,12 +11,14 @@ class GithubCollaborators
     def create
       url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
       HttpClient.new.post_json(url, issue_hash.to_json)
+      sleep 1
     end
 
     def create_review_date
       if get_issues_for_user.empty?
         url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
         HttpClient.new.post_json(url, issue_hash_review_after.to_json)
+        sleep 1
       end
     end
 

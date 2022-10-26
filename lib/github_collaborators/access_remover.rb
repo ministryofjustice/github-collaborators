@@ -11,6 +11,7 @@ class GithubCollaborators
     def remove
       url = "https://api.github.com/repos/#{owner}/#{repository}/collaborators/#{github_user}"
       HttpClient.new.delete(url)
+      sleep 1
     end
   end
 end
