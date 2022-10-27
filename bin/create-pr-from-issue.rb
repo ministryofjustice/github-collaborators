@@ -5,37 +5,6 @@ require_relative "../lib/github_collaborators"
 # GitHub settings
 owner = "ministryofjustice"
 
-# Creates a branch and commits all changed files
-def create_branch_for_pr
-  # Init local Git
-  g = Git.open(".")
-
-  Git.global_config("user.name", "Operations Engineering Bot")
-  Git.global_config("user.email", "dummy@email.com")
-
-  # Generate random uuid for branch name
-  branch_name = UUIDTools::UUID.timestamp_create.to_s
-
-  # Create branch and checkout
-  g.branch(branch_name).create
-  g.checkout(branch_name)
-
-  # Stage file
-  g.add("terraform/*")
-
-  # Commit
-  g.commit("Pull request to add new outside collaborator")
-
-  # Push
-  g.push(g.remote("origin"), branch_name)
-
-  # Cleanup
-  g.checkout("main")
-
-  # Return branch name for PR creation
-  branch_name
-end
-
 # Body of the PR
 def create_hash(branch_name)
   {
@@ -55,14 +24,19 @@ end
 # Grab the new collaborators and insert them into file
 GithubCollaborators::TerraformBlockCreator.new(JSON.parse(ENV.fetch("ISSUE"))).insert
 
-branch_name = create_branch_for_pr
-hash_data = create_hash(branch_name)
+# Create branch
+branch_name = "add-a-new-collaborator-#{rand(1..1000)}"
+bc = GithubCollaborators::BranchCreator::new.create_branch(branch_name)
+bc.add("terraform/*")
+bc.commit_and_push("Pull request to add new outside collaborator")
 
-# Create branch and open PR
 params = {
   owner: owner,
   repository: "github-collaborators",
-  hash_body: hash_data
+  hash_body: create_hash(branch_name)
 }
 
+sleep 5
+
+# Open PR
 GithubCollaborators::PullRequestCreator.new(params).create

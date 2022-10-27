@@ -3,8 +3,6 @@
 require_relative "../lib/github_collaborators"
 
 login = "ministryofjustice"
-
-# Set repo Terraform directory
 terraform_dir = "terraform"
 
 # Returns the repo name from within a repo file
@@ -16,37 +14,6 @@ def get_repo_name(repo_file)
     # Extract name
     /(?<=(["']))(?:(?=(\\?))\2.)*?(?=\1)/.match(line[0])
   end
-end
-
-# Creates a branch to remove a singular file
-def create_branch_for_file(file)
-  # Init local Git
-  g = Git.open(".")
-
-  g.config("user.name", "Operations Engineering Bot")
-  g.config("user.email", "dummy@email.com")
-
-  # Generate random uuid for branch name
-  branch_name = UUIDTools::UUID.timestamp_create.to_s
-
-  # Create branch and checkout
-  g.branch(branch_name).create
-  g.checkout(branch_name)
-
-  # Stage file
-  g.remove(file)
-
-  # Commit
-  g.commit("Remove #{file} as repository has been deleted/archived")
-
-  # Push
-  g.push(g.remote("origin"), branch_name)
-
-  # Cleanup
-  g.checkout("main")
-
-  # Return branch name for PR creation
-  branch_name
 end
 
 # Body of the PR
@@ -109,19 +76,22 @@ repo_delta.delete_if { |repo|
 puts "Current repo files that need deleting but do not have a PR"
 puts repo_delta
 
-# Create PRs
 repo_delta.each { |repo|
   file_name = "#{terraform_dir}/#{repo}.tf"
-  branch_name = create_branch_for_file(file_name)
-  hash_data = create_hash(file_name, branch_name)
 
-  # Give GitHub some time
+  # Create branch
+  branch_name = "remove-#{repo}-tf-file"
+  bc = GithubCollaborators::BranchCreator::new.create_branch(branch_name)
+  bc.remove(file_name)
+  bc.commit_and_push("Remove #{file_name} as repository has been deleted/archived.")
+
   sleep 5
 
+  # Create PR
   params = {
     owner: login,
     repository: "github-collaborators",
-    hash_body: hash_data
+    hash_body: create_hash(file_name, branch_name)
   }
 
   GithubCollaborators::PullRequestCreator.new(params).create
