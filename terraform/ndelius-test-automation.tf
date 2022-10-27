@@ -56,7 +56,7 @@ module "ndelius-test-automation" {
     {
       github_user  = "yfedkiv"
       permission   = "admin"
-      name         = "Yuri Fedkiv"                                                                      #  The name of the person behind github_user
+      name         = "Yuri Fedkiv"                                                                       #  The name of the person behind github_user
       email        = "yfedviv@unilink.com"                                                               #  Their email address
       org          = "Unilink"                                                                           #  The organisation/entity they belong to
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS" #  Why is this person being granted access?
