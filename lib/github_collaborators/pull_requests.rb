@@ -1,8 +1,3 @@
-# Please note that the PullRequest/s classes are written to work with a particular solution and may have weird behaviours if used for other uses
-# An example of this is the files method only returning the first file of the PR
-# There is no current need for large more expansive PullRequest functionality
-# Please contact Operations Engineering if you wish to consume this code in an more extensive fashion
-
 class GithubCollaborators
   class PullRequest
     attr_reader :data
@@ -37,8 +32,12 @@ class GithubCollaborators
   class PullRequests
     attr_reader :graphql
 
-    def initialize(params)
-      @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
+    def initialize(params = nil)
+      if params.nil?
+        @graphql = GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
+      else
+        @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
+      end
     end
 
     def list
