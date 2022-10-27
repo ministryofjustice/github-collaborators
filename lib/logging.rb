@@ -19,12 +19,12 @@ module Logging
         "error" => Logger::ERROR,
         "fatal" => Logger::FATAL
       }
-      
-      return logger_levels[ENV.fetch("LOG_LEVEL", "warning")]
+
+      logger_levels[ENV.fetch("LOG_LEVEL", "warning")]
     end
 
     def configure_logger_for(classname)
-      logger = Logger.new(STDOUT, datetime_format: '%Y-%m-%d %H:%M:%S')
+      logger = Logger.new($stdout, datetime_format: "%Y-%m-%d %H:%M:%S")
       logger.level = get_logger_level
       logger.progname = classname
       logger

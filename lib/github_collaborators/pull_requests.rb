@@ -33,10 +33,10 @@ class GithubCollaborators
     attr_reader :graphql
 
     def initialize(params = nil)
-      if params.nil?
-        @graphql = GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
+      @graphql = if params.nil?
+        GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
       else
-        @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
+        params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
       end
     end
 

@@ -1,6 +1,5 @@
 class GithubCollaborators
   class SlackNotifier
-
     include Logging
 
     def initialize(notification, enabled, collaborators)

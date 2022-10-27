@@ -8,7 +8,7 @@ require "net/http"
 require "uri"
 require "git"
 require "uuidtools"
-require 'logger'
+require "logger"
 require_relative "./executor"
 require_relative "./logging"
 require_relative "./github_graph_ql_client"
