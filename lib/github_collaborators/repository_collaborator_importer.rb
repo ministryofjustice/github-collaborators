@@ -2,19 +2,20 @@ class GithubCollaborators
   class RepositoryCollaboratorImporter
     attr_reader :terraform_dir, :terraform_executable
 
+    include Logging
+
     def initialize(params)
       @terraform_dir = params.fetch(:terraform_dir)
       @terraform_executable = params.fetch(:terraform_executable)
       @org_ext_collabs = params.fetch(:org_ext_collabs)
       @executor = params.fetch(:executor) { Executor.new }
-      @logger = params.fetch(:logger) { Logger.new }
     end
 
     def import(repo_names)
       repo_names.each do |repository|
         collaborators = outside_collaborators(repository)
         if collaborators.any?
-          @logger.warn "Importing collaborators for #{repository}"
+          logger.warn "Importing collaborators for #{repository}"
           create_terraform_file(repository, collaborators)
           import_collaborators(repository, collaborators)
         end
@@ -31,7 +32,7 @@ class GithubCollaborators
       terraform = render_template(repository, collaborators)
       outfile = output_file(repository)
       File.write(outfile, terraform)
-      @logger.warn "Generated terraform file: #{outfile}"
+      logger.warn "Generated terraform file: #{outfile}"
     end
 
     def output_file(repository)
@@ -44,9 +45,9 @@ class GithubCollaborators
 
       collaborators.each do |c|
         login = c.fetch(:login)
-        @logger.warn "  importing collaborator #{login} for repository #{repository}"
+        logger.warn "  importing collaborator #{login} for repository #{repository}"
         cmd = %(cd #{terraform_dir}; #{terraform_executable} import module.#{repo}.github_repository_collaborator.collaborator[\\"#{login}\\"] #{repository}:#{login})
-        @logger.warn cmd
+        logger.warn cmd
         @executor.run(cmd)
       end
     end
