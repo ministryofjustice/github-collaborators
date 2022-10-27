@@ -156,11 +156,11 @@ This script is run on a schedule by a [github action](.github/workflows/outside-
 bin/outside-collaborators.rb
 ```
 
-This script checks collaborators in Terraform against collaborators in GitHub repositories. Unknown collaborators are removed from those repositories. Issues will be raised on repositories when collaborator expiry date is up for renewal or expired.
+This script checks collaborators in Terraform against collaborators in GitHub repositories. Unknown collaborators are removed from those repositories. Issues will be raised on repositories when collaborator expiry date is up for renewal or expired. Slack alerts and repository pull requests are automatically generated when a collaborator expiry is up for renewal and has expired.
 
 #### Caveats
 
-- Does not report include outside collaborators who have not yet accepted their invitation to collaborate. Pending collaborators are not reported by the github graphql API.
+- Does not report / include outside collaborators who have not yet accepted their invitation to collaborate. Pending collaborators are not reported by the github graphql API.
 
 ### `scripts/compare-terraform-to-github.py`
 
@@ -200,7 +200,7 @@ bin/list-repositories.rb | xargs bin/import-repository-collaborators.rb
 
 Make sure you have `bundler` installed (`gem install bundler` if not). Run `bundle install` to set up locally.
 
-Run the tests with `bundle exec rspec`. This will generate a coverage report using simplecov. You can see it by running `open coverage/index.html`
+Run the tests with `bundle exec rspec` or `rspec`. This will generate a coverage report using simplecov. You can see it by running `open coverage/index.html`
 
 [operations engineering reports]: https://github.com/ministryofjustice/operations-engineering-reports
 [triggering the action]: https://github.com/ministryofjustice/github-collaborators/actions/workflows/outside-collaborators-check.yaml
