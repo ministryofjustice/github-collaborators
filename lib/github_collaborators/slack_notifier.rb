@@ -1,5 +1,8 @@
 class GithubCollaborators
   class SlackNotifier
+
+    include Logging
+
     def initialize(notification, enabled, collaborators)
       @notification = notification
       @enabled = !!enabled
@@ -8,7 +11,7 @@ class GithubCollaborators
 
     def run
       unless post_to_slack?
-        puts "** SKIPPING POST: Not posting anything, this is a dry run"
+        logger.info "Skipping Slack post this is a dry run"
         return
       end
 
@@ -48,11 +51,11 @@ class GithubCollaborators
       }
 
       # Print CI message
-      puts "** Message sending to Slack:"
-      puts message
-      puts ""
-      puts "** JSON Payload:"
-      puts JSON.pretty_generate(payload)
+      logger.info "** Message sending to Slack:"
+      logger.info message
+      logger.info ""
+      logger.info "** JSON Payload:"
+      logger.info JSON.pretty_generate(payload)
 
       # Return json data
       payload
