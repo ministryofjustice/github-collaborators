@@ -72,5 +72,15 @@ module "yjaf-transitions" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-09-01"
     },
+    {
+      github_user  = "VasilDimitrov22"
+      permission   = "admin"
+      name         = "Vasil Dimitrov"
+      email        = "vasil.dimitrov@northgateps.com"
+      org          = "NPS (northgate)"
+      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
+      added_by     = "Antony Bishop <antony.bishop@digital.justice.gov.uk> Operations Engineering"
+      review_after = "2023-10-01"
+    },
   ]
 }
