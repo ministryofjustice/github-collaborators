@@ -20,3 +20,4 @@ jobs:
       - run: bin/report-deleted-repos.rb
         env:
           ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+          LOG_LEVEL: "info"
