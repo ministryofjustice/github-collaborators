@@ -60,6 +60,17 @@ class GithubCollaborators
       end
     end
 
+    def has_review_date_expired
+      logger.debug "has_review_date_expired"
+      expired_users = find_users_who_have_expired
+      
+      # Raise Slack message
+      GithubCollaborators::SlackNotifier.new(WillExpireBy.new, POST_TO_SLACK, expired_users).run
+
+      # Raise PRs
+      create_remove_user_pull_requests(expired_users)
+    end
+
     def is_review_date_within_a_week
       logger.debug "is_review_date_within_a_week"
       users_who_expire_soon = find_users_who_expire_soon
@@ -73,29 +84,6 @@ class GithubCollaborators
 
     private
     
-    def temp
-      # TODO: add other PR code here
-      print ""
-      # # Get list of users whose review date has expired
-      # expired_users = []
-      # outside_collaborator_list.each do |x|
-      #   x["issues"].each do |issue|
-      #     if issue == "Review after date has passed"
-      #       expired_users.push(x)
-      #     end
-      #   end
-      # end
-
-      # Sort list by usernames
-      # expired_users.sort_by! { |x| x["login"] }
-
-      # # Loop through those users
-      # if expired_users.length > 0
-      #   # Raise Slack message
-      #   GithubCollaborators::SlackNotifier.new(Expired.new, POST_TO_SLACK, expired_users).run
-      # end
-    end
-
     # Get list of users whose review date have one week remaining
     def find_users_who_expire_soon
       logger.debug "find_users_who_expire_soon"
@@ -104,6 +92,7 @@ class GithubCollaborators
         x["issues"].each do |issue|
           if issue == "Review after date is within a week"
             users_who_expire_soon.push(x)
+            logger.info "Review after date is within a week for #{x["login"]} on #{x["review_date"]}"
           end
         end
       end
@@ -114,6 +103,26 @@ class GithubCollaborators
       end
 
       users_who_expire_soon
+    end
+
+    # Get list of users whose review date has passed
+    def find_users_who_have_expired
+      logger.debug "find_users_who_have_expired"
+      users_who_have_expired = []
+      @outside_collaborators.each do |x|
+        x["issues"].each do |issue|
+          if issue == "Review after date has passed"
+            logger.info "Review after date has passed for #{x["login"]} on #{x["review_date"]}"
+          end
+        end
+      end
+
+      if users_who_have_expired.length > 0
+        # Sort list based on username
+        users_who_have_expired.sort_by! { |x| x["login"] }
+      end
+
+      users_who_have_expired
     end
 
     def extend_date_hash(user_name, branch_name)
@@ -179,6 +188,7 @@ class GithubCollaborators
           end
         end
 
+        # TODO re-enable code
         # if edited_files.length > 0
         #   # At end of each user group commit modified file/s 
         #   bc.create_branch(branch_name)
@@ -197,6 +207,10 @@ class GithubCollaborators
         #   GithubCollaborators::PullRequestCreator.new(params).create
         # end
       end
+    end
+
+    def create_remove_user_pull_requests
+      # TODO got to here use bove function code
     end
 
     def does_pr_already_exist(terraform_file_name, user_name)
