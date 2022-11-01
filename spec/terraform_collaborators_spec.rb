@@ -7,7 +7,7 @@ class TerraformCollaborators
 
     subject {
       described_class.new(
-        base_url: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform",
+        folder_path: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform",
         terraform_dir: "spec/fixtures"
       )
     }
