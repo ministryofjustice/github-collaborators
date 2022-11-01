@@ -12,7 +12,8 @@ class GithubCollaborators
       logger.debug "initialize"
       # TODO: remove this code
       if TESTING
-        @outside_collaborators = @@test_outside_collaborator_list
+        # @outside_collaborators = @@test_outside_collaborator_list
+        @outside_collaborators = test_data
       else
         # Create a list of users that are outside collaborators ie not MoJ Organisation Members
         @outside_collaborators = GithubCollaborators::OrganizationOutsideCollaborators.new(login: OWNER, base_url: BASE_URL).list
@@ -72,6 +73,29 @@ class GithubCollaborators
 
     private
     
+    def temp
+      # TODO: add other PR code here
+      print ""
+      # # Get list of users whose review date has expired
+      # expired_users = []
+      # outside_collaborator_list.each do |x|
+      #   x["issues"].each do |issue|
+      #     if issue == "Review after date has passed"
+      #       expired_users.push(x)
+      #     end
+      #   end
+      # end
+
+      # Sort list by usernames
+      # expired_users.sort_by! { |x| x["login"] }
+
+      # # Loop through those users
+      # if expired_users.length > 0
+      #   # Raise Slack message
+      #   GithubCollaborators::SlackNotifier.new(Expired.new, POST_TO_SLACK, expired_users).run
+      # end
+    end
+
     # Get list of users whose review date have one week remaining
     def find_users_who_expire_soon
       logger.debug "find_users_who_expire_soon"
@@ -112,63 +136,19 @@ class GithubCollaborators
       }
     end
 
-    def user_in_data(file_data, user_name)
-      logger.debug "user_in_data"
-      data = file_data.split("\n")
-      search_pattern = "github_user=\"#{user_name}\""
-      line_number = 0
-      data.each do |line|
-        line = line.delete(' ')
-        if line == search_pattern
-          return line_number
-        end
-        line_number += 1
-      end
-      line_number
-    end
-
-    def extend_date(date_line_number, file_data)
-      logger.debug "extend_date"
-      begin
-        date_line = file_data.split("\n").at(date_line_number)
-        date = Date.parse date_line[22...32]
-      rescue
-        logger.error "Error parsing the date from file. Date characters are not in the expected alignment."
-        return nil
-      else
-        return (date + 180).strftime("%Y-%m-%d")
-      end
-    end
-
-    def write_new_date_to_file(date_line_number, file_data, new_date, file_name)
-      logger.debug "write_new_date_to_file"
-      the_data = file_data.split("\n")
-      date_line = the_data.at(date_line_number)
-      date_line[22...32] = new_date
-      the_data[date_line_number] = date_line
-      new_data = the_data.join("\n")
-
-      File.open(file_name, "w") { |f|
-        f.puts(new_data)
-      }
-    end
-
     def extend_date_in_file(file_name, user_name)
       logger.debug "extend_date_in_file"
 
-      if File.exist?(file_name)
-        file_data = File.read(file_name)
-        line_number = user_in_data(file_data, user_name)
-        if line_number > 0
-          date_line_number = line_number + 7
-          new_date = extend_date(date_line_number, file_data)
-          if new_date != nil
-            write_new_date_to_file(date_line_number, file_data, new_date, file_name)
-            true
-          end
-        end
-      end
-      false
+      params = { 
+        repository: File.basename(file_name, ".tf"),
+        login: user_name,
+        base_url: nil,
+        repo_url: nil,
+        login_url: nil,
+        permission: nil
+      }
+      tc = TerraformCollaborator.new(params)
+      tc.extend_review_date
     end
   
     def create_extend_date_pull_requests(users_who_expire_soon)
@@ -185,18 +165,17 @@ class GithubCollaborators
 
         # For each file that user has an upcoming expiry
         group[1].each do |outside_collaborator|
+
           # Check if a pull request is already pending
           terraform_file_name = File.basename(outside_collaborator["href"])
           user_name = outside_collaborator["login"]
-          
+
           if !does_pr_already_exist(terraform_file_name, user_name)
             # No pull request exists, modify the file
             file_name = "terraform/#{terraform_file_name}"
             branch_name = "update-review-date-#{user_name}"
-            if extend_date_in_file(file_name, user_name)
-              edited_files.push(file_name)
-            end
-            # TODO: Got to here, can create a file.
+            extend_date_in_file(file_name, user_name)
+            edited_files.push(file_name)
           end
         end
 
@@ -229,6 +208,59 @@ class GithubCollaborators
         end
       end
       false
+    end
+
+    def test_data
+
+      params = {
+        terraform_dir: "terraform",
+        folder_path: "/Users/nick.walters/MoJ/github-collaborators"
+      }
+      
+      terraform_collabs = GithubCollaborators::TerraformCollaborators.new(params)
+      the_files = terraform_collabs.fetch_terraform_files
+      
+      exclude_files = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
+      
+      collabs = []
+      the_files.each do |file|
+        if !exclude_files.include?(File.basename(file))
+      
+          params2 = {
+            folder_path: "/Users/nick.walters/MoJ/github-collaborators"
+          }
+          collaborators_in_file = GithubCollaborators::TerraformCollaborators.new(params2).return_collaborators_from_file(file)
+      
+          collaborators_in_file.each do |collaborator|
+            params1 = {
+              repository: File.basename(file, ".tf"),
+              base_url: "/Users/nick.walters/MoJ/github-collaborators",
+              login: collaborator.login,
+            }
+        
+            tc = GithubCollaborators::TerraformCollaborator.new(params1)
+            the_hash = tc.to_hash
+            collabs.push(the_hash)
+            # if tc.status == GithubCollaborators::TerraformCollaborator::FAIL
+            #   print file
+            #   print "\n"
+      
+            #   print collaborator.login
+            #   print "\n"
+      
+            #   tc.get_issues.each do |issue|
+            #     print issue
+            #     print "\n"
+            #   end
+      
+            #   print tc.get_review_after_date
+            #   print "\n"
+            #   print "\n"
+            # end
+          end
+        end
+      end
+      collabs
     end
 
     @@test_outside_collaborator_list = []

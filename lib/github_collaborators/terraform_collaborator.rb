@@ -42,13 +42,20 @@ class GithubCollaborators
       @login_url = params.fetch(:login_url, nil)
       @permission = params.fetch(:permission, nil)
       # Enable the terraform source to be passed in, to make it easier to test the code
-      @terraform_data_as_string = params.fetch(:tfsource, read_terraform_file)
+      @terraform_data_as_string = params.fetch(:tfsource, nil)
       @collaborator_exist = false
-      @terraform_data = extract_collaborators_section
+      set_up
     end
 
-    def to_hash
+    def set_up
+      if @terraform_data_as_string.nil? 
+        @terraform_data_as_string = read_terraform_file
+      end
+      @terraform_data = extract_collaborators_section
       @issues = check_for_issues
+    end
+    
+    def to_hash
       {
         "repository" => @repository,
         "login" => @login,
@@ -112,7 +119,31 @@ class GithubCollaborators
       @permission
     end
 
+    def extend_review_date
+      new_review_after_date = @review_after_date + 180
+      write_new_date_to_file(new_review_after_date)
+    end
+
     private
+
+    def write_new_date_to_file(new_review_after_date)
+      logger.debug "write_new_date_to_file"
+      # Split full file contents (as string) into array of line
+      current_file = @terraform_data_as_string.split("\n")
+      # Find the line for the user
+      line_number = find_user_name_line(current_file)
+      # Get the date line based on the users username in the file
+      # and offset it by REVIEW_AFTER to get the line with the review_after
+      date_line = current_file[line_number + (REVIEW_AFTER + 1)]
+      # Overwrite the review_after date
+      date_line[22...32] = new_review_after_date.strftime("%Y-%m-%d")
+      # Prepare the data and write to file
+      new_data = current_file.join("\n")
+      file_name = "#{@terraform_dir}/#{@repository}.tf"
+      File.open(file_name, "w") { |f|
+        f.puts(new_data)
+      }
+    end
 
     def exists?
       user_exists = does_collaborator_exist?
@@ -136,10 +167,10 @@ class GithubCollaborators
           issues.push("Review after date has passed")
         elsif @review_after_date > (Date.today + YEAR)
           issues.push("Review after date is more than a year in the future")
-        elsif (Date.today + MONTH) > @review_after_date
-          issues.push("Review after date is within a month")
         elsif (Date.today + WEEK) > @review_after_date
           issues.push("Review after date is within a week")
+        elsif (Date.today + MONTH) > @review_after_date
+          issues.push("Review after date is within a month")
         end
       end
       issues
@@ -157,17 +188,27 @@ class GithubCollaborators
       @terraform_data_as_string.split("\n").each_with_object([]) { |line, arr| arr << line if (line =~ / collaborators =/) .. (line =~ /]/); } # rubocop:disable Lint/FlipFlop
     end
 
-    def does_collaborator_exist?
-      return false if @terraform_data_as_string.nil?
+    def find_user_name_line(the_data)
+      logger.debug "find_user_name_line"
       line_number = 0
-      @terraform_data.each do |line|
+      the_data.each do |line|
         if line.include?("github_user") && line.include?("#{@login}")
-          @user_line_in_terraform_file = line_number
-          return true
+          return line_number
         end
         line_number += 1
       end
-      false
+      line_number = 0
+    end
+
+    def does_collaborator_exist?
+      logger.debug "does_collaborator_exist"
+      return false if @terraform_data_as_string.nil?
+      @user_line_in_terraform_file = find_user_name_line(@terraform_data)
+      if @user_line_in_terraform_file == 0
+        return false
+      else
+        return true
+      end
     end
 
     # Retrieves the terraform data for a specific colloborator
@@ -191,6 +232,7 @@ class GithubCollaborators
     # Search for the val parameter within each line of the collaborator block 
     # this checks the attribute and value exists within the file
     def get_attribute(val)
+      logger.debug "get_attribute"
       # Use the offset to read from the line containing the colloborator username within the file
       offset = @user_line_in_terraform_file
       collaborator_block = @terraform_data[offset, (offset + REVIEW_AFTER)]
@@ -205,17 +247,20 @@ class GithubCollaborators
   end
 
   class TerraformCollaborators
+    include Logging
     attr_reader :folder_path
 
     TERRAFORM_DIR = "terraform"
 
     def initialize(params)
+      logger.debug "initialize"
       @terraform_dir = params.fetch(:terraform_dir, TERRAFORM_DIR)
       @folder_path = params.fetch(:folder_path)
     end
 
     # Returns an array of TerraformCollaborator objects
     def return_collaborators_from_file(file_name)
+      logger.debug "return_collaborators_from_file"
       # Grab repo name
       repo = file_name[/(?<=#{@terraform_dir}\/)(.*)(?=.tf)/, 1]
 
@@ -228,13 +273,12 @@ class GithubCollaborators
             # Grab username
             user = /(?<=(["']\b))(?:(?=(\\?))\2.)*?(?=\1)/.match(line)[0]
             # Create TerraformCollaborator and push to arr
-            arr.push(
-              GithubCollaborators::TerraformCollaborator.new(
-                repository: repo,
-                login: user,
-                base_url: @folder_path
-              )
+            tc = GithubCollaborators::TerraformCollaborator.new(
+              repository: repo,
+              login: user,
+              base_url: @folder_path
             )
+            arr.push(tc)
           end
         end
       end
@@ -242,6 +286,7 @@ class GithubCollaborators
 
     # Return absolute paths for every .tf file in the terraform directory
     def fetch_terraform_files
+      logger.debug "fetch_terraform_files"
       Dir["#{@terraform_dir}/*.tf"]
     end
   end
