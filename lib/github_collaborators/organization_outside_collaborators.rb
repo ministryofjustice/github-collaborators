@@ -31,21 +31,26 @@ class GithubCollaborators
       logger.debug "list"
       # For every repository in MoJ GitHub organisation
       repositories.each_with_object([]) { |repo, arr|
-        # For all outside collaborators attached to a repository
-        get_repository_outside_collaborators(repo.name).each do |user|
-          params = { 
-            repository: repo.name,
-            login: user.login,
-            base_url: @base_url,
-            repo_url: repo.url,
-            login_url: user.url,
-            permission: user.permission
-          }
-          tc = TerraformCollaborator.new(params)
-          if tc.status == TerraformCollaborator::FAIL
-            arr.push(tc.to_hash)
+        # Ignore these files
+        exclude_files = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
+        if !exclude_files.include?(File.basename(repo.name))
+        
+          # For all outside collaborators attached to a repository
+          get_repository_outside_collaborators(repo.name).each do |user|
+            params = { 
+              repository: repo.name,
+              login: user.login,
+              base_url: @base_url,
+              repo_url: repo.url,
+              login_url: user.url,
+              permission: user.permission
+            }
+            tc = TerraformCollaborator.new(params)
+            if tc.status == TerraformCollaborator::FAIL
+              arr.push(tc.to_hash)
+            end
+            arr # rubocop:disable Lint/Void
           end
-          arr # rubocop:disable Lint/Void
         end
       }
     end
