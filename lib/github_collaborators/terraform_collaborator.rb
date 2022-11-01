@@ -1,20 +1,28 @@
-# Given a repository name and a github login, return all the collaborator
-# metadata specified in the terraform source code.
-#
-# NB: The terraform statefile only contains the parameters used by
-# the `github_repository_collaborator` module, which omits all the metadata
-# that describes the collaboration. That's the data we want here, which is why
-# we go to the terraform source to get it.
+# Given a repository name and a github login, return all the data for a 
+# given collaborator specified within the terraform source code.
 class GithubCollaborators
   class TerraformCollaborator
+
+    include Logging
+
     attr_reader :repository, :login, :base_url
 
     TERRAFORM_DIR = "terraform"
-
     PASS = "pass"
     FAIL = "fail"
+    YEAR = 365
+    MONTH = 31
+    WEEK = 7
+    PERMISSION = 0
+    NAME = 1
+    EMAIL = 2
+    ORG = 3
+    REASON = 4
+    ADDED_BY = 5
+    REVIEW_AFTER = 6
 
     REQUIRED_ATTRIBUTES = {
+      "permission" => "Collaborator permission is missing",
       "name" => "Collaborator name is missing",
       "email" => "Collaborator email is missing",
       "org" => "Collaborator organisation is missing",
@@ -23,140 +31,190 @@ class GithubCollaborators
       "review_after" => "Collaboration review date is missing"
     }
 
-    YEAR = 365
-    MONTH = 31
-    WEEK = 7
 
     def initialize(params)
-      @repository = params.fetch(:repository)
-      @login = params.fetch(:login)
+      @repository = params.fetch(:repository, nil)
+      @login = params.fetch(:login, nil)
+      # URL of the github UI page listing all the terraform files
+      @base_url = params.fetch(:base_url, nil)
       @terraform_dir = params.fetch(:terraform_dir, TERRAFORM_DIR)
+      @repo_url = params.fetch(:repo_url, nil)
+      @login_url = params.fetch(:login_url, nil)
+      @permission = params.fetch(:permission, nil)
       # Enable the terraform source to be passed in, to make it easier to test the code
-      @tfsource = params.fetch(:tfsource) { fetch_terraform_source }
-      @base_url = params.fetch(:base_url) # URL of the github UI page listing all the terraform files
-    end
-
-    def exists?
-      collaborator_source != nil
-    end
-
-    def status
-      issues.any? ? FAIL : PASS
-    end
-
-    def issues
-      return ["Collaborator not defined in terraform"] unless exists?
-
-      rtn = REQUIRED_ATTRIBUTES.map { |attr, msg| msg if get_value(attr).nil? }.compact
-      unless review_after.nil?
-        if review_after < Date.today
-          rtn << "Review after date has passed"
-        elsif review_after > (Date.today + YEAR)
-          rtn << "Review after date is more than a year in the future"
-        elsif (Date.today + MONTH) > review_after
-          rtn << "Review after date is within a month"
-        elsif (Date.today + WEEK) > review_after
-          rtn << "Review after date is within a week"
-        end
-      end
-      rtn
+      @terraform_data_as_string = params.fetch(:tfsource, read_terraform_file)
+      @collaborator_exist = false
+      @terraform_data = extract_collaborators_section
     end
 
     def to_hash
+      @issues = check_for_issues
       {
-        "repository" => repository,
-        "login" => login,
+        "repository" => @repository,
+        "login" => @login,
+        "issues" => @issues,
         "status" => status,
-        "issues" => issues,
-        "href" => href,
-        "defined_in_terraform" => exists?,
-        "review_date" => review_after
+        "href" => get_href,
+        "defined_in_terraform" => @collaborator_exist,
+        "review_date" => @review_after_date,
+        "repo_url"=> @repo_url,
+        "login_url" => @login_url,
+        "permission" => @permission
       }
     end
 
-    def name
-      get_value("name")
+    def get_name
+      @name
     end
 
-    def email
-      get_value("email")
+    def get_email
+      @email
     end
 
-    def org
-      get_value("org")
+    def get_org
+      @org
     end
 
-    def reason
-      get_value("reason")
+    def get_reason
+      @reason
     end
 
-    def added_by
-      get_value("added_by")
+    def get_added_by
+      @added_by
     end
 
-    def review_after
-      str = get_value("review_after")
-      str.nil? ? nil : Date.parse(str)
-    rescue Date::Error
-      nil
+    def get_review_after_date
+      @review_after_date
     end
 
-    def href
-      filename = fetch_terraform_source.nil? ? "" : "#{GithubCollaborators.tf_safe(repository)}.tf"
-      [base_url, filename].join("/")
+    def get_href
+      filename = @terraform_data_as_string.nil? ? "" : "#{GithubCollaborators.tf_safe(repository)}.tf"
+      @href = [base_url, filename].join("/")
+    end
+
+    def get_issues
+      @issues
+    end
+
+    def status
+      @issues.any? ? FAIL : PASS
+    end
+
+    def get_repo_url
+      @repo_url
+    end
+
+    def get_login_url
+      @login_url
+    end
+
+    def get_permission
+      @permission
     end
 
     private
 
-    def fetch_terraform_source
+    def exists?
+      user_exists = does_collaborator_exist?
+      if user_exists
+        @collaborator_exist = true
+      end
+      user_exists
+    end
+
+    def check_for_issues
+      return ["Collaborator not defined in terraform"] unless exists?
+
+      # Check each attribute value is present in the .tf file for this collaborator
+      issues = REQUIRED_ATTRIBUTES.map { |attr, msg| msg if get_attribute(attr).nil? }.compact
+
+      retrieve_collaborator_data_from_file(issues)
+
+      # Add a specific issue message regarding the review date
+      unless @review_after_date.nil?
+        if @review_after_date < Date.today
+          issues.push("Review after date has passed")
+        elsif @review_after_date > (Date.today + YEAR)
+          issues.push("Review after date is more than a year in the future")
+        elsif (Date.today + MONTH) > @review_after_date
+          issues.push("Review after date is within a month")
+        elsif (Date.today + WEEK) > @review_after_date
+          issues.push("Review after date is within a week")
+        end
+      end
+      issues
+    end
+
+    def read_terraform_file
       source_file = "#{GithubCollaborators.tf_safe(repository)}.tf"
       filename = File.join(@terraform_dir, source_file)
       FileTest.exists?(filename) ? File.read(filename) : nil
     end
 
-    # Extract the lines of the terraform source which define this specific collaborator
-    def collaborator_source
-      return nil if @tfsource.nil?
+    # extracts all the lines a in terraform file between "collaborators" and "]"
+    def extract_collaborators_section
+      return nil if @terraform_data_as_string.nil?
+      @terraform_data_as_string.split("\n").each_with_object([]) { |line, arr| arr << line if (line =~ / collaborators =/) .. (line =~ /]/); } # rubocop:disable Lint/FlipFlop
+    end
 
-      @str ||= begin
-        # extract all the "collaborators" lines from the terraform source
-        lines = @tfsource.split("\n").each_with_object([]) { |line, arr| arr << line if (line =~ / collaborators =/) .. (line =~ /]/); } # rubocop:disable Lint/FlipFlop
+    def does_collaborator_exist?
+      return false if @terraform_data_as_string.nil?
+      line_number = 0
+      @terraform_data.each do |line|
+        if line.include?("github_user") && line.include?("#{@login}")
+          @user_line_in_terraform_file = line_number
+          return true
+        end
+        line_number += 1
+      end
+      false
+    end
 
-        # break into individual collaborator string chunks (plus some trailing junk)
-        collabs = lines.join("\n").split("}")
-
-        # pull out the block (string) with the collaborator we want
-        collabs.grep(/github_user.*#{login}/).first
+    # Retrieves the terraform data for a specific colloborator
+    def retrieve_collaborator_data_from_file(issues)
+      if issues.length == 0
+        collaborator_data = REQUIRED_ATTRIBUTES.map { |attr, msg| get_attribute(attr) }
+        @permission = collaborator_data[PERMISSION]
+        @name = collaborator_data[NAME]
+        @email = collaborator_data[EMAIL]
+        @org = collaborator_data[ORG]
+        @reason = collaborator_data[REASON]
+        @added_by = collaborator_data[ADDED_BY]
+        if collaborator_data[REVIEW_AFTER].nil? or collaborator_data[REVIEW_AFTER] == ""
+          @review_after_date = Date.today
+        else
+          @review_after_date = Date.parse(collaborator_data[REVIEW_AFTER])
+        end  
       end
     end
 
-    def get_value(val)
-      collaborator_source.split("\n").grep(/#{val}\s+=/).each do |line|
+    # Search for the val parameter within each line of the collaborator block 
+    # this checks the attribute and value exists within the file
+    def get_attribute(val)
+      # Use the offset to read from the line containing the colloborator username within the file
+      offset = @user_line_in_terraform_file
+      collaborator_block = @terraform_data[offset, (offset + REVIEW_AFTER)]
+      collaborator_block.grep(/#{val}\s+=/).each do |line|
         if m = /#{val}.*"([^"]+?)"/.match(line) # rubocop:disable Lint/AssignmentInCondition
           return m[1]
         end
       end
+      logger.error "The attribute #{val} is missing within #{repository}.tf for #{login}"
       nil
     end
   end
 
-  # Most of the functionality within this class is file based
-  # Unlike the GithubCollaborator functionality which can be pointed else where
-  # If you wish to use this elsewhere, the code must be copied to the repo with
-  # The target terraform/*.tf files
   class TerraformCollaborators
-    attr_reader :base_url
+    attr_reader :folder_path
 
     TERRAFORM_DIR = "terraform"
 
     def initialize(params)
       @terraform_dir = params.fetch(:terraform_dir, TERRAFORM_DIR)
-      # Location of the Terraform folder containing collaborators
-      @base_url = params.fetch(:base_url)
+      @folder_path = params.fetch(:folder_path)
     end
 
-    # This function returns the collaborators from a tf file as an array of TerraformCollaborator (singular class)
-    # file_name: string
+    # Returns an array of TerraformCollaborator objects
     def return_collaborators_from_file(file_name)
       # Grab repo name
       repo = file_name[/(?<=#{@terraform_dir}\/)(.*)(?=.tf)/, 1]
@@ -174,15 +232,13 @@ class GithubCollaborators
               GithubCollaborators::TerraformCollaborator.new(
                 repository: repo,
                 login: user,
-                base_url: @base_url
+                base_url: @folder_path
               )
             )
           end
         end
       end
     end
-
-    private
 
     # Return absolute paths for every .tf file in the terraform directory
     def fetch_terraform_files
