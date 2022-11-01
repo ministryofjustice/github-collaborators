@@ -3,7 +3,7 @@
 require_relative "../lib/github_collaborators"
 
 terraform_collaborators = GithubCollaborators::TerraformCollaborators.new(
-  base_url: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
+  folder_path: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
 )
 
 repos = GithubCollaborators::Repositories.new(
