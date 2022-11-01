@@ -10,6 +10,7 @@ class GithubCollaborators
 
     def initialize
       logger.debug "initialize"
+      # TODO: remove this code
       if TESTING
         @outside_collaborators = @@test_outside_collaborator_list
       else
@@ -18,20 +19,6 @@ class GithubCollaborators
       end
       # Grab the GitHub-Collaborator repository open pull requests
       @repo_pull_requests = GithubCollaborators::PullRequests.new.list
-    end
-
-    def close_expired_issues
-      logger.debug "close_expired_issues"
-      @outside_collaborators.each do |x|
-        params = {
-          owner: OWNER,
-          repository: x["repository"],
-          github_user: x["login"]
-        }
-
-        # If issue has been raised and a grace period has expired then close issue
-        GithubCollaborators::IssueCreator.new(params).close_expired_issues
-      end
     end
 
     def is_renewal_within_one_month
@@ -84,11 +71,11 @@ class GithubCollaborators
     end
 
     private
-
+    
+    # Get list of users whose review date have one week remaining
     def find_users_who_expire_soon
       logger.debug "find_users_who_expire_soon"
       users_who_expire_soon = []
-      # Get list of users whose review date have one week remaining
       @outside_collaborators.each do |x|
         x["issues"].each do |issue|
           if issue == "Review after date is within a week"
@@ -126,6 +113,7 @@ class GithubCollaborators
     end
 
     def user_in_data(file_data, user_name)
+      logger.debug "user_in_data"
       data = file_data.split("\n")
       search_pattern = "github_user=\"#{user_name}\""
       line_number = 0
