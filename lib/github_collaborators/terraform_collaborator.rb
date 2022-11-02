@@ -33,6 +33,7 @@ class GithubCollaborators
 
 
     def initialize(params)
+      logger.debug "initialize"
       @repository = params.fetch(:repository, nil)
       @login = params.fetch(:login, nil)
       # URL of the github UI page listing all the terraform files
@@ -48,6 +49,7 @@ class GithubCollaborators
     end
 
     def set_up
+      logger.debug "set_up"
       if @terraform_data_as_string.nil? 
         @terraform_data_as_string = read_terraform_file
       end
@@ -56,6 +58,7 @@ class GithubCollaborators
     end
     
     def to_hash
+      logger.debug "to_hash"
       {
         "repository" => @repository,
         "login" => @login,
@@ -95,6 +98,7 @@ class GithubCollaborators
     end
 
     def get_href
+      logger.debug "get_href"
       filename = @terraform_data_as_string.nil? ? "" : "#{GithubCollaborators.tf_safe(repository)}.tf"
       @href = [base_url, filename].join("/")
     end
@@ -120,8 +124,30 @@ class GithubCollaborators
     end
 
     def extend_review_date
+      logger.debug "extend_review_date"
       new_review_after_date = @review_after_date + 180
       write_new_date_to_file(new_review_after_date)
+    end
+
+    def remove_user
+      logger.debug "remove_user"
+      # Split full file contents (as string) into array of line
+      current_file = @terraform_data_as_string.split("\n")
+      # Find the line for the user
+      # Get the line that starts with "{" before "github_user"
+      line_to_remove = find_user_name_line(current_file) - 1
+      # Remove the lines with the user
+      remove_lines = 10
+      until remove_lines == 0
+        current_file.delete_at(line_to_remove)
+        remove_lines -= 1
+      end
+      # Prepare the data and write to file
+      new_data = current_file.join("\n")
+      file_name = "#{@terraform_dir}/#{@repository}.tf"
+      File.open(file_name, "w") { |f|
+        f.puts(new_data)
+      }
     end
 
     private
@@ -146,6 +172,7 @@ class GithubCollaborators
     end
 
     def exists?
+      logger.debug "exists"
       user_exists = does_collaborator_exist?
       if user_exists
         @collaborator_exist = true
@@ -154,6 +181,7 @@ class GithubCollaborators
     end
 
     def check_for_issues
+      logger.debug "check_for_issues"
       return ["Collaborator not defined in terraform"] unless exists?
 
       # Check each attribute value is present in the .tf file for this collaborator
@@ -177,6 +205,7 @@ class GithubCollaborators
     end
 
     def read_terraform_file
+      logger.debug "read_terraform_file"
       source_file = "#{GithubCollaborators.tf_safe(repository)}.tf"
       filename = File.join(@terraform_dir, source_file)
       FileTest.exists?(filename) ? File.read(filename) : nil
@@ -184,6 +213,7 @@ class GithubCollaborators
 
     # extracts all the lines a in terraform file between "collaborators" and "]"
     def extract_collaborators_section
+      logger.debug "extract_collaborators_section"
       return nil if @terraform_data_as_string.nil?
       @terraform_data_as_string.split("\n").each_with_object([]) { |line, arr| arr << line if (line =~ / collaborators =/) .. (line =~ /]/); } # rubocop:disable Lint/FlipFlop
     end
@@ -213,6 +243,7 @@ class GithubCollaborators
 
     # Retrieves the terraform data for a specific colloborator
     def retrieve_collaborator_data_from_file(issues)
+      logger.debug "retrieve_collaborator_data_from_file"
       if issues.length == 0
         collaborator_data = REQUIRED_ATTRIBUTES.map { |attr, msg| get_attribute(attr) }
         @permission = collaborator_data[PERMISSION]
