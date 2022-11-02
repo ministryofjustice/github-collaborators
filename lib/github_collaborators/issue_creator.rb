@@ -19,44 +19,62 @@ class GithubCollaborators
 
     def create_review_date_expires_soon_issue
       logger.debug "create_review_date_expires_soon_issue"
-      if get_issues_for_user.empty?
+      if !does_issue_already_exists?
         url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
         HttpClient.new.post_json(url, review_date_expires_soon_hash.to_json)
         sleep 2
       end
     end
 
-    # Returns issues for a the user
-    def get_issues_for_user
-      logger.debug "get_issues_for_user"
-      url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
-      # Fetch all issues for repo
-      response = HttpClient.new.fetch_json(url).body
-      response_json = JSON.parse(response, {symbolize_names: true})
-
-      # Return empty array if no issues
-      if response_json.nil? || response_json.empty?
-        []
-      else
+    # Checks if issue already open for a user
+    def does_issue_already_exists?
+      logger.debug "does_issue_already_exists"
+      found_issues = false
+      data = get_issues
+      if !data.nil?
         # Get only issues used by this application
-        issues = response_json.select { |x| x[:title].include? "Review after date" }
+        issues = data.select { |x| x[:title].include? "Review after date" }
 
         # This is a work around for when users unassign themself from the ticket without updating their review_after
         # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
-        bad_issues = issues.select { |x| x[:assignees].length == 0 }
-        bad_issues.each { |x| GithubCollaborators::IssueClose::remove_issue(repository, x[:number]) }
-        issues.delete_if { |x| x[:assignees].length == 0 }
+        bad_issues = issues.select { |issue| issue[:assignees].length == 0 }
+        bad_issues.each { |issue| GithubCollaborators::IssueClose::remove_issue(repository, issue[:number]) }
+        issues.delete_if { |issue| issue[:assignees].length == 0 }
 
-        # Check if there is an issue for that user
-        if !issues.nil? && !issues&.empty?
-          issues.select { |x| x[:assignee][:login] == github_user }
-        else
-          []
+        # Check issues are assigned to the user
+        issues.select { |issue| issue[:assignee][:login] == github_user }
+        if issues.length > 0
+          # Found matching issue
+          found_issues = true
         end
       end
+      found_issues
     end
 
     private
+
+    def get_issues
+      logger.debug "get_issues"
+      url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
+      got_data = false
+      response = nil
+      
+      # Fetch all issues for repo
+      until got_data
+        response = HttpClient.new.fetch_json(url).body
+        if response.include?("errors")
+          if response.include?("RATE_LIMITED")
+            sleep 300
+          else
+            logger.fatal "GH GraphQL query contains errors"
+            abort(response)
+          end
+        else
+          got_data = true
+        end
+      end
+      response.nil? ? nil : JSON.parse(response, {symbolize_names: true})
+    end
 
     def unknown_user_hash
       logger.debug "unknown_user_hash"
