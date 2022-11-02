@@ -27,7 +27,7 @@ require_relative "./github_collaborators/pull_request_creator"
 require_relative "./github_collaborators/terraform_block_creator"
 require_relative "./github_collaborators/slack_notifier"
 require_relative "./github_collaborators/expired"
-require_relative "./github_collaborators/will_expire_by"
+require_relative "./github_collaborators/expires_soon"
 require_relative "./github_collaborators/outside_collaborators.rb"
 require_relative "./github_collaborators/branch_creator.rb"
 
