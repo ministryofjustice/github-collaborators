@@ -13,7 +13,7 @@ class GithubCollaborators
       {
         terraform_dir: "spec/tmp",
         terraform_executable: "/bin/terraform",
-        org_ext_collabs: oec,
+        org_outside_collabs: oec,
         executor: executor,
         logger: logger
       }

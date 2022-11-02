@@ -7,13 +7,13 @@ class GithubCollaborators
       logger.debug "initialize"
       @terraform_dir = params.fetch(:terraform_dir)
       @terraform_executable = params.fetch(:terraform_executable)
-      @org_ext_collabs = params.fetch(:org_ext_collabs)
+      @org_outside_collabs = params.fetch(:org_outside_collabs)
       @executor = params.fetch(:executor) { Executor.new }
     end
 
-    def import(repo_names)
+    def import(repositories)
       logger.debug "import"
-      repo_names.each do |repository|
+      repositories.each do |repository|
         collaborators = outside_collaborators(repository)
         if collaborators.any?
           logger.info "Importing collaborators for #{repository}"
@@ -27,7 +27,7 @@ class GithubCollaborators
 
     def outside_collaborators(repository)
       logger.debug "outside_collaborators"
-      @org_ext_collabs.fetch_repository_collaborators(repository)
+      @org_outside_collabs.fetch_repository_collaborators(repository)
     end
 
     def create_terraform_file(repository, collaborators)
@@ -50,7 +50,7 @@ class GithubCollaborators
 
       collaborators.each do |collaborator|
         login = collaborator.fetch(:login)
-        logger.info "importing collaborator #{login} for repository #{repository}"
+        logger.info "Importing collaborator #{login} for repository #{repository}"
         cmd = %(cd #{terraform_dir}; #{terraform_executable} import module.#{repo}.github_repository_collaborator.collaborator[\\"#{login}\\"] #{repository}:#{login})
         logger.info cmd
         @executor.run(cmd)
