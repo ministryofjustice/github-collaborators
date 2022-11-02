@@ -65,10 +65,10 @@ class GithubCollaborators
     def get_outside_collaborators(end_cursor = nil)
       logger.debug "get_outside_collaborators"
       json = graphql.run_query(outside_collaborators_query_pagination(end_cursor))
-      sleep(2)
+      sleep 2
       if json.include?("errors")
         if json.include?("RATE_LIMITED")
-          sleep(300)
+          sleep 300
           get_outside_collaborators(end_cursor)
         else
           logger.fatal "GH GraphQL query contains errors"

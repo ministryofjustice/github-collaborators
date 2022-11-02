@@ -60,10 +60,10 @@ class GithubCollaborators
     def get_pull_requests
       logger.debug "get_pull_requests"
       json = graphql.run_query(pull_request_query)
-      sleep(2)
+      sleep 2
       if json.include?("errors")
         if json.include?("RATE_LIMITED")
-          sleep(300)
+          sleep 300
           get_pull_requests
         else
           logger.fatal "GH GraphQL query contains errors"

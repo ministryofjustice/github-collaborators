@@ -59,10 +59,10 @@ class GithubCollaborators
       json = nil
       until got_data
         json = graphql.run_query(organisation_members_query(end_cursor))
-        sleep(1)
+        sleep 1
         if json.include?("errors")
           if json.include?("RATE_LIMITED")
-            sleep(300)
+            sleep 300
           else
             logger.fatal "GH GraphQL query contains errors"
             abort(json)

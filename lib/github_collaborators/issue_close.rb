@@ -15,7 +15,7 @@ class GithubCollaborators
         response = HttpClient.new.fetch_json(url).body
         if response.include?("errors")
           if response.include?("RATE_LIMITED")
-            sleep(300)
+            sleep 300
           else
             logger.fatal "GH GraphQL query contains errors"
             abort(response)

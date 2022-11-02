@@ -73,7 +73,7 @@ class GithubCollaborators
       json = graphql.run_query(repositories_query(end_cursor))
       if json.include?("errors")
         if json.include?("RATE_LIMITED")
-          sleep(300)
+          sleep 300
           get_repos(end_cursor)
         else
           logger.fatal "GH GraphQL query contains errors"

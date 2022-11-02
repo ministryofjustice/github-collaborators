@@ -61,7 +61,7 @@ if pr_is_fork
   http.request(request)
 
   # Give GitHub API a little time
-  sleep(5)
+  sleep 5
 
   # Close PR
   http, uri = client(pr_pull_url)
