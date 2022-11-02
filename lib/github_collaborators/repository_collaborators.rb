@@ -41,8 +41,8 @@ class GithubCollaborators
       @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
     end
 
-    def list
-      logger.debug "list"
+    def fetch_all_collaborators
+      logger.debug "fetch_all_collaborators"
       @list ||= get_all_outside_collaborators
     end
 

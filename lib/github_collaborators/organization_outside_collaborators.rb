@@ -100,7 +100,7 @@ class GithubCollaborators
       RepositoryCollaborators.new(
         login: login,
         repository: repo_name
-      ).list
+      ).fetch_all_collaborators
     end
   end
 end
