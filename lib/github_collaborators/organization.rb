@@ -44,7 +44,7 @@ class GithubCollaborators
       graphql.get_paginated_results do |end_cursor|
         data = get_organisation_members(end_cursor)
         if data.nil?
-          logger.fatal("GH GraphQL query data is missing")
+          logger.fatal "GH GraphQL query data is missing"
           abort
         else
           arr = data.fetch("edges").map { |d| Member.new(d) }
@@ -64,14 +64,14 @@ class GithubCollaborators
           if json.include?("RATE_LIMITED")
             sleep(300)
           else
-            logger.fatal("GH GraphQL query contains errors")
+            logger.fatal "GH GraphQL query contains errors"
             abort(json)
           end
         else
           got_data = true
         end
       end
-      json.nil? nil : JSON.parse(json).dig("data", "organization", "membersWithRole")
+      json.nil? ? nil : JSON.parse(json).dig("data", "organization", "membersWithRole")
     end
 
     def organisation_members_query(end_cursor)

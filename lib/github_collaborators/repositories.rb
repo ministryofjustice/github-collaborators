@@ -62,7 +62,7 @@ class GithubCollaborators
           arr = data.fetch("nodes").map { |d| Repository.new(d) }
           [arr, data]
         else
-          logger.warn("GH GraphQL query data is missing")
+          logger.fatal "GH GraphQL query data is missing"
           abort
         end
       end
@@ -72,11 +72,11 @@ class GithubCollaborators
       logger.debug "get_repos"
       json = graphql.run_query(repositories_query(end_cursor))
       if json.include?("errors")
-        warn("repositories:get_repos(): graphql query contains errors")
         if json.include?("RATE_LIMITED")
           sleep(300)
           get_repos(end_cursor)
         else
+          logger.fatal "GH GraphQL query contains errors"
           abort(json)
         end
       else

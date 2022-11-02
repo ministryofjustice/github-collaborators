@@ -62,11 +62,11 @@ class GithubCollaborators
       json = graphql.run_query(pull_request_query)
       sleep(2)
       if json.include?("errors")
-        warn("pull_requests:get_pull_requests(): graphql query contains errors")
         if json.include?("RATE_LIMITED")
           sleep(300)
           get_pull_requests
         else
+          logger.fatal "GH GraphQL query contains errors"
           abort(json)
         end
       else

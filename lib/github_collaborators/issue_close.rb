@@ -17,7 +17,7 @@ class GithubCollaborators
           if response.include?("RATE_LIMITED")
             sleep(300)
           else
-            logger.fatal("GH GraphQL query contains errors")
+            logger.fatal "GH GraphQL query contains errors"
             abort(response)
           end
         else

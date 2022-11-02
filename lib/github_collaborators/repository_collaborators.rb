@@ -55,7 +55,7 @@ class GithubCollaborators
           arr = data.fetch("edges").map { |d| Collaborator.new(d) }
           [arr, data]
         else
-          warn("repository_collaborators:get_all_outside_collaborators(): graphql query data missing")
+          logger.fatal "GH GraphQL query data missing"
           abort
         end
       end
@@ -67,11 +67,11 @@ class GithubCollaborators
       json = graphql.run_query(outside_collaborators_query_pagination(end_cursor))
       sleep(2)
       if json.include?("errors")
-        warn("repository_collaborators:get_outside_collaborators(): graphql query contains errors")
         if json.include?("RATE_LIMITED")
           sleep(300)
           get_outside_collaborators(end_cursor)
         else
+          logger.fatal "GH GraphQL query contains errors"
           abort(json)
         end
       else

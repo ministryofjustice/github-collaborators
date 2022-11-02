@@ -78,7 +78,7 @@ class GithubCollaborators
     def insert
       logger.debug "insert"
       if repositories.nil?
-        warn("ABORTED. terraform_block_creator:80 data[repositories] is nil. ")
+        logger.fatal "Data is nil."
         exit(1)
       else
         # For each repository
@@ -108,7 +108,7 @@ class GithubCollaborators
       string.tr(".", "-").strip
     end
 
-    # Util function to return location of repo file from repo name
+    # Return location of repo file from repo name
     def repo_file(repo)
       logger.debug ""
       "terraform/#{tf_safe(repo)}.tf"
