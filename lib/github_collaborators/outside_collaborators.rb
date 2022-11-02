@@ -18,7 +18,7 @@ class GithubCollaborators
         @collaborators_with_issues = GithubCollaborators::OrganizationOutsideCollaborators.new(login: OWNER, base_url: BASE_URL).fetch_users_with_issues
       end
       # Grab the GitHub-Collaborator repository open pull requests
-      @repo_pull_requests = GithubCollaborators::PullRequests.new.list
+      @repo_pull_requests = GithubCollaborators::PullRequests.new.fetch_pull_requests
     end
 
     def is_renewal_within_one_month
