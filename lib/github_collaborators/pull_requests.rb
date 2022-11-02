@@ -44,8 +44,8 @@ class GithubCollaborators
       end
     end
 
-    def list
-      logger.debug "list"
+    def fetch_pull_requests
+      logger.debug "fetch_pull_requests"
       @list ||= get_all_pull_requests
     end
 

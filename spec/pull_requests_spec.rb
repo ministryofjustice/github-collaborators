@@ -16,6 +16,6 @@ class GithubCollaborators
       allow(graphql).to receive(:run_query).and_return(json)
     end
 
-    specify { expect(pullrequests.list.size).to eq(10) }
+    specify { expect(pullrequests.fetch_pull_requests.size).to eq(10) }
   end
 end
