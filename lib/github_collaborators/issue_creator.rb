@@ -10,19 +10,19 @@ class GithubCollaborators
       @github_user = params.fetch(:github_user)
     end
 
-    def create
-      logger.debug "create"
+    def create_unknown_user_issue
+      logger.debug "create_unknown_user_issue"
       url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
-      HttpClient.new.post_json(url, issue_hash.to_json)
-      sleep 1
+      HttpClient.new.post_json(url, unknown_user_hash.to_json)
+      sleep 2
     end
 
-    def create_review_date
-      logger.debug "create_review_date"
+    def create_review_date_expires_soon_issue
+      logger.debug "create_review_date_expires_soon_issue"
       if get_issues_for_user.empty?
         url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
-        HttpClient.new.post_json(url, issue_hash_review_after.to_json)
-        sleep 1
+        HttpClient.new.post_json(url, review_date_expires_soon_hash.to_json)
+        sleep 2
       end
     end
 
@@ -44,7 +44,7 @@ class GithubCollaborators
         # This is a work around for when users unassign themself from the ticket without updating their review_after
         # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
         bad_issues = issues.select { |x| x[:assignees].length == 0 }
-        bad_issues.each { |x| remove_issue(x[:number]) }
+        bad_issues.each { |x| GithubCollaborators::IssueClose::remove_issue(repository, x[:number]) }
         issues.delete_if { |x| x[:assignees].length == 0 }
 
         # Check if there is an issue for that user
@@ -58,27 +58,15 @@ class GithubCollaborators
 
     private
 
-    def remove_issue(issue_id)
-      logger.debug "remove_issue"
-      url = "https://api.github.com/repos/#{owner}/#{repository}/issues/#{issue_id}"
-
-      params = {
-        state: "closed"
-      }
-
-      HttpClient.new.patch_json(url, params.to_json)
-    end
-
-    def issue_hash
-      logger.debug "issue_hash"
+    def unknown_user_hash
+      logger.debug "unknown_user_hash"
       {
         title: "Please define outside collaborators in code",
         assignees: [github_user],
         body: <<~EOF
           Hi there
           
-          We now have a process to manage github collaborators in code:
-          https://github.com/ministryofjustice/github-collaborators/blob/main/README.md#github-outside-collaborators
+          We have a process to manage github collaborators in code: https://github.com/ministryofjustice/github-collaborators
           
           Please follow the procedure described there to grant @#{github_user} access to this repository.
           
@@ -89,20 +77,21 @@ class GithubCollaborators
       }
     end
 
-    def issue_hash_review_after
-      logger.debug "issue_hash_review_after"
+    def review_date_expires_soon_hash
+      logger.debug "review_date_expires_soon_hash"
       {
-        title: "Review after date expiry is upcoming for user: #{github_user}",
+        title: "Collaborator review date expires soon for user: #{github_user}",
         assignees: [github_user],
         body: <<~EOF
           Hi there
           
-          The user @#{github_user} has its access for this repository maintained in code here:
-          https://github.com/ministryofjustice/github-collaborators/blob/main/README.md#github-outside-collaborators
+          The user @#{github_user} has its access for this repository maintained in code here: https://github.com/ministryofjustice/github-collaborators
 
           The review_after date is due to expire within one month, please update this via a PR if they still require access.
           
           If you have any questions, please post in #ask-operations-engineering on Slack.
+
+          Failure to update the review_date will result in the user being removed from the repository via our automation.
         EOF
       }
     end

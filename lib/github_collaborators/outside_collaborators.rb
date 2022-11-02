@@ -32,7 +32,7 @@ class GithubCollaborators
 
         # Create an issue on the repo when "Review after date is within a month" is true
         if x["issues"].include? "Review after date is within a month"
-          GithubCollaborators::IssueCreator.new(params).create_review_date
+          GithubCollaborators::IssueCreator.new(params).create_review_date_expires_soon_issue
         end
       end
     end
@@ -51,10 +51,8 @@ class GithubCollaborators
           # We must create the issue before removing access, because the issue is
           # assigned to the removed collaborator, so that they (hopefully) get a
           # notification about it.
-          GithubCollaborators::IssueCreator.new(params).create
-          sleep 3
+          GithubCollaborators::IssueCreator.new(params).create_unknown_user_issue
           GithubCollaborators::AccessRemover.new(params).remove
-          sleep 1
         end
       end
     end

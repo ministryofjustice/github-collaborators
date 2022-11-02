@@ -14,7 +14,7 @@ class GithubCollaborators
       logger.debug "remove"
       url = "https://api.github.com/repos/#{owner}/#{repository}/collaborators/#{github_user}"
       HttpClient.new.delete(url)
-      sleep 1
+      sleep 2
     end
   end
 end

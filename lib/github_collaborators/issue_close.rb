@@ -32,7 +32,7 @@ class GithubCollaborators
         issues.each do |issue|
           # Check for the issues created by this application and that the issue is open
           if (
-            issue[:title].include?("Review after date expiry is upcoming") || 
+            issue[:title].include?("Collaborator review date expires soon") || 
             issue[:title].include?("Please define outside collaborators in code")
           ) && issue[:state] == "open"
             # Get issue created date and add 45 day grace period
@@ -41,14 +41,11 @@ class GithubCollaborators
             if grace_period < Date.today
               # Close issue as grace period has expired
               remove_issue(repository, issue[:number])
-              sleep 3
             end
           end
         end
       end
     end
-
-    private
 
     def remove_issue(repository, issue_id)
       logger.debug "remove_issue"
@@ -62,6 +59,8 @@ class GithubCollaborators
       HttpClient.new.patch_json(url, params.to_json)
 
       logger.info "Closed issue #{issue_id} on repository #{repository}."
+
+      sleep 2
     end
   end
 end
