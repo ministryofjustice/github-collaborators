@@ -85,14 +85,16 @@ class GithubCollaborators
     private
 
     # Returns a list of outside collaborators and additionally checks they are not MoJ organisation Members
-    # Note this has nothing to do with the TerraformCollaborators which is based of the tf files, this is from the GitHub API directly
+    # This reads data from the GitHub API
+    # This has nothing to do with the TerraformCollaborators class which reads data from the .tf files
     def get_repository_outside_collaborators(repo_name)
       logger.debug "get_repository_outside_collaborators"
       outside_collaborators(repo_name).reject { |user| @organization.is_member?(user.login) }
     end
 
     # Returns a list of outside collaborators for a given repository
-    # Note this has nothing to do with the TerraformCollaborators which is based of the tf files, this is from the GitHub API directly
+    # This reads data from the GitHub API
+    # This has nothing to do with the TerraformCollaborators class which reads data from the .tf files
     def outside_collaborators(repo_name)
       logger.debug "outside_collaborators"
       RepositoryCollaborators.new(
