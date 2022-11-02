@@ -100,7 +100,7 @@ repo_delta.each { |repo|
     hash_body: create_hash(file_name, branch_name)
   }
 
-  GithubCollaborators::PullRequestCreator.new(params).create
+  GithubCollaborators::PullRequestCreator.new(params).create_pull_request
 }
 
 logger.info "Finished"

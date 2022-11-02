@@ -20,8 +20,7 @@ class GithubCollaborators
       url = "https://api.github.com/repos/ministryofjustice/somerepo/pulls"
       expect(HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:post_json).with(url, json)
-
-      ic.create
+      ic.create_pull_request
     end
   end
 end

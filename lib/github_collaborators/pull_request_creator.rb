@@ -11,8 +11,8 @@ class GithubCollaborators
     end
 
     # Create pull request
-    def create
-      logger.debug "create"
+    def create_pull_request
+      logger.debug "create_pull_request"
       url = "https://api.github.com/repos/#{@owner}/#{@repository}/pulls"
       HttpClient.new.post_json(url, @hash_body.to_json)
       sleep 1

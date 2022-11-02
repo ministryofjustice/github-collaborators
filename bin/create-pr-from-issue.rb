@@ -43,6 +43,6 @@ params = {
 sleep 5
 
 # Open PR
-GithubCollaborators::PullRequestCreator.new(params).create
+GithubCollaborators::PullRequestCreator.new(params).create_pull_request
 
 logger.info "Finished"
