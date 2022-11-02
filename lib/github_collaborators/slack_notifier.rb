@@ -9,8 +9,8 @@ class GithubCollaborators
       @collaborators = collaborators
     end
 
-    def run
-      logger.debug "run"
+    def post_slack_message
+      logger.debug "post_slack_message"
       unless post_to_slack?
         logger.info "Skipping Slack post this is a dry run"
         return

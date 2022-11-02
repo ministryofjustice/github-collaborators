@@ -62,7 +62,7 @@ class GithubCollaborators
       expired_users = find_users_who_have_expired
       
       # Raise Slack message
-      GithubCollaborators::SlackNotifier.new(GithubCollaborators::Expired.new, POST_TO_SLACK, expired_users).run
+      GithubCollaborators::SlackNotifier.new(GithubCollaborators::Expired.new, POST_TO_SLACK, expired_users).post_slack_message
 
       # Raise PRs
       create_remove_user_pull_requests(expired_users)
@@ -73,7 +73,7 @@ class GithubCollaborators
       users_who_expire_soon = find_users_who_expire_soon
       
       # Raise Slack message
-      GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, POST_TO_SLACK, users_who_expire_soon).run
+      GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, POST_TO_SLACK, users_who_expire_soon).post_slack_message
 
       # Raise PRs
       create_extend_date_pull_requests(users_who_expire_soon)
@@ -198,7 +198,7 @@ class GithubCollaborators
             hash_body: extend_date_hash(user_name, branch_name)
           }
         
-          GithubCollaborators::PullRequestCreator.new(params).create
+          GithubCollaborators::PullRequestCreator.new(params).create_pull_request
         end
       end
     end
@@ -248,7 +248,7 @@ class GithubCollaborators
             hash_body: remove_user_hash(user_name, branch_name)
           }
         
-          GithubCollaborators::PullRequestCreator.new(params).create
+          GithubCollaborators::PullRequestCreator.new(params).create_pull_request
         end
       end
     end
