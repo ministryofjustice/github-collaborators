@@ -2,7 +2,7 @@ class GithubCollaborators
   class BranchCreator
     include Logging
 
-    def initialize()
+    def initialize
       logger.debug "initialize"
       @g = Git.open(".")
     end
@@ -12,7 +12,7 @@ class GithubCollaborators
       @branch_name = branch_name
       @g.config("user.name", "Operations Engineering Bot")
       @g.config("user.email", "dummy@email.com")
-      @g.checkout(branch_name, new_branch: true, start_point: 'main')
+      @g.checkout(branch_name, new_branch: true, start_point: "main")
     end
 
     def add(files)
@@ -35,7 +35,7 @@ class GithubCollaborators
       # @g.checkout("main")
       @g.checkout("raise-review-date-pr")
     end
-    
+
     # Check remote branches, create a new branch name if already taken
     def check_branch_name_is_valid(branch_name)
       logger.debug "check_branch_is_valid"

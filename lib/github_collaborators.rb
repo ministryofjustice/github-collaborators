@@ -28,8 +28,8 @@ require_relative "./github_collaborators/terraform_block_creator"
 require_relative "./github_collaborators/slack_notifier"
 require_relative "./github_collaborators/expired"
 require_relative "./github_collaborators/expires_soon"
-require_relative "./github_collaborators/outside_collaborators.rb"
-require_relative "./github_collaborators/branch_creator.rb"
+require_relative "./github_collaborators/outside_collaborators"
+require_relative "./github_collaborators/branch_creator"
 
 PAGE_SIZE = 100
 

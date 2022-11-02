@@ -3,19 +3,19 @@ class GithubCollaborators
     include Logging
 
     OWNER = "ministryofjustice"
-    BASE_URL = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"    
+    BASE_URL = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
     TESTING = true
     POST_TO_SLACK = ENV.fetch("REALLY_POST_TO_SLACK", 0) == "1"
 
     def initialize
       logger.debug "initialize"
       # TODO: remove this code
-      if TESTING
+      @collaborators_with_issues = if TESTING
         # @collaborators_with_issues = @@test_outside_collaborator_list
-        @collaborators_with_issues = test_data
+        test_data
       else
         # Create a list of users that are outside collaborators ie not MoJ Organisation Members
-        @collaborators_with_issues = GithubCollaborators::OrganizationOutsideCollaborators.new(login: OWNER, base_url: BASE_URL).fetch_users_with_issues
+        GithubCollaborators::OrganizationOutsideCollaborators.new(login: OWNER, base_url: BASE_URL).fetch_users_with_issues
       end
       # Grab the GitHub-Collaborator repository open pull requests
       @repo_pull_requests = GithubCollaborators::PullRequests.new.fetch_pull_requests
@@ -45,7 +45,7 @@ class GithubCollaborators
           repository: collaborator["repository"],
           github_user: collaborator["login"]
         }
-        
+
         if x["defined_in_terraform"] == false
           logger.info "Removing collaborator #{collaborator["login"]} from repository #{collaborator["repository"]}"
           # We must create the issue before removing access, because the issue is
@@ -60,7 +60,7 @@ class GithubCollaborators
     def has_review_date_expired
       logger.debug "has_review_date_expired"
       expired_users = find_users_who_have_expired
-      
+
       # Raise Slack message
       GithubCollaborators::SlackNotifier.new(GithubCollaborators::Expired.new, POST_TO_SLACK, expired_users).post_slack_message
 
@@ -71,7 +71,7 @@ class GithubCollaborators
     def is_review_date_within_a_week
       logger.debug "is_review_date_within_a_week"
       users_who_expire_soon = find_users_who_expire_soon
-      
+
       # Raise Slack message
       GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, POST_TO_SLACK, users_who_expire_soon).post_slack_message
 
@@ -80,7 +80,7 @@ class GithubCollaborators
     end
 
     private
-    
+
     # Get list of users whose review date have one week remaining
     def find_users_who_expire_soon
       logger.debug "find_users_who_expire_soon"
@@ -126,7 +126,7 @@ class GithubCollaborators
     def extend_date_in_file(file_name, user_name)
       logger.debug "extend_date_in_file"
 
-      params = { 
+      params = {
         repository: File.basename(file_name, ".tf"),
         login: user_name,
         base_url: nil,
@@ -141,7 +141,7 @@ class GithubCollaborators
     def remove_user_from_file(file_name, user_name)
       logger.debug "remove_user_from_file"
 
-      params = { 
+      params = {
         repository: File.basename(file_name, ".tf"),
         login: user_name,
         base_url: nil,
@@ -152,22 +152,20 @@ class GithubCollaborators
       tc = TerraformCollaborator.new(params)
       tc.remove_user
     end
-  
+
     def create_extend_date_pull_requests(users_who_expire_soon)
       logger.debug "create_extend_date_pull_requests"
       # Put users into groups to commit multiple files per branch
       user_groups = users_who_expire_soon.group_by { |user| user["login"] }
       user_groups.each do |group|
-
         # Ready a new branch
-        bc = GithubCollaborators::BranchCreator::new
+        bc = GithubCollaborators::BranchCreator.new
         branch_name = ""
         user_name = ""
         edited_files = []
 
         # For each file that user has an upcoming expiry
         group[1].each do |outside_collaborator|
-
           # Check if a pull request is already pending
           terraform_file_name = File.basename(outside_collaborator["href"])
           user_name = outside_collaborator["login"]
@@ -183,7 +181,7 @@ class GithubCollaborators
         end
 
         if edited_files.length > 0
-          # At the end of each user group commit any modified file/s 
+          # At the end of each user group commit any modified file/s
           branch_name = bc.check_branch_name_is_valid(branch_name)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
@@ -197,7 +195,7 @@ class GithubCollaborators
             repository: "github-collaborators",
             hash_body: extend_date_hash(user_name, branch_name)
           }
-        
+
           GithubCollaborators::PullRequestCreator.new(params).create_pull_request
         end
       end
@@ -208,16 +206,14 @@ class GithubCollaborators
       # Put users into groups to commit multiple files per branch
       user_groups = expired_users.group_by { |user| user["login"] }
       user_groups.each do |group|
-
         # Ready a new branch
-        bc = GithubCollaborators::BranchCreator::new
+        bc = GithubCollaborators::BranchCreator.new
         branch_name = ""
         user_name = ""
         edited_files = []
 
         # For each file where user has expired
         group[1].each do |outside_collaborator|
-
           # Check if a pull request is already pending
           terraform_file_name = File.basename(outside_collaborator["href"])
           user_name = outside_collaborator["login"]
@@ -247,7 +243,7 @@ class GithubCollaborators
             repository: "github-collaborators",
             hash_body: remove_user_hash(user_name, branch_name)
           }
-        
+
           GithubCollaborators::PullRequestCreator.new(params).create_pull_request
         end
       end
@@ -256,10 +252,9 @@ class GithubCollaborators
     def does_pr_already_exist(terraform_file_name, title_message)
       logger.debug "does_pr_already_exist"
       @repo_pull_requests.each do |pull_request|
-        if (
-          (pull_request.title.include? "#{title_message}") &&
-          (pull_request.files.include? "terraform/#{terraform_file_name}")
-        )
+        if (pull_request.title.include? title_message.to_s) &&
+            (pull_request.files.include? "terraform/#{terraform_file_name}")
+
           logger.debug "For #{user_name} PR already open for #{terraform_file_name} file"
           return true
         end
@@ -306,48 +301,47 @@ class GithubCollaborators
     end
 
     def test_data
-
       params = {
         terraform_dir: "terraform",
         folder_path: "/Users/nick.walters/MoJ/github-collaborators"
       }
-      
+
       terraform_collabs = GithubCollaborators::TerraformCollaborators.new(params)
       the_files = terraform_collabs.fetch_terraform_files
-      
+
       exclude_files = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
-      
+
       collabs = []
       the_files.each do |file|
         if !exclude_files.include?(File.basename(file))
-      
+
           params2 = {
             folder_path: "/Users/nick.walters/MoJ/github-collaborators"
           }
           collaborators_in_file = GithubCollaborators::TerraformCollaborators.new(params2).return_collaborators_from_file(file)
-      
+
           collaborators_in_file.each do |collaborator|
             params1 = {
               repository: File.basename(file, ".tf"),
               base_url: "/Users/nick.walters/MoJ/github-collaborators",
-              login: collaborator.login,
+              login: collaborator.login
             }
-        
+
             tc = GithubCollaborators::TerraformCollaborator.new(params1)
             the_hash = tc.to_hash
             collabs.push(the_hash)
             # if tc.status == GithubCollaborators::TerraformCollaborator::FAIL
             #   print file
             #   print "\n"
-      
+
             #   print collaborator.login
             #   print "\n"
-      
+
             #   tc.get_issues.each do |issue|
             #     print issue
             #     print "\n"
             #   end
-      
+
             #   print tc.get_review_after_date
             #   print "\n"
             #   print "\n"

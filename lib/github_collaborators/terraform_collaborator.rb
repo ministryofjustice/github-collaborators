@@ -1,4 +1,4 @@
-# Given a repository name and a github login, return all the data for a 
+# Given a repository name and a github login, return all the data for a
 # given collaborator specified within the terraform source code.
 class GithubCollaborators
   class TerraformCollaborator
@@ -29,7 +29,6 @@ class GithubCollaborators
       "review_after" => "Collaboration review date is missing"
     }
 
-
     def initialize(params)
       logger.debug "initialize"
       @repository = params.fetch(:repository, nil)
@@ -48,13 +47,13 @@ class GithubCollaborators
 
     def set_up
       logger.debug "set_up"
-      if @terraform_data_as_string.nil? 
+      if @terraform_data_as_string.nil?
         @terraform_data_as_string = read_terraform_file
       end
       @terraform_data = extract_collaborators_section
       @issues = check_for_issues
     end
-    
+
     def to_hash
       logger.debug "to_hash"
       {
@@ -65,7 +64,7 @@ class GithubCollaborators
         "href" => get_href,
         "defined_in_terraform" => @collaborator_exist,
         "review_date" => @review_after_date,
-        "repo_url"=> @repo_url,
+        "repo_url" => @repo_url,
         "login_url" => @login_url,
         "permission" => @permission
       }
@@ -180,7 +179,7 @@ class GithubCollaborators
       logger.debug "find_user_name_line"
       line_number = 0
       the_data.each do |line|
-        if line.include?("github_user") && line.include?("#{@login}")
+        if line.include?("github_user") && line.include?(@login.to_s)
           return line_number
         end
         line_number += 1
@@ -192,11 +191,7 @@ class GithubCollaborators
       logger.debug "does_collaborator_exist"
       return false if @terraform_data_as_string.nil?
       @user_line_in_terraform_file = find_user_name_line(@terraform_data)
-      if @user_line_in_terraform_file == 0
-        return false
-      else
-        return true
-      end
+      !(@user_line_in_terraform_file == 0)
     end
 
     # Retrieves the terraform data for a specific collaborator
@@ -210,15 +205,15 @@ class GithubCollaborators
         @org = collaborator_data[ORG]
         @reason = collaborator_data[REASON]
         @added_by = collaborator_data[ADDED_BY]
-        if collaborator_data[REVIEW_AFTER].nil? or collaborator_data[REVIEW_AFTER] == ""
-          @review_after_date = Date.today
+        @review_after_date = if collaborator_data[REVIEW_AFTER].nil? || (collaborator_data[REVIEW_AFTER] == "")
+          Date.today
         else
-          @review_after_date = Date.parse(collaborator_data[REVIEW_AFTER])
-        end  
+          Date.parse(collaborator_data[REVIEW_AFTER])
+        end
       end
     end
 
-    # Search for the val parameter within each line of the collaborator block 
+    # Search for the val parameter within each line of the collaborator block
     # this checks the attribute and value exists within the file
     def get_attribute(val)
       logger.debug "get_attribute"

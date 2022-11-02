@@ -33,7 +33,7 @@ class GithubCollaborators
       fetch_org_repositories.each_with_object([]) { |repo, arr|
         # For all outside collaborators attached to a repository
         get_repository_outside_collaborators(repo.name).each do |user|
-          params = { 
+          params = {
             repository: repo.name,
             login: user.login,
             base_url: @base_url,

@@ -61,7 +61,7 @@ class GithubCollaborators
         if data.nil?
           logger.fatal "GH GraphQL query data is missing"
           abort
-        else  
+        else
           arr = data.fetch("nodes").map { |d| Repository.new(d) }
           [arr, data]
         end
