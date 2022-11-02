@@ -1,5 +1,6 @@
 class GithubCollaborators
   class Collaborator
+    include Logging
     attr_reader :data
 
     GITHUB_TO_TERRAFORM_PERMISSIONS = {
@@ -23,25 +24,30 @@ class GithubCollaborators
     end
 
     def permission
+      logger.debug "permission"
       perm = data.fetch("permission").downcase!
       GITHUB_TO_TERRAFORM_PERMISSIONS.fetch(perm)
     end
   end
 
   class RepositoryCollaborators
+    include Logging
     attr_reader :graphql, :repository, :login
 
     def initialize(params)
+      logger.debug "initialize"
       @login = params.fetch(:login)
       @repository = params.fetch(:repository)
       @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
     end
 
     def list
+      logger.debug "list"
       @list ||= get_all_outside_collaborators
     end
 
     def get_all_outside_collaborators
+      logger.debug "get_all_outside_collaborators"
       arr = []
       graphql.get_paginated_results do |end_cursor|
         data = get_outside_collaborators(end_cursor)
@@ -57,6 +63,7 @@ class GithubCollaborators
     end
 
     def get_outside_collaborators(end_cursor = nil)
+      logger.debug "get_outside_collaborators"
       json = graphql.run_query(outside_collaborators_query_pagination(end_cursor))
       sleep(2)
       if json.include?("errors")
@@ -73,6 +80,7 @@ class GithubCollaborators
     end
 
     def outside_collaborators_query_pagination(end_cursor)
+      logger.debug "outside_collaborators_query_pagination"
       after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
       %[
       {

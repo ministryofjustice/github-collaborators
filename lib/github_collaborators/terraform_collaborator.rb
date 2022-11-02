@@ -2,9 +2,7 @@
 # given collaborator specified within the terraform source code.
 class GithubCollaborators
   class TerraformCollaborator
-
     include Logging
-
     attr_reader :repository, :login, :base_url
 
     TERRAFORM_DIR = "terraform"

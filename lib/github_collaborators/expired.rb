@@ -1,6 +1,5 @@
 class GithubCollaborators
   class Expired
-
     include Logging
 
     def create_line(collaborator)

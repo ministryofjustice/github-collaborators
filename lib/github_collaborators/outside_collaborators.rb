@@ -1,6 +1,5 @@
 class GithubCollaborators
   class OutsideCollaborators
-
     include Logging
 
     OWNER = "ministryofjustice"

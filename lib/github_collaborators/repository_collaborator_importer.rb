@@ -1,10 +1,10 @@
 class GithubCollaborators
   class RepositoryCollaboratorImporter
+    include Logging
     attr_reader :terraform_dir, :terraform_executable
 
-    include Logging
-
     def initialize(params)
+      logger.debug "initialize"
       @terraform_dir = params.fetch(:terraform_dir)
       @terraform_executable = params.fetch(:terraform_executable)
       @org_ext_collabs = params.fetch(:org_ext_collabs)
@@ -12,6 +12,7 @@ class GithubCollaborators
     end
 
     def import(repo_names)
+      logger.debug "import"
       repo_names.each do |repository|
         collaborators = outside_collaborators(repository)
         if collaborators.any?
@@ -25,10 +26,12 @@ class GithubCollaborators
     private
 
     def outside_collaborators(repository)
+      logger.debug "outside_collaborators"
       @org_ext_collabs.for_repository(repository)
     end
 
     def create_terraform_file(repository, collaborators)
+      logger.debug "create_terraform_file"
       terraform = render_template(repository, collaborators)
       outfile = output_file(repository)
       File.write(outfile, terraform)
@@ -36,10 +39,12 @@ class GithubCollaborators
     end
 
     def output_file(repository)
+      logger.debug "output_file"
       "#{terraform_dir}/#{GithubCollaborators.tf_safe(repository)}.tf"
     end
 
     def import_collaborators(repository, collaborators)
+      logger.debug "v"
       repo = GithubCollaborators.tf_safe(repository)
       @executor.run("cd #{terraform_dir}; #{terraform_executable} init")
 
@@ -53,6 +58,7 @@ class GithubCollaborators
     end
 
     def render_template(repository, collaborators)
+      logger.debug "render_template"
       repo = GithubCollaborators.tf_safe(repository)
 
       template = <<~EOF

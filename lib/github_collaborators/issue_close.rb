@@ -1,6 +1,5 @@
 class GithubCollaborators
   class IssueClose
-
     include Logging
 
     # Close issues that have been open longer than 45 days

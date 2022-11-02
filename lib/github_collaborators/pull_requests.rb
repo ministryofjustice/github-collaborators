@@ -1,8 +1,10 @@
 class GithubCollaborators
   class PullRequest
+    include Logging
     attr_reader :data
 
     def initialize(data)
+      logger.debug "initialize"
       @data = data
     end
 
@@ -30,9 +32,11 @@ class GithubCollaborators
   end
 
   class PullRequests
+    include Logging
     attr_reader :graphql
 
     def initialize(params = nil)
+      logger.debug "initialize"
       @graphql = if params.nil?
         GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
       else
@@ -41,17 +45,20 @@ class GithubCollaborators
     end
 
     def list
+      logger.debug "list"
       @list ||= get_all_pull_requests
     end
 
     private
 
     def get_all_pull_requests
+      logger.debug "get_all_pull_requests"
       data = get_pull_requests
       data.fetch("nodes").map { |d| PullRequest.new(d) }
     end
 
     def get_pull_requests
+      logger.debug "get_pull_requests"
       json = graphql.run_query(pull_request_query)
       sleep(2)
       if json.include?("errors")

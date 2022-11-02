@@ -3,12 +3,14 @@ class GithubCollaborators
     include Logging
 
     def initialize(notification, enabled, collaborators)
+      logger.debug "initialize"
       @notification = notification
       @enabled = !!enabled
       @collaborators = collaborators
     end
 
     def run
+      logger.debug "run"
       unless post_to_slack?
         logger.info "Skipping Slack post this is a dry run"
         return
@@ -26,6 +28,7 @@ class GithubCollaborators
     end
 
     def message_payload
+      logger.debug "message_payload"
       # Use the class singular or multiple message based on number of collaborators in list
       notification_message = @collaborators.length == 1 ? @notification.singular_message : @notification.multiple_message(@collaborators.length)
 

@@ -1,20 +1,24 @@
 class GithubCollaborators
   class IssueCreator
+    include Logging
     attr_reader :owner, :repository, :github_user
 
     def initialize(params)
+      logger.debug "initialize"
       @owner = params.fetch(:owner)
       @repository = params.fetch(:repository)
       @github_user = params.fetch(:github_user)
     end
 
     def create
+      logger.debug "create"
       url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
       HttpClient.new.post_json(url, issue_hash.to_json)
       sleep 1
     end
 
     def create_review_date
+      logger.debug "create_review_date"
       if get_issues_for_user.empty?
         url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
         HttpClient.new.post_json(url, issue_hash_review_after.to_json)
@@ -24,6 +28,7 @@ class GithubCollaborators
 
     # Returns issues for a the user
     def get_issues_for_user
+      logger.debug "get_issues_for_user"
       url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
       # Fetch all issues for repo
       response = HttpClient.new.fetch_json(url).body
@@ -54,6 +59,7 @@ class GithubCollaborators
     private
 
     def remove_issue(issue_id)
+      logger.debug "remove_issue"
       url = "https://api.github.com/repos/#{owner}/#{repository}/issues/#{issue_id}"
 
       params = {
@@ -64,6 +70,7 @@ class GithubCollaborators
     end
 
     def issue_hash
+      logger.debug "issue_hash"
       {
         title: "Please define outside collaborators in code",
         assignees: [github_user],
@@ -83,6 +90,7 @@ class GithubCollaborators
     end
 
     def issue_hash_review_after
+      logger.debug "issue_hash_review_after"
       {
         title: "Review after date expiry is upcoming for user: #{github_user}",
         assignees: [github_user],

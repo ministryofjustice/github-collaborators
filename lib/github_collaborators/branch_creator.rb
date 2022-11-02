@@ -1,6 +1,5 @@
 class GithubCollaborators
   class BranchCreator
-
     include Logging
 
     def initialize()

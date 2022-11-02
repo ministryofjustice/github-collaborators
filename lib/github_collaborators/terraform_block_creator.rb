@@ -3,9 +3,11 @@
 
 class GithubCollaborators
   class TerraformBlockCreator
+    include Logging
     attr_reader :data
 
     def initialize(data)
+      logger.debug "initialize"
       # Creates a hash of arrays with field: [0] value
       # From a GitHub issues reponse created from an issue template
       # Example:
@@ -74,6 +76,7 @@ class GithubCollaborators
 
     # This method inserts the Terraform blocks defined by this class into the relevant terraform/*.tf files
     def insert
+      logger.debug "insert"
       if repositories.nil?
         warn("ABORTED. terraform_block_creator:80 data[repositories] is nil. ")
         exit(1)
@@ -107,6 +110,7 @@ class GithubCollaborators
 
     # Util function to return location of repo file from repo name
     def repo_file(repo)
+      logger.debug ""
       "terraform/#{tf_safe(repo)}.tf"
     end
 
@@ -114,6 +118,7 @@ class GithubCollaborators
     # Pass it the infomation needed for such, see example at:
     # https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/yjaf-auth.tf
     def create_insert
+      logger.debug "create_insert"
       <<~EOF
         \s\s\s\s{
             \s\sgithub_user  = "#{username}"
