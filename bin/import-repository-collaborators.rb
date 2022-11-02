@@ -2,9 +2,7 @@
 
 require_relative "../lib/github_collaborators"
 
-include Logging
-
-logger.info "Start"
+puts "Start"
 
 repositories = ARGV
 
@@ -19,4 +17,4 @@ GithubCollaborators::RepositoryCollaboratorImporter.new(
   )
 ).import(repositories)
 
-logger.info "Finished"
+puts "Finished"

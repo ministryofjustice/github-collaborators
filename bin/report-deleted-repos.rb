@@ -2,9 +2,7 @@
 
 require_relative "../lib/github_collaborators"
 
-include Logging
-
-logger.info "Start"
+puts "Start"
 
 login = "ministryofjustice"
 terraform_dir = "terraform"
@@ -55,8 +53,8 @@ repo_delta.delete_if { |repo|
     GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/#{login}/#{repo_name}").code != "404"
 }
 
-logger.info "Current repo files that need deleting"
-logger.info repo_delta
+puts "Current repo files that need deleting"
+puts repo_delta
 
 # -------------------------
 # Report section over
@@ -103,4 +101,4 @@ repo_delta.each { |repo|
   GithubCollaborators::PullRequestCreator.new(params).create_pull_request
 }
 
-logger.info "Finished"
+puts "Finished"

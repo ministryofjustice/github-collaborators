@@ -2,9 +2,7 @@
 
 require_relative "../lib/github_collaborators"
 
-include Logging
-
-logger.info "Start"
+puts "Start"
 
 # GitHub settings
 owner = "ministryofjustice"
@@ -45,4 +43,4 @@ sleep 5
 # Open PR
 GithubCollaborators::PullRequestCreator.new(params).create_pull_request
 
-logger.info "Finished"
+puts "Finished"

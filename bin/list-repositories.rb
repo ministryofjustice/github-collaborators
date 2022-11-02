@@ -2,12 +2,10 @@
 
 require_relative "../lib/github_collaborators"
 
-include Logging
-
-logger.info "Start"
+puts "Start"
 
 repositories = GithubCollaborators::Repositories.new(login: "ministryofjustice").active_repositories
 
 repositories.map(&:name).sort.each { |repo| puts repo }
 
-logger.info "Finished"
+puts "Finished"
