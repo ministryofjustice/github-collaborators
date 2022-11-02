@@ -18,6 +18,7 @@ def remove_collaborator(hash)
   # assigned to the removed collaborator, so that they (hopefully) get a
   # notification about it.
   GithubCollaborators::IssueCreator.new(params).create
+  sleep 3
   GithubCollaborators::AccessRemover.new(params).remove
 end
 
