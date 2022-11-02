@@ -2,6 +2,10 @@
 
 require_relative "../lib/github_collaborators"
 
+include Logging
+
+logger.info "Start"
+
 login = "ministryofjustice"
 terraform_dir = "terraform"
 
@@ -96,3 +100,5 @@ repo_delta.each { |repo|
 
   GithubCollaborators::PullRequestCreator.new(params).create
 }
+
+logger.info "Finished"
