@@ -44,7 +44,7 @@ class GithubCollaborators
     end
 
     def import_collaborators(repository, collaborators)
-      logger.debug "v"
+      logger.debug "import_collaborators"
       repo = GithubCollaborators.tf_safe(repository)
       @executor.run("cd #{terraform_dir}; #{terraform_executable} init")
 

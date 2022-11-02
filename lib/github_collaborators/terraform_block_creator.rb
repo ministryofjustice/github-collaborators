@@ -110,7 +110,7 @@ class GithubCollaborators
 
     # Return location of repo file from repo name
     def repo_file(repo)
-      logger.debug ""
+      logger.debug "repo_file"
       "terraform/#{tf_safe(repo)}.tf"
     end
 

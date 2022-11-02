@@ -51,7 +51,7 @@ class GithubCollaborators
     private
 
     def remove_issue(repository, issue_id)
-      logger.debug("remove_issue")
+      logger.debug "remove_issue"
 
       url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues/#{issue_id}"
 
