@@ -43,31 +43,35 @@ class GithubCollaborators
       logger.debug "get_all_organisation_members"
       graphql.get_paginated_results do |end_cursor|
         data = get_organisation_members(end_cursor)
-        if data
-          arr = data.fetch("edges").map { |d| Member.new(d) }
-          [arr, data]
-        else
+        if data.nil?
           logger.fatal("GH GraphQL query data is missing")
           abort
+        else
+          arr = data.fetch("edges").map { |d| Member.new(d) }
+          [arr, data]
         end
       end
     end
 
     def get_organisation_members(end_cursor = nil)
       logger.debug "get_organisation_members"
-      json = graphql.run_query(organisation_members_query(end_cursor))
-      sleep(2)
-      if json.include?("errors")
-        if json.include?("RATE_LIMITED")
-          sleep(300)
-          get_organisation_members(end_cursor)
+      got_data = false
+      json = nil
+      until got_data
+        json = graphql.run_query(organisation_members_query(end_cursor))
+        sleep(1)
+        if json.include?("errors")
+          if json.include?("RATE_LIMITED")
+            sleep(300)
+          else
+            logger.fatal("GH GraphQL query contains errors")
+            abort(json)
+          end
         else
-          logger.fatal("GH GraphQL query contains errors")
-          abort(json)
+          got_data = true
         end
-      else
-        JSON.parse(json).dig("data", "organization", "membersWithRole")
       end
+      json.nil? nil : JSON.parse(json).dig("data", "organization", "membersWithRole")
     end
 
     def organisation_members_query(end_cursor)
