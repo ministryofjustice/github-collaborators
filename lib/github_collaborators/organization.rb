@@ -56,22 +56,21 @@ class GithubCollaborators
     def get_organisation_members(end_cursor = nil)
       logger.debug "get_organisation_members"
       got_data = false
-      json = nil
+      response = nil
       until got_data
-        json = graphql.run_query(organisation_members_query(end_cursor))
-        sleep 1
-        if json.include?("errors")
-          if json.include?("RATE_LIMITED")
+        response = graphql.run_query(organisation_members_query(end_cursor))
+        if response.include?("errors")
+          if response.include?("RATE_LIMITED")
             sleep 300
           else
             logger.fatal "GH GraphQL query contains errors"
-            abort(json)
+            abort(response)
           end
         else
           got_data = true
         end
       end
-      json.nil? ? nil : JSON.parse(json).dig("data", "organization", "membersWithRole")
+      response.nil? ? nil : JSON.parse(response).dig("data", "organization", "membersWithRole")
     end
 
     def organisation_members_query(end_cursor)

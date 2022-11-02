@@ -58,30 +58,35 @@ class GithubCollaborators
       logger.debug "get_all_repos"
       graphql.get_paginated_results do |end_cursor|
         data = get_repos(end_cursor)
-        if data
-          arr = data.fetch("nodes").map { |d| Repository.new(d) }
-          [arr, data]
-        else
+        if data.nil?
           logger.fatal "GH GraphQL query data is missing"
           abort
+        else  
+          arr = data.fetch("nodes").map { |d| Repository.new(d) }
+          [arr, data]
         end
       end
     end
 
     def get_repos(end_cursor = nil)
       logger.debug "get_repos"
-      json = graphql.run_query(repositories_query(end_cursor))
-      if json.include?("errors")
-        if json.include?("RATE_LIMITED")
-          sleep 300
-          get_repos(end_cursor)
+      got_data = false
+      response = nil
+
+      until got_data
+        response = graphql.run_query(repositories_query(end_cursor))
+        if response.include?("errors")
+          if response.include?("RATE_LIMITED")
+            sleep 300
+          else
+            logger.fatal "GH GraphQL query contains errors"
+            abort(response)
+          end
         else
-          logger.fatal "GH GraphQL query contains errors"
-          abort(json)
+          got_data = true
         end
-      else
-        JSON.parse(json).dig("data", "organization", "repositories")
       end
+      response.nil? ? nil : JSON.parse(response).dig("data", "organization", "repositories")
     end
 
     def repositories_query(end_cursor)

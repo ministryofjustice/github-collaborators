@@ -51,12 +51,12 @@ class GithubCollaborators
       arr = []
       graphql.get_paginated_results do |end_cursor|
         data = get_outside_collaborators(end_cursor)
-        if data
-          arr = data.fetch("edges").map { |d| Collaborator.new(d) }
-          [arr, data]
-        else
+        if data.nil?
           logger.fatal "GH GraphQL query data missing"
           abort
+        else
+          arr = data.fetch("edges").map { |d| Collaborator.new(d) }
+          [arr, data]
         end
       end
       arr
@@ -64,19 +64,23 @@ class GithubCollaborators
 
     def get_outside_collaborators(end_cursor = nil)
       logger.debug "get_outside_collaborators"
-      json = graphql.run_query(outside_collaborators_query_pagination(end_cursor))
-      sleep 2
-      if json.include?("errors")
-        if json.include?("RATE_LIMITED")
-          sleep 300
-          get_outside_collaborators(end_cursor)
+      got_data = false
+      response = nil
+
+      until got_data
+        response = graphql.run_query(outside_collaborators_query_pagination(end_cursor))
+        if response.include?("errors")
+          if response.include?("RATE_LIMITED")
+            sleep 300
+          else
+            logger.fatal "GH GraphQL query contains errors"
+            abort(response)
+          end
         else
-          logger.fatal "GH GraphQL query contains errors"
-          abort(json)
+          got_data = true
         end
-      else
-        JSON.parse(json).dig("data", "organization", "repository", "collaborators")
       end
+      response.nil? ? nil : JSON.parse(response).dig("data", "organization", "repository", "collaborators")
     end
 
     def outside_collaborators_query_pagination(end_cursor)

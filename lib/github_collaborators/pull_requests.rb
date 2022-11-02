@@ -54,24 +54,33 @@ class GithubCollaborators
     def get_all_pull_requests
       logger.debug "get_all_pull_requests"
       data = get_pull_requests
-      data.fetch("nodes").map { |d| PullRequest.new(d) }
+      if data.nil?
+        logger.fatal "GH GraphQL query data is missing"
+        abort
+      else
+        data.fetch("nodes").map { |d| PullRequest.new(d) }
+      end
     end
 
     def get_pull_requests
       logger.debug "get_pull_requests"
-      json = graphql.run_query(pull_request_query)
-      sleep 2
-      if json.include?("errors")
-        if json.include?("RATE_LIMITED")
-          sleep 300
-          get_pull_requests
+      got_data = false
+      response = nil
+
+      until got_data
+        response = graphql.run_query(pull_request_query)
+        if response.include?("errors")
+          if response.include?("RATE_LIMITED")
+            sleep 300
+          else
+            logger.fatal "GH GraphQL query contains errors"
+            abort(response)
+          end
         else
-          logger.fatal "GH GraphQL query contains errors"
-          abort(json)
+          got_data = true
         end
-      else
-        JSON.parse(json).dig("data", "organization", "repository", "pullRequests")
       end
+      response.nil? ? nil : JSON.parse(response).dig("data", "organization", "repository", "pullRequests")
     end
 
     def pull_request_query
