@@ -8,7 +8,7 @@ terraform_collaborators = GithubCollaborators::TerraformCollaborators.new(
 
 repos = GithubCollaborators::Repositories.new(
   login: "ministryofjustice"
-).current
+).active_repositories
 
 outside_collaborators = GithubCollaborators::OrganizationOutsideCollaborators.new(
   login: "ministryofjustice",

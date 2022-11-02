@@ -79,7 +79,7 @@ class GithubCollaborators
     # Returns a list of all active repositories (as Repositories objects) excluding locked, archived etc
     def fetch_org_repositories
       logger.debug "repositories"
-      @repos ||= Repositories.new(login: login).current
+      @repos ||= Repositories.new(login: login).active_repositories
     end
 
     private

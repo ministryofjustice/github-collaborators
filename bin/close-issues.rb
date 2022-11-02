@@ -6,7 +6,7 @@ include Logging
 
 logger.info "Start"
 
-repositories ||= GithubCollaborators::Repositories.new(login: "ministryofjustice").current
+repositories ||= GithubCollaborators::Repositories.new(login: "ministryofjustice").active_repositories
 
 repositories.each do |repository|
   GithubCollaborators::IssueClose.new.close_expired_issues(repository.name)

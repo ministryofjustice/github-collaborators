@@ -39,20 +39,20 @@ class GithubCollaborators
       @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
     end
 
-    def list
-      logger.debug "list"
-      @list ||= get_all_repos
-    end
-
-    def current
-      logger.debug "current"
-      list
+    def active_repositories
+      logger.debug "active_repositories"
+      fetch_repositories
         .reject(&:archived?)
         .reject(&:disabled?)
         .reject(&:locked?)
     end
 
     private
+
+    def fetch_repositories
+      logger.debug "fetch_repositories"
+      @list ||= get_all_repos
+    end
 
     def get_all_repos
       logger.debug "get_all_repos"

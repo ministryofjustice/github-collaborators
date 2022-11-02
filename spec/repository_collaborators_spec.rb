@@ -23,7 +23,7 @@ class GithubCollaborators
 
     it "lists collaborators" do
       expect(
-        repo_collabs.list.map(&:login).sort
+        repo_collabs.fetch_all_collaborators.map(&:login).sort
       ).to eq(collaborators)
     end
   end
