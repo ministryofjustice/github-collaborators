@@ -20,6 +20,7 @@ def remove_collaborator(hash)
   GithubCollaborators::IssueCreator.new(params).create
   sleep 3
   GithubCollaborators::AccessRemover.new(params).remove
+  sleep 1
 end
 
 ############################################################
