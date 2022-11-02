@@ -74,21 +74,21 @@ repos.each do |repo|
       json = GithubCollaborators::HttpClient.new.fetch_json(url).body
       if json != ""
         JSON.parse(json)
-          .find_all { |c| c["invitee"]["login"] }
-          .map { |c| pending_invites.push(c) }
+          .find_all { |collaborator| collaborator["invitee"]["login"] }
+          .map { |collaborator| pending_invites.push(collaborator) }
       end
 
       # Print collaborator name + pending invite or name only
       tc.each do |tc_collaborator|
         if pending_invites.length != 0
-          print tc_collaborator.login.to_s unless gc.any? { |x| x.fetch(:login) == tc_collaborator.login }
-          pending_invites.each do |x|
-            if x["invitee"]["login"] == tc_collaborator.login
+          print tc_collaborator.login.to_s unless gc.any? { |collaborator| collaborator.fetch(:login) == tc_collaborator.login }
+          pending_invites.each do |collaborator|
+            if collaborator["invitee"]["login"] == tc_collaborator.login
               print ": Has a pending invite \n"
             end
           end
         else
-          puts tc_collaborator.login unless gc.any? { |x| x.fetch(:login) == tc_collaborator.login }
+          puts tc_collaborator.login unless gc.any? { |collaborator| collaborator.fetch(:login) == tc_collaborator.login }
         end
       end
 
@@ -96,8 +96,8 @@ repos.each do |repo|
       if gc.length > 0
         puts "-" * 37
         puts "The #{gc.length} Outside Collaborator/s for this repository are:"
-        gc.each do |i|
-          puts i.fetch(:login)
+        gc.each do |collaborator|
+          puts collaborator.fetch(:login)
         end
       end
       puts "=" * 37
