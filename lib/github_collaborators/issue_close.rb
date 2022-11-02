@@ -6,26 +6,41 @@ class GithubCollaborators
     def close_expired_issues(repository)
       logger.debug "close_expired_issues"
 
-      # Fetch all issues for repo
       url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
-      response = HttpClient.new.fetch_json(url).body
-      response_json = JSON.parse(response, {symbolize_names: true})
+      got_data = false
+      response = nil
+      
+      # Fetch all issues for a repository
+      until got_data
+        response = HttpClient.new.fetch_json(url).body
+        if response.include?("errors")
+          if response.include?("RATE_LIMITED")
+            sleep(300)
+          else
+            logger.fatal("GH GraphQL query contains errors")
+            abort(response)
+          end
+        end
+        got_data = true
+      end
+
+      issues = JSON.parse(response, {symbolize_names: true})
       allowed_days = 45
 
-      if !response_json.nil? && !response_json.empty?
-        response_json.each do |json|
+      if !issues.nil? && !issues.empty?
+        issues.each do |issue|
           # Check for the issues created by this application and that the issue is open
           if (
-            json[:title].include?("Review after date expiry is upcoming") || 
-            json[:title].include?("Please define outside collaborators in code")
-          ) && json[:state] == "open"
+            issue[:title].include?("Review after date expiry is upcoming") || 
+            issue[:title].include?("Please define outside collaborators in code")
+          ) && issue[:state] == "open"
             # Get issue created date and add 45 day grace period
-            created_date = Date.parse(json[:created_at])
+            created_date = Date.parse(issue[:created_at])
             grace_period = created_date + allowed_days
             if grace_period < Date.today
               # Close issue as grace period has expired
-              remove_issue(repository, json[:number])
-              sleep 5
+              remove_issue(repository, issue[:number])
+              sleep 3
             end
           end
         end
