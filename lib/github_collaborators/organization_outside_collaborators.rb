@@ -10,7 +10,7 @@ class GithubCollaborators
       @organization ||= Organization.new(params.fetch(:login))
     end
 
-    # Sample response
+    # Sample response: A [] of {} objects as shown below
     # [
     #   {
     #     "repository"=>"vcms-test-automation",
@@ -27,38 +27,41 @@ class GithubCollaborators
     #     "permission"=>"push"
     #   },
     # ]
-    def list
-      logger.debug "list"
+    def fetch_users_with_issues
+      logger.debug "fetch_users_with_issues"
       # For every repository in MoJ GitHub organisation
-      repositories.each_with_object([]) { |repo, arr|
-        # Ignore these files
-        exclude_files = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
-        if !exclude_files.include?(File.basename(repo.name))
-        
-          # For all outside collaborators attached to a repository
-          get_repository_outside_collaborators(repo.name).each do |user|
-            params = { 
-              repository: repo.name,
-              login: user.login,
-              base_url: @base_url,
-              repo_url: repo.url,
-              login_url: user.url,
-              permission: user.permission
-            }
-            tc = TerraformCollaborator.new(params)
-            if tc.status == TerraformCollaborator::FAIL
-              arr.push(tc.to_hash)
-            end
-            arr # rubocop:disable Lint/Void
+      fetch_org_repositories.each_with_object([]) { |repo, arr|
+        # For all outside collaborators attached to a repository
+        get_repository_outside_collaborators(repo.name).each do |user|
+          params = { 
+            repository: repo.name,
+            login: user.login,
+            base_url: @base_url,
+            repo_url: repo.url,
+            login_url: user.url,
+            permission: user.permission
+          }
+          # Create the terraform file equivalent of the collaborator
+          tc = TerraformCollaborator.new(params)
+          # Is there an issue with the collaborator
+          if tc.status == TerraformCollaborator::FAIL
+            # This collaborator has an issue
+            arr.push(tc.to_hash)
           end
+          arr # rubocop:disable Lint/Void
         end
       }
     end
 
-    # Returns the outside collaborators for a certain repository, sample response:
-    # {:login=>"benashton", :login_url=>"https://github.com/benashton", :permission=>"admin"}
-    def for_repository(repo_name)
-      logger.debug "for_repository"
+    # Returns the outside collaborators for a certain repository
+    # Sample response: immutable hash values
+    # {
+    #   :login=>"benashton",
+    #   :login_url=>"https://github.com/benashton",
+    #   :permission=>"admin"
+    # }
+    def fetch_repository_collaborators(repo_name)
+      logger.debug "fetch_repository_collaborators"
       get_repository_outside_collaborators(repo_name).map do |user|
         {
           login: user.login,
@@ -73,8 +76,8 @@ class GithubCollaborators
       @organization.is_member?(user_login)
     end
 
-    # Returns a list of all active repositories as Repositories objects (does not include locked, archived etc)
-    def repositories
+    # Returns a list of all active repositories (as Repositories objects) excluding locked, archived etc
+    def fetch_org_repositories
       logger.debug "repositories"
       @repos ||= Repositories.new(login: login).current
     end

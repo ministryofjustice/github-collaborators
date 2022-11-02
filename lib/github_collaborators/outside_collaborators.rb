@@ -11,11 +11,11 @@ class GithubCollaborators
       logger.debug "initialize"
       # TODO: remove this code
       if TESTING
-        # @outside_collaborators = @@test_outside_collaborator_list
-        @outside_collaborators = test_data
+        # @collaborators_with_issues = @@test_outside_collaborator_list
+        @collaborators_with_issues = test_data
       else
         # Create a list of users that are outside collaborators ie not MoJ Organisation Members
-        @outside_collaborators = GithubCollaborators::OrganizationOutsideCollaborators.new(login: OWNER, base_url: BASE_URL).list
+        @collaborators_with_issues = GithubCollaborators::OrganizationOutsideCollaborators.new(login: OWNER, base_url: BASE_URL).fetch_users_with_issues
       end
       # Grab the GitHub-Collaborator repository open pull requests
       @repo_pull_requests = GithubCollaborators::PullRequests.new.list
@@ -23,11 +23,11 @@ class GithubCollaborators
 
     def is_renewal_within_one_month
       logger.debug "is_renewal_within_one_month"
-      @outside_collaborators.each do |x|
+      @collaborators_with_issues.each do |collaborator|
         params = {
           owner: OWNER,
-          repository: x["repository"],
-          github_user: x["login"]
+          repository: collaborator["repository"],
+          github_user: collaborator["login"]
         }
 
         # Create an issue on the repo when "Review after date is within a month" is true
@@ -39,15 +39,15 @@ class GithubCollaborators
 
     def remove_unknown_collaborators
       logger.debug "remove_unknown_collaborators"
-      @outside_collaborators.each do |x|
+      @collaborators_with_issues.each do |collaborator|
         params = {
           owner: OWNER,
-          repository: x["repository"],
-          github_user: x["login"]
+          repository: collaborator["repository"],
+          github_user: collaborator["login"]
         }
         
         if x["defined_in_terraform"] == false
-          logger.info "Removing collaborator #{x["login"]} from repository #{x["repository"]}"
+          logger.info "Removing collaborator #{collaborator["login"]} from repository #{collaborator["repository"]}"
           # We must create the issue before removing access, because the issue is
           # assigned to the removed collaborator, so that they (hopefully) get a
           # notification about it.
@@ -85,11 +85,11 @@ class GithubCollaborators
     def find_users_who_expire_soon
       logger.debug "find_users_who_expire_soon"
       users_who_expire_soon = []
-      @outside_collaborators.each do |user|
-        user["issues"].each do |issue|
+      @collaborators_with_issues.each do |collaborator|
+        collaborator["issues"].each do |issue|
           if issue == "Review after date is within a week"
-            users_who_expire_soon.push(user)
-            logger.info "Review after date is within a week for #{user["login"]} on #{user["review_date"]}"
+            users_who_expire_soon.push(collaborator)
+            logger.info "Review after date is within a week for #{collaborator["login"]} on #{collaborator["review_date"]}"
           end
         end
       end
@@ -106,11 +106,11 @@ class GithubCollaborators
     def find_users_who_have_expired
       logger.debug "find_users_who_have_expired"
       users_who_have_expired = []
-      @outside_collaborators.each do |user|
-        user["issues"].each do |issue|
+      @collaborators_with_issues.each do |collaborator|
+        collaborator["issues"].each do |issue|
           if issue == "Review after date has passed"
-            users_who_have_expired.push(user)
-            logger.info "Review after date has passed for #{user["login"]} on #{user["review_date"]}"
+            users_who_have_expired.push(collaborator)
+            logger.info "Review after date has passed for #{collaborator["login"]} on #{collaborator["review_date"]}"
           end
         end
       end
@@ -156,7 +156,7 @@ class GithubCollaborators
     def create_extend_date_pull_requests(users_who_expire_soon)
       logger.debug "create_extend_date_pull_requests"
       # Put users into groups to commit multiple files per branch
-      user_groups = users_who_expire_soon.group_by { |x| x["login"] }
+      user_groups = users_who_expire_soon.group_by { |user| user["login"] }
       user_groups.each do |group|
 
         # Ready a new branch
@@ -206,7 +206,7 @@ class GithubCollaborators
     def create_remove_user_pull_requests(expired_users)
       logger.debug "create_remove_user_pull_requests"
       # Put users into groups to commit multiple files per branch
-      user_groups = expired_users.group_by { |x| x["login"] }
+      user_groups = expired_users.group_by { |user| user["login"] }
       user_groups.each do |group|
 
         # Ready a new branch

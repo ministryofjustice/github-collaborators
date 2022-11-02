@@ -239,7 +239,7 @@ class GithubCollaborators
       end
     end
 
-    # Retrieves the terraform data for a specific colloborator
+    # Retrieves the terraform data for a specific collaborator
     def retrieve_collaborator_data_from_file(issues)
       logger.debug "retrieve_collaborator_data_from_file"
       if issues.length == 0
@@ -262,7 +262,7 @@ class GithubCollaborators
     # this checks the attribute and value exists within the file
     def get_attribute(val)
       logger.debug "get_attribute"
-      # Use the offset to read from the line containing the colloborator username within the file
+      # Use the offset to read from the line containing the collaborator username within the file
       offset = @user_line_in_terraform_file
       collaborator_block = @terraform_data[offset, (offset + REVIEW_AFTER)]
       collaborator_block.grep(/#{val}\s+=/).each do |line|

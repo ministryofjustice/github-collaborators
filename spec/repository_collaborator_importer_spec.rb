@@ -7,7 +7,7 @@ class GithubCollaborators
         {login: "digitalronin", permission: "admin"}
       ]
     }
-    let(:oec) { double(OrganizationOutsideCollaborators, for_repository: collabs) }
+    let(:oec) { double(OrganizationOutsideCollaborators, fetch_repository_collaborators: collabs) }
 
     let(:params) {
       {

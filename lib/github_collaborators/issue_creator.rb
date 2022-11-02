@@ -35,7 +35,7 @@ class GithubCollaborators
         logger.error "Issues are missing"
       else
         # Get only issues used by this application
-        issues = data.select { |x| x[:title].include? "Review after date" }
+        issues = data.select { |issue| issue[:title].include? "Review after date" }
 
         # This is a work around for when users unassign themself from the ticket without updating their review_after
         # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
@@ -43,7 +43,7 @@ class GithubCollaborators
         bad_issues.each { |issue| GithubCollaborators::IssueClose::remove_issue(repository, issue[:number]) }
         issues.delete_if { |issue| issue[:assignees].length == 0 }
 
-        # Check issues are assigned to the user
+        # Check which issues are assigned to the user
         issues.select { |issue| issue[:assignee][:login] == github_user }
         if issues.length > 0
           # Found matching issue

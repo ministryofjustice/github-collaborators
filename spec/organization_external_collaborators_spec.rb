@@ -46,7 +46,7 @@ class GithubCollaborators
     end
 
     it "lists outside collaborators for a repo" do
-      expect(org_ext_collabs.for_repository("aaa")).to eq([alice_hash])
+      expect(org_ext_collabs.fetch_repository_collaborators("aaa")).to eq([alice_hash])
     end
   end
 end
