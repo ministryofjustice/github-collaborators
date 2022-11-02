@@ -55,8 +55,8 @@ repo_delta.delete_if { |repo|
     GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/#{login}/#{repo_name}").code != "404"
 }
 
-puts "Current repo files that need deleting"
-puts repo_delta
+logger.info "Current repo files that need deleting"
+logger.info repo_delta
 
 # -------------------------
 # Report section over
