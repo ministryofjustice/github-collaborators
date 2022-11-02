@@ -65,7 +65,7 @@ class GithubCollaborators
       expired_users = find_users_who_have_expired
       
       # Raise Slack message
-      GithubCollaborators::SlackNotifier.new(WillExpireBy.new, POST_TO_SLACK, expired_users).run
+      GithubCollaborators::SlackNotifier.new(GithubCollaborators::Expired.new, POST_TO_SLACK, expired_users).run
 
       # Raise PRs
       create_remove_user_pull_requests(expired_users)
@@ -76,7 +76,7 @@ class GithubCollaborators
       users_who_expire_soon = find_users_who_expire_soon
       
       # Raise Slack message
-      GithubCollaborators::SlackNotifier.new(WillExpireBy.new, POST_TO_SLACK, users_who_expire_soon).run
+      GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, POST_TO_SLACK, users_who_expire_soon).run
 
       # Raise PRs
       create_extend_date_pull_requests(users_who_expire_soon)
@@ -88,18 +88,18 @@ class GithubCollaborators
     def find_users_who_expire_soon
       logger.debug "find_users_who_expire_soon"
       users_who_expire_soon = []
-      @outside_collaborators.each do |x|
-        x["issues"].each do |issue|
+      @outside_collaborators.each do |user|
+        user["issues"].each do |issue|
           if issue == "Review after date is within a week"
-            users_who_expire_soon.push(x)
-            logger.info "Review after date is within a week for #{x["login"]} on #{x["review_date"]}"
+            users_who_expire_soon.push(user)
+            logger.info "Review after date is within a week for #{user["login"]} on #{user["review_date"]}"
           end
         end
       end
 
       if users_who_expire_soon.length > 0
         # Sort list based on username
-        users_who_expire_soon.sort_by! { |x| x["login"] }
+        users_who_expire_soon.sort_by! { |user| user["login"] }
       end
 
       users_who_expire_soon
@@ -109,40 +109,21 @@ class GithubCollaborators
     def find_users_who_have_expired
       logger.debug "find_users_who_have_expired"
       users_who_have_expired = []
-      @outside_collaborators.each do |x|
-        x["issues"].each do |issue|
+      @outside_collaborators.each do |user|
+        user["issues"].each do |issue|
           if issue == "Review after date has passed"
-            logger.info "Review after date has passed for #{x["login"]} on #{x["review_date"]}"
+            users_who_have_expired.push(user)
+            logger.info "Review after date has passed for #{user["login"]} on #{user["review_date"]}"
           end
         end
       end
 
       if users_who_have_expired.length > 0
         # Sort list based on username
-        users_who_have_expired.sort_by! { |x| x["login"] }
+        users_who_have_expired.sort_by! { |user| user["login"] }
       end
 
       users_who_have_expired
-    end
-
-    def extend_date_hash(user_name, branch_name)
-      logger.debug "extend_date_hash"
-      {
-        title: "Extend review dates for #{user_name}",
-        head: branch_name,
-        base: "main",
-        body: <<~EOF
-          Hi there
-          
-          This is the GitHub-Collaborator repository bot. 
-
-          #{user_name} has review date/s that are close to expiring. 
-          
-          The review date/s have automatically been extended.
-
-          Either approve this pull request, modify it or delete it if it is no longer necessary.
-        EOF
-      }
     end
 
     def extend_date_in_file(file_name, user_name)
@@ -158,6 +139,21 @@ class GithubCollaborators
       }
       tc = TerraformCollaborator.new(params)
       tc.extend_review_date
+    end
+
+    def remove_user_from_file(file_name, user_name)
+      logger.debug "remove_user_from_file"
+
+      params = { 
+        repository: File.basename(file_name, ".tf"),
+        login: user_name,
+        base_url: nil,
+        repo_url: nil,
+        login_url: nil,
+        permission: nil
+      }
+      tc = TerraformCollaborator.new(params)
+      tc.remove_user
     end
   
     def create_extend_date_pull_requests(users_who_expire_soon)
@@ -178,8 +174,9 @@ class GithubCollaborators
           # Check if a pull request is already pending
           terraform_file_name = File.basename(outside_collaborator["href"])
           user_name = outside_collaborator["login"]
+          title_message = "Extend review dates for #{user_name}"
 
-          if !does_pr_already_exist(terraform_file_name, user_name)
+          if !does_pr_already_exist(terraform_file_name, title_message)
             # No pull request exists, modify the file
             file_name = "terraform/#{terraform_file_name}"
             branch_name = "update-review-date-#{user_name}"
@@ -188,40 +185,125 @@ class GithubCollaborators
           end
         end
 
-        # TODO re-enable code
-        # if edited_files.length > 0
-        #   # At end of each user group commit modified file/s 
-        #   bc.create_branch(branch_name)
-        #   edited_files.each { |file_name| bc.add(file_name) }
-        #   bc.commit_and_push("Update review date for #{user_name}")
+        if edited_files.length > 0
+          # At the end of each user group commit any modified file/s 
+          bc.create_branch(branch_name)
+          edited_files.each { |file_name| bc.add(file_name) }
+          bc.commit_and_push("Update review date for #{user_name}")
 
-        #   sleep 5
+          sleep 5
 
-        #   # Create a pull request
-        #   params = {
-        #     owner: OWNER,
-        #     repository: "github-collaborators",
-        #     hash_body: extend_date_hash(user_name, branch_name)
-        #   }
+          # Create a pull request
+          params = {
+            owner: OWNER,
+            repository: "github-collaborators",
+            hash_body: extend_date_hash(user_name, branch_name)
+          }
         
-        #   GithubCollaborators::PullRequestCreator.new(params).create
-        # end
+          GithubCollaborators::PullRequestCreator.new(params).create
+        end
       end
     end
 
-    def create_remove_user_pull_requests
-      # TODO got to here use bove function code
+    def create_remove_user_pull_requests(expired_users)
+      logger.debug "create_remove_user_pull_requests"
+      # Put users into groups to commit multiple files per branch
+      user_groups = expired_users.group_by { |x| x["login"] }
+      user_groups.each do |group|
+
+        # Ready a new branch
+        bc = GithubCollaborators::BranchCreator::new
+        branch_name = ""
+        user_name = ""
+        edited_files = []
+
+        # For each file where user has expired
+        group[1].each do |outside_collaborator|
+
+          # Check if a pull request is already pending
+          terraform_file_name = File.basename(outside_collaborator["href"])
+          user_name = outside_collaborator["login"]
+          title_message = "Remove expired user #{user_name}"
+
+          if !does_pr_already_exist(terraform_file_name, title_message)
+            # No pull request exists, modify the file
+            file_name = "terraform/#{terraform_file_name}"
+            branch_name = "remove-expired-user-#{user_name}"
+            remove_user_from_file(file_name, user_name)
+            edited_files.push(file_name)
+          end
+        end
+
+        if edited_files.length > 0
+          # At the end of each user group commit any modified file/s 
+          bc.create_branch(branch_name)
+          edited_files.each { |file_name| bc.add(file_name) }
+          bc.commit_and_push("Remove expired user #{user_name}")
+
+          sleep 5
+
+          # Create a pull request
+          params = {
+            owner: OWNER,
+            repository: "github-collaborators",
+            hash_body: remove_user_hash(user_name, branch_name)
+          }
+        
+          GithubCollaborators::PullRequestCreator.new(params).create
+        end
+      end
     end
 
-    def does_pr_already_exist(terraform_file_name, user_name)
+    def does_pr_already_exist(terraform_file_name, title_message)
       logger.debug "does_pr_already_exist"
       @repo_pull_requests.each do |pull_request|
-        if (pull_request.title.include? "#{user_name}") && (pull_request.files.include? "terraform/#{terraform_file_name}")
+        if (
+          (pull_request.title.include? "#{title_message}") &&
+          (pull_request.files.include? "terraform/#{terraform_file_name}")
+        )
           logger.debug "For #{user_name} PR already open for #{terraform_file_name} file"
           return true
         end
       end
       false
+    end
+
+    def remove_user_hash(user_name, branch_name)
+      logger.debug "remove_user_hash"
+      {
+        title: "Remove expired user #{user_name} from file/s",
+        head: branch_name,
+        base: "main",
+        body: <<~EOF
+          Hi there
+
+          This is the GitHub-Collaborator repository bot. 
+
+          The user #{user_name} review date has expired for the file/s contained in this pull request.
+          
+          Either approve this pull request, modify it or delete it if it is no longer necessary.
+        EOF
+      }
+    end
+
+    def extend_date_hash(user_name, branch_name)
+      logger.debug "extend_date_hash"
+      {
+        title: "Extend review dates for #{user_name}",
+        head: branch_name,
+        base: "main",
+        body: <<~EOF
+          Hi there
+          
+          This is the GitHub-Collaborator repository bot. 
+
+          #{user_name} has review date/s that are close to expiring. 
+          
+          The review date/s have automatically been extended.
+
+          Either approve this pull request, modify it or delete it if it is no longer necessary.
+        EOF
+      }
     end
 
     def test_data
