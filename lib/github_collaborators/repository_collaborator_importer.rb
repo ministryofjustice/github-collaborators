@@ -50,7 +50,7 @@ class GithubCollaborators
 
       collaborators.each do |c|
         login = c.fetch(:login)
-        logger.info "  importing collaborator #{login} for repository #{repository}"
+        logger.info "importing collaborator #{login} for repository #{repository}"
         cmd = %(cd #{terraform_dir}; #{terraform_executable} import module.#{repo}.github_repository_collaborator.collaborator[\\"#{login}\\"] #{repository}:#{login})
         logger.info cmd
         @executor.run(cmd)
