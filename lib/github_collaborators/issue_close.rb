@@ -20,8 +20,9 @@ class GithubCollaborators
             logger.fatal("GH GraphQL query contains errors")
             abort(response)
           end
+        else
+          got_data = true
         end
-        got_data = true
       end
 
       issues = JSON.parse(response, {symbolize_names: true})
