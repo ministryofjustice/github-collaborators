@@ -10,11 +10,16 @@ class GithubCollaborators
 
     def create_branch(branch_name)
       logger.debug "create_branch"
+      # Add a post fix number to branch name if a branch already exists
+      add_post_fix = 1
+      until !@g.branch('main').contains?("#{branch_name}")
+        branch_name = branch_name + "_" + add_post_fix.to_s
+        add_post_fix += 1
+      end
       @branch_name = branch_name
       @g.config("user.name", "Operations Engineering Bot")
       @g.config("user.email", "dummy@email.com")
-      @g.branch(branch_name).create
-      @g.checkout(branch_name)
+      @g.checkout(branch_name, new_branch: true, start_point: 'main')
     end
 
     def add(files)
@@ -30,7 +35,7 @@ class GithubCollaborators
     def commit_and_push(commit_message)
       logger.debug "commit_and_push"
       @g.commit(commit_message)
-      @g.push(g.remote("origin"), @branch_name)
+      @g.push(@g.remote("origin"), @branch_name)
 
       # Cleanup
       # TODO: Revert this after testing
