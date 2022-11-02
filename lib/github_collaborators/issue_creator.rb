@@ -30,8 +30,10 @@ class GithubCollaborators
     def does_issue_already_exists?
       logger.debug "does_issue_already_exists"
       found_issues = false
-      data = get_issues
-      if !data.nil?
+      data = get_issues(repository)
+      if data.nil?
+        logger.error "Issues are missing"
+      else
         # Get only issues used by this application
         issues = data.select { |x| x[:title].include? "Review after date" }
 
@@ -51,11 +53,9 @@ class GithubCollaborators
       found_issues
     end
 
-    private
-
-    def get_issues
+    def get_issues(repository)
       logger.debug "get_issues"
-      url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
+      url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
       got_data = false
       response = nil
       
@@ -75,6 +75,8 @@ class GithubCollaborators
       end
       response.nil? ? nil : JSON.parse(response, {symbolize_names: true})
     end
+
+    private
 
     def unknown_user_hash
       logger.debug "unknown_user_hash"

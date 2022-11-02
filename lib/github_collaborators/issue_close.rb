@@ -5,30 +5,12 @@ class GithubCollaborators
     # Close issues that have been open longer than 45 days
     def close_expired_issues(repository)
       logger.debug "close_expired_issues"
-
-      url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
-      got_data = false
-      response = nil
-      
-      # Fetch all issues for a repository
-      until got_data
-        response = HttpClient.new.fetch_json(url).body
-        if response.include?("errors")
-          if response.include?("RATE_LIMITED")
-            sleep 300
-          else
-            logger.fatal "GH GraphQL query contains errors"
-            abort(response)
-          end
-        else
-          got_data = true
-        end
-      end
-
-      issues = JSON.parse(response, {symbolize_names: true})
       allowed_days = 45
-
-      if !issues.nil? && !issues.empty?
+      
+      issues = GithubCollaborators::IssueCreator::get_issues(repository)
+      if issues.nil?
+        logger.error "Issues are missing"
+      else
         issues.each do |issue|
           # Check for the issues created by this application and that the issue is open
           if (
