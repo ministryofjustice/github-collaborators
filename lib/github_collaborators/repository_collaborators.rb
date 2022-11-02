@@ -48,18 +48,19 @@ class GithubCollaborators
 
     def get_all_outside_collaborators
       logger.debug "get_all_outside_collaborators"
-      arr = []
+      collaborators = []
       graphql.get_paginated_results do |end_cursor|
         data = get_outside_collaborators(end_cursor)
         if data.nil?
           logger.fatal "GH GraphQL query data missing"
           abort
         else
-          arr = data.fetch("edges").map { |d| Collaborator.new(d) }
-          [arr, data]
+          collaborators = data.fetch("edges").map { |d| Collaborator.new(d) }
+          # Add new collaborators to array
+          [collaborators, data]
         end
       end
-      arr
+      collaborators
     end
 
     def get_outside_collaborators(end_cursor = nil)
