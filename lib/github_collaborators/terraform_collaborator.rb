@@ -71,54 +71,8 @@ class GithubCollaborators
       }
     end
 
-    def get_name
-      @name
-    end
-
-    def get_email
-      @email
-    end
-
-    def get_org
-      @org
-    end
-
-    def get_reason
-      @reason
-    end
-
-    def get_added_by
-      @added_by
-    end
-
-    def get_review_after_date
-      @review_after_date
-    end
-
-    def get_href
-      logger.debug "get_href"
-      filename = @terraform_data_as_string.nil? ? "" : "#{GithubCollaborators.tf_safe(repository)}.tf"
-      @href = [base_url, filename].join("/")
-    end
-
-    def get_issues
-      @issues
-    end
-
     def status
       @issues.any? ? FAIL : PASS
-    end
-
-    def get_repo_url
-      @repo_url
-    end
-
-    def get_login_url
-      @login_url
-    end
-
-    def get_permission
-      @permission
     end
 
     def extend_review_date
@@ -149,6 +103,12 @@ class GithubCollaborators
     end
 
     private
+
+    def get_href
+      logger.debug "get_href"
+      filename = @terraform_data_as_string.nil? ? "" : "#{GithubCollaborators.tf_safe(repository)}.tf"
+      @href = [base_url, filename].join("/")
+    end
 
     def write_new_date_to_file(new_review_after_date)
       logger.debug "write_new_date_to_file"
