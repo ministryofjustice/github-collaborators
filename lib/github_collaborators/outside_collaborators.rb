@@ -186,6 +186,7 @@ class GithubCollaborators
 
         if edited_files.length > 0
           # At the end of each user group commit any modified file/s 
+          branch_name = bc.check_branch_name_is_valid(branch_name)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
           bc.commit_and_push("Update review date for #{user_name}")
@@ -234,7 +235,8 @@ class GithubCollaborators
         end
 
         if edited_files.length > 0
-          # At the end of each user group commit any modified file/s 
+          # At the end of each user group commit any modified file/s
+          branch_name = bc.check_branch_name_is_valid(branch_name)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
           bc.commit_and_push("Remove expired user #{user_name}")

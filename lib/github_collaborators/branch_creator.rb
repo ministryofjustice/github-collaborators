@@ -9,12 +9,6 @@ class GithubCollaborators
 
     def create_branch(branch_name)
       logger.debug "create_branch"
-      # Add a post fix number to branch name if a branch already exists
-      add_post_fix = 1
-      until !@g.branch('main').contains?("#{branch_name}")
-        branch_name = branch_name + "_" + add_post_fix.to_s
-        add_post_fix += 1
-      end
       @branch_name = branch_name
       @g.config("user.name", "Operations Engineering Bot")
       @g.config("user.email", "dummy@email.com")
@@ -40,6 +34,35 @@ class GithubCollaborators
       # TODO: Revert this after testing
       # @g.checkout("main")
       @g.checkout("raise-review-date-pr")
+    end
+    
+    # Check remote branches, create a new branch name if already taken
+    def check_branch_name_is_valid(branch_name)
+      logger.debug "check_branch_is_valid"
+      branch_name = branch_name
+      # Step through all the remote branches
+      @g.fetch
+      @g.branches.remote.each do |remote_branch|
+        if remote_branch.name == branch_name
+          # Branch name already exists
+          number_as_string = remote_branch.name.scan(/\d+/).last
+          if number_as_string.nil?
+            # Branch name has no number in the name
+            new_post_fix_number = 1
+            # Add new number to end of name
+            branch_name = branch_name + "-" + new_post_fix_number.to_s
+          else
+            # Branch name has a number in the name
+            length = number_as_string.length
+            number = number_as_string.to_i
+            # Increment that number
+            new_post_fix_number = number + 1
+            # Replace end digits with new number
+            branch_name[-length..] = new_post_fix_number.to_s
+          end
+        end
+      end
+      branch_name
     end
   end
 end

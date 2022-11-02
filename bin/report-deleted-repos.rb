@@ -85,7 +85,9 @@ repo_delta.each { |repo|
 
   # Create branch
   branch_name = "remove-#{repo}-tf-file"
-  bc = GithubCollaborators::BranchCreator::new.create_branch(branch_name)
+  bc = GithubCollaborators::BranchCreator::new
+  branch_name = bc.check_branch_name_is_valid(branch_name)
+  bc.create_branch(branch_name)
   bc.remove(file_name)
   bc.commit_and_push("Remove #{file_name} as repository has been deleted/archived.")
 
