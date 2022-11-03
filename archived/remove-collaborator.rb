@@ -9,7 +9,6 @@ def remove_collaborator(hash)
   puts "Removing collaborator #{github_user} from repository #{repository}"
 
   params = {
-    owner: ENV.fetch("OWNER"),
     repository: repository,
     github_user: github_user
   }

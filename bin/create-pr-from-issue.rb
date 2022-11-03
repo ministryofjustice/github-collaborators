@@ -4,9 +4,6 @@ require_relative "../lib/github_collaborators"
 
 puts "Start"
 
-# GitHub settings
-owner = "ministryofjustice"
-
 # Body of the PR
 def create_hash(branch_name)
   {
@@ -33,7 +30,6 @@ bc.add("terraform/*")
 bc.commit_and_push("Pull request to add new outside collaborator")
 
 params = {
-  owner: owner,
   repository: "github-collaborators",
   hash_body: create_hash(branch_name)
 }

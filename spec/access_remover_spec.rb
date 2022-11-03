@@ -2,7 +2,6 @@ class GithubCollaborators
   describe AccessRemover do
     let(:params) {
       {
-        owner: "ministryofjustice",
         repository: "somerepo",
         github_user: "somegithubuser"
       }

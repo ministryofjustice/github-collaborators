@@ -1,11 +1,11 @@
 class GithubCollaborators
   class PullRequestCreator
     include Logging
-    attr_reader :owner, :repository, :hash_body
+    attr_reader :repository, :hash_body
+    POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
 
     def initialize(params)
       logger.debug "initialize"
-      @owner = params.fetch(:owner)
       @repository = params.fetch(:repository)
       @hash_body = params.fetch(:hash_body)
     end
@@ -13,9 +13,13 @@ class GithubCollaborators
     # Create pull request
     def create_pull_request
       logger.debug "create_pull_request"
-      url = "https://api.github.com/repos/#{@owner}/#{@repository}/pulls"
-      HttpClient.new.post_json(url, @hash_body.to_json)
-      sleep 1
+      if POST_TO_GH
+        url = "https://api.github.com/repos/ministryofjustice/#{@repository}/pulls"
+        HttpClient.new.post_json(url, @hash_body.to_json)
+        sleep 1
+      else
+        logger.debug "create pull request on #{repository}"
+      end
     end
   end
 end

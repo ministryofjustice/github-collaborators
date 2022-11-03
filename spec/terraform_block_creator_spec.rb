@@ -2,7 +2,6 @@ class GithubCollaborators
   describe TerraformBlockCreator do
     let(:params) {
       {
-        owner: "ministryofjustice",
         repository: "somerepo",
         pull_file: "myfile",
         branch: "mybranch"

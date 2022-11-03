@@ -4,7 +4,6 @@ require_relative "../lib/github_collaborators"
 
 puts "Start"
 
-login = "ministryofjustice"
 terraform_dir = "terraform"
 
 # Returns the repo name from within a repo file
@@ -40,7 +39,7 @@ end
 terraform_repos = Dir.glob("#{terraform_dir}/*.tf").map { |file_name| File.basename(file_name, File.extname(file_name)) }
 
 # Get live list of all GitHub repos
-repositories = GithubCollaborators::Repositories.new(login: login).active_repositories
+repositories = GithubCollaborators::Repositories.new.active_repositories
 
 # Get repos that are not on GitHub and remove files required by Terraform
 repo_delta = (terraform_repos - repositories) - ["main", "variables", "versions", "backend"]
@@ -48,8 +47,8 @@ repo_delta = (terraform_repos - repositories) - ["main", "variables", "versions"
 # Check to make sure the repo isn't in redirect mode or replacing . with - in the filename for Terraform
 repo_delta.delete_if { |repo|
   repo_name = get_repo_name("#{terraform_dir}/#{repo}.tf")
-  GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/#{login}/#{repo}").code == "301" ||
-    GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/#{login}/#{repo_name}").code != "404"
+  GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/ministryofjustice/#{repo}").code == "301" ||
+    GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/ministryofjustice/#{repo_name}").code != "404"
 }
 
 puts "Current repo files that need deleting"
@@ -92,7 +91,6 @@ repo_delta.each { |repo|
 
   # Create PR
   params = {
-    owner: login,
     repository: "github-collaborators",
     hash_body: create_hash(file_name, branch_name)
   }

@@ -2,7 +2,6 @@ class GithubCollaborators
   describe IssueCreator do
     let(:params) {
       {
-        owner: "ministryofjustice",
         repository: "somerepo",
         github_user: "somegithubuser"
       }

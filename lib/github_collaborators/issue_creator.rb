@@ -1,28 +1,36 @@
 class GithubCollaborators
   class IssueCreator
     include Logging
-    attr_reader :owner, :repository, :github_user
+    attr_reader :repository, :github_user
+    POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
 
     def initialize(params)
       logger.debug "initialize"
-      @owner = params.fetch(:owner)
       @repository = params.fetch(:repository)
       @github_user = params.fetch(:github_user)
     end
 
     def create_unknown_user_issue
       logger.debug "create_unknown_user_issue"
-      url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
-      HttpClient.new.post_json(url, unknown_user_hash.to_json)
-      sleep 2
+      if POST_TO_GH
+        url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
+        HttpClient.new.post_json(url, unknown_user_hash.to_json)
+        sleep 2
+      else
+        logger.debug "create_unknown_user_issue for #{github_user} on #{repository}"
+      end
     end
 
     def create_review_date_expires_soon_issue
       logger.debug "create_review_date_expires_soon_issue"
       if !does_issue_already_exists?
-        url = "https://api.github.com/repos/#{owner}/#{repository}/issues"
-        HttpClient.new.post_json(url, review_date_expires_soon_hash.to_json)
-        sleep 2
+        if POST_TO_GH
+          url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
+          HttpClient.new.post_json(url, review_date_expires_soon_hash.to_json)
+          sleep 2
+        else
+          logger.debug "create_review_date_expires_soon_issue for #{github_user} on #{repository}"
+        end
       end
     end
 

@@ -1,28 +1,28 @@
 class GithubCollaborators
   class SlackNotifier
     include Logging
+    POST_TO_SLACK = ENV.fetch("REALLY_POST_TO_SLACK", 0) == "1"
 
-    def initialize(notification, enabled, collaborators)
+    def initialize(notification, collaborators)
       logger.debug "initialize"
       @notification = notification
-      @enabled = !!enabled
       @collaborators = collaborators
     end
 
     def post_slack_message
       logger.debug "post_slack_message"
-      unless post_to_slack?
-        logger.info "Skipping Slack post this is a dry run"
-        return
-      end
 
       if @collaborators.length > 0
         payload = message_payload
 
-        if ENV.has_key? "SLACK_WEBHOOK_URL"
-          HTTP.post(ENV["SLACK_WEBHOOK_URL"], body: JSON.dump(payload))
+        if POST_TO_SLACK
+          if ENV.has_key? "SLACK_WEBHOOK_URL"
+            HTTP.post(ENV["SLACK_WEBHOOK_URL"], body: JSON.dump(payload))
+          else
+            logger.error "Unable to post to Slack the SLACK_WEBHOOK_URL is missing."
+          end
         else
-          raise "Unable to post to Slack the SLACK_WEBHOOK_URL is missing."
+          logger.info "Skipping Slack post this is a dry run"
         end
       end
     end
@@ -61,10 +61,6 @@ class GithubCollaborators
 
       # Return json data
       payload
-    end
-
-    def post_to_slack?
-      @enabled
     end
   end
 end

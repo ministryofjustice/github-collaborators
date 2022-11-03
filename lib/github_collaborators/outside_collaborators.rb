@@ -2,10 +2,8 @@ class GithubCollaborators
   class OutsideCollaborators
     include Logging
 
-    OWNER = "ministryofjustice"
     BASE_URL = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
     TESTING = true
-    POST_TO_SLACK = ENV.fetch("REALLY_POST_TO_SLACK", 0) == "1"
 
     def initialize
       logger.debug "initialize"
@@ -14,7 +12,7 @@ class GithubCollaborators
         test_data
       else
         # Create a list of users that are outside collaborators ie not MoJ Organisation Members
-        GithubCollaborators::OrganizationOutsideCollaborators.new(login: OWNER, base_url: BASE_URL).fetch_users_with_issues
+        GithubCollaborators::OrganizationOutsideCollaborators.new(base_url: BASE_URL).fetch_users_with_issues
       end
       # Grab the GitHub-Collaborator repository open pull requests
       @repo_pull_requests = GithubCollaborators::PullRequests.new.get_pull_requests
@@ -22,9 +20,8 @@ class GithubCollaborators
 
     def is_renewal_within_one_month
       logger.debug "is_renewal_within_one_month"
-      @collaborators_with_issues.each do |collaborator|
+      @collaborators.each do |collaborator|
         params = {
-          owner: OWNER,
           repository: collaborator["repository"],
           github_user: collaborator["login"]
         }
@@ -40,7 +37,6 @@ class GithubCollaborators
       logger.debug "remove_unknown_collaborators"
       @collaborators.each do |collaborator|
         params = {
-          owner: OWNER,
           repository: collaborator["repository"],
           github_user: collaborator["login"]
         }
@@ -51,8 +47,7 @@ class GithubCollaborators
           # assigned to the removed collaborator, so that they (hopefully) get a
           # notification about it.
           GithubCollaborators::IssueCreator.new(params).create_unknown_user_issue
-          # TODO revert this
-          # GithubCollaborators::AccessRemover.new(params).remove
+          GithubCollaborators::AccessRemover.new(params).remove
         end
       end
     end
@@ -62,7 +57,7 @@ class GithubCollaborators
       expired_users = find_users_who_have_expired
 
       # Raise Slack message
-      GithubCollaborators::SlackNotifier.new(GithubCollaborators::Expired.new, POST_TO_SLACK, expired_users).post_slack_message
+      GithubCollaborators::SlackNotifier.new(GithubCollaborators::Expired.new, expired_users).post_slack_message
 
       # Raise PRs
       create_remove_user_pull_requests(expired_users)
@@ -73,7 +68,7 @@ class GithubCollaborators
       users_who_expire_soon = find_users_who_expire_soon
 
       # Raise Slack message
-      GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, POST_TO_SLACK, users_who_expire_soon).post_slack_message
+      GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, users_who_expire_soon).post_slack_message
 
       # Raise PRs
       create_extend_date_pull_requests(users_who_expire_soon)
@@ -191,7 +186,6 @@ class GithubCollaborators
 
           # Create a pull request
           params = {
-            owner: OWNER,
             repository: "github-collaborators",
             hash_body: extend_date_hash(user_name, branch_name)
           }
@@ -239,7 +233,6 @@ class GithubCollaborators
 
           # Create a pull request
           params = {
-            owner: OWNER,
             repository: "github-collaborators",
             hash_body: remove_user_hash(user_name, branch_name)
           }

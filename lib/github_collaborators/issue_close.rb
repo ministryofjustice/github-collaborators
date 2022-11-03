@@ -8,7 +8,6 @@ class GithubCollaborators
       allowed_days = 45
 
       params = {
-        owner: nil,
         repository: nil,
         github_user: nil
       }
