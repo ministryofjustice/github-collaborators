@@ -9,7 +9,7 @@ class GithubCollaborators
 
     let(:json) { File.read("spec/fixtures/repositories.json") }
 
-    let(:graphql) { GithubGraphQlClient.new(github_token: "dummy") }
+    let(:graphql) { GithubCollaborators::GithubGraphQlClient.new(github_token: "dummy") }
 
     subject(:repos) { described_class.new(params) }
 

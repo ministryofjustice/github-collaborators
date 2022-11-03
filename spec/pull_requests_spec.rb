@@ -8,7 +8,7 @@ class GithubCollaborators
 
     let(:json) { File.read("spec/fixtures/pull-requests.json") }
 
-    let(:graphql) { GithubGraphQlClient.new(github_token: "fake") }
+    let(:graphql) { GithubCollaborators::GithubGraphQlClient.new(github_token: "fake") }
 
     subject(:pullrequests) { described_class.new(params) }
 
@@ -16,6 +16,6 @@ class GithubCollaborators
       allow(graphql).to receive(:run_query).and_return(json)
     end
 
-    specify { expect(pullrequests.fetch_pull_requests.size).to eq(10) }
+    specify { expect(pullrequests.get_pull_requests.size).to eq(10) }
   end
 end
