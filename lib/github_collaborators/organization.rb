@@ -1,19 +1,12 @@
 class GithubCollaborators
   class Member
     include Logging
-    attr_reader :data
+    attr_reader :login, :name
 
     def initialize(data)
       logger.debug "initialize"
-      @data = data
-    end
-
-    def login
-      data.dig("node", "login")
-    end
-
-    def name
-      data.dig("node", "name")
+      @login = data.dig("node", "login")
+      @name = data.dig("node", "name")
     end
   end
 
@@ -24,53 +17,30 @@ class GithubCollaborators
     def initialize(login)
       logger.debug "initialize"
       @login = login
-      @graphql = GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
-    end
-
-    def members
-      logger.debug "members"
-      @list ||= get_all_organisation_members
+      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
+      get_all_organisation_members
     end
 
     def is_member?(login)
       logger.debug "is_member"
-      members.map(&:login).include?(login)
+      @org_members.map(&:login).include?(login)
     end
 
     private
 
     def get_all_organisation_members
       logger.debug "get_all_organisation_members"
-      graphql.get_paginated_results do |end_cursor|
-        data = get_organisation_members(end_cursor)
-        if data.nil?
-          logger.fatal "GH GraphQL query data is missing"
-          abort
-        else
-          arr = data.fetch("edges").map { |d| Member.new(d) }
-          [arr, data]
-        end
-      end
-    end
-
-    def get_organisation_members(end_cursor = nil)
-      logger.debug "get_organisation_members"
-      got_data = false
-      response = nil
-      until got_data
+      end_cursor = nil
+      loop do 
         response = graphql.run_query(organisation_members_query(end_cursor))
-        if response.include?("errors")
-          if response.include?("RATE_LIMITED")
-            sleep 300
-          else
-            logger.fatal "GH GraphQL query contains errors"
-            abort(response)
-          end
-        else
-          got_data = true
+        members = JSON.parse(response).dig("data", "organization", "membersWithRole")
+        members.each do |member|
+          @org_members.push(GithubCollaborators::Member.new(member.fetch("edges")))
         end
+        break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
+        end_cursor = JSON.parse(response).dig("data", "search","pageInfo", "endCursor")
       end
-      response.nil? ? nil : JSON.parse(response).dig("data", "organization", "membersWithRole")
+      @org_members.sort_by { |org_member| org_member.name }
     end
 
     def organisation_members_query(end_cursor)
