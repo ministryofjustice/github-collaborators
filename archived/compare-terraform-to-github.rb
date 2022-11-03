@@ -71,12 +71,10 @@ repos.each do |repo|
       # Get the pending collaborator invites for the repository
       pending_invites = []
       url = "https://api.github.com/repos/ministryofjustice/#{repo.name}/invitations"
-      json = GithubCollaborators::HttpClient.new.fetch_json(url).body
-      if json != ""
-        JSON.parse(json)
-          .find_all { |collaborator| collaborator["invitee"]["login"] }
-          .map { |collaborator| pending_invites.push(collaborator) }
-      end
+      json = GithubCollaborators::HttpClient.new.fetch_json(url)
+      JSON.parse(json)
+        .find_all { |collaborator| collaborator["invitee"]["login"] }
+        .map { |collaborator| pending_invites.push(collaborator) }
 
       # Print collaborator name + pending invite or name only
       tc.each do |tc_collaborator|
