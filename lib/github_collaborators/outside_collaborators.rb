@@ -3,7 +3,8 @@ class GithubCollaborators
     include Logging
 
     BASE_URL = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
-    TESTING = true
+    # TODO: put a better solution here
+    TESTING = false
 
     def initialize
       logger.debug "initialize"
@@ -56,22 +57,27 @@ class GithubCollaborators
       logger.debug "has_review_date_expired"
       expired_users = find_users_who_have_expired
 
-      # Raise Slack message
-      GithubCollaborators::SlackNotifier.new(GithubCollaborators::Expired.new, expired_users).post_slack_message
+      if expired_users.length > 0
 
-      # Raise PRs
-      create_remove_user_pull_requests(expired_users)
+        # Raise Slack message
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::Expired.new, expired_users).post_slack_message
+
+        # Raise PRs
+        create_remove_user_pull_requests(expired_users)
+      end
     end
 
     def is_review_date_within_a_week
       logger.debug "is_review_date_within_a_week"
       users_who_expire_soon = find_users_who_expire_soon
+      if users_who_expire_soon.length > 0
 
-      # Raise Slack message
-      GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, users_who_expire_soon).post_slack_message
+        # Raise Slack message
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, users_who_expire_soon).post_slack_message
 
-      # Raise PRs
-      create_extend_date_pull_requests(users_who_expire_soon)
+        # Raise PRs
+        create_extend_date_pull_requests(users_who_expire_soon)
+      end
     end
 
     private
@@ -125,9 +131,7 @@ class GithubCollaborators
         repository: File.basename(file_name, ".tf"),
         login: user_name,
         base_url: nil,
-        repo_url: nil,
-        login_url: nil,
-        permission: nil
+        repo_url: nil
       }
       tc = TerraformCollaborator.new(params)
       tc.extend_review_date
@@ -140,9 +144,7 @@ class GithubCollaborators
         repository: File.basename(file_name, ".tf"),
         login: user_name,
         base_url: nil,
-        repo_url: nil,
-        login_url: nil,
-        permission: nil
+        repo_url: nil
       }
       tc = TerraformCollaborator.new(params)
       tc.remove_user
