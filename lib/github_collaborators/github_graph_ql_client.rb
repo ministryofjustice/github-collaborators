@@ -17,7 +17,7 @@ class GithubCollaborators
 
       until got_data
         response = query_github_api(query)
-        if response.code != "200"
+        if response.code == "200"
           if response.body.include?("errors")
             if response.body.include?("RATE_LIMITED")
               sleep 300
@@ -26,7 +26,6 @@ class GithubCollaborators
               abort(response.body)
             end
           end
-        else
           got_data = true
         end
       end
