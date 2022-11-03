@@ -10,15 +10,14 @@ class GithubCollaborators
     def initialize
       logger.debug "initialize"
       # TODO: remove this code
-      @collaborators_with_issues = if TESTING
-        # @collaborators_with_issues = @@test_outside_collaborator_list
+      @collaborators = if TESTING
         test_data
       else
         # Create a list of users that are outside collaborators ie not MoJ Organisation Members
         GithubCollaborators::OrganizationOutsideCollaborators.new(login: OWNER, base_url: BASE_URL).fetch_users_with_issues
       end
       # Grab the GitHub-Collaborator repository open pull requests
-      @repo_pull_requests = GithubCollaborators::PullRequests.new.fetch_pull_requests
+      @repo_pull_requests = GithubCollaborators::PullRequests.new.get_pull_requests
     end
 
     def is_renewal_within_one_month
@@ -31,7 +30,7 @@ class GithubCollaborators
         }
 
         # Create an issue on the repo when "Review after date is within a month" is true
-        if x["issues"].include? "Review after date is within a month"
+        if collaborator["issues"].include? "Review after date is within a month"
           GithubCollaborators::IssueCreator.new(params).create_review_date_expires_soon_issue
         end
       end
@@ -39,20 +38,21 @@ class GithubCollaborators
 
     def remove_unknown_collaborators
       logger.debug "remove_unknown_collaborators"
-      @collaborators_with_issues.each do |collaborator|
+      @collaborators.each do |collaborator|
         params = {
           owner: OWNER,
           repository: collaborator["repository"],
           github_user: collaborator["login"]
         }
 
-        if x["defined_in_terraform"] == false
+        if collaborator["defined_in_terraform"] == false
           logger.info "Removing collaborator #{collaborator["login"]} from repository #{collaborator["repository"]}"
           # We must create the issue before removing access, because the issue is
           # assigned to the removed collaborator, so that they (hopefully) get a
           # notification about it.
           GithubCollaborators::IssueCreator.new(params).create_unknown_user_issue
-          GithubCollaborators::AccessRemover.new(params).remove
+          # TODO revert this
+          # GithubCollaborators::AccessRemover.new(params).remove
         end
       end
     end
@@ -85,7 +85,7 @@ class GithubCollaborators
     def find_users_who_expire_soon
       logger.debug "find_users_who_expire_soon"
       users_who_expire_soon = []
-      @collaborators_with_issues.each do |collaborator|
+      @collaborators.each do |collaborator|
         collaborator["issues"].each do |issue|
           if issue == "Review after date is within a week"
             users_who_expire_soon.push(collaborator)
@@ -106,7 +106,7 @@ class GithubCollaborators
     def find_users_who_have_expired
       logger.debug "find_users_who_have_expired"
       users_who_have_expired = []
-      @collaborators_with_issues.each do |collaborator|
+      @collaborators.each do |collaborator|
         collaborator["issues"].each do |issue|
           if issue == "Review after date has passed"
             users_who_have_expired.push(collaborator)
@@ -254,7 +254,6 @@ class GithubCollaborators
       @repo_pull_requests.each do |pull_request|
         if (pull_request.title.include? title_message.to_s) &&
             (pull_request.files.include? "terraform/#{terraform_file_name}")
-
           logger.debug "For #{user_name} PR already open for #{terraform_file_name} file"
           return true
         end
