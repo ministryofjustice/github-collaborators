@@ -31,8 +31,6 @@ require_relative "./github_collaborators/expires_soon"
 require_relative "./github_collaborators/outside_collaborators"
 require_relative "./github_collaborators/branch_creator"
 
-PAGE_SIZE = 100
-
 class GithubCollaborators
   def self.tf_safe(string)
     string.tr(".", "-")
