@@ -6,7 +6,13 @@ class GithubCollaborators
     def initialize(data)
       logger.debug "initialize"
       @login = data.dig("node", "login")
-      @name = data.dig("node", "name")
+      # Some users do not return an name
+      if data.dig("node", "name").nil?
+        # So use the user name instead
+        @name = @login
+      else
+        @name = data.dig("node", "name")
+      end   
     end
   end
 
@@ -37,8 +43,8 @@ class GithubCollaborators
         members.each do |member|
           org_members.push(GithubCollaborators::Member.new(member))
         end
-        break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
-        end_cursor = JSON.parse(response).dig("data", "search","pageInfo", "endCursor")
+        break unless JSON.parse(response).dig("data", "organization", "membersWithRole", "pageInfo", "hasNextPage")
+        end_cursor = JSON.parse(response).dig("data", "organization", "membersWithRole", "pageInfo", "endCursor")
       end
       org_members.sort_by { |org_member| org_member.name }
     end
@@ -47,22 +53,22 @@ class GithubCollaborators
       logger.debug "organisation_members_query"
       after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
       %[
-    {
-      organization(login: "ministryofjustice") {
-        membersWithRole(first: #{PAGE_SIZE} #{after}) {
-          edges {
-            node {
-              login
-              name
+        {
+          organization(login: "ministryofjustice") {
+            membersWithRole(first: 100 #{after}) {
+              edges {
+                node {
+                  login
+                  name
+                }
+              }
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
             }
           }
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
         }
-      }
-    }
       ]
     end
   end
