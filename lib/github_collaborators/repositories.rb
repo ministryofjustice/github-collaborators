@@ -22,22 +22,21 @@ class GithubCollaborators
 
     def active_repositories
       logger.debug "active_repositories"
-      active_repositories = []
       ["public", "private", "internal"].each do |type|
         end_cursor = nil
-        loop do 
+        loop do
           response = graphql.run_query(repositories_query(end_cursor, type))
           repositories = JSON.parse(response).dig("data", "search", "repos")
           repositories.reject { |r| r.dig("repo", "isDisabled") }
           repositories.reject { |r| r.dig("repo", "isLocked") }
           repositories.each do |repo|
-            active_repositories.push(GithubCollaborators::Repository.new(repo.dig("repo")))
+            @active_repositories.push(GithubCollaborators::Repository.new(repo.dig("repo")))
           end
           break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
           end_cursor = JSON.parse(response).dig("data", "search","pageInfo", "endCursor")
         end
       end
-      active_repositories.sort_by { |repo| repo.name }
+      @active_repositories.sort_by { |repo| repo.name }
     end
 
     private
