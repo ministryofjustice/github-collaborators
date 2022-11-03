@@ -30,7 +30,7 @@ class GithubCollaborators
     def fetch_users_with_issues
       logger.debug "fetch_users_with_issues"
       # For every repository in MoJ GitHub organisation
-      fetch_org_repositories.each_with_object([]) { |repo, arr|
+      fetch_org_repositories.each_with_object([]) { |repo, users|
         # For all outside collaborators attached to a repository
         get_repository_outside_collaborators(repo.name).each do |user|
           params = {
@@ -46,9 +46,9 @@ class GithubCollaborators
           # Is there an issue with the collaborator
           if tc.status == TerraformCollaborator::FAIL
             # This collaborator has an issue
-            arr.push(tc.to_hash)
+            users.push(tc.to_hash)
           end
-          arr # rubocop:disable Lint/Void
+          users # rubocop:disable Lint/Void
         end
       }
     end
