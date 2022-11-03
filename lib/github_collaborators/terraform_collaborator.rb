@@ -37,8 +37,6 @@ class GithubCollaborators
       @base_url = params.fetch(:base_url, nil)
       @terraform_dir = params.fetch(:terraform_dir, TERRAFORM_DIR)
       @repo_url = params.fetch(:repo_url, nil)
-      @login_url = params.fetch(:login_url, nil)
-      @permission = params.fetch(:permission, nil)
       # Enable the terraform source to be passed in, to make it easier to test the code
       @terraform_data_as_string = params.fetch(:tfsource, nil)
       @collaborator_exist = false
@@ -65,7 +63,6 @@ class GithubCollaborators
         "defined_in_terraform" => @collaborator_exist,
         "review_date" => @review_after_date,
         "repo_url" => @repo_url,
-        "login_url" => @login_url,
         "permission" => @permission
       }
     end
@@ -86,7 +83,7 @@ class GithubCollaborators
       current_file = @terraform_data_as_string.split("\n")
       # Find the line for the user
       # Get the line that starts with "{" before "github_user"
-      line_to_remove = find_user_name_line(current_file) - 1
+      line_to_remove = find_user_name_line_number(current_file) - 1
       # Remove the lines with the user
       remove_lines = 10
       until remove_lines == 0
@@ -114,7 +111,7 @@ class GithubCollaborators
       # Split full file contents (as string) into array of line
       current_file = @terraform_data_as_string.split("\n")
       # Find the line for the user
-      line_number = find_user_name_line(current_file)
+      line_number = find_user_name_line_number(current_file)
       # Get the date line based on the users username in the file
       # and offset it by REVIEW_AFTER to get the line with the review_after
       date_line = current_file[line_number + (REVIEW_AFTER + 1)]
@@ -175,8 +172,10 @@ class GithubCollaborators
       @terraform_data_as_string.split("\n").each_with_object([]) { |line, arr| arr << line if (line =~ / collaborators =/) .. (line =~ /]/); } # rubocop:disable Lint/FlipFlop
     end
 
-    def find_user_name_line(the_data)
-      logger.debug "find_user_name_line"
+    # Search each line of the passed in data to find the collaborators username
+    # return the line number where discovered collaborators username
+    def find_user_name_line_number(the_data)
+      logger.debug "find_user_name_line_number"
       line_number = 0
       the_data.each do |line|
         if line.include?("github_user") && line.include?(@login.to_s)
@@ -190,7 +189,7 @@ class GithubCollaborators
     def does_collaborator_exist?
       logger.debug "does_collaborator_exist"
       return false if @terraform_data_as_string.nil?
-      @user_line_in_terraform_file = find_user_name_line(@terraform_data)
+      @user_line_in_terraform_file = find_user_name_line_number(@terraform_data)
       !(@user_line_in_terraform_file == 0)
     end
 
