@@ -31,24 +31,21 @@ class GithubCollaborators
       logger.debug "does_issue_already_exists"
       found_issues = false
       data = get_issues(repository)
-      if data.nil?
-        logger.error "Issues are missing"
-      else
-        # Get only issues used by this application
-        issues = data.select { |issue| issue[:title].include? "Review after date" }
 
-        # This is a work around for when users unassign themself from the ticket without updating their review_after
-        # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
-        bad_issues = issues.select { |issue| issue[:assignees].length == 0 }
-        bad_issues.each { |issue| GithubCollaborators::IssueClose.remove_issue(repository, issue[:number]) }
-        issues.delete_if { |issue| issue[:assignees].length == 0 }
+      # Get only issues used by this application
+      issues = data.select { |issue| issue[:title].include? "Collaborator review date expires soon for user" }
 
-        # Check which issues are assigned to the user
-        issues.select { |issue| issue[:assignee][:login] == github_user }
-        if issues.length > 0
-          # Found matching issue
-          found_issues = true
-        end
+      # This is a work around for when users unassign themself from the ticket without updating their review_after
+      # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
+      bad_issues = issues.select { |issue| issue[:assignees].length == 0 }
+      bad_issues.each { |issue| GithubCollaborators::IssueClose.remove_issue(repository, issue[:number]) }
+      issues.delete_if { |issue| issue[:assignees].length == 0 }
+
+      # Check which issues are assigned to the user
+      issues.select { |issue| issue[:assignee][:login] == github_user }
+      if issues.length > 0
+        # Found matching issue
+        found_issues = true
       end
       found_issues
     end
@@ -56,24 +53,8 @@ class GithubCollaborators
     def get_issues(repository)
       logger.debug "get_issues"
       url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
-      got_data = false
-      response = nil
-
-      # Fetch all issues for repo
-      until got_data
-        response = HttpClient.new.fetch_json(url).body
-        if response.include?("errors")
-          if response.include?("RATE_LIMITED")
-            sleep 300
-          else
-            logger.fatal "GH GraphQL query contains errors"
-            abort(response)
-          end
-        else
-          got_data = true
-        end
-      end
-      response.nil? ? nil : JSON.parse(response, {symbolize_names: true})
+      response = HttpClient.new.fetch_json(url)
+      JSON.parse(response, {symbolize_names: true})
     end
 
     private
