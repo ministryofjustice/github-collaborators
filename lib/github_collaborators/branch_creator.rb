@@ -1,6 +1,7 @@
 class GithubCollaborators
   class BranchCreator
     include Logging
+    POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
 
     def initialize
       logger.debug "initialize"
@@ -9,31 +10,46 @@ class GithubCollaborators
 
     def create_branch(branch_name)
       logger.debug "create_branch"
-      @branch_name = branch_name
-      @g.config("user.name", "Operations Engineering Bot")
-      @g.config("user.email", "dummy@email.com")
-      @g.checkout(branch_name, new_branch: true, start_point: "main")
+      if POST_TO_GH
+        @branch_name = branch_name
+        @g.config("user.name", "Operations Engineering Bot")
+        @g.config("user.email", "dummy@email.com")
+        @g.checkout(branch_name, new_branch: true, start_point: "main")
+      else
+        logger.debug "Didnt create git branch #{branch_name}, this is a dry run"
+      end
     end
 
     def add(files)
       logger.debug "add"
-      @g.add(files)
+      if POST_TO_GH
+        @g.add(files)
+      else
+        logger.debug "Didnt add files to git #{files}, this is a dry run"
+      end
     end
 
     def remove(files)
       logger.debug "remove"
-      @g.remove(files)
+      if POST_TO_GH
+        @g.remove(files)
+      else
+        logger.debug "Didnt remove files from git #{files}, this is a dry run"
+      end
     end
 
     def commit_and_push(commit_message)
       logger.debug "commit_and_push"
-      @g.commit(commit_message)
-      @g.push(@g.remote("origin"), @branch_name)
-
-      # Cleanup
-      # TODO: Revert this after testing
-      # @g.checkout("main")
-      @g.checkout("raise-review-date-pr")
+      if POST_TO_GH
+        @g.commit(commit_message)
+        @g.push(@g.remote("origin"), @branch_name)
+  
+        # Cleanup
+        @g.checkout("main")
+        sleep 4
+      else
+        logger.debug "Didnt commit and push files to github, this is a dry run"
+      end
     end
 
     # Check remote branches, create a new branch name if already taken

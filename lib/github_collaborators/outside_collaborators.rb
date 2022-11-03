@@ -182,8 +182,6 @@ class GithubCollaborators
           edited_files.each { |file_name| bc.add(file_name) }
           bc.commit_and_push("Update review date for #{user_name}")
 
-          sleep 5
-
           # Create a pull request
           params = {
             repository: "github-collaborators",
@@ -228,8 +226,6 @@ class GithubCollaborators
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
           bc.commit_and_push("Remove expired user #{user_name}")
-
-          sleep 5
 
           # Create a pull request
           params = {

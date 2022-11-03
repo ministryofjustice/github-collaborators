@@ -18,7 +18,7 @@ class GithubCollaborators
         HttpClient.new.post_json(url, @hash_body.to_json)
         sleep 1
       else
-        logger.debug "create pull request on #{repository}"
+        logger.debug "Didnt create pull request on #{repository}, this is a dry run"
       end
     end
   end

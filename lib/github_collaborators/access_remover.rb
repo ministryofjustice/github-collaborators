@@ -17,7 +17,7 @@ class GithubCollaborators
         HttpClient.new.delete(url)
         sleep 2
       else
-        logger.debug "Remove #{github_user} from #{repository}"
+        logger.debug "Didnt remove #{github_user} from #{repository}, this is a dry run"
       end
     end
   end

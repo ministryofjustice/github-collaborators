@@ -22,7 +22,7 @@ class GithubCollaborators
             logger.error "Unable to post to Slack the SLACK_WEBHOOK_URL is missing."
           end
         else
-          logger.info "Skipping Slack post this is a dry run"
+          logger.info "Skipping Slack post message, this is a dry run"
         end
       end
     end

@@ -17,7 +17,7 @@ class GithubCollaborators
         HttpClient.new.post_json(url, unknown_user_hash.to_json)
         sleep 2
       else
-        logger.debug "create_unknown_user_issue for #{github_user} on #{repository}"
+        logger.debug "Didnt create unknown user issue for #{github_user} on #{repository}, this is a dry run"
       end
     end
 
@@ -29,7 +29,7 @@ class GithubCollaborators
           HttpClient.new.post_json(url, review_date_expires_soon_hash.to_json)
           sleep 2
         else
-          logger.debug "create_review_date_expires_soon_issue for #{github_user} on #{repository}"
+          logger.debug "Didnt create review date expires soon issue for #{github_user} on #{repository}, this is a dry run"
         end
       end
     end
