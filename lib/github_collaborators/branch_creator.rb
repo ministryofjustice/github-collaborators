@@ -55,7 +55,7 @@ class GithubCollaborators
     # Check remote branches, create a new branch name if already taken
     def check_branch_name_is_valid(branch_name)
       logger.debug "check_branch_is_valid"
-      branch_name = branch_name
+      new_branch_name = branch_name
       # Step through all the remote branches
       @g.fetch
       @g.branches.remote.each do |remote_branch|
@@ -66,7 +66,7 @@ class GithubCollaborators
             # Branch name has no number in the name
             new_post_fix_number = 1
             # Add new number to end of name
-            branch_name = branch_name + "-" + new_post_fix_number.to_s
+            new_branch_name = new_branch_name + "-" + new_post_fix_number.to_s
           else
             # Branch name has a number in the name
             length = number_as_string.length
@@ -74,11 +74,11 @@ class GithubCollaborators
             # Increment that number
             new_post_fix_number = number + 1
             # Replace end digits with new number
-            branch_name[-length..] = new_post_fix_number.to_s
+            new_branch_name[-length..] = new_post_fix_number.to_s
           end
         end
       end
-      branch_name
+      new_branch_name
     end
   end
 end
