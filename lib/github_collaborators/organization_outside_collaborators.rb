@@ -1,13 +1,12 @@
 class GithubCollaborators
   class OrganizationOutsideCollaborators
     include Logging
-    attr_reader :login, :base_url
+    attr_reader :base_url
 
     def initialize(params)
       logger.debug "initialize"
-      @login = params.fetch(:login)
       @base_url = params.fetch(:base_url) # URL of the github UI page listing all the terraform files
-      @organization ||= Organization.new(params.fetch(:login))
+      @organization ||= Organization.new
     end
 
     # Sample response: A [] of {} objects as shown below

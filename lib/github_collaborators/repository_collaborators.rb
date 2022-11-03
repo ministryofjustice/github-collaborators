@@ -34,16 +34,17 @@ class GithubCollaborators
     def fetch_all_collaborators
       logger.debug "fetch_all_collaborators"
       end_cursor = nil
+      collaborators = []
       loop do
         response = graphql.run_query(outside_collaborators_query(end_cursor))
         outside_collaborators = JSON.parse(response).dig("data", "organization", "repository", "collaborators")
         outside_collaborators.each do |outside_collaborator|
-          @collaborators.push(GithubCollaborators::Collaborator.new(outside_collaborator.fetch("edges")))
+          collaborators.push(GithubCollaborators::Collaborator.new(outside_collaborator.fetch("edges")))
         end
         break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
         end_cursor = JSON.parse(response).dig("data", "search","pageInfo", "endCursor")
       end
-      @collaborators.sort_by { |collaborator| collaborator.name }
+      collaborators.sort_by { |collaborator| collaborator.name }
     end
 
     def outside_collaborators_query(end_cursor)
