@@ -43,7 +43,7 @@ class GithubCollaborators
       if POST_TO_GH
         @g.commit(commit_message)
         @g.push(@g.remote("origin"), @branch_name)
-  
+
         # Cleanup
         @g.checkout("main")
         sleep 4

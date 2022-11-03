@@ -12,7 +12,7 @@ class GithubCollaborators
       logger.debug "fetch_json"
       got_data = false
       response = nil
-  
+
       until got_data
         response = http_get(url)
         if response.code != "200"
@@ -28,7 +28,7 @@ class GithubCollaborators
           got_data = true
         end
       end
-  
+
       if response.body.nil?
         @logger.fatal "GH GraphQL query data is missing"
         abort
@@ -65,7 +65,7 @@ class GithubCollaborators
       logger.debug "http_get"
       http, uri = create_http_client(url)
       request = Net::HTTP::Get.new(uri.request_uri, headers)
-      http.request(request)  
+      http.request(request)
     end
 
     def create_http_client(url)

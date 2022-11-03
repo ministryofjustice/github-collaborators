@@ -9,7 +9,7 @@ class GithubCollaborators
       logger.debug "initialize"
       @github_token = params.fetch(:github_token)
     end
-  
+
     def run_query(query)
       logger.debug "run_query"
       got_data = false
@@ -46,9 +46,7 @@ class GithubCollaborators
       headers = {"Authorization" => "bearer #{github_token}"}
 
       uri = URI.parse(GITHUB_GRAPHQL_URL)
-      resp = Net::HTTP.post(uri, json, headers)
-
-      resp
+      Net::HTTP.post(uri, json, headers)
     end
   end
 end

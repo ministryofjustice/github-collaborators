@@ -30,7 +30,7 @@ class GithubCollaborators
       logger.debug "get_all_organisation_members"
       org_members = []
       end_cursor = nil
-      loop do 
+      loop do
         response = graphql.run_query(organisation_members_query(end_cursor))
         members = JSON.parse(response).dig("data", "organization", "membersWithRole", "edges")
         members.each do |member|
