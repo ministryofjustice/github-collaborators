@@ -17,6 +17,7 @@ class GithubCollaborators
         # Check for the issues created by this application and that the issue is open
         if (
           issue[:title].include?("Collaborator review date expires soon") ||
+          issue[:title].include?("Review after date expiry is upcoming for user") ||
           issue[:title].include?("Please define outside collaborators in code")
         ) && issue[:state] == "open"
           # Get issue created date and add 45 day grace period
