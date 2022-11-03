@@ -41,7 +41,6 @@ terraform_repos = Dir.glob("#{terraform_dir}/*.tf").map { |file_name| File.basen
 
 # Get live list of all GitHub repos
 repositories = GithubCollaborators::Repositories.new(login: login).active_repositories
-repositories = repositories.map(&:name).sort
 
 # Get repos that are not on GitHub and remove files required by Terraform
 repo_delta = (terraform_repos - repositories) - ["main", "variables", "versions", "backend"]
@@ -63,7 +62,7 @@ puts repo_delta
 # Open PRs for all the deleted repos
 
 # Grab current open PRs
-pull_requests = GithubCollaborators::PullRequests.new.fetch_pull_requests
+pull_requests = GithubCollaborators::PullRequests.new.get_pull_requests
 
 # Delete from actionable array if PR already created
 # Two scenarios:

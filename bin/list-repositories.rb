@@ -6,6 +6,6 @@ puts "Start"
 
 repositories = GithubCollaborators::Repositories.new(login: "ministryofjustice").active_repositories
 
-repositories.map(&:name).sort.each { |repo| puts repo }
+repositories.map { |repo| puts repo }
 
 puts "Finished"
