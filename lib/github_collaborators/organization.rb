@@ -1,18 +1,11 @@
 class GithubCollaborators
   class Member
     include Logging
-    attr_reader :login, :name
+    attr_reader :login
 
     def initialize(data)
       logger.debug "initialize"
       @login = data.dig("node", "login")
-      # Some users do not return an name
-      if data.dig("node", "name").nil?
-        # So use the user name instead
-        @name = @login
-      else
-        @name = data.dig("node", "name")
-      end   
     end
   end
 
@@ -46,7 +39,7 @@ class GithubCollaborators
         break unless JSON.parse(response).dig("data", "organization", "membersWithRole", "pageInfo", "hasNextPage")
         end_cursor = JSON.parse(response).dig("data", "organization", "membersWithRole", "pageInfo", "endCursor")
       end
-      org_members.sort_by { |org_member| org_member.name }
+      org_members.sort_by { |org_member| org_member.login }
     end
 
     def organisation_members_query(end_cursor)
@@ -59,7 +52,6 @@ class GithubCollaborators
               edges {
                 node {
                   login
-                  name
                 }
               }
               pageInfo {
