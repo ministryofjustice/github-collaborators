@@ -6,9 +6,7 @@ terraform_collaborators = GithubCollaborators::TerraformCollaborators.new(
   folder_path: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
 )
 
-repos = GithubCollaborators::Repositories.new(
-  login: "ministryofjustice"
-).active_repositories
+repos = GithubCollaborators::Repositories.new.active_repositories
 
 outside_collaborators = GithubCollaborators::OrganizationOutsideCollaborators.new(
   login: "ministryofjustice",
@@ -51,9 +49,7 @@ repos.each do |repo|
       if outside_collaborators.is_an_org_member(tc_collaborator.login) == true
         collaborators_who_are_members.push(tc_collaborator.login)
         gc.push({
-          login: tc_collaborator.login,
-          login_url: nil,
-          permission: nil
+          login: tc_collaborator.login
         })
 
       end

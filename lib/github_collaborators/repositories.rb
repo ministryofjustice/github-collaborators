@@ -12,12 +12,11 @@ class GithubCollaborators
 
   class Repositories
     include Logging
-    attr_reader :graphql, :login
+    attr_reader :graphql
 
-    def initialize(params)
+    def initialize
       logger.debug "initialize"
-      @login = params.fetch(:login)
-      @graphql = params.fetch(:graphql) { GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
+      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
     end
 
     def active_repositories
@@ -34,7 +33,7 @@ class GithubCollaborators
             active_repositories.push(GithubCollaborators::Repository.new(repo.dig("repo")))
           end
           break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
-          end_cursor = JSON.parse(response).dig("data", "search","pageInfo", "endCursor")
+          end_cursor = JSON.parse(response).dig("data", "search", "pageInfo", "endCursor")
         end
       end
       active_repositories.sort_by { |repo| repo.name }
