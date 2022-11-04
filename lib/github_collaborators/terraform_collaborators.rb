@@ -43,6 +43,22 @@ class GithubCollaborators
       set_up
     end
 
+    # Example: an array of this class (TerraformCollaborator) ie hashes
+    # [
+    #   {
+    #     "repository"=>"vcms-test-automation",
+    #     "login"=>"user-name",
+    #     "status"=>"fail",
+    #     "issues"=>[
+    #       "Review after date is more than a year in the future"
+    #     ],
+    #     "href"=>"https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/vcms-test-automation.tf",
+    #     "defined_in_terraform"=>true,
+    #     "review_date"=>"2022-10-10",
+    #     "repo_url"=>"https://github.com/ministryofjustice/vcms-test-automation"
+    #   },
+    # ]
+
     def set_up
       logger.debug "set_up"
       if @terraform_data_as_string.nil?
@@ -241,9 +257,30 @@ class GithubCollaborators
       @folder_path = params.fetch(:folder_path)
     end
 
+    # Returns all the named collaborators in the terraform files
+    def fetch_all_terraform_collaborators
+      logger.debug "fetch_all_terraform_collaborators"
+
+      collaborators = []
+      exclude_files = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
+
+      # Go through all the terraform files and get the collaborators
+      fetch_terraform_files.each do |terraform_file|
+        # Ignore the above named files
+        if !exclude_files.include?(File.basename(terraform_file))
+          collaborators_in_file = return_collaborators_from_file(terraform_file)
+          collaborators_in_file.each { |collaborator| collaborators.push(collaborator.to_hash) }
+        end
+      end
+      collaborators.sort_by { |collaborator| collaborator["login"] }
+    end
+
+    private
+
     # Returns an array of TerraformCollaborator objects
     def return_collaborators_from_file(file_name)
       logger.debug "return_collaborators_from_file"
+
       # Grab repo name
       repo = file_name[/(?<=#{@terraform_dir}\/)(.*)(?=.tf)/, 1]
 

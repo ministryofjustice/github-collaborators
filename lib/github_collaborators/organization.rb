@@ -1,67 +1,77 @@
 class GithubCollaborators
-  class Member
-    include Logging
-    attr_reader :login
-
-    def initialize(data)
-      logger.debug "initialize"
-      @login = data.dig("node", "login")
-    end
-  end
-
   class Organization
     include Logging
-    attr_reader :graphql
+    attr_reader :base_url
 
-    def initialize
+    def initialize(params)
       logger.debug "initialize"
-      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
-      @org_members = get_all_organisation_members
+      # URL of the github UI page listing all the terraform files
+      @base_url = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
+      @organization_members = params.fetch(:org) { OrganizationMembers.new.get_org_members }
+      @outside_collaborators = []
+      @repositories = params.fetch(:repositories) { Repositories.new.get_active_repositories }
     end
 
-    def is_member?(login)
-      logger.debug "is_member"
-      @org_members.map(&:login).include?(login)
+    def add_outside_collaborator_to_repositories
+      logger.debug "add_outside_collaborator_to_repositories"
+      # For every repository in MoJ GitHub organisation
+      @repositories.each do |repository|
+        # Get each outside collaborator
+        outside_collaborators = get_repository_outside_collaborators(repository.name)
+        outside_collaborators.each do |collaborator|
+          params = {
+            repository: repository.name,
+            login: collaborator.login,
+            base_url: @base_url,
+            repo_url: repository.url
+          }
+          # Create the terraform file equivalent of the collaborator
+          tc = TerraformCollaborator.new(params)
+          # Add that collaborator to the repository
+          repository.add_outside_collaborator(tc)
+        end
+      end
+    end
+
+    # Get collaborators from repos that has an issue
+    def get_collaborators_with_issues
+      logger.debug "get_collaborators_with_issues"
+      collaborators = []
+      # Filter out repositories with no outside collaborators
+      repos_with_outside_collaborators = @repositories.select { |repository| repository.outside_collaborators > 0 }
+      # Check the repositories with outside collaborators
+      @repos_with_outside_collaborators.each do |repository|
+        # Loop through each repository collaborators
+        repository.get_all_outside_collaborators.each do |collaborator|
+          # Is there an issue with the collaborator
+          if collaborator.status == TerraformCollaborator::FAIL
+            # This collaborator has an issue
+            collaborators.push(collaborator)
+          end
+        end
+      end
+      collaborators
+    end
+
+    def fetch_repository_collaborators(repository_name)
+      logger.debug "fetch_repository_collaborators"
+      repository = @repositories.select { |repository| repository.name == repository_name }
+      repository.get_all_outside_collaborators
+    end
+
+    def is_collaborator_an_org_member(user_login)
+      logger.debug "is_collaborator_an_org_member"
+      @organization_members.map(&:login).include?(user_login)
     end
 
     private
 
-    def get_all_organisation_members
-      logger.debug "get_all_organisation_members"
-      org_members = []
-      end_cursor = nil
-      loop do
-        response = graphql.run_query(organisation_members_query(end_cursor))
-        members = JSON.parse(response).dig("data", "organization", "membersWithRole", "edges")
-        members.each do |member|
-          org_members.push(GithubCollaborators::Member.new(member))
-        end
-        break unless JSON.parse(response).dig("data", "organization", "membersWithRole", "pageInfo", "hasNextPage")
-        end_cursor = JSON.parse(response).dig("data", "organization", "membersWithRole", "pageInfo", "endCursor")
-      end
-      org_members.sort_by { |org_member| org_member.login }
-    end
-
-    def organisation_members_query(end_cursor)
-      logger.debug "organisation_members_query"
-      after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
-      %[
-        {
-          organization(login: "ministryofjustice") {
-            membersWithRole(first: 100 #{after}) {
-              edges {
-                node {
-                  login
-                }
-              }
-              pageInfo {
-                hasNextPage
-                endCursor
-              }
-            }
-          }
-        }
-      ]
+    # Returns a list of outside collaborators
+    # This reads data from the GitHub API
+    # This has nothing to do with the TerraformCollaborators class which reads data from the .tf files
+    def get_repository_outside_collaborators(repo_name)
+      logger.debug "get_repository_outside_collaborators"
+      GithubCollaborators::RepositoryCollaborators.new(repository: repo_name).fetch_all_collaborators
     end
   end
 end

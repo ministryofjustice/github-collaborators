@@ -1,12 +1,23 @@
 class GithubCollaborators
   class Repository
     include Logging
-    attr_reader :name, :url
+    attr_reader :name, :url, :outside_collaborators
 
     def initialize(data)
       logger.debug "initialize"
       @name = data.fetch("name")
       @url = data.fetch("url")
+      @outside_collaborators = []
+    end
+
+    def add_outside_collaborator(collaborator)
+      logger.debug "add_outside_collaborator"
+      @outside_collaborators.push(collaborator)
+    end
+
+    def get_all_outside_collaborators
+      logger.debug "get_all_outside_collaborators"
+      @outside_collaborators
     end
   end
 
@@ -19,8 +30,8 @@ class GithubCollaborators
       @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
     end
 
-    def active_repositories
-      logger.debug "active_repositories"
+    def get_active_repositories
+      logger.debug "get_active_repositories"
       active_repositories = []
       ["public", "private", "internal"].each do |type|
         end_cursor = nil
