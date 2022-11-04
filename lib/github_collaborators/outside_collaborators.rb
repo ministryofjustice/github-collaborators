@@ -3,17 +3,16 @@ class GithubCollaborators
     include Logging
 
     BASE_URL = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform"
-    # TODO: put a better solution here
-    TESTING = false
 
-    def initialize
+    def initialize(check_github)
       logger.debug "initialize"
-      # TODO: remove this code
-      @collaborators = if TESTING
-        test_data
-      else
-        # Create a list of users that are outside collaborators ie not MoJ Organisation Members
+      # Create a list of users that are outside collaborators ie not MoJ Organisation Members
+      @collaborators = if check_github
+        # Using the data from GitHub
         GithubCollaborators::OrganizationOutsideCollaborators.new(base_url: BASE_URL).fetch_users_with_issues
+      else
+        # Using the data from the terraform folder files
+        fetch_collaborators_within_terraform_files
       end
       # Grab the GitHub-Collaborator repository open pull requests
       @repo_pull_requests = GithubCollaborators::PullRequests.new.get_pull_requests
@@ -290,58 +289,28 @@ class GithubCollaborators
       }
     end
 
-    def test_data
+    # Returns all the named collaborators in the terraform files
+    # This function is used to check the collaborators data in the
+    # files match with what is online on the Org/GitHub
+    def fetch_collaborators_within_terraform_files
       params = {
-        terraform_dir: "terraform",
-        folder_path: "/Users/nick.walters/MoJ/github-collaborators"
+        folder_path: Dir.getwd + "/terraform"
       }
 
-      terraform_collabs = GithubCollaborators::TerraformCollaborators.new(params)
-      the_files = terraform_collabs.fetch_terraform_files
-
+      terraform_collaborators = GithubCollaborators::TerraformCollaborators.new(params)
+      terraform_files = terraform_collaborators.fetch_terraform_files
       exclude_files = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
 
-      collabs = []
-      the_files.each do |file|
-        if !exclude_files.include?(File.basename(file))
-
-          params2 = {
-            folder_path: "/Users/nick.walters/MoJ/github-collaborators"
-          }
-          collaborators_in_file = GithubCollaborators::TerraformCollaborators.new(params2).return_collaborators_from_file(file)
-
-          collaborators_in_file.each do |collaborator|
-            params1 = {
-              repository: File.basename(file, ".tf"),
-              base_url: "/Users/nick.walters/MoJ/github-collaborators",
-              login: collaborator.login
-            }
-
-            tc = GithubCollaborators::TerraformCollaborator.new(params1)
-            the_hash = tc.to_hash
-            collabs.push(the_hash)
-            # if tc.status == GithubCollaborators::TerraformCollaborator::FAIL
-            #   print file
-            #   print "\n"
-
-            #   print collaborator.login
-            #   print "\n"
-
-            #   tc.get_issues.each do |issue|
-            #     print issue
-            #     print "\n"
-            #   end
-
-            #   print tc.get_review_after_date
-            #   print "\n"
-            #   print "\n"
-            # end
-          end
+      collaborators = []
+      # Go through all the terraform files and get the collaborators
+      terraform_files.each do |terraform_file|
+        # Ignore the above named files
+        if !exclude_files.include?(File.basename(terraform_file))
+          collaborators_in_file = terraform_collaborators.return_collaborators_from_file(terraform_file)
+          collaborators_in_file.each { |collaborator| collaborators.push(collaborator.to_hash) }
         end
       end
-      collabs
+      collaborators.sort_by { |collaborator| collaborator["login"] }
     end
-
-    @@test_outside_collaborator_list = []
   end
 end
