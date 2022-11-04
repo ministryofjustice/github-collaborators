@@ -42,7 +42,7 @@ class GithubCollaborators
 
     it "lists outside collaborators" do
       allow_any_instance_of(IssueClose).to receive_message_chain(:close_expired_issues)
-      expect(org_outside_collabs.fetch_users_with_issues).to eq(ext_collabs)
+      expect(org_outside_collabs.fetch_collaborators_with_issues).to eq(ext_collabs)
     end
 
     it "lists outside collaborators for a repo" do

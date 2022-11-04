@@ -10,14 +10,14 @@ class GithubCollaborators
       @github_user = params.fetch(:github_user)
     end
 
-    def create_unknown_user_issue
-      logger.debug "create_unknown_user_issue"
+    def create_unknown_collaborator_issue
+      logger.debug "create_unknown_collaborator_issue"
       if POST_TO_GH
         url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
-        HttpClient.new.post_json(url, unknown_user_hash.to_json)
+        HttpClient.new.post_json(url, unknown_collaborator_hash.to_json)
         sleep 2
       else
-        logger.debug "Didnt create unknown user issue for #{github_user} on #{repository}, this is a dry run"
+        logger.debug "Didnt create unknown collaborator issue for #{github_user} on #{repository}, this is a dry run"
       end
     end
 
@@ -34,7 +34,7 @@ class GithubCollaborators
       end
     end
 
-    # Checks if issue already open for a user
+    # Checks if issue already open for a collaborator
     def does_issue_already_exists?
       logger.debug "does_issue_already_exists"
       found_issues = false
@@ -43,13 +43,13 @@ class GithubCollaborators
       # Get only issues used by this application
       issues = data.select { |issue| issue[:title].include? "Collaborator review date expires soon for user" }
 
-      # This is a work around for when users unassign themself from the ticket without updating their review_after
+      # This is a work around for when collaborators unassign themself from the ticket without updating their review_after
       # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
       bad_issues = issues.select { |issue| issue[:assignees].length == 0 }
       bad_issues.each { |issue| GithubCollaborators::IssueClose.remove_issue(repository, issue[:number]) }
       issues.delete_if { |issue| issue[:assignees].length == 0 }
 
-      # Check which issues are assigned to the user
+      # Check which issues are assigned to the collaborator
       issues.select { |issue| issue[:assignee][:login] == github_user }
       if issues.length > 0
         # Found matching issue
@@ -67,8 +67,8 @@ class GithubCollaborators
 
     private
 
-    def unknown_user_hash
-      logger.debug "unknown_user_hash"
+    def unknown_collaborator_hash
+      logger.debug "unknown_collaborator_hash"
       {
         title: "Please define outside collaborators in code",
         assignees: [github_user],
@@ -100,7 +100,7 @@ class GithubCollaborators
           
           If you have any questions, please post in #ask-operations-engineering on Slack.
 
-          Failure to update the review_date will result in the user being removed from the repository via our automation.
+          Failure to update the review_date will result in the collaborator being removed from the repository via our automation.
         EOF
       }
     end

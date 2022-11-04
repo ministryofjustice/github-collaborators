@@ -77,14 +77,14 @@ class GithubCollaborators
       write_new_date_to_file(new_review_after_date)
     end
 
-    def remove_user
-      logger.debug "remove_user"
+    def remove_collaborator
+      logger.debug "remove_collaborator"
       # Split full file contents (as string) into array of line
       current_file = @terraform_data_as_string.split("\n")
-      # Find the line for the user
+      # Find the line for the collaborator
       # Get the line that starts with "{" before "github_user"
       line_to_remove = find_user_name_line_number(current_file) - 1
-      # Remove the lines with the user
+      # Remove the lines that contain the collaborator data
       remove_lines = 10
       until remove_lines == 0
         current_file.delete_at(line_to_remove)
@@ -110,9 +110,9 @@ class GithubCollaborators
       logger.debug "write_new_date_to_file"
       # Split full file contents (as string) into array of line
       current_file = @terraform_data_as_string.split("\n")
-      # Find the line for the user
+      # Find the line for the collaborator
       line_number = find_user_name_line_number(current_file)
-      # Get the date line based on the users username in the file
+      # Get the date line based on the collaborator username in the file
       # and offset it by REVIEW_AFTER to get the line with the review_after
       date_line = current_file[line_number + (REVIEW_AFTER + 1)]
       # Overwrite the review_after date
@@ -127,11 +127,11 @@ class GithubCollaborators
 
     def exists?
       logger.debug "exists"
-      user_exists = does_collaborator_exist?
-      if user_exists
+      collaborator_exists = does_collaborator_exist?
+      if collaborator_exists
         @collaborator_exist = true
       end
-      user_exists
+      collaborator_exists
     end
 
     def check_for_issues

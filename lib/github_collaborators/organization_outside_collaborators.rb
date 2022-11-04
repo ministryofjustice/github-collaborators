@@ -24,15 +24,15 @@ class GithubCollaborators
     #     "repo_url"=>"https://github.com/ministryofjustice/vcms-test-automation"
     #   },
     # ]
-    def fetch_users_with_issues
-      logger.debug "fetch_users_with_issues"
+    def fetch_collaborators_with_issues
+      logger.debug "fetch_collaborators_with_issues"
       # For every repository in MoJ GitHub organisation
-      fetch_org_repositories.each_with_object([]) { |repo, users|
+      fetch_org_repositories.each_with_object([]) { |repo, collaborators|
         # For all outside collaborators attached to a repository
-        get_repository_outside_collaborators(repo.name).each do |user|
+        get_repository_outside_collaborators(repo.name).each do |collaborator|
           params = {
             repository: repo.name,
-            login: user.login,
+            login: collaborator.login,
             base_url: @base_url,
             repo_url: repo.url
           }
@@ -41,9 +41,8 @@ class GithubCollaborators
           # Is there an issue with the collaborator
           if tc.status == TerraformCollaborator::FAIL
             # This collaborator has an issue
-            users.push(tc.to_hash)
+            collaborators.push(tc.to_hash)
           end
-          users # rubocop:disable Lint/Void
         end
       }
     end
@@ -55,9 +54,9 @@ class GithubCollaborators
     # }
     def fetch_repository_collaborators(repo_name)
       logger.debug "fetch_repository_collaborators"
-      get_repository_outside_collaborators(repo_name).map do |user|
+      get_repository_outside_collaborators(repo_name).map do |collaborator|
         {
-          login: user.login
+          login: collaborator.login
         }
       end
     end
@@ -80,7 +79,7 @@ class GithubCollaborators
     # This has nothing to do with the TerraformCollaborators class which reads data from the .tf files
     def get_repository_outside_collaborators(repo_name)
       logger.debug "get_repository_outside_collaborators"
-      outside_collaborators(repo_name).reject { |user| @organization.is_member?(user.login) }
+      outside_collaborators(repo_name).reject { |collaborator| @organization.is_member?(collaborator.login) }
     end
 
     # Returns a list of outside collaborators for a given repository

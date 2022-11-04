@@ -20,8 +20,8 @@ class GithubCollaborators
       "I've found a collaborator whose review date has expired"
     end
 
-    def multiple_message(users)
-      "I've found #{users} collaborators whose review dates have expired"
+    def multiple_message(collaborators)
+      "I've found #{collaborators} collaborators whose review dates have expired"
     end
   end
 end

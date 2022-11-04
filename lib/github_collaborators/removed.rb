@@ -11,8 +11,8 @@ class GithubCollaborators
       "I've removed an unknown collaborator"
     end
 
-    def multiple_message(users)
-      "I've removed #{users} unknown collaborators"
+    def multiple_message(collaborators)
+      "I've removed #{collaborators} unknown collaborators"
     end
   end
 end

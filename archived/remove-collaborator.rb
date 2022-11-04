@@ -16,7 +16,7 @@ def remove_collaborator(hash)
   # We must create the issue before removing access, because the issue is
   # assigned to the removed collaborator, so that they (hopefully) get a
   # notification about it.
-  GithubCollaborators::IssueCreator.new(params).create_unknown_user_issue
+  GithubCollaborators::IssueCreator.new(params).create_unknown_collaborator_issue
   GithubCollaborators::AccessRemover.new(params).remove
 end
 
