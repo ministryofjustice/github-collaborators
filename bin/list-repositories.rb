@@ -4,7 +4,7 @@ require_relative "../lib/github_collaborators"
 
 puts "Start"
 
-repositories = GithubCollaborators::Repositories.new.active_repositories
+repositories = GithubCollaborators::Repositories.new.get_active_repositories
 
 repositories.map { |repo| puts repo }
 

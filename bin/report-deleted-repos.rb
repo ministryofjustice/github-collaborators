@@ -38,8 +38,8 @@ end
 # Get list of Terraform defined repos
 terraform_repos = Dir.glob("#{terraform_dir}/*.tf").map { |file_name| File.basename(file_name, File.extname(file_name)) }
 
-# Get live list of all GitHub repos
-repositories = GithubCollaborators::Repositories.new.active_repositories
+# Get all GitHub repos
+repositories = GithubCollaborators::Repositories.new.get_active_repositories
 
 # Get repos that are not on GitHub and remove files required by Terraform
 repo_delta = (terraform_repos - repositories) - ["main", "variables", "versions", "backend"]

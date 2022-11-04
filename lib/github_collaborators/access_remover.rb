@@ -10,8 +10,8 @@ class GithubCollaborators
       @github_user = params.fetch(:github_user)
     end
 
-    def remove
-      logger.debug "remove"
+    def remove_access
+      logger.debug "remove_access"
       if POST_TO_GH
         url = "https://api.github.com/repos/ministryofjustice/#{repository}/collaborators/#{github_user}"
         HttpClient.new.delete(url)

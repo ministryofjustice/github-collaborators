@@ -16,7 +16,7 @@ class GithubCollaborators
       expect(HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:delete).with(url)
 
-      ar.remove
+      ar.remove_access
     end
   end
 end
