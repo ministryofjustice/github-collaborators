@@ -37,10 +37,8 @@ class GithubCollaborators
     def get_collaborators_with_issues
       logger.debug "get_collaborators_with_issues"
       collaborators = []
-      # Filter out repositories with no outside collaborators
-      repos_with_outside_collaborators = @repositories.select { |repository| repository.outside_collaborators > 0 }
       # Check the repositories with outside collaborators
-      @repos_with_outside_collaborators.each do |repository|
+      @repositories.each do |repository|
         # Loop through each repository collaborators
         repository.get_all_outside_collaborators.each do |collaborator|
           # Is there an issue with the collaborator
