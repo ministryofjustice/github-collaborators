@@ -35,6 +35,7 @@ class GithubCollaborators
 
     def remove_unknown_collaborators
       logger.debug "remove_unknown_collaborators"
+      removed_outside_collaborators = []
       @collaborators.each do |collaborator|
         params = {
           repository: collaborator["repository"],
@@ -48,7 +49,12 @@ class GithubCollaborators
           # notification about it.
           GithubCollaborators::IssueCreator.new(params).create_unknown_user_issue
           GithubCollaborators::AccessRemover.new(params).remove
+          removed_outside_collaborators.push(collaborator)
         end
+      end
+
+      if removed_outside_collaborators.length > 0
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::Removed.new, removed_outside_collaborators).post_slack_message
       end
     end
 
