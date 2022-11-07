@@ -26,7 +26,7 @@ class GithubCollaborators
     def check_collaborators_from_github
       logger.debug "check_collaborators_from_github"
       # Create a list of outside collaborators using the data from GitHub
-      @organization.add_outside_collaborator_to_repositories
+      @organization.add_outside_collaborators_to_repositories
       collaborators = @organization.get_collaborators_with_issues
       is_review_date_within_a_week(collaborators)
       is_renewal_within_one_month(collaborators)
@@ -336,7 +336,7 @@ class GithubCollaborators
 
       collaborators_who_are_members = []
 
-      @organization.add_outside_collaborator_to_repositories
+      @organization.add_outside_collaborators_to_repositories
 
       # For each repository
       @repositories.each do |repository|

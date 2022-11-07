@@ -12,8 +12,8 @@ class GithubCollaborators
       @repositories = params.fetch(:repositories) { Repositories.new.get_active_repositories }
     end
 
-    def add_outside_collaborator_to_repositories
-      logger.debug "add_outside_collaborator_to_repositories"
+    def add_outside_collaborators_to_repositories
+      logger.debug "add_outside_collaborators_to_repositories"
       # For every repository in MoJ GitHub organisation
       @repositories.each do |repository|
         # Get each outside collaborator
