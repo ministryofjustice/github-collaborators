@@ -95,6 +95,7 @@ class GithubCollaborators
       write_new_date_to_file(new_review_after_date)
     end
 
+    # Remove the collaborator from the current object terraform file
     def remove_collaborator
       logger.debug "remove_collaborator"
       # Split full file contents (as string) into array of line
