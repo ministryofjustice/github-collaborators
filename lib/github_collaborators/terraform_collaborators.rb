@@ -55,7 +55,8 @@ class GithubCollaborators
     #     "href"=>"https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/vcms-test-automation.tf",
     #     "defined_in_terraform"=>true,
     #     "review_date"=>"2022-10-10",
-    #     "repo_url"=>"https://github.com/ministryofjustice/vcms-test-automation"
+    #     "repo_url"=>"https://github.com/ministryofjustice/vcms-test-automation",
+    #     "permission"=>"admin"
     #   },
     # ]
 
