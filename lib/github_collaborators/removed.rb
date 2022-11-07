@@ -8,11 +8,11 @@ class GithubCollaborators
     end
 
     def singular_message
-      "I've removed an unknown collaborator"
+      "I've removed an unknown collaborator from Github"
     end
 
     def multiple_message(collaborators)
-      "I've removed #{collaborators} unknown collaborators"
+      "I've removed #{collaborators} unknown collaborators from Github"
     end
   end
 end

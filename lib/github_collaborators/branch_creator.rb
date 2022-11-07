@@ -16,7 +16,7 @@ class GithubCollaborators
         @g.config("user.email", "dummy@email.com")
         @g.checkout(branch_name, new_branch: true, start_point: "main")
       else
-        logger.debug "Didnt create git branch #{branch_name}, this is a dry run"
+        logger.debug "Didn't create git branch #{branch_name}, this is a dry run"
       end
     end
 
@@ -25,7 +25,7 @@ class GithubCollaborators
       if POST_TO_GH
         @g.add(files)
       else
-        logger.debug "Didnt add files to git #{files}, this is a dry run"
+        logger.debug "Didn't add files to git #{files}, this is a dry run"
       end
     end
 
@@ -34,7 +34,7 @@ class GithubCollaborators
       if POST_TO_GH
         @g.remove(files)
       else
-        logger.debug "Didnt remove files from git #{files}, this is a dry run"
+        logger.debug "Didn't remove files from git #{files}, this is a dry run"
       end
     end
 
@@ -48,7 +48,7 @@ class GithubCollaborators
         @g.checkout("main")
         sleep 4
       else
-        logger.debug "Didnt commit and push files to github, this is a dry run"
+        logger.debug "Didn't commit and push files to github, this is a dry run"
       end
     end
 
