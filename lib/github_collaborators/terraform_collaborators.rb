@@ -43,7 +43,17 @@ class GithubCollaborators
       set_up
     end
 
-    # Example: an array of this class (TerraformCollaborator) ie hashes
+    def set_up
+      logger.debug "set_up"
+      if @terraform_data_as_string.nil?
+        @terraform_data_as_string = read_terraform_file
+      end
+      @terraform_data = extract_collaborators_section
+      @issues = check_for_issues
+    end
+
+    # The to_hash function returns the below hash structure
+    # Example: for multiple collaborators create an array of this class (TerraformCollaborator ie hashes)
     # [
     #   {
     #     "repository"=>"vcms-test-automation",
@@ -59,15 +69,6 @@ class GithubCollaborators
     #     "permission"=>"admin"
     #   },
     # ]
-
-    def set_up
-      logger.debug "set_up"
-      if @terraform_data_as_string.nil?
-        @terraform_data_as_string = read_terraform_file
-      end
-      @terraform_data = extract_collaborators_section
-      @issues = check_for_issues
-    end
 
     def to_hash
       logger.debug "to_hash"
