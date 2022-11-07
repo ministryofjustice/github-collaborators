@@ -22,20 +22,20 @@ class GithubCollaborators
     def fetch_all_collaborators
       logger.debug "fetch_all_collaborators"
       end_cursor = nil
-      collaborators = []
+      outside_collaborators = []
       loop do
         response = graphql.run_query(outside_collaborators_query(end_cursor))
         json_data = JSON.parse(response)
         # Repos with no outside collaborators return an empty array
         break unless !json_data.dig("data", "organization", "repository", "collaborators", "edges").empty?
-        outside_collaborators = json_data.dig("data", "organization", "repository", "collaborators", "edges")
-        outside_collaborators.each do |outside_collaborator|
-          collaborators.push(GithubCollaborators::Collaborator.new(outside_collaborator))
+        collaborators = json_data.dig("data", "organization", "repository", "collaborators", "edges")
+        collaborators.each do |outside_collaborator|
+          outside_collaborators.push(GithubCollaborators::Collaborator.new(outside_collaborator))
         end
         break unless JSON.parse(response).dig("data", "organization", "repository", "collaborators", "pageInfo", "hasNextPage")
         end_cursor = JSON.parse(response).dig("data", "organization", "repository", "collaborators", "pageInfo", "endCursor")
       end
-      collaborators.sort_by { |collaborator| collaborator.login }
+      outside_collaborators
     end
 
     def outside_collaborators_query(end_cursor)
