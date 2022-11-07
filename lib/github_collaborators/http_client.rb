@@ -3,9 +3,9 @@ class GithubCollaborators
     include Logging
     attr_reader :token
 
-    def initialize(params = {})
+    def initialize
       logger.debug "initialize"
-      @token = params.fetch(:token) { ENV.fetch("ADMIN_GITHUB_TOKEN") }
+      @token = ENV.fetch("ADMIN_GITHUB_TOKEN")
     end
 
     def fetch_json(url)
