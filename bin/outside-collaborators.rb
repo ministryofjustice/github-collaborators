@@ -5,7 +5,8 @@ require_relative "../lib/github_collaborators"
 puts "Start"
 
 outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-outside_collaborators.check_collaborators_from_github
-terraform_files_outside_collaborators.check_collaborators_in_files
+outside_collaborators.compare_terraform_and_github
+outside_collaborators.collaborator_checks
+outside_collaborators.print_full_org_members
 
 puts "Finished"

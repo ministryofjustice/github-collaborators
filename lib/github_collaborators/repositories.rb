@@ -1,29 +1,31 @@
 class GithubCollaborators
   class Repository
     include Logging
-    attr_reader :name, :url, :outside_collaborators
+    attr_reader :name, :url, :outside_collaborators, :outside_collaborators_count
 
     def initialize(data)
       logger.debug "initialize"
       @name = data.fetch("name")
       @url = data.fetch("url")
+      @outside_collaborators_count = data.dig("collaborators", "totalCount")
       @outside_collaborators = []
     end
 
+    # Add collaborator based on login name
     def add_outside_collaborator(collaborator)
       logger.debug "add_outside_collaborator"
-      @outside_collaborators.push(collaborator)
+      @outside_collaborators.push(collaborator.login)
     end
 
-    def get_all_outside_collaborators
-      logger.debug "get_all_outside_collaborators"
-      @outside_collaborators
+    # Add collaborators based on login name
+    def add_outside_collaborators(collaborators)
+      logger.debug "add_outside_collaborators"
+      collaborators.each { |collaborator| @outside_collaborators.push(collaborator.login) }
     end
   end
 
   class Repositories
     include Logging
-    attr_reader :graphql
 
     def initialize
       logger.debug "initialize"
@@ -36,7 +38,7 @@ class GithubCollaborators
       ["public", "private", "internal"].each do |type|
         end_cursor = nil
         loop do
-          response = graphql.run_query(repositories_query(end_cursor, type))
+          response = @graphql.run_query(repositories_query(end_cursor, type))
           repositories = JSON.parse(response).dig("data", "search", "repos")
           repositories.reject { |r| r.dig("repo", "isDisabled") }
           repositories.reject { |r| r.dig("repo", "isLocked") }
@@ -69,6 +71,9 @@ class GithubCollaborators
                   url
                   isDisabled
                   isLocked
+                  collaborators(affiliation: OUTSIDE) {
+                    totalCount
+                  }
                 }
               }
             }

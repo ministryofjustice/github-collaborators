@@ -1,47 +1,159 @@
 class GithubCollaborators
   class OutsideCollaborators
     include Logging
+    POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
 
     def initialize
       logger.debug "initialize"
 
-      # Grab the Org members
-      @organization_members = OrganizationMembers.new.get_org_members
-
-      # Grab the Org repositories
-      @repositories = Repositories.new.get_active_repositories
-
       # Grab the GitHub-Collaborator repository open pull requests
-      @repo_pull_requests = GithubCollaborators::PullRequests.new.get_pull_requests
+      pull_requests = GithubCollaborators::PullRequests.new
+      @repo_pull_requests = pull_requests.get_pull_requests
 
-      params = {
-        org: @organization_members,
-        repositories: @repositories
-      }
-      @organization = GithubCollaborators::Organization.new(params)
+      # Contains the Org repositories, full Org members, Org outside collaborators and each repository collaborators. 
+      @organization = GithubCollaborators::Organization.new
 
+      # An array of TerraformCollaborator hash variables, see the to_hash function for structure.
       @terraform_collaborators = GithubCollaborators::TerraformCollaborators.new(folder_path: Dir.getwd + "/terraform").fetch_all_terraform_collaborators
     end
-
-    def check_collaborators_from_github
-      logger.debug "check_collaborators_from_github"
-      # Create a list of outside collaborators using the data from GitHub
-      @organization.add_outside_collaborators_to_repositories
-      collaborators = @organization.get_collaborators_with_issues
-      is_review_date_within_a_week(collaborators)
-      is_renewal_within_one_month(collaborators)
-      remove_unknown_collaborators(collaborators)
-      has_review_date_expired(collaborators)
-    end
-
-    def check_collaborators_in_files
-      logger.debug "check_collaborators_in_files"
-      # Filter out the collaborators that do not have an issue
-      collaborators_with_issues = @terraform_collaborators.select { |collaborator| collaborator["issues"].length > 0 }
+    
+    # Entry point from Ruby script
+    def collaborator_checks
+      logger.debug "collaborator_checks"
+      collaborators_with_issues = collect_collaborators_with_issues
+      is_review_date_within_a_week(collaborators_with_issues)
+      is_renewal_within_one_month(collaborators_with_issues)
+      remove_unknown_collaborators(collaborators_with_issues)
       has_review_date_expired(collaborators_with_issues)
     end
 
+    def print_full_org_members
+      @organization.collaborators_and_org_members.each { |collaborator| logger.info "Collaborator #{collaborator} is a full Org member and an outside collaborator." }
+    end
+
+    # Print out any differences between GitHub and terraform files
+    def compare_terraform_and_github
+      logger.debug "compare_terraform_and_github"      
+
+      # An array to store collaborators login names that are defined in Terraform but are not on GitHub
+      collaborators_missing_on_github = []
+
+      # For each repository
+      @organization.repositories.each do |repository|
+
+        # Get the GitHub outside collaborators for the repository
+        collaborators_on_github = repository.outside_collaborators
+
+        # Get the Terraform defined outside collaborators for the repository
+        collaborators_in_file = []
+        @terraform_collaborators.each do |tc|
+          if tc["repository"] == GithubCollaborators.tf_safe(repository.name) 
+            collaborators_in_file.push(tc["login"])
+          end
+        end
+
+        if collaborators_in_file.length == 0 && collaborators_in_file.length == 0
+          next
+        else
+          # Some terraform collaborators have been upgraded to full organization members, this finds them.
+          collaborators_in_file.each do |collaborator|
+            if is_collaborator_org_member(collaborator)
+              # And adds those collaborator to the GitHub list
+              collaborators_on_github.push(collaborator)
+            end
+          end
+
+          if collaborators_in_file.length != collaborators_on_github.length
+            # There is a difference between Terraform and Github
+            logger.warn "=" * 37
+            logger.warn "There is a difference in Outside Collaborators for the #{repository.name} repository"
+            logger.warn "GitHub Outside Collaborators: #{collaborators_on_github.length}"
+            logger.warn "Terraform Outside Collaborators: #{collaborators_in_file.length}"
+            logger.warn "Collaborators on GitHub:"
+            collaborators_on_github.each { |gc| logger.warn "    #{gc}" }
+            logger.warn "Collaborators in Terraform:"
+            collaborators_in_file.each { |tc| logger.warn "    #{tc}" }
+  
+            # Get the collaborator invites for the repository and store the data as 
+            # a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
+            repository_invites = []
+            url = "https://api.github.com/repos/ministryofjustice/#{repository.name}/invitations"
+            json = GithubCollaborators::HttpClient.new.fetch_json(url)
+            JSON.parse(json)
+              .find_all { |invite| invite["invitee"]["login"] }
+              .map { |invite| repository_invites.push( { :login => invite["invitee"]["login"], :expired => invite["expired"], :invite_id => invite["id"] } ) }
+
+            # Check the repository invites
+            # using a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
+            repository_invites.each do |invite|
+              if collaborators_in_file.include?(invite[:login])
+                if invite[:expired]
+                  # When invite has expired
+                  logger.warn "The invite for #{invite[:login]} on #{repository.name} has expired. Deleting the invite."
+                  if POST_TO_GH
+                    url = "https://api.github.com/repos/ministryofjustice/#{repository.name}/invitations/#{invite[:invite_id]}"
+                    GithubCollaborators::HttpClient.new.delete(url)
+                    sleep 1
+                  else
+                    logger.debug "Didn't delete collaborator repository invite, this is a dry run"
+                  end
+                else
+                  # When invite is pending
+                  logger.info "There is a pending invite for #{invite[:login]} on #{repository.name}."
+                end
+              else
+                # When no invite exists, this means the collaborator is not found on GitHub repository
+                # Collaborator is not defined on GitHub, add to the array for a Slack message below
+                # Store as a hash like this { :login => "name", :repository => "repo_name" }
+                collaborators_missing_on_github.push( { :login => "#{invite[:login]}", :repository => "#{repository.name}" } )
+                logger.warn "#{invite[:login]} is not defined on the GitHub repository: #{repository.name}."
+              end
+            end          
+
+            logger.warn "=" * 37
+          end
+        end
+      end
+
+      if collaborators_missing_on_github.length > 0
+        # Raise Slack message
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::MissingCollaborators.new, collaborators_missing_on_github).post_slack_message
+      end
+    end
+
     private
+
+    def collect_collaborators_with_issues
+      logger.debug "collect_collaborators_with_issues"
+
+      # Find the collaborators with issues
+      those_with_issues = []
+      github_collaborators_with_issues = @organization.get_collaborators_with_issues
+      terraform_collaborators_with_issues = @terraform_collaborators.select { |collaborator| collaborator["issues"].length > 0 }
+      those_with_issues = github_collaborators_with_issues + terraform_collaborators_with_issues
+      
+      # Sort list by login
+      those_with_issues.sort_by { |collaborator| collaborator["login"] }
+      
+      # Filter out duplicates
+      collaborators_with_issues = []
+      previous_login = ""
+      previous_issues = []
+      those_with_issues.each do |collaborator|
+        if previous_login == collaborator["login"] &&
+          previous_issues == collaborator["issues"]
+          # Skip a duplicate Terraform / GitHub collaborator with issue
+          next
+        else
+          # Store unique collaborator with issue from Terraform / GitHub
+          collaborators_with_issues.push(collaborator)
+          previous_login = collaborator["login"]
+          previous_issues = collaborator["issues"]
+        end
+      end
+
+      collaborators_with_issues
+    end
 
     def is_renewal_within_one_month(collaborators)
       logger.debug "is_renewal_within_one_month"
@@ -129,11 +241,9 @@ class GithubCollaborators
       end
     end
 
-    def is_collaborator_org_member(user_name)
+    def is_collaborator_org_member(login)
       logger.debug "is_collaborator_org_member"
-
-      if @organization.is_collaborator_an_org_member(user_name)
-        logger.info "Collaborator #{user_name} is a full Org member and an outside collaborator."
+      if @organization.is_collaborator_an_org_member(login)
         return true
       end
       false
@@ -153,7 +263,7 @@ class GithubCollaborators
       end
 
       # Sort list based on username
-      collaborators_who_expire_soon.sort_by! { |user| user["login"] }
+      collaborators_who_expire_soon.sort_by { |collaborator| collaborator["login"] }
     end
 
     # Get list of collaborators whose review date has passed
@@ -169,49 +279,49 @@ class GithubCollaborators
         end
       end
 
-      # Sort list based on username
-      collaborators_who_have_expired.sort_by! { |user| user["login"] }
+      # Sort list based on login name
+      collaborators_who_have_expired.sort_by! { |collaborator| collaborator["login"] }
     end
 
-    def extend_date_in_file(file_name, user_name)
+    def extend_date_in_file(file_name, login)
       logger.debug "extend_date_in_file"
       TerraformCollaborator.new(
         repository: File.basename(file_name, ".tf"),
-        login: user_name
+        login: login
       ).extend_review_date
     end
 
-    def remove_collaborator_from_file(file_name, user_name)
+    def remove_collaborator_from_file(file_name, login)
       logger.debug "remove_collaborator_from_file"
       tc = TerraformCollaborator.new(
         repository: File.basename(file_name, ".tf"),
-        login: user_name
+        login: login
       ).remove_collaborator
     end
 
     def create_extend_date_pull_requests(collaborators_who_expire_soon)
       logger.debug "create_extend_date_pull_requests"
       # Put collaborators into groups to commit multiple files per branch
-      collaborator_groups = collaborators_who_expire_soon.group_by { |user| user["login"] }
+      collaborator_groups = collaborators_who_expire_soon.group_by { |collaborator| collaborator["login"] }
       collaborator_groups.each do |group|
         # Ready a new branch
         bc = GithubCollaborators::BranchCreator.new
         branch_name = ""
-        user_name = ""
+        login = ""
         edited_files = []
 
         # For each file that collaborator has an upcoming expiry
         group[1].each do |outside_collaborator|
           # Check if a pull request is already pending
           terraform_file_name = File.basename(outside_collaborator["href"])
-          user_name = outside_collaborator["login"]
-          title_message = "Extend review dates for #{user_name}"
+          login = outside_collaborator["login"]
+          title_message = "Extend review dates for #{login}"
 
           if !does_pr_already_exist(terraform_file_name, title_message)
             # No pull request exists, modify the file
             file_name = "terraform/#{terraform_file_name}"
-            branch_name = "update-review-date-#{user_name}"
-            extend_date_in_file(file_name, user_name)
+            branch_name = "update-review-date-#{login}"
+            extend_date_in_file(file_name, login)
             edited_files.push(file_name)
           end
         end
@@ -221,12 +331,12 @@ class GithubCollaborators
           branch_name = bc.check_branch_name_is_valid(branch_name)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
-          bc.commit_and_push("Update review date for #{user_name}")
+          bc.commit_and_push("Update review date for #{login}")
 
           # Create a pull request
           params = {
             repository: "github-collaborators",
-            hash_body: extend_date_hash(user_name, branch_name)
+            hash_body: extend_date_hash(login, branch_name)
           }
 
           GithubCollaborators::PullRequestCreator.new(params).create_pull_request
@@ -237,26 +347,26 @@ class GithubCollaborators
     def create_remove_collaborator_pull_requests(expired_collaborators)
       logger.debug "create_remove_collaborator_pull_requests"
       # Put collaborators into groups to commit multiple files per branch
-      collaborators_groups = expired_collaborators.group_by { |user| user["login"] }
+      collaborators_groups = expired_collaborators.group_by { |collaborator| collaborator["login"] }
       collaborators_groups.each do |group|
         # Ready a new branch
         bc = GithubCollaborators::BranchCreator.new
         branch_name = ""
-        user_name = ""
+        login = ""
         edited_files = []
 
         # For each file where collaborator has expired
         group[1].each do |outside_collaborator|
           # Check if a pull request is already pending
           terraform_file_name = File.basename(outside_collaborator["href"])
-          user_name = outside_collaborator["login"]
-          title_message = "Remove expired collaborator #{user_name}"
+          login = outside_collaborator["login"]
+          title_message = "Remove expired collaborator #{login}"
 
           if !does_pr_already_exist(terraform_file_name, title_message)
             # No pull request exists, modify the file
             file_name = "terraform/#{terraform_file_name}"
-            branch_name = "remove-expired-collaborator-#{user_name}"
-            remove_collaborator_from_file(file_name, user_name)
+            branch_name = "remove-expired-collaborator-#{login}"
+            remove_collaborator_from_file(file_name, login)
             edited_files.push(file_name)
           end
         end
@@ -266,12 +376,12 @@ class GithubCollaborators
           branch_name = bc.check_branch_name_is_valid(branch_name)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
-          bc.commit_and_push("Remove expired collaborator #{user_name}")
+          bc.commit_and_push("Remove expired collaborator #{login}")
 
           # Create a pull request
           params = {
             repository: "github-collaborators",
-            hash_body: remove_collaborator_hash(user_name, branch_name)
+            hash_body: remove_collaborator_hash(login, branch_name)
           }
 
           GithubCollaborators::PullRequestCreator.new(params).create_pull_request
@@ -285,17 +395,17 @@ class GithubCollaborators
         # Chek the PR title message and check if file in the PR list of files
         if (pull_request.title.include? title_message.to_s) &&
             (pull_request.files.include? "terraform/#{terraform_file_name}")
-          logger.debug "For #{user_name} PR already open for #{terraform_file_name} file"
+          logger.debug "PR already open for #{terraform_file_name} file"
           return true
         end
       end
       false
     end
 
-    def remove_collaborator_hash(user_name, branch_name)
+    def remove_collaborator_hash(login, branch_name)
       logger.debug "remove_collaborator_hash"
       {
-        title: "Remove expired collaborator #{user_name} from file/s",
+        title: "Remove expired collaborator #{login} from file/s",
         head: branch_name,
         base: "main",
         body: <<~EOF
@@ -303,17 +413,17 @@ class GithubCollaborators
 
           This is the GitHub-Collaborator repository bot. 
 
-          The collaborator #{user_name} review date has expired for the file/s contained in this pull request.
+          The collaborator #{login} review date has expired for the file/s contained in this pull request.
           
           Either approve this pull request, modify it or delete it if it is no longer necessary.
         EOF
       }
     end
 
-    def extend_date_hash(user_name, branch_name)
+    def extend_date_hash(login, branch_name)
       logger.debug "extend_date_hash"
       {
-        title: "Extend review dates for #{user_name}",
+        title: "Extend review dates for #{login}",
         head: branch_name,
         base: "main",
         body: <<~EOF
@@ -321,117 +431,13 @@ class GithubCollaborators
           
           This is the GitHub-Collaborator repository bot. 
 
-          #{user_name} has review date/s that are close to expiring. 
+          #{login} has review date/s that are close to expiring. 
           
           The review date/s have automatically been extended.
 
           Either approve this pull request, modify it or delete it if it is no longer necessary.
         EOF
       }
-    end
-
-    # TODO: Rewrite this code
-    def compare_terraform_against_github
-      logger.debug "compare_terraform_against_github"
-
-      collaborators_who_are_members = []
-
-      @organization.add_outside_collaborators_to_repositories
-
-      # For each repository
-      @repositories.each do |repository|
-        # Get the GitHub outside collaborators for repository
-        collaborators_on_github = repository.get_all_outside_collaborators
-
-        # Get the Terraform outside collaborators for repository
-        terraform_collaborators = GithubCollaborators::TerraformCollaborators.new(folder_path: Dir.getwd + "/terraform")
-        collaborators_in_file = terraform_collaborators.return_collaborators_from_file(terraform_file)
-        collaborators_in_file.each { |collaborator| collaborators.push(collaborator.to_hash) }
-
-        # Edge cases
-        if collaborators_on_github.nil? || collaborators_in_file.nil?
-          next
-        end
-
-        if (collaborators_on_github.length == 0) && (collaborators_in_file.length == 0)
-          next
-        end
-
-        if tc.length == 0
-          logger.debug "=" * 37
-          logger.debug "Repository: #{repository.name}"
-          logger.debug "Number of Outside Collaborators: #{gc.length}"
-          logger.debug "These Outside Collaborator/s are not defined in Terraform:"
-          gc.each do |gc_collaborator|
-            puts gc_collaborator.fetch(:login)
-          end
-          logger.debug "=" * 37
-          logger.debug ""
-        elsif gc.length != tc.length
-
-          # Some collaborators have been upgraded to full organization members, this checks for them.
-          tc.each do |tc_collaborator|
-            if org_members.is_an_org_member(tc_collaborator.login) == true
-              collaborators_who_are_members.push(tc_collaborator.login)
-              gc.push(
-                {
-                  login: tc_collaborator.login
-                }
-              )
-            end
-          end
-
-          # Do the check again with the new value added above
-          if gc.length != tc.length
-            # Report when collaborator/s are defined in Terraform but not GitHub.
-            logger.debug "====================================="
-            logger.debug "Difference in repository: #{repository.name}"
-            logger.debug "Number of Outside Collaborators: #{gc.length}"
-            logger.debug "Defined in Terraform: #{tc.length}"
-            logger.debug "The Outside Collaborator/s not attached to the repository but defined in Terraform:"
-
-            # Get the pending collaborator invites for the repository
-            pending_invites = []
-            url = "https://api.github.com/repos/ministryofjustice/#{repository.name}/invitations"
-            json = GithubCollaborators::HttpClient.new.fetch_json(url)
-            JSON.parse(json)
-              .find_all { |collaborator| collaborator["invitee"]["login"] }
-              .map { |collaborator| pending_invites.push(collaborator) }
-
-            # Print collaborator name + pending invite or name only
-            tc.each do |tc_collaborator|
-              if pending_invites.length != 0
-                logger.debug tc_collaborator.login.to_s unless gc.any? { |collaborator| collaborator.fetch(:login) == tc_collaborator.login }
-                pending_invites.each do |collaborator|
-                  if collaborator["invitee"]["login"] == tc_collaborator.login
-                    logger.debug ": Has a pending invite \n"
-                  end
-                end
-              else
-                logger.debug tc_collaborator.login unless gc.any? { |collaborator| collaborator.fetch(:login) == tc_collaborator.login }
-              end
-            end
-
-            # Print all the repository outside collaborators if any exist
-            if gc.length > 0
-              logger.debug "-" * 37
-              logger.debug "The #{gc.length} Outside Collaborator/s for this repository are:"
-              gc.each do |collaborator|
-                logger.debug collaborator.fetch(:login)
-              end
-            end
-            logger.debug "=" * 37
-            logger.debug ""
-          end
-        end
-      end
-
-      # Print collaborator login who are also a member of the org
-      logger.info "These Outside Collaborators are defined within Terraform and are full Organization Members:"
-      collaborators_who_are_members = collaborators_who_are_members.uniq
-      collaborators_who_are_members.each do |collaborator|
-        logger.info collaborator.to_s
-      end
     end
   end
 end
