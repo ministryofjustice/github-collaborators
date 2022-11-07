@@ -11,20 +11,19 @@ class GithubCollaborators
 
   class RepositoryCollaborators
     include Logging
-    attr_reader :graphql, :repository
+    attr_reader :repository
 
-    def initialize(params)
+    def initialize
       logger.debug "initialize"
-      @repository = params.fetch(:repository)
-      @graphql = params.fetch(:graphql) { GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
+      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
     end
 
-    def fetch_all_collaborators
+    def fetch_all_collaborators(repository)
       logger.debug "fetch_all_collaborators"
       end_cursor = nil
       outside_collaborators = []
       loop do
-        response = graphql.run_query(outside_collaborators_query(end_cursor))
+        response = @graphql.run_query(outside_collaborators_query(end_cursor, repository))
         json_data = JSON.parse(response)
         # Repos with no outside collaborators return an empty array
         break unless !json_data.dig("data", "organization", "repository", "collaborators", "edges").empty?
@@ -38,27 +37,27 @@ class GithubCollaborators
       outside_collaborators
     end
 
-    def outside_collaborators_query(end_cursor)
+    def outside_collaborators_query(end_cursor, repository)
       logger.debug "outside_collaborators_query"
       after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
       %[
-      {
-        organization(login: "ministryofjustice") {
-          repository(name: "#{repository}") {
-            collaborators(first:100 affiliation: OUTSIDE #{after}) {
-              pageInfo {
-                hasNextPage
-                endCursor
-              }
-              edges {
-                node {
-                  login
+        {
+          organization(login: "ministryofjustice") {
+            repository(name: "#{repository}") {
+              collaborators(first:100 affiliation: OUTSIDE #{after}) {
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+                edges {
+                  node {
+                    login
+                  }
                 }
               }
             }
           }
         }
-      }
       ]
     end
   end

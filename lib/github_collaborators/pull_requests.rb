@@ -14,21 +14,15 @@ class GithubCollaborators
 
   class PullRequests
     include Logging
-    attr_reader :graphql
-
-    def initialize(params = nil)
+  
+    def initialize
       logger.debug "initialize"
-      @graphql = if params.nil?
-        GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
-      else
-        # Unit test mock out the GithubGraphQlClient object
-        params.fetch(:graphql) { GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
-      end
+      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) 
     end
 
     def get_pull_requests
       logger.debug "get_pull_requests"
-      response = graphql.run_query(pull_request_query)
+      response = @graphql.run_query(pull_request_query)
       data = JSON.parse(response).dig("data", "organization", "repository", "pullRequests")
       @pull_requests ||= data.fetch("nodes").map { |d| PullRequest.new(d) }
     end

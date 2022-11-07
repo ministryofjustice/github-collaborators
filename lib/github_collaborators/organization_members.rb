@@ -11,17 +11,12 @@ class GithubCollaborators
 
   class OrganizationMembers
     include Logging
-    attr_reader :graphql
+    attr_reader :org_members
 
     def initialize
       logger.debug "initialize"
       @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
       @org_members = get_all_organisation_members
-    end
-
-    def get_org_members
-      logger.debug "get_org_members"
-      @org_members
     end
 
     private
@@ -31,7 +26,7 @@ class GithubCollaborators
       org_members = []
       end_cursor = nil
       loop do
-        response = graphql.run_query(organisation_members_query(end_cursor))
+        response = @graphql.run_query(organisation_members_query(end_cursor))
         members = JSON.parse(response).dig("data", "organization", "membersWithRole", "edges")
         members.each do |member|
           org_members.push(GithubCollaborators::Member.new(member))
