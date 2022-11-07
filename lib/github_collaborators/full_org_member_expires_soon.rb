@@ -1,5 +1,5 @@
 class GithubCollaborators
-  class FullOrgMemberExpiresSoon < ExpiresSoonMessage
+  class FullOrgMemberExpiresSoon < GithubCollaborators::ExpiresSoonMessage
     include Logging
 
     def create_line(collaborator)
