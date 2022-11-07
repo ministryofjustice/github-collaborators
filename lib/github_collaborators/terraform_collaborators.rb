@@ -206,7 +206,7 @@ class GithubCollaborators
       logger.debug "does_collaborator_exist"
       return false if @terraform_data_as_string.nil?
       @user_line_in_terraform_file = find_user_name_line_number(@terraform_data)
-      !(@user_line_in_terraform_file == 0)
+      @user_line_in_terraform_file != 0
     end
 
     # Retrieves the terraform data for a specific collaborator
