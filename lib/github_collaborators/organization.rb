@@ -22,9 +22,9 @@ class GithubCollaborators
       # Grab the Org repositories
       repos = Repositories.new
       @repositories = repos.get_active_repositories
-      
+
       # Get all the outside collaborators from GitHub per repo
-      # This will take a long time to complete. 
+      # This will take a long time to complete.
       # Use it once.
       # It will call the GitHub API on every repo to get the outside collaborators.
       repo_collaborators = GithubCollaborators::RepositoryCollaborators.new
@@ -52,7 +52,6 @@ class GithubCollaborators
       @repositories.each do |repository|
         # Loop through each repository collaborators
         repository.outside_collaborators.each do |collaborator|
-
           params = {
             repository: repository.name,
             login: collaborator,
@@ -62,7 +61,7 @@ class GithubCollaborators
 
           # Create the terraform file equivalent of the collaborator
           tc = TerraformCollaborator.new(params)
-          
+
           # Is there an issue with the collaborator
           if tc.status == TerraformCollaborator::FAIL
             # This collaborator has an issue
@@ -92,11 +91,11 @@ class GithubCollaborators
       false
     end
 
-    # This will add a collaborator login name to a list of 
+    # This will add a collaborator login name to a list of
     # collaborators if the login name is not already defined.
     def add_additional_collaborators(collaborators)
       logger.debug "add_additional_collaborators"
-      collaborators.each do |collaborator| 
+      collaborators.each do |collaborator|
         # Check if the collaborator login name is already known
         if @outside_collaborators.include?(collaborator["login"])
           next
@@ -113,7 +112,7 @@ class GithubCollaborators
     def add_collaborator_and_org_member(login)
       logger.debug "add_collaborator_and_org_member"
       if @collaborators_and_org_members.include?(login)
-        return
+        nil
       else
         @collaborators_and_org_members.push(login)
       end

@@ -10,13 +10,13 @@ class GithubCollaborators
       pull_requests = GithubCollaborators::PullRequests.new
       @repo_pull_requests = pull_requests.get_pull_requests
 
-      # Contains the Org repositories, full Org members, Org outside collaborators and each repository collaborators. 
+      # Contains the Org repositories, full Org members, Org outside collaborators and each repository collaborators.
       @organization = GithubCollaborators::Organization.new
 
       # An array of TerraformCollaborator hash variables, see the to_hash function for structure.
       @terraform_collaborators = GithubCollaborators::TerraformCollaborators.new(folder_path: Dir.getwd + "/terraform").fetch_all_terraform_collaborators
     end
-    
+
     # Entry point from Ruby script
     def collaborator_checks
       logger.debug "collaborator_checks"
@@ -33,21 +33,20 @@ class GithubCollaborators
 
     # Print out any differences between GitHub and terraform files
     def compare_terraform_and_github
-      logger.debug "compare_terraform_and_github"      
+      logger.debug "compare_terraform_and_github"
 
       # An array to store collaborators login names that are defined in Terraform but are not on GitHub
       collaborators_missing_on_github = []
 
       # For each repository
       @organization.repositories.each do |repository|
-
         # Get the GitHub outside collaborators for the repository
         collaborators_on_github = repository.outside_collaborators
 
         # Get the Terraform defined outside collaborators for the repository
         collaborators_in_file = []
         @terraform_collaborators.each do |tc|
-          if tc["repository"] == GithubCollaborators.tf_safe(repository.name) 
+          if tc["repository"] == GithubCollaborators.tf_safe(repository.name)
             collaborators_in_file.push(tc["login"])
           end
         end
@@ -73,15 +72,15 @@ class GithubCollaborators
             collaborators_on_github.each { |gc| logger.warn "    #{gc}" }
             logger.warn "Collaborators in Terraform:"
             collaborators_in_file.each { |tc| logger.warn "    #{tc}" }
-  
-            # Get the collaborator invites for the repository and store the data as 
+
+            # Get the collaborator invites for the repository and store the data as
             # a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
             repository_invites = []
             url = "https://api.github.com/repos/ministryofjustice/#{repository.name}/invitations"
             json = GithubCollaborators::HttpClient.new.fetch_json(url)
             JSON.parse(json)
               .find_all { |invite| invite["invitee"]["login"] }
-              .map { |invite| repository_invites.push( { :login => invite["invitee"]["login"], :expired => invite["expired"], :invite_id => invite["id"] } ) }
+              .map { |invite| repository_invites.push({login: invite["invitee"]["login"], expired: invite["expired"], invite_id: invite["id"]}) }
 
             # Check the repository invites
             # using a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
@@ -105,10 +104,10 @@ class GithubCollaborators
                 # When no invite exists, this means the collaborator is not found on GitHub repository
                 # Collaborator is not defined on GitHub, add to the array for a Slack message below
                 # Store as a hash like this { :login => "name", :repository => "repo_name" }
-                collaborators_missing_on_github.push( { :login => "#{invite[:login]}", :repository => "#{repository.name}" } )
+                collaborators_missing_on_github.push({login: (invite[:login]).to_s, repository: repository.name.to_s})
                 logger.warn "#{invite[:login]} is not defined on the GitHub repository: #{repository.name}."
               end
-            end          
+            end
 
             logger.warn "=" * 37
           end
@@ -131,17 +130,17 @@ class GithubCollaborators
       github_collaborators_with_issues = @organization.get_collaborators_with_issues
       terraform_collaborators_with_issues = @terraform_collaborators.select { |collaborator| collaborator["issues"].length > 0 }
       those_with_issues = github_collaborators_with_issues + terraform_collaborators_with_issues
-      
+
       # Sort list by login
       those_with_issues.sort_by { |collaborator| collaborator["login"] }
-      
+
       # Filter out duplicates
       collaborators_with_issues = []
       previous_login = ""
       previous_issues = []
       those_with_issues.each do |collaborator|
         if previous_login == collaborator["login"] &&
-          previous_issues == collaborator["issues"]
+            previous_issues == collaborator["issues"]
           # Skip a duplicate Terraform / GitHub collaborator with issue
           next
         else

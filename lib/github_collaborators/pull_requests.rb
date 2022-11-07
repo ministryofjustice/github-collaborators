@@ -14,10 +14,10 @@ class GithubCollaborators
 
   class PullRequests
     include Logging
-  
+
     def initialize
       logger.debug "initialize"
-      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) 
+      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
     end
 
     def get_pull_requests
