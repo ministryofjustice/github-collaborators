@@ -215,6 +215,7 @@ class GithubCollaborators
     def retrieve_collaborator_data_from_file(issues)
       logger.debug "retrieve_collaborator_data_from_file"
       if issues.length == 0
+        # Get the values from the file based on attribute name
         collaborator_data = REQUIRED_ATTRIBUTES.map { |attr, msg| get_attribute(attr) }
         @permission = collaborator_data[PERMISSION]
         @name = collaborator_data[NAME]
