@@ -70,7 +70,7 @@ class GithubCollaborators
           @missing_repositories.push(github_repository_name)
         end
       elsif @github_repositories.length == 0 && @terraform_repositories.length > 0
-        # Terraform files exists but no GitHub repository exists 
+        # Terraform files exists but no GitHub repository exists
         @terraform_repositories.each do |terraform_repository_name|
           @missing_repositories.push(terraform_repository_name)
         end
@@ -81,7 +81,7 @@ class GithubCollaborators
         repositories.each do |repository_name|
           # expect to find repository in both arrays
           if @github_repositories.count(repository_name) == 0 ||
-            @terraform_repositories.count(repository_name) == 0
+              @terraform_repositories.count(repository_name) == 0
             # Found a missing repository
             @missing_repositories.push(repository_name)
           end

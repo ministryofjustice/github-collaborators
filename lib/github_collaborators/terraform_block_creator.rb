@@ -19,7 +19,7 @@ class GithubCollaborators
     # This is called when full org member / collaborator is missing from Terraform file
     def add_data(login)
       logger.debug "add_data"
-      @username = "#{login}"
+      @username = login.to_s
       @permission = ""
       @email = ""
       @name = ""
@@ -27,7 +27,7 @@ class GithubCollaborators
       @reason = "Full Org member / collaborator missing from Terraform file"
       @added_by = "opseng-bot@digital.justice.gov.uk"
       review_date = (Date.today + 90).strftime("%Y-%m-%d")
-      @review_after = "#{review_date}"
+      @review_after = review_date.to_s
     end
 
     # This functions takes the body generated from a GitHub ticket created from /.github/ISSUE_TEMPLATE/create-pr-from-issue.yaml
@@ -53,7 +53,7 @@ class GithubCollaborators
         .drop(1)
         # Map values into array
         .map { |field| [field[0], field.drop(1)] }.to_h
-      
+
       @username = the_data["username"][0]
       @permission = the_data["permission"][0]
       @email = the_data["email"][0]
@@ -73,14 +73,11 @@ class GithubCollaborators
     # This method inserts the Terraform blocks defined by this class into the relevant terraform/*.tf files
     def insert
       logger.debug "insert"
-      # Nil check just in case
-      if !@repositories.nil?
-        # For each repository
-        @repositories.each { |repository_name|
-          # Add new data to Terraform file
-          write_to_file(repository_name)
-        }
-      end
+      # For each repository
+      @repositories&.each { |repository_name|
+        # Add new data to Terraform file
+        write_to_file(repository_name)
+      }
     end
 
     private
@@ -88,23 +85,23 @@ class GithubCollaborators
     def create_new_file(file_name)
       logger.debug "create_new_file"
       repo_name = File.basename(file_name, ".tf")
-      File.open(file_name, "w") { |f| f.write create_new_file_template(repo_name)  }
+      File.write(file_name, create_new_file_template(repo_name))
     end
 
     def add_to_file(file_name)
       logger.debug "add_to_file"
-       # Read the relevant file into array
-       file_content = File.read(file_name).split("\n")
+      # Read the relevant file into array
+      file_content = File.read(file_name).split("\n")
 
-       # Create insert contents and insert, length - 2 gives the correct location in the file
-       file_content.insert(file_content.length - 2, create_insert)
+      # Create insert contents and insert, length - 2 gives the correct location in the file
+      file_content.insert(file_content.length - 2, create_insert)
 
-       # Write new content to file
-       File.open(file_name, "w") { |f|
-         f.puts(file_content)
-       }
+      # Write new content to file
+      File.open(file_name, "w") { |f|
+        f.puts(file_content)
+      }
     end
-    
+
     def write_to_file(repository_name)
       logger.debug "write_to_file"
 
@@ -143,22 +140,22 @@ class GithubCollaborators
     def create_new_file_template(repository)
       logger.debug "create_new_file_template"
       <<~EOF
-      module "#{repository}" {
-      \s\ssource     = "./modules/repository-collaborators"
-      \s\srepository = "#{repository}"
-      \s\scollaborators = [
-      \s\s\s\s{
-      \s\s\s\s\s\sgithub_user  = "#{@username}"
-      \s\s\s\s\s\spermission   = "#{@permission}"
-      \s\s\s\s\s\sname         = "#{@name}"         
-      \s\s\s\s\s\semail        = "#{@email}"        
-      \s\s\s\s\s\sorg          = "#{@org}"          
-      \s\s\s\s\s\sreason       = "#{@reason}"       
-      \s\s\s\s\s\sadded_by     = "#{@added_by}"     
-      \s\s\s\s\s\sreview_after = "#{@review_after}" 
-      \s\s\s\s},
-      \s\s\]
-      }
+        module "#{repository}" {
+        \s\ssource     = "./modules/repository-collaborators"
+        \s\srepository = "#{repository}"
+        \s\scollaborators = [
+        \s\s\s\s{
+        \s\s\s\s\s\sgithub_user  = "#{@username}"
+        \s\s\s\s\s\spermission   = "#{@permission}"
+        \s\s\s\s\s\sname         = "#{@name}"         
+        \s\s\s\s\s\semail        = "#{@email}"        
+        \s\s\s\s\s\sorg          = "#{@org}"          
+        \s\s\s\s\s\sreason       = "#{@reason}"       
+        \s\s\s\s\s\sadded_by     = "#{@added_by}"     
+        \s\s\s\s\s\sreview_after = "#{@review_after}" 
+        \s\s\s\s},
+        \s\s\]
+        }
       EOF
     end
   end

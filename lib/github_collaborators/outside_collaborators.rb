@@ -141,7 +141,7 @@ class GithubCollaborators
         .map { |repository| all_org_team_repositories.push(repository["name"]) }
 
       # Collect the GitHub and Terraform repositories for each full org member
-      @organization.collaborators_and_org_members.each do |collaborator| 
+      @organization.collaborators_and_org_members.each do |collaborator|
         full_org_member = GithubCollaborators::FullOrgMember.new(collaborator)
         full_org_member.add_excluded_repositories(all_org_team_repositories)
         # GitHub repositories
@@ -158,7 +158,6 @@ class GithubCollaborators
       # Run full org member tests
       odd_full_org_members = []
       full_org_members.each do |full_org_member|
-        
         # Compare the GitHub and Terraform repositories
         if full_org_member.do_repositories_match == false
           # Where collaborator is not defined in Terraform, create a PR with collaborator added to those files
@@ -469,7 +468,7 @@ class GithubCollaborators
 
       # No pull request exists, modify the file
       branch_name = "add-collaborator-#{collaborator}-to-terraform"
-      
+
       # Edit the files
       edited_files = []
       repositories.each do |repository_name|
