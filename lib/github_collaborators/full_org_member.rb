@@ -19,7 +19,7 @@ class GithubCollaborators
 
     # Check whether a collaborator is attached to no repositories
     # This is call after API calls below have been called and the
-    # all-org-team repositories have been removed.
+    # all-org-members team repositories have been removed.
     def odd_full_org_member_check
       logger.debug "odd_full_org_members"
       if @github_repositories.length == 0
@@ -44,7 +44,7 @@ class GithubCollaborators
           # Accept only ministryofjustice repositories
           if repo.dig("node", "owner", "login") == "ministryofjustice"
             repository_name = repo.dig("node", "name")
-            # Ignore excluded repositories ie the all-org-team repositories
+            # Ignore excluded repositories ie the all-org-members team repositories
             if !@excluded_repositories.include?(repository_name)
               # Store repository
               @github_repositories.push(repository_name)
@@ -54,6 +54,11 @@ class GithubCollaborators
         break unless JSON.parse(response).dig("data", "user", "repositories", "pageInfo", "hasNextPage")
         end_cursor = JSON.parse(response).dig("data", "user", "repositories", "pageInfo", "endCursor")
       end
+    end
+
+    def add_terraform_repositories(repositories)
+      logger.debug "add_terraform_repositories"
+      @terraform_repositories = repositories
     end
 
     def add_terraform_repository(repository)

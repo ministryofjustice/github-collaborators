@@ -30,9 +30,9 @@ class GithubCollaborators
     def full_org_members
       logger.debug "full_org_members"
       # Print full org members
+      full_org_members_check
       logger.info "There are #{@organization.collaborators_and_org_members.length} full Org member / outside collaborators."
       @organization.collaborators_and_org_members.each { |collaborator| logger.info "#{collaborator} is a full Org member / outside collaborator." }
-      full_org_members_check
     end
 
     # Print out any differences between GitHub and terraform files
@@ -146,12 +146,14 @@ class GithubCollaborators
         full_org_member.add_excluded_repositories(all_org_team_repositories)
         # GitHub repositories
         full_org_member.get_full_org_member_repositories
-        # Filter array to get collaborator related elements
+        # Filter array to get collaborator Terraform related elements
         tc = @terraform_collaborators.select { |terraform_collaborator| terraform_collaborator["login"] == collaborator }
+        tc_repositories = []
         tc.each do |collaborator|
-          # Terraform repositories
-          full_org_member.add_terraform_repository(collaborator["repository"])
+          tc_repositories.push(collaborator["repository"])
         end
+        # Terraform repositories
+        full_org_member.add_terraform_repositories(tc_repositories)
         full_org_members.push(full_org_member)
       end
 

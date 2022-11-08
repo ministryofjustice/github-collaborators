@@ -9,11 +9,11 @@ class GithubCollaborators
     end
 
     def singular_message
-      "I've found a collaborator who is defined in Terraform but is not attached to a repository. Find out if the Collaborator still requires access"
+      "I've found a collaborator who is defined in Terraform but is not attached to a GitHub repository. Find out if the Collaborator still requires access"
     end
 
     def multiple_message(collaborators)
-      "I've found #{collaborators} collaborators who are defined in Terraform but they are not attached to a repository. Find out if these Collaborators still require access"
+      "I've found #{collaborators} collaborators who are defined in Terraform but they are not attached to a GitHub repository. Find out if these Collaborators still require access"
     end
   end
 end
