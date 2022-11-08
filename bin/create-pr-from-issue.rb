@@ -27,7 +27,7 @@ tc.insert
 
 # Create branch
 branch_name = "add-a-new-collaborator-#{tc.username}"
-bc = GithubCollaborators::BranchCreator::new.create_branch(branch_name)
+bc = GithubCollaborators::BranchCreator.new.create_branch(branch_name)
 bc.add("terraform/*")
 bc.commit_and_push("Pull request to add new outside collaborator")
 
