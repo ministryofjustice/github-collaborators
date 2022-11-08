@@ -13,7 +13,7 @@ class GithubCollaborators
       # Contains the Org repositories, full Org members, Org outside collaborators and each repository collaborators.
       @organization = GithubCollaborators::Organization.new
 
-      # An array of TerraformCollaborator hash variables, see the to_hash function for structure.
+      # An array of TerraformCollaborator objects as hash variables, see the to_hash function for structure.
       @terraform_collaborators = GithubCollaborators::TerraformCollaborators.new(folder_path: Dir.getwd + "/terraform").fetch_all_terraform_collaborators
     end
 
@@ -27,8 +27,12 @@ class GithubCollaborators
       has_review_date_expired(collaborators_with_issues)
     end
 
-    def print_full_org_members
-      @organization.collaborators_and_org_members.each { |collaborator| logger.info "Collaborator #{collaborator} is a full Org member and an outside collaborator." }
+    def full_org_members
+      logger.debug "full_org_members"
+      # Print full org members
+      logger.info "There are #{@organization.collaborators_and_org_members.length} full Org member / outside collaborators."
+      @organization.collaborators_and_org_members.each { |collaborator| logger.info "#{collaborator} is a full Org member / outside collaborator." }
+      full_org_members_check
     end
 
     # Print out any differences between GitHub and terraform files
@@ -122,6 +126,57 @@ class GithubCollaborators
 
     private
 
+    # Find if full org members / collaborators are members of repositories but not defined in Terraform
+    def full_org_members_check
+      logger.debug "full_org_members_check"
+
+      full_org_members = []
+
+      # Get the all org team repositories
+      all_org_team_repositories = []
+      url = "https://api.github.com/orgs/ministryofjustice/teams/all-org-members/repos?per_page=100"
+      json = GithubCollaborators::HttpClient.new.fetch_json(url)
+      JSON.parse(json)
+        .find_all { |repository| repository["name"] }
+        .map { |repository| all_org_team_repositories.push(repository["name"]) }
+
+      # Collect the GitHub and Terraform repositories for each full org member
+      @organization.collaborators_and_org_members.each do |collaborator| 
+        full_org_member = GithubCollaborators::FullOrgMember.new(collaborator)
+        full_org_member.add_excluded_repositories(all_org_team_repositories)
+        # GitHub repositories
+        full_org_member.get_full_org_member_repositories
+        # Filter array to get collaborator related elements
+        tc = @terraform_collaborators.select { |terraform_collaborator| terraform_collaborator["login"] == collaborator }
+        tc.each do |collaborator|
+          # Terraform repositories
+          full_org_member.add_terraform_repository(collaborator["repository"])
+        end
+        full_org_members.push(full_org_member)
+      end
+
+      # Run full org member tests
+      odd_full_org_members = []
+      full_org_members.each do |full_org_member|
+        
+        # Compare the GitHub and Terraform repositories
+        if full_org_member.do_repositories_match == false
+          # Where collaborator is not defined in Terraform, create a PR with collaborator added to those files
+          create_add_collaborator_pull_requests(full_org_member.login, full_org_member.missing_repositories)
+        end
+
+        # Find the collaborators attached to no GitHub repositories
+        if full_org_member.odd_full_org_member_check
+          odd_full_org_members.push(full_org_member.login)
+        end
+      end
+
+      # Raise Slack message for collaborators attached to no Github repositories
+      if odd_full_org_members.length > 0
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::OddFullOrgMembers.new, odd_full_org_members).post_slack_message
+      end
+    end
+
     def collect_collaborators_with_issues
       logger.debug "collect_collaborators_with_issues"
 
@@ -180,7 +235,7 @@ class GithubCollaborators
 
         # Unknown collaborator
         if collaborator["defined_in_terraform"] == false
-          logger.info "Removing collaborator #{collaborator["login"]} from repository #{collaborator["repository"]}"
+          logger.info "Removing collaborator #{collaborator["login"]} from GitHub repository #{collaborator["repository"]}"
           # We must create the issue before removing access, because the issue is
           # assigned to the removed collaborator, so that they (hopefully) get a
           # notification about it.
@@ -312,7 +367,7 @@ class GithubCollaborators
           # Check if a pull request is already pending
           terraform_file_name = File.basename(outside_collaborator["href"])
           login = outside_collaborator["login"]
-          title_message = "Extend review dates for #{login}"
+          title_message = "Extend review dates for #{login} in Terraform file/s"
 
           if !does_pr_already_exist(terraform_file_name, title_message)
             # No pull request exists, modify the file
@@ -328,7 +383,7 @@ class GithubCollaborators
           branch_name = bc.check_branch_name_is_valid(branch_name)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
-          bc.commit_and_push("Update review date for #{login}")
+          bc.commit_and_push("Extend review dates for #{login} in Terraform file/s")
 
           # Create a pull request
           params = {
@@ -357,7 +412,7 @@ class GithubCollaborators
           # Check if a pull request is already pending
           terraform_file_name = File.basename(outside_collaborator["href"])
           login = outside_collaborator["login"]
-          title_message = "Remove expired collaborator #{login}"
+          title_message = "Remove expired collaborator #{login} from Terraform file/s"
 
           if !does_pr_already_exist(terraform_file_name, title_message)
             # No pull request exists, modify the file
@@ -373,7 +428,7 @@ class GithubCollaborators
           branch_name = bc.check_branch_name_is_valid(branch_name)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
-          bc.commit_and_push("Remove expired collaborator #{login}")
+          bc.commit_and_push("Remove expired collaborator #{login} from Terraform file/s")
 
           # Create a pull request
           params = {
@@ -399,10 +454,53 @@ class GithubCollaborators
       false
     end
 
+    # Add collaborators to Terraform file/s
+    def create_add_collaborator_pull_requests(collaborator, repositories)
+      logger.debug "create_add_collaborator_pull_requests"
+
+      title_message = "Add full org member / collaborator #{collaborator} to Terraform file/s"
+
+      repositories.each do |repository|
+        terraform_file_name = repository + ".tf"
+        if does_pr_already_exist(terraform_file_name, title_message)
+          repositories.delete_at(repository)
+        end
+      end
+
+      # No pull request exists, modify the file
+      branch_name = "add-collaborator-#{collaborator}-to-terraform"
+      
+      # Edit the files
+      edited_files = []
+      repositories.each do |repository_name|
+        terraform_file_name = repository_name + ".tf"
+        file_name = "terraform/#{terraform_file_name}"
+        tc = GithubCollaborators::TerraformBlockCreator.new
+        tc.add_data(collaborator)
+        tc.update_file(repository_name)
+        edited_files.push(file_name)
+      end
+
+      # Ready a new branch
+      bc = GithubCollaborators::BranchCreator.new
+      branch_name = bc.check_branch_name_is_valid(branch_name)
+      bc.create_branch(branch_name)
+      edited_files.each { |file_name| bc.add(file_name) }
+      bc.commit_and_push(title_message)
+
+      # Create a pull request
+      params = {
+        repository: "github-collaborators",
+        hash_body: add_collaborator_hash(collaborator, branch_name)
+      }
+
+      GithubCollaborators::PullRequestCreator.new(params).create_pull_request
+    end
+
     def remove_collaborator_hash(login, branch_name)
       logger.debug "remove_collaborator_hash"
       {
-        title: "Remove expired collaborator #{login} from file/s",
+        title: "Remove expired collaborator #{login} from Terraform file/s",
         head: branch_name,
         base: "main",
         body: <<~EOF
@@ -420,7 +518,7 @@ class GithubCollaborators
     def extend_date_hash(login, branch_name)
       logger.debug "extend_date_hash"
       {
-        title: "Extend review dates for #{login}",
+        title: "Extend review dates for #{login} in Terraform file/s",
         head: branch_name,
         base: "main",
         body: <<~EOF
@@ -433,6 +531,29 @@ class GithubCollaborators
           The review date/s have automatically been extended.
 
           Either approve this pull request, modify it or delete it if it is no longer necessary.
+        EOF
+      }
+    end
+
+    def add_collaborator_hash(login, branch_name)
+      logger.debug "add_collaborator_hash"
+      {
+        title: "Add full org member / collaborator #{login} to Terraform file/s",
+        head: branch_name,
+        base: "main",
+        body: <<~EOF
+          Hi there
+          
+          This is the GitHub-Collaborator repository bot. 
+
+          #{login} was found to be missing from the file/s in this pull request.
+
+          This is because the collaborator is a full organization member and is able to join repositories outside of Terraform.
+
+          This pull request ensures we keep track of those collaborators and which repositories they are accessing.
+
+          Edit the pull request file/s because Terraform requires the collaborators repository permission.
+
         EOF
       }
     end

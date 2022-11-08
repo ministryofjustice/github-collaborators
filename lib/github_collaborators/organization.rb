@@ -23,10 +23,7 @@ class GithubCollaborators
       repos = Repositories.new
       @repositories = repos.get_active_repositories
 
-      # Get all the outside collaborators from GitHub per repo
-      # This will take a long time to complete.
-      # Use it once.
-      # It will call the GitHub API on every repo to get the outside collaborators.
+      # Get all the outside collaborators from GitHub per repo that has an outside collaborator
       repo_collaborators = GithubCollaborators::RepositoryCollaborators.new
       @repositories.each do |repository|
         if repository.outside_collaborators_count > 0

@@ -21,7 +21,9 @@ def create_hash(branch_name)
 end
 
 # Grab the new collaborators and insert them into file
-tc = GithubCollaborators::TerraformBlockCreator.new(JSON.parse(ENV.fetch("ISSUE"))).insert
+tc = GithubCollaborators::TerraformBlockCreator.new
+tc.import_data(JSON.parse(ENV.fetch("ISSUE")))
+tc.insert
 
 # Create branch
 branch_name = "add-a-new-collaborator-#{tc.username}"

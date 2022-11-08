@@ -12,8 +12,10 @@ class GithubCollaborators
       logger.debug "fetch_json"
       got_data = false
       response = nil
+      count = 0
 
       until got_data
+        count += 1
         response = http_get(url)
         if response.code != "200"
           if response.body.include?("errors")
@@ -26,6 +28,10 @@ class GithubCollaborators
           end
         else
           got_data = true
+        end
+        if count > 5
+          @logger.fatal "GH GraphQL query error"
+          abort
         end
       end
 

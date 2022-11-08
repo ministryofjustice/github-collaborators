@@ -7,6 +7,6 @@ puts "Start"
 outside_collaborators = GithubCollaborators::OutsideCollaborators.new
 outside_collaborators.compare_terraform_and_github
 outside_collaborators.collaborator_checks
-outside_collaborators.print_full_org_members
+outside_collaborators.full_org_members
 
 puts "Finished"
