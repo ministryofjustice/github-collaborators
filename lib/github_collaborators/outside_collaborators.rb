@@ -88,7 +88,7 @@ class GithubCollaborators
       JSON.parse(json)
         .find_all { |repository| repository["name"] }
         .map { |repository| all_org_members_team_repositories.push(repository["name"]) }
-        all_org_members_team_repositories
+      all_org_members_team_repositories
     end
 
     def get_full_org_members
@@ -101,7 +101,7 @@ class GithubCollaborators
       # Collect the GitHub and Terraform repositories for each full org member
       @organization.collaborators_and_org_members.each do |collaborator|
         full_org_member = GithubCollaborators::FullOrgMember.new(collaborator)
-        # Exclude the all org members team repositories repositories 
+        # Exclude the all org members team repositories repositories
         full_org_member.add_excluded_repositories(all_org_members_team_repositories)
         # Get the GitHub repositories
         full_org_member.get_full_org_member_repositories
@@ -126,7 +126,6 @@ class GithubCollaborators
 
       # Run full org member tests
       get_full_org_members.each do |full_org_member|
-
         # Compare the GitHub and Terraform repositories
         if full_org_member.do_repositories_match == false
           # Where collaborator is not defined in Terraform, create a PR with collaborator added to those files
@@ -157,7 +156,6 @@ class GithubCollaborators
       # Use the github_collaborators_with_issues first as they have the repo url for Slack message later on
       those_with_issues = github_collaborators_with_issues
       terraform_collaborators_with_issues.each do |collaborator|
-
         is_duplicate = false
 
         those_with_issues.each do |collaborator_with_issue|
