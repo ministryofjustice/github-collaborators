@@ -98,6 +98,7 @@ class GithubCollaborators
     # Remove the collaborator from the current object terraform file
     def remove_collaborator
       logger.debug "remove_collaborator"
+
       # Split full file contents (as string) into array of line
       current_file = @terraform_data_as_string.split("\n")
       # Find the line for the collaborator

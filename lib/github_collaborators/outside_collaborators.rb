@@ -129,29 +129,27 @@ class GithubCollaborators
       those_with_issues = []
       github_collaborators_with_issues = @organization.get_collaborators_with_issues
       terraform_collaborators_with_issues = @terraform_collaborators.select { |collaborator| collaborator["issues"].length > 0 }
-      those_with_issues = github_collaborators_with_issues + terraform_collaborators_with_issues
 
-      # Sort list by login
-      those_with_issues.sort_by { |collaborator| collaborator["login"] }
-
-      # Filter out duplicates
-      collaborators_with_issues = []
-      previous_login = ""
-      previous_issues = []
-      those_with_issues.each do |collaborator|
-        if previous_login == collaborator["login"] &&
-            previous_issues == collaborator["issues"]
-          # Skip a duplicate Terraform / GitHub collaborator with issue
+      # Combine the issues, Filter out duplicates
+      # Use the github_collaborators_with_issues first as they have the repo url for Slack message later on
+      those_with_issues = github_collaborators_with_issues
+      terraform_collaborators_with_issues.each do |collaborator|
+        is_duplicate = false
+        those_with_issues.each do |collaborator_with_issue|
+          if collaborator["login"] == collaborator_with_issue["login"] &&
+              collaborator["repository"] == collaborator_with_issue["repository"] &&
+              collaborator["issues"] == collaborator_with_issue["issues"]
+            is_duplicate = true
+          end
+        end
+        if is_duplicate
           next
         else
-          # Store unique collaborator with issue from Terraform / GitHub
-          collaborators_with_issues.push(collaborator)
-          previous_login = collaborator["login"]
-          previous_issues = collaborator["issues"]
+          those_with_issues.push(collaborator)
         end
       end
 
-      collaborators_with_issues
+      those_with_issues
     end
 
     def is_renewal_within_one_month(collaborators)
