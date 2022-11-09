@@ -28,7 +28,6 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 - The `terraform plan` and `terraform apply` use the Terraform module [github_repository_collaborator](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/repository_collaborator) to add Outside Collaborators, who are defined in the terraform source code, to the MoJ Github Organisation repositories.
 - Ruby code in the `bin/` and `lib/` directories (with unit tests in the `spec/` directory) queries GitHub via the GraphQL API and retrieves all the collaborator relationships which exist.
 - A github action runs periodically and compares the collaborators in GitHub with the terraform source code. Any collaborators which are not fully specified in the terraform source code are removed from found repositories.
-- A utility script will import existing outside collaborators from specified github repositories, create the corresponding terraform code, and import into terraform state.
 
 ## Removing collaborators
 
