@@ -32,8 +32,8 @@ class GithubCollaborators
 
     # This functions takes the body generated from a GitHub ticket created from /.github/ISSUE_TEMPLATE/create-pr-from-issue.yaml
     # It then structures this data to be used in creating Terraform collaborator blocks for the repo github-collaborators
-    def import_data(data)
-      logger.debug "import_data"
+    def add_data_from_issue(data)
+      logger.debug "add_data_from_issue"
       # Creates a hash of arrays with field: [0] value
       # From a GitHub issues reponse created from an issue template
       # Example:
@@ -70,9 +70,9 @@ class GithubCollaborators
       write_to_file(repository_name)
     end
 
-    # This method inserts the Terraform blocks defined by this class into the relevant terraform/*.tf files
-    def insert
-      logger.debug "insert"
+    # This method writes the Terraform blocks defined by this class into the relevant terraform/*.tf files
+    def update_files
+      logger.debug "update_files"
       # For each repository
       @repositories&.each { |repository_name|
         # Add new data to Terraform file
