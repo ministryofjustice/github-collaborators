@@ -2,7 +2,6 @@ module "ndelius-test-automation" {
   source     = "./modules/repository-collaborators"
   repository = "ndelius-test-automation"
   collaborators = [
-
     {
       github_user  = "mlaskowski4"
       permission   = "admin"

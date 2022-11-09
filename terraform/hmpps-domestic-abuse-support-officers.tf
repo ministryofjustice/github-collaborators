@@ -2,7 +2,6 @@ module "hmpps-domestic-abuse-support-officers" {
   source     = "./modules/repository-collaborators"
   repository = "hmpps-domestic-abuse-support-officers"
   collaborators = [
-
     {
       github_user  = "simoncreasy-civica"
       permission   = "push"

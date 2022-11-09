@@ -2,7 +2,6 @@ module "hmpps-vcms" {
   source     = "./modules/repository-collaborators"
   repository = "hmpps-vcms"
   collaborators = [
-
     {
       github_user  = "simoncreasy-civica"
       permission   = "push"
