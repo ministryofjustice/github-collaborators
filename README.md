@@ -103,30 +103,6 @@ For example:
 
 You can add comments (prefixed with `#` on every line) to these files to provide additional context/information.
 
-### Import existing collaborators
-
-If you have a repository which already has collaborators, there is a utility script which will create the required terraform file and import the existing collaborators into the terraform state:
-
-```
-bin/import-repository-collaborators.rb
-```
-
-See the usage details below.
-
-> This has already been done for all repository collaborators which existed as at 2020-11-24
-
-If you have manually added an outside collaborator to a repository which is already defined in this repository, you should edit the terraform file as usual, but you will also need to import the existing collaborator into the terraform state like this:
-
-```
-terraform import module.<repository name>.github_repository_collaborator.collaborator[\"github username\"]> <repository name>:<github username>
-```
-
-e.g.
-
-```
-terraform import module.testing-outside-collaborators.github_repository_collaborator.collaborator[\"toonsend\"] testing-outside-collaborators:toonsend
-```
-
 ## Pre-requisites
 
 - [Terraform] 0.13+
@@ -173,28 +149,6 @@ Outputs all outside collaborators who are defined in the terraform code from thi
 ### `bin/list-repositories.rb`
 
 Output the names of all current (i.e. excluding deleted/archived/locked) MoJ github repositories.
-
-### ` bin/import-repository-collaborators.rb`
-
-This script takes a list of names of MoJ github repositories, and creates a file for each repository, in the `terraform` directory, defining all of that repository's outside collaborators.
-
-e.g. running
-
-```
-bin/import-repository-collaborators.rb acronyms`
-```
-
-...will create the file `terraform/acronyms.tf`
-
-It also imports any existing collaborators into the terraform state
-
-### Import all repositories' collaborators
-
-```
-bin/list-repositories.rb | xargs bin/import-repository-collaborators.rb
-```
-
-> This takes quite a long time.
 
 ## Development
 
