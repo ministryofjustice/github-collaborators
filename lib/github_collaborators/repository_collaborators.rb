@@ -1,5 +1,5 @@
 class GithubCollaborators
-  class Collaborator
+  class GitHubCollaborator
     include Logging
     attr_reader :login
 
@@ -29,7 +29,7 @@ class GithubCollaborators
         break unless !json_data.dig("data", "organization", "repository", "collaborators", "edges").empty?
         collaborators = json_data.dig("data", "organization", "repository", "collaborators", "edges")
         collaborators.each do |outside_collaborator|
-          outside_collaborators.push(GithubCollaborators::Collaborator.new(outside_collaborator))
+          outside_collaborators.push(GithubCollaborators::GitHubCollaborator.new(outside_collaborator))
         end
         break unless JSON.parse(response).dig("data", "organization", "repository", "collaborators", "pageInfo", "hasNextPage")
         end_cursor = JSON.parse(response).dig("data", "organization", "repository", "collaborators", "pageInfo", "endCursor")

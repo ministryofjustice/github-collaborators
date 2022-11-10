@@ -16,12 +16,10 @@ class GithubCollaborators
         .map { |collaborator| @outside_collaborators.push(collaborator["login"]) }
 
       # Grab the Org members
-      org_members = OrganizationMembers.new
-      @organization_members = org_members.org_members
+      @organization_members = OrganizationMembers.new.org_members
 
       # Grab the Org repositories
-      repos = Repositories.new
-      @repositories = repos.get_active_repositories
+      @repositories = Repositories.new.get_active_repositories
 
       # Get all the outside collaborators from GitHub per repo that has an outside collaborator
       repo_collaborators = GithubCollaborators::RepositoryCollaborators.new
@@ -39,34 +37,6 @@ class GithubCollaborators
 
       # There are some collaborators who have full Org membership
       @collaborators_and_org_members = []
-    end
-
-    # Get collaborators that have an issue
-    def get_collaborators_with_issues
-      logger.debug "get_collaborators_with_issues"
-      collaborators_with_issues = []
-      # Check the repositories for outside collaborators
-      @repositories.each do |repository|
-        # Loop through each repository collaborators
-        repository.outside_collaborators.each do |collaborator|
-          params = {
-            repository: repository.name,
-            login: collaborator,
-            base_url: "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform",
-            repo_url: repository.url
-          }
-
-          # Create the terraform file equivalent of the collaborator
-          tc = TerraformCollaborator.new(params)
-
-          # Is there an issue with the collaborator
-          if tc.status == TerraformCollaborator::FAIL
-            # This collaborator has an issue
-            collaborators_with_issues.push(tc.to_hash)
-          end
-        end
-      end
-      collaborators_with_issues
     end
 
     def fetch_repository_collaborators(repository_name)
@@ -108,9 +78,7 @@ class GithubCollaborators
     # Checks and stores which collaborator have org membership
     def add_collaborator_and_org_member(login)
       logger.debug "add_collaborator_and_org_member"
-      if @collaborators_and_org_members.include?(login)
-        nil
-      else
+      if !@collaborators_and_org_members.include?(login)
         @collaborators_and_org_members.push(login)
       end
     end

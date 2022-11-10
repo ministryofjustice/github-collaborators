@@ -38,10 +38,16 @@ class GithubCollaborators
     def does_issue_already_exists?
       logger.debug "does_issue_already_exists"
       found_issues = false
-      data = get_issues(repository)
+      repository_issues = get_issues(repository)
 
-      # Get only issues used by this application
-      issues = data.select { |issue| issue[:title].include? "Collaborator review date expires soon for user" }
+      # Get the issues created previously by this application
+      issues = []
+      repository_issues.each do |issue|
+        if (issue[:title].include? "Collaborator review date expires soon for user") ||
+            (issue[:title].include? "Review after date expiry is upcoming for user")
+          issues.push(issue)
+        end
+      end
 
       # This is a work around for when collaborators unassign themself from the ticket without updating their review_after
       # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
