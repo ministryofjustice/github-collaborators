@@ -106,11 +106,11 @@ class GithubCollaborators
       @terraform_file_data = []
     end
 
-    # Add collaborator to a Terraform file
+    # This is not used, keeping it, in case
     def add_collaborator(collaborator)
       logger.debug "add_collaborator"
       block = GithubCollaborators::TerraformBlock.new
-      block = add_collaborator_data(collaborator)
+      block.add_collaborator_data(collaborator)
       @terraform_blocks.push(block)
     end
 
@@ -124,7 +124,7 @@ class GithubCollaborators
     def add_collaborators_from_issue(collaborator_data)
       logger.debug "add_collaborators_from_issue"
       block = GithubCollaborators::TerraformBlock.new
-        .block.add_collector_from_issue_data(collaborator_data)
+      block.add_collector_from_issue_data(collaborator_data)
       @terraform_blocks.push(block)
     end
 
@@ -317,6 +317,15 @@ class GithubCollaborators
       terraform_file = GithubCollaborators::TerraformFile.new(repository_name)
       # Store Terraform file
       @terraform_files.push(terraform_file)
+    end
+
+    def remove_empty_file(empty_file_name)
+      logger.debug "remove_empty_file"
+      path_to_file = "terraform/#{empty_file_name}.tf"
+      if File.exist?(path_to_file)
+        File.delete(path_to_file)
+        @terraform_files.delete_if { |terraform_file| terraform_file.filename == empty_file_name }
+      end
     end
 
     private

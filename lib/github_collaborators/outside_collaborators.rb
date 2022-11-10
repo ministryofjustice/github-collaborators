@@ -36,9 +36,56 @@ class GithubCollaborators
       compare_terraform_and_github
       collaborator_checks
       full_org_members
+      remove_empty_files
     end
 
     private
+
+    def remove_empty_files
+      logger.debug "remove_empty_files"
+      empty_files = []
+
+      # Get empty files
+      @terraform_files.terraform_files.each do |terraform_file|
+        if terraform_file.terraform_blocks.length == 0
+          empty_files.push(terraform_file.filename)
+        end
+      end
+
+      title_message = "Delete empty Terraform file/s"
+
+      # Remove any files which are in an open pull request already
+      empty_files.delete_if { |empty_file_name| does_pr_already_exist(empty_file_name, title_message) }
+
+      # Delete the empty files
+      edited_files = []
+      empty_files.each do |empty_file_name|
+        @terraform_files.remove_empty_file(empty_file_name)
+        file_name = "terraform/#{empty_file_name}.tf"
+        edited_files.push(file_name)
+      end
+
+      if edited_files.length > 0
+
+        # Ready a new branch
+        bc = GithubCollaborators::BranchCreator.new
+        branch_name = "delete-empty-files"
+        branch_name = bc.check_branch_name_is_valid(branch_name)
+        bc.create_branch(branch_name)
+
+        # Add, commit and push the changes
+        edited_files.each { |file_name| bc.add(file_name) }
+        bc.commit_and_push("Delete empty files")
+
+        # Create a pull request
+        params = {
+          repository: GITHUB_COLLABORATORS,
+          hash_body: delete_empty_files_hash(branch_name)
+        }
+
+        GithubCollaborators::PullRequestCreator.new(params).create_pull_request
+      end
+    end
 
     def collaborator_checks
       logger.debug "collaborator_checks"
@@ -643,6 +690,23 @@ class GithubCollaborators
           The review date/s have automatically been extended.
 
           Either approve this pull request, modify it or delete it if it is no longer necessary.
+        EOF
+      }
+    end
+
+    def delete_empty_files_hash(branch_name)
+      logger.debug "delete_empty_files_hash"
+      {
+        title: "Delete empty Terraform file/s",
+        head: branch_name,
+        base: "main",
+        body: <<~EOF
+          Hi there
+          
+          This is the GitHub-Collaborator repository bot.
+
+          The Terraform files in this pull request are empty and serve no purpose, please remove them.
+
         EOF
       }
     end
