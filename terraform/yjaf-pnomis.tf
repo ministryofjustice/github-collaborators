@@ -23,16 +23,6 @@ module "yjaf-pnomis" {
       review_after = "2022-08-04"
     },
     {
-      github_user  = "ttipler"
-      permission   = "admin"
-      name         = "Thomas Tipler"
-      email        = "thomas.tipler@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "Greg Whiting - greg.whiting@northgateps.com"
-      review_after = "2023-07-21"
-    },
-    {
       github_user  = "oliviergaubert"
       permission   = "admin"
       name         = "Olivier Gaubert"
