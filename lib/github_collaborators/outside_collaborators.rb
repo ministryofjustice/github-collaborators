@@ -67,7 +67,7 @@ class GithubCollaborators
         # Ready a new branch
         bc = GithubCollaborators::BranchCreator.new
         branch_name = "delete-empty-files"
-        branch_name = bc.check_branch_name_is_valid(branch_name)
+        branch_name = bc.check_branch_name_is_valid(branch_name, "")
         bc.create_branch(branch_name)
 
         # Add, commit and push the changes
@@ -394,6 +394,7 @@ class GithubCollaborators
         branch_name = ""
         login = ""
         edited_files = []
+        login = ""
 
         # For each file that collaborator has an upcoming expiry
         group[1].each do |collaborator|
@@ -413,7 +414,7 @@ class GithubCollaborators
 
         if edited_files.length > 0
           # At the end of each collaborator group commit any modified file/s
-          branch_name = bc.check_branch_name_is_valid(branch_name)
+          branch_name = bc.check_branch_name_is_valid(branch_name, login)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
           bc.commit_and_push(EXTEND_REVIEW_DATE_PR_TITLE + " " + login)
@@ -458,7 +459,7 @@ class GithubCollaborators
 
         if edited_files.length > 0
           # At the end of each collaborator group commit any modified file/s
-          branch_name = bc.check_branch_name_is_valid(branch_name)
+          branch_name = bc.check_branch_name_is_valid(branch_name, login)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
           bc.commit_and_push(REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login)
@@ -513,7 +514,7 @@ class GithubCollaborators
       repositories.delete_if { |repository_name| does_pr_already_exist("#{repository_name}.tf", title_message) }
 
       if repositories.length > 0
-        branch_name = "add-collaborator-#{collaborator_name}-to-terraform"
+        branch_name = "add-collaborator-#{collaborator_name}"
 
         edited_files = []
         repositories.each do |repository_name|
@@ -525,7 +526,7 @@ class GithubCollaborators
 
         # Ready a new branch
         bc = GithubCollaborators::BranchCreator.new
-        branch_name = bc.check_branch_name_is_valid(branch_name)
+        branch_name = bc.check_branch_name_is_valid(branch_name, collaborator_name)
         bc.create_branch(branch_name)
         edited_files.each { |file_name| bc.add(file_name) }
         bc.commit_and_push(title_message)

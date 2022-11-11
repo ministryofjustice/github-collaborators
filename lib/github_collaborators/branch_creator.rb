@@ -44,32 +44,86 @@ class GithubCollaborators
     end
 
     # Check remote branches, create a new branch name if already taken
-    def check_branch_name_is_valid(branch_name)
+    def check_branch_name_is_valid(branch_name, collaborator_name)
       logger.debug "check_branch_is_valid"
-      new_branch_name = branch_name
+
       # Step through all the remote branches
       @g.fetch
-      @g.branches.remote.each do |remote_branch|
+      remote_branches = @g.branches.remote
+      remote_branches.each do |remote_branch|
         if remote_branch.name == branch_name
-          # Branch name already exists
-          number_as_string = remote_branch.name.scan(/\d+/).last
-          if number_as_string.nil?
-            # Branch name has no number in the name
-            new_post_fix_number = 1
-            # Add new number to end of name
-            new_branch_name = new_branch_name + "-" + new_post_fix_number.to_s
-          else
-            # Branch name has a number in the name
-            length = number_as_string.length
-            number = number_as_string.to_i
-            # Increment that number
-            new_post_fix_number = number + 1
-            # Replace end digits with new number
-            new_branch_name[-length..] = new_post_fix_number.to_s
+          # The branch name already exists
+          new_branch_name = branch_name
+
+          number_in_branch_name = remote_branch.name.scan(/\d+/).last
+          if number_in_branch_name.nil?
+            # The branch name has no number in the name
+            # Add a new number to end of the branch name
+            new_post_fix_number = 0
+            loop do
+              new_post_fix_number += 1
+              new_branch_name = remote_branch.name + "-" + new_post_fix_number.to_s
+              break unless branch_name_exist(new_branch_name, remote_branches)
+            end
+            return new_branch_name
+          end
+
+          number_in_collaborator_name = collaborator_name.scan(/\d+/).last
+          if number_in_collaborator_name.nil?
+            # The branch name has a number at the end, collaborator name does not.
+            # Increment number IN branch name
+            length = number_in_branch_name.length
+            new_post_fix_number = 0
+            loop do
+              new_post_fix_number = + 1
+              # Replace end digits with new number
+              new_branch_name[-length..] = new_post_fix_number.to_s
+              break unless branch_name_exist(new_branch_name, remote_branches)
+            end
+            return new_branch_name
+          end
+
+          if number_in_branch_name.to_i == number_in_collaborator_name.to_i
+            # The branch name and collaborator name have the same number in them.
+            # This can be confused as the branch name number.
+            # Add a post fix number after the collaborators name.
+            new_post_fix_number = 0
+            loop do
+              new_post_fix_number += 1
+              new_branch_name = remote_branch.name + "-" + new_post_fix_number.to_s
+              break unless branch_name_exist(new_branch_name, remote_branches)
+            end
+            return new_branch_name
+          end
+
+          if number_in_branch_name.to_i != number_in_collaborator_name.to_i
+            # The branch name and collaborator name different numbers in them.
+            # Increment the post fix number
+            length = number_in_branch_name.length
+            new_post_fix_number = 0
+            loop do
+              new_post_fix_number += 1
+              new_branch_name = remote_branch.name
+              new_branch_name[-length..] = new_post_fix_number.to_s
+              break unless branch_name_exist(new_branch_name, remote_branches)
+            end
+            return new_branch_name
           end
         end
       end
-      new_branch_name
+    end
+
+    private
+
+    def branch_name_exist(new_name, remote_branches)
+      logger.debug "branch_name_exist"
+      exists = false
+      remote_branches.each do |remote_branch|
+        if remote_branch.name == new_name
+          exists = true
+        end
+      end
+      exists
     end
   end
 end
