@@ -18,14 +18,13 @@ class GithubCollaborators
     def initialize
       logger.debug "initialize"
       @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
-      @pull_requests = []
     end
 
     def get_pull_requests
       logger.debug "get_pull_requests"
       response = @graphql.run_query(pull_request_query)
       data = JSON.parse(response).dig("data", "organization", "repository", "pullRequests")
-      @pull_requests ||= data.fetch("nodes").map { |d| PullRequest.new(d) }
+      pull_requests = (data.fetch("nodes").map { |d| PullRequest.new(d) })
     end
 
     private

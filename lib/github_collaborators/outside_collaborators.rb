@@ -21,8 +21,7 @@ class GithubCollaborators
       end
 
       # Grab the GitHub-Collaborator repository open pull requests
-      pull_requests = GithubCollaborators::PullRequests.new
-      @repo_pull_requests = pull_requests.get_pull_requests
+      @repo_pull_requests = GithubCollaborators::PullRequests.new.get_pull_requests
 
       # Contains the Org repositories, full Org members, Org outside collaborators and each repository collaborators.
       @organization = GithubCollaborators::Organization.new
