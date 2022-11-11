@@ -9,7 +9,6 @@ require "uri"
 require "git"
 require "uuidtools"
 require "logger"
-require_relative "./executor"
 require_relative "./logging"
 require_relative "./github_collaborators/access_remover"
 require_relative "./github_collaborators/branch_creator"
@@ -36,6 +35,23 @@ require_relative "./github_collaborators/slack_notifier"
 require_relative "./github_collaborators/terraform_files"
 
 class GithubCollaborators
+  # Issue raised on Github
+  COLLABORATOR_EXPIRES_SOON = "Collaborator review date expires soon for user"
+  COLLABORATOR_EXPIRY_UPCOMING = "Review after date expiry is upcoming for user"
+  DEFINE_COLLABORATOR_IN_CODE = "Please define outside collaborators in code"
+
+  # Internal issues
+  REVIEW_DATE_WITHIN_MONTH = "Review after date is within a month"
+  REVIEW_DATE_PASSED = "Review after date has passed"
+  REVIEW_DATE_TO_LONG = "Review after date is more than a year in the future"
+  REVIEW_DATE_EXPIRES_SOON = "Review after date is within a week"
+
+  # Pull request titles
+  EMPTY_FILES_PR_TITLE = "Delete empty Terraform file/s"
+  ADD_FULL_ORG_MEMBER_PR_TITLE = "Add full org member / collaborator to Terraform file/s for"
+  EXTEND_REVIEW_DATE_PR_TITLE = "Extend review date in Terraform file/s for"
+  REMOVE_EXPIRED_COLLABORATOR_PR_TITLE = "Remove expired collaborator from Terraform file/s for"
+
   def self.tf_safe(string)
     string.tr(".", "-")
   end

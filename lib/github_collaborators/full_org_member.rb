@@ -18,8 +18,8 @@ class GithubCollaborators
     end
 
     # Check whether a collaborator is attached to no repositories
-    # This is call after API calls below have been called and the
-    # all-org-members team repositories have been removed.
+    # This is called after the API calls below have been called and
+    # the all-org-members team repositories have been removed.
     def odd_full_org_member_check
       logger.debug "odd_full_org_members"
       if @github_repositories.length == 0
@@ -59,11 +59,6 @@ class GithubCollaborators
     def add_terraform_repositories(repositories)
       logger.debug "add_terraform_repositories"
       @terraform_repositories = repositories
-    end
-
-    def add_terraform_repository(repository)
-      logger.debug "add_terraform_repository"
-      @terraform_repositories.push(repository)
     end
 
     def do_repositories_match

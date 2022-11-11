@@ -69,7 +69,7 @@ pull_requests = GithubCollaborators::PullRequests.new.get_pull_requests
 #   b. for some reason there is a PR currently open with this file included
 # In both scenarios we do not want to create a PR
 repo_delta.delete_if { |repo|
-  pull_requests.map(&:file).include? "#{terraform_dir}/#{repo}.tf"
+  pull_requests.map(&:file).include?("#{terraform_dir}/#{repo}.tf")
 }
 
 # Report files that need PRs

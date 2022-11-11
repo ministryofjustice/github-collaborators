@@ -1,7 +1,6 @@
 class GithubCollaborators
   class PullRequestCreator
     include Logging
-    attr_reader :repository, :hash_body
     POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
 
     def initialize(params)
@@ -18,7 +17,7 @@ class GithubCollaborators
         HttpClient.new.post_json(url, @hash_body.to_json)
         sleep 1
       else
-        logger.debug "Didn't create pull request on #{repository}, this is a dry run"
+        logger.debug "Didn't create pull request on #{@repository}, this is a dry run"
       end
     end
   end

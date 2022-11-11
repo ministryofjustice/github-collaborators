@@ -2,22 +2,27 @@ class GithubCollaborators
   class IssueClose
     include Logging
 
+    def initialize
+      logger.debug "initialize"
+      params = {
+        repository: nil,
+        github_user: nil
+      }
+      @issue_creator = GithubCollaborators::IssueCreator.new(params)
+    end
+
     # Close issues that have been open longer than 45 days
     def close_expired_issues(repository)
       logger.debug "close_expired_issues"
       allowed_days = 45
 
-      params = {
-        repository: nil,
-        github_user: nil
-      }
-      issues = GithubCollaborators::IssueCreator.new(params).get_issues(repository)
+      issues = @issue_creator.get_issues(repository)
       issues.each do |issue|
         # Check for the issues created by this application and that the issue is open
         if (
-          issue[:title].include?("Collaborator review date expires soon") ||
-          issue[:title].include?("Review after date expiry is upcoming for user") ||
-          issue[:title].include?("Please define outside collaborators in code")
+          issue[:title].include?(COLLABORATOR_EXPIRES_SOON) ||
+          issue[:title].include?(COLLABORATOR_EXPIRY_UPCOMING) ||
+          issue[:title].include?(DEFINE_COLLABORATOR_IN_CODE)
         ) && issue[:state] == "open"
           # Get issue created date and add 45 day grace period
           created_date = Date.parse(issue[:created_at])

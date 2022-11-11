@@ -1,7 +1,6 @@
 class GithubCollaborators
   class IssueCreator
     include Logging
-    attr_reader :repository, :github_user
     POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
 
     def initialize(params)
@@ -13,11 +12,11 @@ class GithubCollaborators
     def create_unknown_collaborator_issue
       logger.debug "create_unknown_collaborator_issue"
       if POST_TO_GH
-        url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
+        url = "https://api.github.com/repos/ministryofjustice/#{@repository}/issues"
         HttpClient.new.post_json(url, unknown_collaborator_hash.to_json)
         sleep 2
       else
-        logger.debug "Didn't create unknown collaborator issue for #{github_user} on #{repository}, this is a dry run"
+        logger.debug "Didn't create unknown collaborator issue for #{@github_user} on #{@repository}, this is a dry run"
       end
     end
 
@@ -25,11 +24,11 @@ class GithubCollaborators
       logger.debug "create_review_date_expires_soon_issue"
       if !does_issue_already_exists?
         if POST_TO_GH
-          url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
+          url = "https://api.github.com/repos/ministryofjustice/#{@repository}/issues"
           HttpClient.new.post_json(url, review_date_expires_soon_hash.to_json)
           sleep 2
         else
-          logger.debug "Didn't create review date expires soon issue for #{github_user} on #{repository}, this is a dry run"
+          logger.debug "Didn't create review date expires soon issue for #{@github_user} on #{@repository}, this is a dry run"
         end
       end
     end
@@ -38,13 +37,13 @@ class GithubCollaborators
     def does_issue_already_exists?
       logger.debug "does_issue_already_exists"
       found_issues = false
-      repository_issues = get_issues(repository)
+      repository_issues = get_issues(@repository)
 
       # Get the issues created previously by this application
       issues = []
       repository_issues.each do |issue|
-        if (issue[:title].include? "Collaborator review date expires soon for user") ||
-            (issue[:title].include? "Review after date expiry is upcoming for user")
+        if issue[:title].include?(COLLABORATOR_EXPIRES_SOON) ||
+            issue[:title].include?(COLLABORATOR_EXPIRY_UPCOMING)
           issues.push(issue)
         end
       end
@@ -52,11 +51,11 @@ class GithubCollaborators
       # This is a work around for when collaborators unassign themself from the ticket without updating their review_after
       # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
       bad_issues = issues.select { |issue| issue[:assignees].length == 0 }
-      bad_issues.each { |issue| GithubCollaborators::IssueClose.remove_issue(repository, issue[:number]) }
+      bad_issues.each { |issue| GithubCollaborators::IssueClose.remove_issue(@repository, issue[:number]) }
       issues.delete_if { |issue| issue[:assignees].length == 0 }
 
       # Check which issues are assigned to the collaborator
-      issues.select { |issue| issue[:assignee][:login] == github_user }
+      issues.select { |issue| issue[:assignee][:login] == @github_user }
       if issues.length > 0
         # Found matching issue
         found_issues = true
@@ -76,14 +75,14 @@ class GithubCollaborators
     def unknown_collaborator_hash
       logger.debug "unknown_collaborator_hash"
       {
-        title: "Please define outside collaborators in code",
-        assignees: [github_user],
+        title: DEFINE_COLLABORATOR_IN_CODE,
+        assignees: [@github_user],
         body: <<~EOF
           Hi there
           
           We have a process to manage github collaborators in code: https://github.com/ministryofjustice/github-collaborators
           
-          Please follow the procedure described there to grant @#{github_user} access to this repository.
+          Please follow the procedure described there to grant @#{@github_user} access to this repository.
           
           If you have any questions, please post in #ask-operations-engineering on Slack.
           
@@ -95,12 +94,12 @@ class GithubCollaborators
     def review_date_expires_soon_hash
       logger.debug "review_date_expires_soon_hash"
       {
-        title: "Collaborator review date expires soon for user: #{github_user}",
-        assignees: [github_user],
+        title: COLLABORATOR_EXPIRES_SOON + " " + @github_user,
+        assignees: [@github_user],
         body: <<~EOF
           Hi there
           
-          The user @#{github_user} has its access for this repository maintained in code here: https://github.com/ministryofjustice/github-collaborators
+          The user @#{@github_user} has its access for this repository maintained in code here: https://github.com/ministryofjustice/github-collaborators
 
           The review_after date is due to expire within one month, please update this via a PR if they still require access.
           

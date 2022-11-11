@@ -65,13 +65,13 @@ class GithubCollaborators
       if @review_after_date == ""
         @issues.push("Collaboration review date is missing")
       elsif @review_after_date < Date.today
-        @issues.push("Review after date has passed")
+        @issues.push(REVIEW_DATE_PASSED)
       elsif @review_after_date > (Date.today + YEAR)
-        @issues.push("Review after date is more than a year in the future")
+        @issues.push(REVIEW_DATE_TO_LONG)
       elsif (Date.today + WEEK) > @review_after_date
-        @issues.push("Review after date is within a week")
+        @issues.push(REVIEW_DATE_EXPIRES_SOON)
       elsif (Date.today + MONTH) > @review_after_date
-        @issues.push("Review after date is within a month")
+        @issues.push(REVIEW_DATE_WITHIN_MONTH)
       end
     end
 

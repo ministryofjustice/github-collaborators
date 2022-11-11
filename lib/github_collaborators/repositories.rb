@@ -1,12 +1,11 @@
 class GithubCollaborators
   class Repository
     include Logging
-    attr_reader :name, :url, :outside_collaborators, :outside_collaborators_count
+    attr_reader :name, :outside_collaborators, :outside_collaborators_count
 
     def initialize(data)
       logger.debug "initialize"
       @name = data.fetch("name")
-      @url = data.fetch("url")
       @outside_collaborators_count = data.dig("collaborators", "totalCount")
       @outside_collaborators = []
     end
@@ -68,7 +67,6 @@ class GithubCollaborators
               repo: node {
                 ... on Repository {
                   name
-                  url
                   isDisabled
                   isLocked
                   collaborators(affiliation: OUTSIDE) {

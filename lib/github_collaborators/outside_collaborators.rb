@@ -52,10 +52,8 @@ class GithubCollaborators
         end
       end
 
-      title_message = "Delete empty Terraform file/s"
-
       # Remove any files which are in an open pull request already
-      empty_files.delete_if { |empty_file_name| does_pr_already_exist(empty_file_name, title_message) }
+      empty_files.delete_if { |empty_file_name| does_pr_already_exist(empty_file_name, EMPTY_FILES_PR_TITLE) }
 
       # Delete the empty files
       edited_files = []
@@ -75,7 +73,7 @@ class GithubCollaborators
 
         # Add, commit and push the changes
         edited_files.each { |file_name| bc.add(file_name) }
-        bc.commit_and_push("Delete empty files")
+        bc.commit_and_push(EMPTY_FILES_PR_TITLE)
 
         # Create a pull request
         params = {
@@ -226,8 +224,8 @@ class GithubCollaborators
           github_user: collaborator.login
         }
 
-        # Create an issue on the repository when "Review after date is within a month" is true
-        if collaborator.issues.include? "Review after date is within a month"
+        if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH)
+          # Create an issue on the repository
           GithubCollaborators::IssueCreator.new(params).create_review_date_expires_soon_issue
         end
       end
@@ -328,7 +326,7 @@ class GithubCollaborators
       collaborators_who_expire_soon = []
       collaborators.each do |collaborator|
         collaborator.issues.each do |issue|
-          if issue == "Review after date is within a week"
+          if issue == REVIEW_DATE_EXPIRES_SOON
             collaborators_who_expire_soon.push(collaborator)
             logger.info "Review after date is within a week for #{collaborator.login} on #{collaborator.review_after_date}"
           end
@@ -403,7 +401,7 @@ class GithubCollaborators
           # Check if a pull request is already pending
           terraform_file_name = File.basename(collaborator.href)
           login = collaborator.login
-          title_message = "Extend review dates for #{login} in Terraform file/s"
+          title_message = EXTEND_REVIEW_DATE_PR_TITLE + " " + login
 
           if !does_pr_already_exist(terraform_file_name, title_message)
             # No pull request exists, modify the file
@@ -419,7 +417,7 @@ class GithubCollaborators
           branch_name = bc.check_branch_name_is_valid(branch_name)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
-          bc.commit_and_push("Extend review dates for #{login} in Terraform file/s")
+          bc.commit_and_push(EXTEND_REVIEW_DATE_PR_TITLE + " " + login)
 
           # Create a pull request
           params = {
@@ -448,7 +446,7 @@ class GithubCollaborators
           # Check if a pull request is already pending
           terraform_file_name = File.basename(collaborator.href)
           login = collaborator.login
-          title_message = "Remove expired collaborator #{login} from Terraform file/s"
+          title_message = REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login
 
           if !does_pr_already_exist(terraform_file_name, title_message)
             # No pull request exists, modify the file
@@ -464,7 +462,7 @@ class GithubCollaborators
           branch_name = bc.check_branch_name_is_valid(branch_name)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
-          bc.commit_and_push("Remove expired collaborator #{login} from Terraform file/s")
+          bc.commit_and_push(REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login)
 
           # Create a pull request
           params = {
@@ -481,8 +479,8 @@ class GithubCollaborators
       logger.debug "does_pr_already_exist"
       @repo_pull_requests.each do |pull_request|
         # Chek the PR title message and check if file in the PR list of files
-        if (pull_request.title.include? title_message.to_s) &&
-            (pull_request.files.include? "terraform/#{terraform_file_name}")
+        if pull_request.title.include?(title_message.to_s) &&
+            pull_request.files.include?("terraform/#{terraform_file_name}")
           logger.debug "PR already open for #{terraform_file_name} file"
           return true
         end
@@ -510,9 +508,10 @@ class GithubCollaborators
     def create_add_collaborator_pull_requests(collaborator_name, repositories)
       logger.debug "create_add_collaborator_pull_requests"
 
-      title_message = "Add full org member / collaborator #{collaborator_name} to Terraform file/s"
+      title_message = ADD_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name,
 
-      repositories.delete_if { |repository_name| does_pr_already_exist("#{repository_name}.tf", title_message) }
+        # Remove the repository if an open pull request is already adding the full org member
+        repositories.delete_if { |repository_name| does_pr_already_exist("#{repository_name}.tf", title_message) }
 
       if repositories.length > 0
         branch_name = "add-collaborator-#{collaborator_name}-to-terraform"
@@ -659,7 +658,7 @@ class GithubCollaborators
     def remove_collaborator_hash(login, branch_name)
       logger.debug "remove_collaborator_hash"
       {
-        title: "Remove expired collaborator #{login} from Terraform file/s",
+        title: REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login,
         head: branch_name,
         base: "main",
         body: <<~EOF
@@ -677,7 +676,7 @@ class GithubCollaborators
     def extend_date_hash(login, branch_name)
       logger.debug "extend_date_hash"
       {
-        title: "Extend review dates for #{login} in Terraform file/s",
+        title: EXTEND_REVIEW_DATE_PR_TITLE + " " + login,
         head: branch_name,
         base: "main",
         body: <<~EOF
@@ -697,7 +696,7 @@ class GithubCollaborators
     def delete_empty_files_hash(branch_name)
       logger.debug "delete_empty_files_hash"
       {
-        title: "Delete empty Terraform file/s",
+        title: EMPTY_FILES_PR_TITLE,
         head: branch_name,
         base: "main",
         body: <<~EOF
@@ -714,7 +713,7 @@ class GithubCollaborators
     def add_collaborator_hash(login, branch_name)
       logger.debug "add_collaborator_hash"
       {
-        title: "Add full org member / collaborator #{login} to Terraform file/s",
+        title: ADD_FULL_ORG_MEMBER_PR_TITLE + " " + login,
         head: branch_name,
         base: "main",
         body: <<~EOF

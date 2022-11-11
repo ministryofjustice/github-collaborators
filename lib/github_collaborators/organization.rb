@@ -1,13 +1,14 @@
 class GithubCollaborators
   class Organization
     include Logging
-    attr_reader :base_url, :repositories, :collaborators_and_org_members
+    attr_reader :repositories, :collaborators_and_org_members
 
     def initialize
       logger.debug "initialize"
 
-      # Grab the Org outside collaborators
       @outside_collaborators = []
+
+      # Grab the Org outside collaborators
       # This has a hard limit return of 100 collaborators
       url = "https://api.github.com/orgs/ministryofjustice/outside_collaborators?per_page=100"
       json = GithubCollaborators::HttpClient.new.fetch_json(url)
@@ -39,12 +40,6 @@ class GithubCollaborators
       @collaborators_and_org_members = []
     end
 
-    def fetch_repository_collaborators(repository_name)
-      logger.debug "fetch_repository_collaborators"
-      repository = @repositories.select { |repository| repository.name == repository_name }
-      repository.outside_collaborators
-    end
-
     def is_collaborator_an_org_member(login)
       logger.debug "is_collaborator_an_org_member"
       # Loop through all the org members
@@ -56,21 +51,6 @@ class GithubCollaborators
         end
       end
       false
-    end
-
-    # This will add a collaborator login name to a list of
-    # collaborators if the login name is not already defined.
-    def add_additional_collaborators(collaborators)
-      logger.debug "add_additional_collaborators"
-      collaborators.each do |collaborator|
-        # Check if the collaborator login name is already known
-        if @outside_collaborators.include?(collaborator["login"])
-          next
-        end
-        # It isn't so add the login to the list
-        @outside_collaborators.push(collaborator["login"])
-        logger.info "#{collaborator["login"]} is not listed on GitHub."
-      end
     end
 
     private

@@ -1,7 +1,6 @@
 class GithubCollaborators
   class GithubGraphQlClient
     include Logging
-    attr_reader :github_token
 
     GITHUB_GRAPHQL_URL = "https://api.github.com/graphql"
 
@@ -31,7 +30,7 @@ class GithubCollaborators
           got_data = true
         end
         if count > 5
-          @logger.fatal "GH GraphQL query error"
+          logger.fatal "GH GraphQL query error"
           abort
         end
       end
@@ -49,7 +48,7 @@ class GithubCollaborators
     def query_github_api(body)
       logger.debug "query_github_api"
       json = {query: body}.to_json
-      headers = {"Authorization" => "bearer #{github_token}"}
+      headers = {"Authorization" => "bearer #{@github_token}"}
 
       uri = URI.parse(GITHUB_GRAPHQL_URL)
       Net::HTTP.post(uri, json, headers)

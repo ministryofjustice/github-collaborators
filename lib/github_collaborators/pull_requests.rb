@@ -18,6 +18,7 @@ class GithubCollaborators
     def initialize
       logger.debug "initialize"
       @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
+      @pull_requests = []
     end
 
     def get_pull_requests

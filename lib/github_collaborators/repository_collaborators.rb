@@ -11,7 +11,6 @@ class GithubCollaborators
 
   class RepositoryCollaborators
     include Logging
-    attr_reader :repository
 
     def initialize
       logger.debug "initialize"

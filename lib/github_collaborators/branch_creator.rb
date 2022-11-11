@@ -29,15 +29,6 @@ class GithubCollaborators
       end
     end
 
-    def remove(files)
-      logger.debug "remove"
-      if POST_TO_GH
-        @g.remove(files)
-      else
-        logger.debug "Didn't remove files from git #{files}, this is a dry run"
-      end
-    end
-
     def commit_and_push(commit_message)
       logger.debug "commit_and_push"
       if POST_TO_GH

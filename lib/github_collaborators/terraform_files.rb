@@ -1,7 +1,7 @@
 class GithubCollaborators
   class TerraformBlock
     include Logging
-    attr_reader :repositories, :username, :permission, :reason, :added_by, :review_after, :email, :name, :org
+    attr_reader :username, :permission, :reason, :added_by, :review_after, :email, :name, :org
     attr_writer :review_after
 
     def initialize
@@ -37,6 +37,7 @@ class GithubCollaborators
       @added_by = "opseng-bot@digital.justice.gov.uk"
       review_date = (Date.today + 90).strftime("%Y-%m-%d")
       @review_after = review_date.to_s
+      @defined_in_terraform = false
     end
 
     # This is called when a collaborator is found on GitHub but not defined in a Terraform file
@@ -101,7 +102,7 @@ class GithubCollaborators
       logger.debug "initialize"
 
       @filename = repository_name
-      @file_path = "terraform/#{tf_safe(@filename)}.tf"
+      @file_path = "terraform/#{GithubCollaborators.tf_safe(@filename)}.tf"
       @terraform_blocks = []
       @terraform_file_data = []
     end
@@ -248,11 +249,6 @@ class GithubCollaborators
       end
       logger.warn "The attribute #{val} is missing within #{@filename}.tf"
       nil
-    end
-
-    # Util function to deal with Terraform . limitations
-    def tf_safe(string)
-      string.tr(".", "-").strip
     end
 
     def create_file_template
