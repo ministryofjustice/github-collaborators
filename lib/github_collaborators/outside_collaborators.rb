@@ -507,10 +507,10 @@ class GithubCollaborators
     def create_add_collaborator_pull_requests(collaborator_name, repositories)
       logger.debug "create_add_collaborator_pull_requests"
 
-      title_message = ADD_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name,
+      title_message = ADD_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name
 
-        # Remove the repository if an open pull request is already adding the full org member
-        repositories.delete_if { |repository_name| does_pr_already_exist("#{repository_name}.tf", title_message) }
+      # Remove the repository if an open pull request is already adding the full org member
+      repositories.delete_if { |repository_name| does_pr_already_exist("#{repository_name}.tf", title_message) }
 
       if repositories.length > 0
         branch_name = "add-collaborator-#{collaborator_name}-to-terraform"
@@ -727,6 +727,8 @@ class GithubCollaborators
           This pull request ensures we keep track of those collaborators and which repositories they are accessing.
 
           Edit the pull request file/s because Terraform requires the collaborators repository permission.
+
+          Permission can either be admin, push, maintain, pull or triage.
 
         EOF
       }
