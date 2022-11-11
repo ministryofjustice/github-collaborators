@@ -119,7 +119,7 @@ class GithubCollaborators
       logger.debug "increment_post_fix_number"
       length = number_in_branch_name.length
       new_post_fix_number = 0
-      new_branch_name = ""
+      new_branch_name = branch_name
       loop do
         new_post_fix_number = + 1
         new_branch_name[-length..] = new_post_fix_number.to_s
