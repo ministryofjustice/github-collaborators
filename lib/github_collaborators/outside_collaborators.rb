@@ -52,7 +52,7 @@ class GithubCollaborators
       end
 
       # Remove any files which are in an open pull request already
-      empty_files.delete_if { |empty_file_name| does_pr_already_exist(empty_file_name, EMPTY_FILES_PR_TITLE) }
+      empty_files.delete_if { |empty_file_name| does_pr_already_exist("#{empty_file_name}.tf", EMPTY_FILES_PR_TITLE) }
 
       # Delete the empty files
       edited_files = []
