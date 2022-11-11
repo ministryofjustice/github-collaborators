@@ -56,57 +56,34 @@ class GithubCollaborators
           new_branch_name = branch_name
 
           number_in_branch_name = remote_branch.name.scan(/\d+/).last
+          number_in_collaborator_name = collaborator_name.scan(/\d+/).last
+
           if number_in_branch_name.nil?
             # The branch name has no number in the name
             # Add a new number to end of the branch name
-            new_post_fix_number = 0
-            loop do
-              new_post_fix_number += 1
-              new_branch_name = remote_branch.name + "-" + new_post_fix_number.to_s
-              break unless branch_name_exist(new_branch_name, remote_branches)
-            end
+            new_branch_name = add_post_fix_number(branch_name, remote_branches)
             return new_branch_name
           end
 
-          number_in_collaborator_name = collaborator_name.scan(/\d+/).last
           if number_in_collaborator_name.nil?
-            # The branch name has a number at the end, collaborator name does not.
-            # Increment number IN branch name
-            length = number_in_branch_name.length
-            new_post_fix_number = 0
-            loop do
-              new_post_fix_number = + 1
-              # Replace end digits with new number
-              new_branch_name[-length..] = new_post_fix_number.to_s
-              break unless branch_name_exist(new_branch_name, remote_branches)
-            end
+            # The branch name has a number at the end, collaborator name does not
+            # Increment number in branch name
+            new_branch_name = increment_post_fix_number(branch_name, remote_branches, number_in_branch_name)
             return new_branch_name
           end
 
           if number_in_branch_name.to_i == number_in_collaborator_name.to_i
-            # The branch name and collaborator name have the same number in them.
-            # This can be confused as the branch name number.
-            # Add a post fix number after the collaborators name.
-            new_post_fix_number = 0
-            loop do
-              new_post_fix_number += 1
-              new_branch_name = remote_branch.name + "-" + new_post_fix_number.to_s
-              break unless branch_name_exist(new_branch_name, remote_branches)
-            end
+            # The branch name and collaborator name have the same number in them
+            # This can be confused as the branch name number
+            # Add a post fix number after the collaborators name
+            new_branch_name = add_post_fix_number(branch_name, remote_branches)
             return new_branch_name
           end
 
           if number_in_branch_name.to_i != number_in_collaborator_name.to_i
-            # The branch name and collaborator name different numbers in them.
-            # Increment the post fix number
-            length = number_in_branch_name.length
-            new_post_fix_number = 0
-            loop do
-              new_post_fix_number += 1
-              new_branch_name = remote_branch.name
-              new_branch_name[-length..] = new_post_fix_number.to_s
-              break unless branch_name_exist(new_branch_name, remote_branches)
-            end
+            # The branch name and collaborator name different numbers in them
+            # Increment the post fix number after the collaborators name
+            new_branch_name = increment_post_fix_number(branch_name, remote_branches, number_in_branch_name)
             return new_branch_name
           end
         end
@@ -124,6 +101,31 @@ class GithubCollaborators
         end
       end
       exists
+    end
+
+    def add_post_fix_number(branch_name, remote_branches)
+      logger.debug "add_post_fix_number"
+      new_post_fix_number = 0
+      new_branch_name = ""
+      loop do
+        new_post_fix_number += 1
+        new_branch_name = branch_name + "-" + new_post_fix_number.to_s
+        break unless branch_name_exist(new_branch_name, remote_branches)
+      end
+      new_branch_name
+    end
+
+    def increment_post_fix_number(branch_name, remote_branches, number_in_branch_name)
+      logger.debug "increment_post_fix_number"
+      length = number_in_branch_name.length
+      new_post_fix_number = 0
+      new_branch_name = ""
+      loop do
+        new_post_fix_number = + 1
+        new_branch_name[-length..] = new_post_fix_number.to_s
+        break unless branch_name_exist(new_branch_name, remote_branches)
+      end
+      new_branch_name
     end
   end
 end

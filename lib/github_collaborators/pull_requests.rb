@@ -24,7 +24,7 @@ class GithubCollaborators
       logger.debug "get_pull_requests"
       response = @graphql.run_query(pull_request_query)
       data = JSON.parse(response).dig("data", "organization", "repository", "pullRequests")
-      pull_requests = (data.fetch("nodes").map { |d| PullRequest.new(d) })
+      data.fetch("nodes").map { |d| PullRequest.new(d) }
     end
 
     private
