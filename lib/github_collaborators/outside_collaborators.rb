@@ -394,7 +394,6 @@ class GithubCollaborators
       collaborator_groups.each do |group|
         # Ready a new branch
         bc = GithubCollaborators::BranchCreator.new
-        branch_name = ""
         login = ""
         edited_files = []
         pull_request_title = ""
@@ -444,7 +443,6 @@ class GithubCollaborators
       collaborators_groups.each do |group|
         # Ready a new branch
         bc = GithubCollaborators::BranchCreator.new
-        branch_name = ""
         login = ""
         edited_files = []
         pull_request_title = ""
