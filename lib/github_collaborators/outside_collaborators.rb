@@ -490,8 +490,8 @@ class GithubCollaborators
       @repo_pull_requests.each do |pull_request|
         # Chek the PR title message and check if file in the PR list of files
         if pull_request.title.include?(title_message.to_s)
-          if (pull_request.files.include?("terraform/#{terraform_file_name}")) ||
-              (pull_request.files.include?(terraform_file_name))
+          if pull_request.files.include?("terraform/#{terraform_file_name}") ||
+              pull_request.files.include?(terraform_file_name)
             logger.debug "PR already open for #{terraform_file_name} file"
             return true
           end
