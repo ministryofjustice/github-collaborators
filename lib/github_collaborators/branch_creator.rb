@@ -1,7 +1,7 @@
 class GithubCollaborators
   class BranchCreator
     include Logging
-    POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+    POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "0"
 
     def initialize
       logger.debug "initialize"
@@ -36,7 +36,9 @@ class GithubCollaborators
         @g.push(@g.remote("origin"), @branch_name)
 
         # Cleanup
-        @g.checkout("main")
+        # @g.checkout("main")
+        @g.checkout("raise-review-date-pr")
+
         sleep 4
       else
         logger.debug "Didn't commit and push files to github, this is a dry run"
