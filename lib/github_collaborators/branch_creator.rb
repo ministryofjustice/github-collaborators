@@ -55,6 +55,7 @@ class GithubCollaborators
           # The branch name already exists
           new_branch_name = branch_name
 
+          # Search for any numbers in collaborator name and branch name
           number_in_branch_name = remote_branch.name.scan(/\d+/).last
           number_in_collaborator_name = collaborator_name.scan(/\d+/).last
 
@@ -88,6 +89,7 @@ class GithubCollaborators
           end
         end
       end
+      branch_name
     end
 
     private
