@@ -1,7 +1,7 @@
 class GithubCollaborators
   class PullRequestCreator
     include Logging
-    POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+    POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "0"
 
     def initialize(params)
       logger.debug "initialize"
