@@ -20,7 +20,7 @@ module "staff-device-shared-services-infrastructure" {
       org          = "Made Tech Ltd"
       reason       = "MoJ Network Access Control Tech Team"
       added_by     = "justin.fielding@justice.gov.uk"
-      review_after = "2022-01-01"
+      review_after = "2022-06-30"
     },
     {
       github_user  = "C-gyorfi"
@@ -30,7 +30,7 @@ module "staff-device-shared-services-infrastructure" {
       org          = "Made Tech Ltd"
       reason       = "MoJ Network Access Control Tech Team"
       added_by     = "justin.fielding@justice.gov.uk"
-      review_after = "2022-01-01"
-    }
+      review_after = "2022-06-30"
+    },
   ]
 }
