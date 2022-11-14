@@ -409,23 +409,23 @@ class GithubCollaborators
             extend_date_in_file(collaborator.repository, login)
             file_name = "terraform/#{terraform_file_name}"
             edited_files.push(file_name)
-
-            if edited_files.length > 0
-              # At the end of each collaborator group commit any modified file/s
-              branch_name = bc.check_branch_name_is_valid(branch_name, login)
-              bc.create_branch(branch_name)
-              edited_files.each { |file_name| bc.add(file_name) }
-              bc.commit_and_push(EXTEND_REVIEW_DATE_PR_TITLE + " " + login)
-
-              # Create a pull request
-              params = {
-                repository: GITHUB_COLLABORATORS,
-                hash_body: extend_date_hash(login, branch_name)
-              }
-
-              GithubCollaborators::PullRequestCreator.new(params).create_pull_request
-            end
           end
+        end
+
+        if edited_files.length > 0
+          # At the end of each collaborator group commit any modified file/s
+          branch_name = bc.check_branch_name_is_valid(branch_name, login)
+          bc.create_branch(branch_name)
+          edited_files.each { |file_name| bc.add(file_name) }
+          bc.commit_and_push(EXTEND_REVIEW_DATE_PR_TITLE + " " + login)
+
+          # Create a pull request
+          params = {
+            repository: GITHUB_COLLABORATORS,
+            hash_body: extend_date_hash(login, branch_name)
+          }
+
+          GithubCollaborators::PullRequestCreator.new(params).create_pull_request
         end
       end
     end
@@ -454,23 +454,23 @@ class GithubCollaborators
             branch_name = "remove-expired-collaborator-#{login}"
             remove_collaborator_from_file(collaborator.repository, login)
             edited_files.push(file_name)
-
-            if edited_files.length > 0
-              # At the end of each collaborator group commit any modified file/s
-              branch_name = bc.check_branch_name_is_valid(branch_name, login)
-              bc.create_branch(branch_name)
-              edited_files.each { |file_name| bc.add(file_name) }
-              bc.commit_and_push(REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login)
-
-              # Create a pull request
-              params = {
-                repository: GITHUB_COLLABORATORS,
-                hash_body: remove_collaborator_hash(login, branch_name)
-              }
-
-              GithubCollaborators::PullRequestCreator.new(params).create_pull_request
-            end
           end
+        end
+
+        if edited_files.length > 0
+          # At the end of each collaborator group commit any modified file/s
+          branch_name = bc.check_branch_name_is_valid(branch_name, login)
+          bc.create_branch(branch_name)
+          edited_files.each { |file_name| bc.add(file_name) }
+          bc.commit_and_push(REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login)
+
+          # Create a pull request
+          params = {
+            repository: GITHUB_COLLABORATORS,
+            hash_body: remove_collaborator_hash(login, branch_name)
+          }
+
+          GithubCollaborators::PullRequestCreator.new(params).create_pull_request
         end
       end
     end
