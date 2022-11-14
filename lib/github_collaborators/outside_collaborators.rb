@@ -297,8 +297,8 @@ class GithubCollaborators
     def has_review_date_expired(collaborators)
       logger.debug "has_review_date_expired"
       all_collaborators = find_collaborators_who_have_expired(collaborators)
-      remove_expired_collaborators(all_collaborators)
-      extend_full_org_member_collaborators(all_collaborators)
+      # remove_expired_collaborators(all_collaborators)
+      # extend_full_org_member_collaborators(all_collaborators)
     end
 
     def is_review_date_within_a_week(collaborators)
