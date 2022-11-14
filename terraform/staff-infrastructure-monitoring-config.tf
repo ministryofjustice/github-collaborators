@@ -20,7 +20,7 @@ module "staff-infrastructure-monitoring-config" {
       org          = "Made Tech Ltd"
       reason       = "MoJ NAC Tech Team"
       added_by     = "justin.fielding@justice.gov.uk"
-      review_after = "2022-01-01"
+      review_after = "2022-06-30"
     },
     {
       github_user  = "MichaelCullenMadeTech"
@@ -30,7 +30,7 @@ module "staff-infrastructure-monitoring-config" {
       org          = "Made Tech Ltd"
       reason       = "MoJ NAC Tech Team"
       added_by     = "justin.fielding@justice.gov.uk"
-      review_after = "2022-01-01"
-    }
+      review_after = "2022-06-30"
+    },
   ]
 }
