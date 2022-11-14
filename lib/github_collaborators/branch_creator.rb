@@ -53,7 +53,6 @@ class GithubCollaborators
       remote_branches.each do |remote_branch|
         if remote_branch.name == branch_name
           # The branch name already exists
-          new_branch_name = branch_name
 
           # Search for any numbers in collaborator name and branch name
           number_in_branch_name = remote_branch.name.scan(/\d+/).last
