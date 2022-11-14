@@ -63,7 +63,6 @@ class GithubCollaborators
       end
 
       if edited_files.length > 0
-
         # Ready a new branch
         bc = GithubCollaborators::BranchCreator.new
         branch_name = "delete-empty-files"
@@ -81,6 +80,10 @@ class GithubCollaborators
         }
 
         GithubCollaborators::PullRequestCreator.new(params).create_pull_request
+
+        pull_request = PullRequest.new
+        pull_request.add_local_data(EMPTY_FILES_PR_TITLE, edited_files)
+        @repo_pull_requests.push(pull_request)
       end
     end
 
@@ -394,18 +397,17 @@ class GithubCollaborators
         branch_name = ""
         login = ""
         edited_files = []
-        login = ""
+        pull_request_title = ""
 
         # For each file that collaborator has an upcoming expiry
         group[1].each do |collaborator|
           # Check if a pull request is already pending
           terraform_file_name = File.basename(collaborator.href)
           login = collaborator.login
-          title_message = EXTEND_REVIEW_DATE_PR_TITLE + " " + login
+          pull_request_title = EXTEND_REVIEW_DATE_PR_TITLE + " " + login
 
-          if !does_pr_already_exist(terraform_file_name, title_message)
+          if !does_pr_already_exist(terraform_file_name, pull_request_title)
             # No pull request exists, modify the file
-            branch_name = "update-review-date-#{login}"
             extend_date_in_file(collaborator.repository, login)
             file_name = "terraform/#{terraform_file_name}"
             edited_files.push(file_name)
@@ -414,6 +416,7 @@ class GithubCollaborators
 
         if edited_files.length > 0
           # At the end of each collaborator group commit any modified file/s
+          branch_name = "update-review-date-#{login}"
           branch_name = bc.check_branch_name_is_valid(branch_name, login)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
@@ -426,6 +429,10 @@ class GithubCollaborators
           }
 
           GithubCollaborators::PullRequestCreator.new(params).create_pull_request
+
+          pull_request = PullRequest.new
+          pull_request.add_local_data(pull_request_title, edited_files)
+          @repo_pull_requests.push(pull_request)
         end
       end
     end
@@ -440,18 +447,18 @@ class GithubCollaborators
         branch_name = ""
         login = ""
         edited_files = []
+        pull_request_title = ""
 
         # For each file where collaborator has expired
         group[1].each do |collaborator|
           # Check if a pull request is already pending
           terraform_file_name = File.basename(collaborator.href)
           login = collaborator.login
-          title_message = REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login
+          pull_request_title = REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login
 
-          if !does_pr_already_exist(terraform_file_name, title_message)
+          if !does_pr_already_exist(terraform_file_name, pull_request_title)
             # No pull request exists, modify the file
             file_name = "terraform/#{terraform_file_name}"
-            branch_name = "remove-expired-collaborator-#{login}"
             remove_collaborator_from_file(collaborator.repository, login)
             edited_files.push(file_name)
           end
@@ -459,6 +466,7 @@ class GithubCollaborators
 
         if edited_files.length > 0
           # At the end of each collaborator group commit any modified file/s
+          branch_name = "remove-expired-collaborator-#{login}"
           branch_name = bc.check_branch_name_is_valid(branch_name, login)
           bc.create_branch(branch_name)
           edited_files.each { |file_name| bc.add(file_name) }
@@ -471,6 +479,10 @@ class GithubCollaborators
           }
 
           GithubCollaborators::PullRequestCreator.new(params).create_pull_request
+
+          pull_request = PullRequest.new
+          pull_request.add_local_data(pull_request_title, edited_files)
+          @repo_pull_requests.push(pull_request)
         end
       end
     end
@@ -479,10 +491,12 @@ class GithubCollaborators
       logger.debug "does_pr_already_exist"
       @repo_pull_requests.each do |pull_request|
         # Chek the PR title message and check if file in the PR list of files
-        if pull_request.title.include?(title_message.to_s) &&
-            pull_request.files.include?("terraform/#{terraform_file_name}")
-          logger.debug "PR already open for #{terraform_file_name} file"
-          return true
+        if pull_request.title.include?(title_message.to_s)
+          if (pull_request.files.include?("terraform/#{terraform_file_name}")) ||
+              (pull_request.files.include?(terraform_file_name))
+            logger.debug "PR already open for #{terraform_file_name} file"
+            return true
+          end
         end
       end
       false
@@ -513,19 +527,18 @@ class GithubCollaborators
       # Remove the repository if an open pull request is already adding the full org member
       repositories.delete_if { |repository_name| does_pr_already_exist("#{repository_name}.tf", title_message) }
 
-      if repositories.length > 0
-        branch_name = "add-collaborator-#{collaborator_name}"
+      edited_files = []
+      repositories.each do |repository_name|
+        # No pull request exists, modify the file/s
+        check_repository_file_exist(repository_name)
+        add_collaborator_to_file(repository_name, collaborator_name)
+        edited_files.push("terraform/#{repository_name}.tf")
+      end
 
-        edited_files = []
-        repositories.each do |repository_name|
-          # No pull request exists, modify the file/s
-          check_repository_file_exist(repository_name)
-          add_collaborator_to_file(repository_name, collaborator_name)
-          edited_files.push("terraform/#{repository_name}.tf")
-        end
-
+      if edited_files.length > 0
         # Ready a new branch
         bc = GithubCollaborators::BranchCreator.new
+        branch_name = "add-collaborator-#{collaborator_name}"
         branch_name = bc.check_branch_name_is_valid(branch_name, collaborator_name)
         bc.create_branch(branch_name)
         edited_files.each { |file_name| bc.add(file_name) }
@@ -538,6 +551,10 @@ class GithubCollaborators
         }
 
         GithubCollaborators::PullRequestCreator.new(params).create_pull_request
+
+        pull_request = PullRequest.new
+        pull_request.add_local_data(title_message, edited_files)
+        @repo_pull_requests.push(pull_request)
       end
     end
 

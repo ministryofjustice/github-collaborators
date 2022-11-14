@@ -30,7 +30,7 @@ class GithubCollaborators
     def message_payload
       logger.debug "message_payload"
       # Use the class singular or multiple message based on number of collaborators in list
-      notification_message = (@collaborators.length == 1) ? @notification.singular_message : @notification.multiple_message(@collaborators.length)
+      notification_message = @collaborators.length == 1 ? @notification.singular_message : @notification.multiple_message(@collaborators.length)
 
       # Create the lines that will be displayed in Slack for each collaborator per repo
       message_lines = @collaborators.map do |collaborator|
