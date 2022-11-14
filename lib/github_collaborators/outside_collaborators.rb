@@ -416,13 +416,13 @@ class GithubCollaborators
               bc.create_branch(branch_name)
               edited_files.each { |file_name| bc.add(file_name) }
               bc.commit_and_push(EXTEND_REVIEW_DATE_PR_TITLE + " " + login)
-    
+
               # Create a pull request
               params = {
                 repository: GITHUB_COLLABORATORS,
                 hash_body: extend_date_hash(login, branch_name)
               }
-    
+
               GithubCollaborators::PullRequestCreator.new(params).create_pull_request
             end
           end
