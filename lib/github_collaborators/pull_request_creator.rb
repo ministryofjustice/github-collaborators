@@ -14,7 +14,7 @@ class GithubCollaborators
       logger.debug "create_pull_request"
       if POST_TO_GH
         url = "https://api.github.com/repos/ministryofjustice/#{@repository}/pulls"
-        HttpClient.new.post_json(url, @hash_body.to_json)
+        GithubCollaborators::HttpClient.new.post_json(url, @hash_body.to_json)
         sleep 1
       else
         logger.debug "Didn't create pull request on #{@repository}, this is a dry run"

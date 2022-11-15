@@ -13,7 +13,7 @@ class GithubCollaborators
       logger.debug "create_unknown_collaborator_issue"
       if POST_TO_GH
         url = "https://api.github.com/repos/ministryofjustice/#{@repository}/issues"
-        HttpClient.new.post_json(url, unknown_collaborator_hash.to_json)
+        GithubCollaborators::HttpClient.new.post_json(url, unknown_collaborator_hash.to_json)
         sleep 2
       else
         logger.debug "Didn't create unknown collaborator issue for #{@github_user} on #{@repository}, this is a dry run"
@@ -25,7 +25,7 @@ class GithubCollaborators
       if !does_issue_already_exists?
         if POST_TO_GH
           url = "https://api.github.com/repos/ministryofjustice/#{@repository}/issues"
-          HttpClient.new.post_json(url, review_date_expires_soon_hash.to_json)
+          GithubCollaborators::HttpClient.new.post_json(url, review_date_expires_soon_hash.to_json)
           sleep 2
         else
           logger.debug "Didn't create review date expires soon issue for #{@github_user} on #{@repository}, this is a dry run"
@@ -66,7 +66,7 @@ class GithubCollaborators
     def get_issues(repository)
       logger.debug "get_issues"
       url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
-      response = HttpClient.new.fetch_json(url)
+      response = GithubCollaborators::HttpClient.new.fetch_json(url)
       JSON.parse(response, {symbolize_names: true})
     end
 

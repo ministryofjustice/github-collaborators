@@ -44,7 +44,7 @@ class GithubCollaborators
         state: "closed"
       }
 
-      HttpClient.new.patch_json(url, params.to_json)
+      GithubCollaborators::HttpClient.new.patch_json(url, params.to_json)
 
       logger.info "Closed issue #{issue_id} on repository #{repository}."
 
