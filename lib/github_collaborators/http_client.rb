@@ -2,11 +2,6 @@ class GithubCollaborators
   class HttpClient
     include Logging
 
-    def initialize
-      logger.debug "initialize"
-      @token = ENV.fetch("ADMIN_GITHUB_TOKEN")
-    end
-
     def fetch_json(url)
       logger.debug "fetch_json"
       got_data = false
@@ -85,7 +80,7 @@ class GithubCollaborators
       {
         "Accept" => "application/json",
         "Content-Type" => "application/json",
-        "Authorization" => "token #{@token}"
+        "Authorization" => "token #{ENV.fetch("ADMIN_GITHUB_TOKEN")}"
       }
     end
   end
