@@ -277,10 +277,23 @@ class GithubCollaborators
       end
     end
 
+    def remove_expired_full_org_members(all_collaborators)
+      logger.debug "remove_expired_full_org_members"
+      # Find the collaborators that have full org membership
+      full_org_collaborators = all_collaborators.select { |collaborator| is_collaborator_org_member(collaborator.login) }
+      if full_org_collaborators.length > 0
+        # Raise Slack message
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::FullOrgMemberExpired.new, full_org_collaborators).post_slack_message
+
+        # Remove full org member from the files and raise PRs
+        create_remove_collaborator_pull_requests(full_org_collaborators)
+      end
+    end
+
     # Extend the review date for collaborators that are defined in Terraform files
     # but are all full org members
-    def extend_full_org_member_collaborators(all_collaborators)
-      logger.debug "extend_full_org_member_collaborators"
+    def extend_full_org_member_review_date(all_collaborators)
+      logger.debug "extend_full_org_member_review_date"
       # Find the collaborators that have full org membership
       full_org_collaborators = all_collaborators.select { |collaborator| is_collaborator_org_member(collaborator.login) }
       if full_org_collaborators.length > 0
@@ -298,19 +311,29 @@ class GithubCollaborators
       logger.debug "has_review_date_expired"
       all_collaborators = find_collaborators_who_have_expired(collaborators)
       remove_expired_collaborators(all_collaborators)
-      extend_full_org_member_collaborators(all_collaborators)
+      remove_expired_full_org_members(all_collaborators)
     end
 
     def is_review_date_within_a_week(collaborators)
       logger.debug "is_review_date_within_a_week"
       collaborators_who_expire_soon = find_collaborators_who_expire_soon(collaborators)
-      if collaborators_who_expire_soon.length > 0
+      extend_collaborators_review_date(collaborators_who_expire_soon)
+      extend_full_org_member_review_date(collaborators_who_expire_soon)
+    end
+
+    def extend_collaborators_review_date(all_collaborators)
+      logger.debug "extend_collaborators_review_date"
+
+      # Filter out full org collaborators
+      collaborators = all_collaborators.select { |collaborator| !is_collaborator_org_member(collaborator.login) }
+
+      if collaborators.length > 0
 
         # Raise Slack message
-        GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, collaborators_who_expire_soon).post_slack_message
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, collaborators).post_slack_message
 
         # Extend the date in the collaborator files and raise PRs
-        create_extend_date_pull_requests(collaborators_who_expire_soon)
+        create_extend_date_pull_requests(collaborators)
       end
     end
 
@@ -699,7 +722,7 @@ class GithubCollaborators
           
           This is the GitHub-Collaborator repository bot. 
 
-          #{login} has review date/s that are close to expiring. 
+          The collaborator #{login} has review date/s that are close to expiring. 
           
           The review date/s have automatically been extended.
 

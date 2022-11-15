@@ -1,5 +1,5 @@
 class GithubCollaborators
-  class Expired
+  class FullOrgMemberExpired
     include Logging
 
     def create_line(collaborator)
@@ -17,11 +17,11 @@ class GithubCollaborators
     end
 
     def singular_message
-      "I've found a collaborator whose review date has expired, a pull request has been created to remove the collaborator"
+      "I've found a full Org member / collaborator whose review date has expired, a pull request has been created to remove the collaborator from the Terraform file/s. Manually remove the collaborator from the repository"
     end
 
     def multiple_message(collaborators)
-      "I've found #{collaborators} collaborators whose review dates have expired, pull requests have been created to remove these collaborators"
+      "I've found #{collaborators} full Org members / collaborators whose review dates have expired, pull requests have been created to remove these collaborators from the Terraform file/s. Manually remove the collaborator from the repository"
     end
   end
 end

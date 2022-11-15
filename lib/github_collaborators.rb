@@ -15,6 +15,7 @@ require_relative "./github_collaborators/branch_creator"
 require_relative "./github_collaborators/collaborator"
 require_relative "./github_collaborators/expired"
 require_relative "./github_collaborators/expires_soon"
+require_relative "./github_collaborators/full_org_member_expired"
 require_relative "./github_collaborators/full_org_member_expires_soon"
 require_relative "./github_collaborators/full_org_member"
 require_relative "./github_collaborators/github_graph_ql_client"
@@ -48,7 +49,7 @@ class GithubCollaborators
 
   # Pull request titles
   EMPTY_FILES_PR_TITLE = "Delete empty Terraform file/s"
-  ADD_FULL_ORG_MEMBER_PR_TITLE = "Add full org member / collaborator to Terraform file/s for"
+  ADD_FULL_ORG_MEMBER_PR_TITLE = "Add full Org member / collaborator to Terraform file/s for"
   EXTEND_REVIEW_DATE_PR_TITLE = "Extend review date in Terraform file/s for"
   REMOVE_EXPIRED_COLLABORATOR_PR_TITLE = "Remove expired collaborator from Terraform file/s for"
 
