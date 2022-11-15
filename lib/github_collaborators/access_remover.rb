@@ -1,7 +1,6 @@
 class GithubCollaborators
   class AccessRemover
     include Logging
-    POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
 
     def initialize(params)
       logger.debug "initialize"
@@ -11,7 +10,7 @@ class GithubCollaborators
 
     def remove_access
       logger.debug "remove_access"
-      if POST_TO_GH
+      if ENV.fetch("REALLY_POST_TO_GH", "0") == "1"
         url = "https://api.github.com/repos/ministryofjustice/#{@repository}/collaborators/#{@github_user}"
         HttpClient.new.delete(url)
         sleep 2
