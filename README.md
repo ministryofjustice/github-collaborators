@@ -202,5 +202,3 @@ To debug in VS Code use the below launch configrations within `.vscode/launch.js
 }
 
 ```
-
-[this report]: https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_collaborators
