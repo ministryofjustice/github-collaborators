@@ -6,6 +6,8 @@ puts "Start"
 
 repositories = GithubCollaborators::Repositories.new.get_active_repositories
 
-repositories.each do { |repo| puts repo }
+repositories.each do |repo| 
+  puts repo
+end
 
 puts "Finished"
