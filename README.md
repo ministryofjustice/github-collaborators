@@ -136,7 +136,7 @@ This script is run on daily basis by the [GitHub action](https://github.com/mini
 ruby bin/outside-collaborators.rb
 ```
 
-The script checks collaborators in Terraform against collaborators in GitHub repositories. Unknown collaborators are removed from those repositories. Issues will be raised on repositories when collaborator expiry date is up for renewal or expired. Slack alerts and repository pull requests are automatically generated when a collaborator expiry is up for renewal and has expired. It will output all outside collaborators who are defined in the Terraform code compared to the collaborators on GitHub per repository and state which collaborators are missing. It will delete expired collaborator invites to a repository which has not been accepted within the allowed time. 
+The script checks collaborators in Terraform against collaborators in GitHub repositories. Unknown collaborators are removed from those repositories. Issues will be raised on repositories when collaborator expiry date is up for renewal or expired. Slack alerts and repository pull requests are automatically generated when a collaborator expiry is up for renewal and has expired. It will output all outside collaborators who are defined in the Terraform code compared to the collaborators on GitHub per repository and state which collaborators are missing. It will delete expired collaborator invites to a repository which has not been accepted within the allowed time.
 
 ### bin/list-repositories.rb
 
