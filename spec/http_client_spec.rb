@@ -40,14 +40,34 @@ class GithubCollaborators
         expect { hc.fetch_json(TEST_URL) }.to raise_error(SystemExit)
       end
 
-      it "good response with empty body" do
+      it "call get and return a good response with empty body" do
         stub_request(:get, TEST_URL).to_return(body: "", status: 200)
-        hc.fetch_json(TEST_URL)
+        reply = hc.fetch_json(TEST_URL)
+        expect( reply ).to eq("")
       end
 
-      it "good response with body" do
+      it "call get and return a good response with body" do
         stub_request(:get, TEST_URL).to_return(body: "abc", status: 200)
-        hc.fetch_json(TEST_URL)
+        reply = hc.fetch_json(TEST_URL)
+        expect( reply ).to eq("abc")
+      end
+
+      it "call post" do
+        stub_request(:post, TEST_URL).to_return(body: "abc", status: 200)
+        reply = hc.post_json(TEST_URL, nil)
+        expect( reply ).to be_instance_of(Net::HTTPOK)
+      end
+
+      it "call patch" do
+        stub_request(:patch, TEST_URL).to_return(body: "abc", status: 200)
+        reply = hc.patch_json(TEST_URL, nil)
+        expect( reply ).to be_instance_of(Net::HTTPOK)
+      end
+
+      it "call delete" do
+        stub_request(:delete, TEST_URL).to_return(body: "abc", status: 200)
+        reply = hc.delete(TEST_URL)
+        expect( reply ).to be_instance_of(Net::HTTPOK)
       end
     end
   end
