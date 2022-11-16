@@ -1,5 +1,4 @@
 class GithubCollaborators
-
   TEST_URL = "https://api.github.com/repos/ministryofjustice/github-collaborators/issues"
 
   describe HttpClient do
