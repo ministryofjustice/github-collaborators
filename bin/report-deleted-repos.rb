@@ -25,11 +25,11 @@
 #     base: "main",
 #     body: <<~EOF
 #       Hi there
-      
+
 #       The repository that is maintained by the file #{pull_file} has been deleted/archived
-      
+
 #       Please merge this pull request to delete the file.
-      
+
 #       If you have any questions, please post in #ask-operations-engineering on Slack.
 #     EOF
 #   }

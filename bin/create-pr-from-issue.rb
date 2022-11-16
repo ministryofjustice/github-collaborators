@@ -12,9 +12,9 @@
 #     base: "main",
 #     body: <<~EOF
 #       Hi there
-      
+
 #       Please merge this pull request to add the attached outside collaborator to GitHub.
-      
+
 #       If you have any questions, please post in #ask-operations-engineering on Slack.
 #     EOF
 #   }
