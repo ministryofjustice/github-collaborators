@@ -22,7 +22,8 @@ class GithubCollaborators
         if (
           issue[:title].include?(COLLABORATOR_EXPIRES_SOON) ||
           issue[:title].include?(COLLABORATOR_EXPIRY_UPCOMING) ||
-          issue[:title].include?(DEFINE_COLLABORATOR_IN_CODE)
+          issue[:title].include?(DEFINE_COLLABORATOR_IN_CODE) ||
+          issue[:title].include?("User access removed, access is now via a team")
         ) && issue[:state] == "open"
           # Get issue created date and add 45 day grace period
           created_date = Date.parse(issue[:created_at])
