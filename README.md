@@ -130,7 +130,7 @@ See [env.example](./env.example) for more more information.
 
 ### [bin/outside-collaborators.rb](.github/workflows/outside-collaborators-check.yaml)
 
-This script is run on daily basis by the [GitHub action](https://github.com/ministryofjustice/github-collaborators/actions/workflows/outside-collaborators-check.yaml). You can also run it manually either by triggering the action. To run it locally:
+This script is run on daily basis by the [GitHub action](https://github.com/ministryofjustice/github-collaborators/actions/workflows/outside-collaborators-check.yaml). You can also run it manually by triggering the action. To run it locally:
 
 ```
 ruby bin/outside-collaborators.rb
