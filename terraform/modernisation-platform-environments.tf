@@ -101,6 +101,36 @@ module "modernisation-platform-environments" {
       reason       = "Get access to data-and-insights-hub on Modernisation Platform"              #  Why is this person being granted access?
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
       review_after = "2023-02-23"                                                                 #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
+    {
+      github_user  = "umeshc-roy"
+      permission   = "push"
+      name         = "Umesh Ray"                                                                  #  The name of the person behind github_user
+      email        = "Umesh.Ray@lumen.com"                                                        #  Their email address
+      org          = "Lumen"                                                                      #  The organisation/entity they belong to
+      reason       = "Get access to PPUD on Modernisation Platform"                               #  Why is this person being granted access?
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2023-11-04"                                                                 #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
+    {
+      github_user  = "pankaj-pant-lumen"
+      permission   = "push"
+      name         = "Pankaj Pant"                                                                #  The name of the person behind github_user
+      email        = "Pankaj.Pant@lumen.com"                                                      #  Their email address
+      org          = "Lumen"                                                                      #  The organisation/entity they belong to
+      reason       = "Get access to PPUD on Modernisation Platform"                               #  Why is this person being granted access?
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2023-11-04"                                                                 #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+    },
+    {
+      github_user  = "larnal-lumen"
+      permission   = "push"
+      name         = "Luis Martinez Arnal"                                                        #  The name of the person behind github_user
+      email        = "Luis.MartinezArnal@lumen.com"                                               #  Their email address
+      org          = "Lumen"                                                                      #  The organisation/entity they belong to
+      reason       = "Get access to PPUD on Modernisation Platform"                               #  Why is this person being granted access?
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
+      review_after = "2023-11-04"                                                                 #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
     }
   ]
 }
