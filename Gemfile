@@ -8,6 +8,7 @@ gem "erb"
 gem "json"
 gem "bundler-audit"
 gem "simplecov", require: false, group: :test
+gem "webmock", require: false, group: :test
 gem "bundler"
 gem "git"
 gem "uuidtools"

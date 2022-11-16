@@ -29,10 +29,6 @@ class GithubCollaborators
         end
       end
 
-      if response.body.nil?
-        logger.fatal "GH GraphQL query data is missing"
-        abort
-      end
       response.body
     end
 

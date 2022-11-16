@@ -1,6 +1,6 @@
 class GithubCollaborators
   describe AccessRemover do
-    context "when post to github" do
+    context "when env var not enabled" do
       before do
         ENV["REALLY_POST_TO_GH"] = "1"
       end
@@ -16,7 +16,7 @@ class GithubCollaborators
   
       let(:http_client) { double(HttpClient) }
   
-      it "calls github api" do
+      it "call github api" do
         url = "https://api.github.com/repos/ministryofjustice/somerepo/collaborators/somegithubuser"
         expect(HttpClient).to receive(:new).and_return(http_client)
         expect(http_client).to receive(:delete).with(url)
@@ -28,7 +28,7 @@ class GithubCollaborators
       end
     end
 
-    context "when dont post to github" do
+    context "when env var not enabled" do
       before do
         ENV["REALLY_POST_TO_GH"] = "0"
       end
@@ -42,7 +42,7 @@ class GithubCollaborators
   
       subject(:ar) { described_class.new(params) }
       
-      it "doesnt call github api" do
+      it "dont call github api" do
         ar.remove_access
       end
     end 
