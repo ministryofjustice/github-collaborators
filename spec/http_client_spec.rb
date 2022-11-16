@@ -5,7 +5,7 @@ class GithubCollaborators
     subject(:hc) { described_class.new }
 
     context "when token is missing" do
-      it "catch error on get" do
+      it "catch error on fetch" do
         expect { hc.fetch_json(TEST_URL) }.to raise_error(KeyError)
       end
 
@@ -40,13 +40,13 @@ class GithubCollaborators
         expect { hc.fetch_json(TEST_URL) }.to raise_error(SystemExit)
       end
 
-      it "call get and return a good response with empty body" do
+      it "call fetch and return a good response with empty body" do
         stub_request(:get, TEST_URL).to_return(body: "", status: 200)
         reply = hc.fetch_json(TEST_URL)
         expect( reply ).to eq("")
       end
 
-      it "call get and return a good response with body" do
+      it "call fetch and return a good response with body" do
         stub_request(:get, TEST_URL).to_return(body: "abc", status: 200)
         reply = hc.fetch_json(TEST_URL)
         expect( reply ).to eq("abc")
