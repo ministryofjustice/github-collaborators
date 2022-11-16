@@ -9,7 +9,7 @@ class GithubCollaborators
 
     let(:json) { File.read("spec/fixtures/repositories.json") }
 
-    let(:graphql) { GithubGraphQlClient.new(github_token: "dummy") }
+    let(:graphql) { GithubCollaborators::GithubGraphQlClient.new(github_token: "dummy") }
 
     subject(:repos) { described_class.new(params) }
 
@@ -17,14 +17,14 @@ class GithubCollaborators
       allow(graphql).to receive(:run_query).and_return(json)
     end
 
-    specify { expect(repos.list.size).to eq(4) }
+    specify { expect(repos.get_active_repositories.size).to eq(4) }
 
     it "excludes archived, locked & disabled repos" do
-      expect(repos.current.size).to eq(1)
+      expect(repos.get_active_repositories.size).to eq(1)
     end
 
     it "returns repo objects" do
-      repos.list.each do |repo|
+      repos.get_active_repositories.each do |repo|
         expect(repo).to be_a(Repository)
       end
     end

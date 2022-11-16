@@ -2,6 +2,12 @@
 
 require_relative "../lib/github_collaborators"
 
-repositories = GithubCollaborators::Repositories.new(login: "ministryofjustice").current
+puts "Start"
 
-repositories.map(&:name).sort.each { |repo| puts repo }
+repositories = GithubCollaborators::Repositories.new.get_active_repositories
+
+repositories.each do |repo|
+  puts repo
+end
+
+puts "Finished"

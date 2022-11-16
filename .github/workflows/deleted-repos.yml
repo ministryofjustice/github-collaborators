@@ -1,8 +1,9 @@
 name: Report deleted repos
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 23 * * 1-5"
+
+# on:
+#   workflow_dispatch:
+#   schedule:
+#     - cron: "0 23 * * 1-5"
 
 env:
   RUBY_VERSION: 3.1.0
@@ -20,3 +21,4 @@ jobs:
       - run: bin/report-deleted-repos.rb
         env:
           ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+          LOG_LEVEL: "info"

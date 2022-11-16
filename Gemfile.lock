@@ -7,6 +7,8 @@ GEM
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
     cgi (0.3.3)
+    crack (0.4.5)
+      rexml
     date (3.2.2)
     diff-lcs (1.5.0)
     docile (1.4.0)
@@ -15,12 +17,14 @@ GEM
     erb (2.2.3)
       cgi
     ffi (1.15.5)
+    ffi (1.15.5-x64-mingw32)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
     git (1.12.0)
       addressable (~> 2.8)
       rchardet (~> 1.8)
+    hashdiff (1.0.1)
     http (5.1.0)
       addressable (~> 2.8)
       http-cookie (~> 1.0)
@@ -36,6 +40,7 @@ GEM
     public_suffix (5.0.0)
     rake (13.0.6)
     rchardet (1.8.0)
+    rexml (3.2.5)
     rspec (3.11.0)
       rspec-core (~> 3.11.0)
       rspec-expectations (~> 3.11.0)
@@ -60,6 +65,10 @@ GEM
       unf_ext
     unf_ext (0.0.8.2)
     uuidtools (2.2.0)
+    webmock (3.18.1)
+      addressable (>= 2.8.0)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
 
 PLATFORMS
   x64-mingw32
@@ -77,6 +86,7 @@ DEPENDENCIES
   rspec
   simplecov
   uuidtools
+  webmock
 
 RUBY VERSION
    ruby 3.1.0

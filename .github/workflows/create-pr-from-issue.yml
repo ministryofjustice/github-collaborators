@@ -1,7 +1,8 @@
 name: Create a PR from an issue - Outside Collaborators
-on:
-  issues:
-    types: [opened]
+
+# on:
+#   issues:
+#     types: [opened]
 
 env:
   RUBY_VERSION: 3.1.0
@@ -22,6 +23,7 @@ jobs:
         env:
           ISSUE: ${{ toJson(github.event.issue) }}
           ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LOG_LEVEL: "info"
       - name: Report failure to Slack
         if: always()
         uses: ravsamhq/notify-slack-action@v2

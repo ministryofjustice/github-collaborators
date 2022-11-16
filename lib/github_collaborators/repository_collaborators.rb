@@ -1,99 +1,62 @@
 class GithubCollaborators
-  class Collaborator
-    attr_reader :data
-
-    GITHUB_TO_TERRAFORM_PERMISSIONS = {
-      "read" => "pull",
-      "triage" => "triage",
-      "write" => "push",
-      "maintain" => "maintain",
-      "admin" => "admin"
-    }
+  class GitHubCollaborator
+    include Logging
+    attr_reader :login
 
     def initialize(data)
-      @data = data
-    end
-
-    def login
-      data.dig("node", "login")
-    end
-
-    def url
-      data.dig("node", "url")
-    end
-
-    def permission
-      perm = data.fetch("permission").downcase!
-      GITHUB_TO_TERRAFORM_PERMISSIONS.fetch(perm)
+      logger.debug "initialize"
+      @login = data.dig("node", "login")
     end
   end
 
   class RepositoryCollaborators
-    attr_reader :graphql, :repository, :login
+    include Logging
 
-    def initialize(params)
-      @login = params.fetch(:login)
-      @repository = params.fetch(:repository)
-      @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
+    def initialize
+      logger.debug "initialize"
+      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
     end
 
-    def list
-      @list ||= get_all_outside_collaborators
-    end
-
-    def get_all_outside_collaborators
-      arr = []
-      graphql.get_paginated_results do |end_cursor|
-        data = get_outside_collaborators(end_cursor)
-        if data
-          arr = data.fetch("edges").map { |d| Collaborator.new(d) }
-          [arr, data]
-        else
-          warn("repository_collaborators:get_all_outside_collaborators(): graphql query data missing")
-          abort
+    def fetch_all_collaborators(repository)
+      logger.debug "fetch_all_collaborators"
+      end_cursor = nil
+      outside_collaborators = []
+      loop do
+        response = @graphql.run_query(outside_collaborators_query(end_cursor, repository))
+        json_data = JSON.parse(response)
+        # Repos with no outside collaborators return an empty array
+        break unless !json_data.dig("data", "organization", "repository", "collaborators", "edges").empty?
+        collaborators = json_data.dig("data", "organization", "repository", "collaborators", "edges")
+        collaborators.each do |outside_collaborator|
+          outside_collaborators.push(GithubCollaborators::GitHubCollaborator.new(outside_collaborator))
         end
+        break unless JSON.parse(response).dig("data", "organization", "repository", "collaborators", "pageInfo", "hasNextPage")
+        end_cursor = JSON.parse(response).dig("data", "organization", "repository", "collaborators", "pageInfo", "endCursor")
       end
-      arr
+      outside_collaborators
     end
 
-    def get_outside_collaborators(end_cursor = nil)
-      json = graphql.run_query(outside_collaborators_query_pagination(end_cursor))
-      sleep(2)
-      if json.include?("errors")
-        warn("repository_collaborators:get_outside_collaborators(): graphql query contains errors")
-        if json.include?("RATE_LIMITED")
-          sleep(300)
-          get_outside_collaborators(end_cursor)
-        else
-          abort(json)
-        end
-      else
-        JSON.parse(json).dig("data", "organization", "repository", "collaborators")
-      end
-    end
-
-    def outside_collaborators_query_pagination(end_cursor)
+    def outside_collaborators_query(end_cursor, repository)
+      logger.debug "outside_collaborators_query"
       after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
       %[
-      {
-        organization(login: "#{login}") {
-          repository(name: "#{repository}") {
-            collaborators(first:100 affiliation: OUTSIDE #{after}) {
-              pageInfo {
-                hasNextPage
-                endCursor
-              }
-              edges {
-                permission
-                node {
-                  login
-                  url
+        {
+          organization(login: "ministryofjustice") {
+            repository(name: "#{repository}") {
+              collaborators(first:100 affiliation: OUTSIDE #{after}) {
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
+                edges {
+                  node {
+                    login
+                  }
                 }
               }
             }
           }
         }
-      }
       ]
     end
   end

@@ -214,9 +214,9 @@ EOF
       end
 
       # To Do: Find solution why this test fails when added review_date to to_hash()
-      # it "sets defined_in_terraform to false" do
-      #   expect(tc.to_hash["defined_in_terraform"]).to be(false)
-      # end
+      it "sets defined_in_terraform to false" do
+        expect(tc.to_hash["defined_in_terraform"]).to be(false)
+      end
     end
 
     context "when date is malformed" do

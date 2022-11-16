@@ -1,7 +1,6 @@
 name: Compare collaborators in Terraform against GitHub
 
 on:
-  # Sunday 3pm
   schedule:
     - cron: "0 15 * * 0"
   # Allows you to run this workflow manually from the Actions tab

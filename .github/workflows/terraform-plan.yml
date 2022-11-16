@@ -1,5 +1,8 @@
 name: Terraform plan
-on: [workflow_dispatch, pull_request]
+
+on:
+  workflow_dispatch:
+  # pull_request:
 
 env:
   TERRAFORM: terraform

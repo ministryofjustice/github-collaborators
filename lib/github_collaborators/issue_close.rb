@@ -1,40 +1,55 @@
 class GithubCollaborators
   class IssueClose
+    include Logging
+
+    def initialize
+      logger.debug "initialize"
+      params = {
+        repository: nil,
+        github_user: nil
+      }
+      @issue_creator = GithubCollaborators::IssueCreator.new(params)
+    end
+
     # Close issues that have been open longer than 45 days
     def close_expired_issues(repository)
-      # Fetch all issues for repo
-      url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
-      response = HttpClient.new.fetch_json(url).body
-      response_json = JSON.parse(response, {symbolize_names: true})
+      logger.debug "close_expired_issues"
       allowed_days = 45
 
-      if !response_json.nil? && !response_json.empty?
-        response_json.each do |json|
-          # Check for the issues created by this application and the issue is open
-          if (json[:title].include?("Review after date expiry is upcoming") || json[:title].include?("Please define outside collaborators in code") || json[:title].include?("Please define external collaborators in code")) && json[:state] == "open"
-            # Get issue created date and add 45 day grace period
-            created_date = Date.parse(json[:created_at])
-            grace_period = created_date + allowed_days
-            if grace_period < Date.today
-              # Close issue as grace period has expired
-              remove_issue(repository, json[:number])
-              sleep 5
-            end
+      issues = @issue_creator.get_issues(repository)
+      issues.each do |issue|
+        # Check for the issues created by this application and that the issue is open
+        if (
+          issue[:title].include?(COLLABORATOR_EXPIRES_SOON) ||
+          issue[:title].include?(COLLABORATOR_EXPIRY_UPCOMING) ||
+          issue[:title].include?(DEFINE_COLLABORATOR_IN_CODE) ||
+          issue[:title].include?("User access removed, access is now via a team")
+        ) && issue[:state] == "open"
+          # Get issue created date and add 45 day grace period
+          created_date = Date.parse(issue[:created_at])
+          grace_period = created_date + allowed_days
+          if grace_period < Date.today
+            # Close issue as grace period has expired
+            remove_issue(repository, issue[:number])
           end
         end
       end
     end
 
-    private
-
     def remove_issue(repository, issue_id)
+      logger.debug "remove_issue"
+
       url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues/#{issue_id}"
 
       params = {
         state: "closed"
       }
 
-      HttpClient.new.patch_json(url, params.to_json)
+      GithubCollaborators::HttpClient.new.patch_json(url, params.to_json)
+
+      logger.info "Closed issue #{issue_id} on repository #{repository}."
+
+      sleep 2
     end
   end
 end

@@ -1,41 +1,24 @@
-# Please note that this class was written to work with a particular solution and may have weird behaviours if used for other uses
-# An example of this that the pull request content requires a file name
-# There is no current need for large more expansive PullRequest functionality
-# Please contact Operations Engineering if you wish to consume this code in an more extensive fashion
-
 class GithubCollaborators
   class PullRequestCreator
-    attr_reader :owner, :repository, :pull_file, :branch
+    include Logging
+    POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
 
     def initialize(params)
-      @owner = params.fetch(:owner)
+      logger.debug "initialize"
       @repository = params.fetch(:repository)
-      @pull_file = params.fetch(:pull_file)
-      @branch = params.fetch(:branch)
+      @hash_body = params.fetch(:hash_body)
     end
 
     # Create pull request
-    def create(pull_hash = self.pull_hash)
-      url = "https://api.github.com/repos/#{owner}/#{repository}/pulls"
-      HttpClient.new.post_json(url, pull_hash.to_json)
-    end
-
-    # Body of the PR
-    def pull_hash
-      {
-        title: "Remove #{pull_file} as repository being deleted ",
-        head: branch,
-        base: "main",
-        body: <<~EOF
-          Hi there
-          
-          The repository that is maintained by the file #{pull_file} has been deleted/archived
-          
-          Please merge this pull request to delete the file.
-          
-          If you have any questions, please post in #ask-operations-engineering on Slack.
-        EOF
-      }
+    def create_pull_request
+      logger.debug "create_pull_request"
+      if POST_TO_GH
+        url = "https://api.github.com/repos/ministryofjustice/#{@repository}/pulls"
+        GithubCollaborators::HttpClient.new.post_json(url, @hash_body.to_json)
+        sleep 1
+      else
+        logger.debug "Didn't create pull request on #{@repository}, this is a dry run"
+      end
     end
   end
 end

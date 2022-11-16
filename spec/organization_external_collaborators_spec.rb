@@ -7,7 +7,7 @@ class GithubCollaborators
       }
     }
 
-    let(:org_ext_collabs) { described_class.new(params) }
+    let(:org_outside_collabs) { described_class.new(params) }
 
     let(:org) { double(Organization, is_member?: false) }
 
@@ -42,11 +42,11 @@ class GithubCollaborators
 
     it "lists outside collaborators" do
       allow_any_instance_of(IssueClose).to receive_message_chain(:close_expired_issues)
-      expect(org_ext_collabs.list).to eq(ext_collabs)
+      expect(org_outside_collabs.fetch_collaborators_with_issues).to eq(ext_collabs)
     end
 
     it "lists outside collaborators for a repo" do
-      expect(org_ext_collabs.for_repository("aaa")).to eq([alice_hash])
+      expect(org_outside_collabs.fetch_repository_collaborators("aaa")).to eq([alice_hash])
     end
   end
 end

@@ -13,7 +13,7 @@ class GithubCollaborators
       ["DangerDawson", "damacus", "digitalronin"]
     }
 
-    let(:graphql) { GithubGraphQlClient.new(github_token: "fake") }
+    let(:graphql) { GithubCollaborators::GithubGraphQlClient.new(github_token: "fake") }
 
     before do
       allow(graphql).to receive(:run_query).and_return(json)
@@ -23,7 +23,7 @@ class GithubCollaborators
 
     it "lists collaborators" do
       expect(
-        repo_collabs.list.map(&:login).sort
+        repo_collabs.fetch_all_collaborators.map(&:login).sort
       ).to eq(collaborators)
     end
   end

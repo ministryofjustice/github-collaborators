@@ -1,102 +1,86 @@
 class GithubCollaborators
   class Repository
-    attr_reader :data
+    include Logging
+    attr_reader :name, :outside_collaborators, :outside_collaborators_count
 
     def initialize(data)
-      @data = data
+      logger.debug "initialize"
+      @name = data.fetch("name")
+      @outside_collaborators_count = data.dig("collaborators", "totalCount")
+      @outside_collaborators = []
     end
 
-    def name
-      data.fetch("name")
+    # Add collaborator based on login name
+    def add_outside_collaborator(collaborator)
+      logger.debug "add_outside_collaborator"
+      @outside_collaborators.push(collaborator.login)
     end
 
-    def url
-      data.fetch("url")
-    end
-
-    def locked?
-      data.fetch("isLocked")
-    end
-
-    def archived?
-      data.fetch("isArchived")
-    end
-
-    def disabled?
-      data.fetch("isDisabled")
+    # Add collaborators based on login name
+    def add_outside_collaborators(collaborators)
+      logger.debug "add_outside_collaborators"
+      collaborators.each { |collaborator| @outside_collaborators.push(collaborator.login) }
     end
   end
 
   class Repositories
-    attr_reader :graphql, :login
+    include Logging
 
-    def initialize(params)
-      @login = params.fetch(:login)
-      @graphql = params.fetch(:graphql) { GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN")) }
+    def initialize
+      logger.debug "initialize"
+      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
     end
 
-    def list
-      @list ||= get_all_repos
-    end
-
-    def current
-      list
-        .reject(&:archived?)
-        .reject(&:disabled?)
-        .reject(&:locked?)
+    def get_active_repositories
+      logger.debug "get_active_repositories"
+      active_repositories = []
+      ["public", "private", "internal"].each do |type|
+        end_cursor = nil
+        loop do
+          response = @graphql.run_query(repositories_query(end_cursor, type))
+          repositories = JSON.parse(response).dig("data", "search", "repos")
+          repositories.reject { |r| r.dig("repo", "isDisabled") }
+          repositories.reject { |r| r.dig("repo", "isLocked") }
+          repositories.each do |repo|
+            active_repositories.push(GithubCollaborators::Repository.new(repo.dig("repo")))
+          end
+          break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
+          end_cursor = JSON.parse(response).dig("data", "search", "pageInfo", "endCursor")
+        end
+      end
+      active_repositories.sort_by { |repo| repo.name }
     end
 
     private
 
-    def get_all_repos
-      graphql.get_paginated_results do |end_cursor|
-        data = get_repos(end_cursor)
-        if data
-          arr = data.fetch("nodes").map { |d| Repository.new(d) }
-          [arr, data]
-        else
-          warn("repositories:get_all_repos(): graphql query data missing")
-          abort
-        end
-      end
-    end
-
-    def get_repos(end_cursor = nil)
-      json = graphql.run_query(repositories_query(end_cursor))
-      sleep(2)
-      if json.include?("errors")
-        warn("repositories:get_repos(): graphql query contains errors")
-        if json.include?("RATE_LIMITED")
-          sleep(300)
-          get_repos(end_cursor)
-        else
-          abort(json)
-        end
-      else
-        JSON.parse(json).dig("data", "organization", "repositories")
-      end
-    end
-
-    def repositories_query(end_cursor)
+    def repositories_query(end_cursor, type)
+      logger.debug "repositories_query"
       after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
       %[
-    {
-      organization(login: "#{login}") {
-        repositories(first: #{PAGE_SIZE} #{after}) {
-          nodes {
-            name
-            url
-            isLocked
-            isArchived
-            isDisabled
-          }
-          pageInfo {
-            hasNextPage
-            endCursor
+        {
+          search(
+            type: REPOSITORY
+            query: "org:ministryofjustice, archived:false, is:#{type}"
+            first: 100 #{after}
+          ) {
+            repos: edges {
+              repo: node {
+                ... on Repository {
+                  name
+                  isDisabled
+                  isLocked
+                  collaborators(affiliation: OUTSIDE) {
+                    totalCount
+                  }
+                }
+              }
+            }
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
           }
         }
-      }
-    }
       ]
     end
   end

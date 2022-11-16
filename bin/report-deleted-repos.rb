@@ -1,110 +1,101 @@
-#!/usr/bin/env ruby
+# #!/usr/bin/env ruby
 
-require_relative "../lib/github_collaborators"
+# require_relative "../lib/github_collaborators"
 
-login = "ministryofjustice"
+# puts "Start"
 
-# Set repo Terraform directory
-terraform_dir = "terraform"
+# terraform_dir = "terraform"
 
-# Returns the repo name from within a repo file
-# This is to deal with a difference in file name and defined repo name inside the Terraform modules
-def get_repo_name(repo_file)
-  File.open repo_file do |file|
-    # Grab repo line
-    line = file.find_all { |line| line =~ /\s{1}repository/ }
-    # Extract name
-    /(?<=(["']))(?:(?=(\\?))\2.)*?(?=\1)/.match(line[0])
-  end
-end
+# # Returns the repo name from within a repo file
+# # This is to deal with a difference in file name and defined repo name inside the Terraform modules
+# def get_repo_name(repo_file)
+#   File.open repo_file do |file|
+#     # Grab repo line
+#     line = file.find_all { |line| line =~ /\s{1}repository/ }
+#     # Extract name
+#     /(?<=(["']))(?:(?=(\\?))\2.)*?(?=\1)/.match(line[0])
+#   end
+# end
 
-# Creates a branch to remove a singular file
-# This probably deserves its own class but keeping it here for now until we need more major functionality in this area
-def create_branch_for_file(file)
-  # Init local Git
-  g = Git.open(".")
+# # Body of the PR
+# def create_hash(pull_file, branch)
+#   {
+#     title: "Remove #{pull_file} as repository being deleted ",
+#     head: branch,
+#     base: "main",
+#     body: <<~EOF
+#       Hi there
 
-  g.config("user.name", "Operations Engineering Bot")
-  g.config("user.email", "dummy@email.com")
+#       The repository that is maintained by the file #{pull_file} has been deleted/archived
 
-  # Generate random uuid for branch name
-  branch_name = UUIDTools::UUID.timestamp_create.to_s
+#       Please merge this pull request to delete the file.
 
-  # Create branch and checkout
-  g.branch(branch_name).create
-  g.checkout(branch_name)
+#       If you have any questions, please post in #ask-operations-engineering on Slack.
+#     EOF
+#   }
+# end
 
-  # Stage file
-  g.remove(file)
+# # Get list of Terraform defined repos
+# terraform_repos = Dir.glob("#{terraform_dir}/*.tf").map { |file_name| File.basename(file_name, File.extname(file_name)) }
 
-  # Commit
-  g.commit("Remove #{file} as repository has been deleted/archived")
+# # Get all GitHub repos
+# repositories = GithubCollaborators::Repositories.new.get_active_repositories
 
-  # Push
-  g.push(g.remote("origin"), branch_name)
+# # Get repos that are not on GitHub and remove files required by Terraform
+# repo_delta = (terraform_repos - repositories) - ["main", "variables", "versions", "backend"]
 
-  # Cleanup
-  g.checkout("main")
+# # Check to make sure the repo isn't in redirect mode or replacing . with - in the filename for Terraform
+# repo_delta.delete_if { |repo|
+#   repo_name = get_repo_name("#{terraform_dir}/#{repo}.tf")
+#   GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/ministryofjustice/#{repo}").code == "301" ||
+#     GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/ministryofjustice/#{repo_name}").code != "404"
+# }
 
-  # Return branch name for PR creation
-  branch_name
-end
+# puts "Current repo files that need deleting"
+# puts repo_delta
 
-# Get list of Terraform defined repos
-terraform_repos = Dir.glob("#{terraform_dir}/*.tf").map { |file_name| File.basename(file_name, File.extname(file_name)) }
+# # -------------------------
+# # Report section over
+# # -------------------------
 
-# Get live list of all GitHub repos
-repositories_json = GithubCollaborators::Repositories.new(login: login).current
-repositories = repositories_json.map(&:name).sort
+# # Open PRs for all the deleted repos
 
-# Get repos that are not on GitHub and remove files required by Terraform
-repo_delta = (terraform_repos - repositories) - ["main", "variables", "versions", "backend"]
+# # Grab current open PRs
+# pull_requests = GithubCollaborators::PullRequests.new.get_pull_requests
 
-# Check to make sure the repo isn't in redirect mode or replacing . with - in the filename for Terraform
-repo_delta.delete_if { |repo|
-  repo_name = get_repo_name("#{terraform_dir}/#{repo}.tf")
-  GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/#{login}/#{repo}").code == "301" ||
-    GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/#{login}/#{repo_name}").code != "404"
-}
+# # Delete from actionable array if PR already created
+# # Two scenarios:
+# #   a. we have already created a PR to remove
+# #   b. for some reason there is a PR currently open with this file included
+# # In both scenarios we do not want to create a PR
+# repo_delta.delete_if { |repo|
+#   pull_requests.map(&:file).include?("#{terraform_dir}/#{repo}.tf")
+# }
 
-puts "Current repo files that need deleting"
-puts repo_delta
+# # Report files that need PRs
+# puts "Current repo files that need deleting but do not have a PR"
+# puts repo_delta
 
-# -------------------------
-# Report section over
-# -------------------------
+# repo_delta.each { |repo|
+#   file_name = "#{terraform_dir}/#{repo}.tf"
 
-# Open PRs for all the deleted repos
+#   # Create branch
+#   branch_name = "remove-#{repo}-tf-file"
+#   bc = GithubCollaborators::BranchCreator.new
+#   branch_name = bc.check_branch_name_is_valid(branch_name)
+#   bc.create_branch(branch_name)
+#   bc.remove(file_name)
+#   bc.commit_and_push("Remove #{file_name} as repository has been deleted/archived.")
 
-# Grab current open PRs
-pull_requests = GithubCollaborators::PullRequests.new(login: login).list
+#   sleep 5
 
-# Delete from actionable array if PR already created
-# Two scenarios:
-#   a. we have already created a PR to remove
-#   b. for some reason there is a PR currently open with this file included
-# In both scenarios we do not want to create a PR
-repo_delta.delete_if { |repo|
-  pull_requests.map(&:file).include? "#{terraform_dir}/#{repo}.tf"
-}
+#   # Create PR
+#   params = {
+#     repository: "github-collaborators",
+#     hash_body: create_hash(file_name, branch_name)
+#   }
 
-# Report files that need PRs
-puts "Current repo files that need deleting but do not have a PR"
-puts repo_delta
+#   GithubCollaborators::PullRequestCreator.new(params).create_pull_request
+# }
 
-# Create PRs
-repo_delta.each { |repo|
-  branch_name = create_branch_for_file("#{terraform_dir}/#{repo}.tf")
-
-  # Give GitHub some time
-  sleep 5
-
-  params = {
-    owner: login,
-    repository: "github-collaborators",
-    pull_file: "#{terraform_dir}/#{repo}.tf",
-    branch: branch_name
-  }
-
-  GithubCollaborators::PullRequestCreator.new(params).create
-}
+# puts "Finished"

@@ -1,67 +1,44 @@
-#!/usr/bin/env ruby
+# #!/usr/bin/env ruby
 
-require_relative "../lib/github_collaborators"
+# require_relative "../lib/github_collaborators"
 
-# GitHub settings
-owner = "ministryofjustice"
+# puts "Start"
 
-# Creates a branch and commits all changed files
-# This probably deserves its own class but keeping it here for now until we need more major functionality in this area
-def create_branch_for_pr
-  # Init local Git
-  g = Git.open(".")
+# # Body of the PR
+# def create_hash(branch_name)
+#   {
+#     title: "Outside Collaborator PR",
+#     head: branch_name,
+#     base: "main",
+#     body: <<~EOF
+#       Hi there
 
-  Git.global_config("user.name", "Operations Engineering Bot")
-  Git.global_config("user.email", "dummy@email.com")
+#       Please merge this pull request to add the attached outside collaborator to GitHub.
 
-  # Generate random uuid for branch name
-  branch_name = UUIDTools::UUID.timestamp_create.to_s
+#       If you have any questions, please post in #ask-operations-engineering on Slack.
+#     EOF
+#   }
+# end
 
-  # Create branch and checkout
-  g.branch(branch_name).create
-  g.checkout(branch_name)
+# # Grab the new collaborators and write them into file/s
+# tc = GithubCollaborators::TerraformBlockCreator.new
+# tc.add_data_from_issue(JSON.parse(ENV.fetch("ISSUE")))
+# tc.update_files
 
-  # Stage file
-  g.add("terraform/*")
+# # Create branch
+# branch_name = "add-a-new-collaborator-#{tc.username}"
+# bc = GithubCollaborators::BranchCreator.new.create_branch(branch_name)
+# bc.add("terraform/*")
+# bc.commit_and_push("Pull request to add new outside collaborator")
 
-  # Commit
-  g.commit("Pull request to add new outside collaborator")
+# params = {
+#   repository: "github-collaborators",
+#   hash_body: create_hash(branch_name)
+# }
 
-  # Push
-  g.push(g.remote("origin"), branch_name)
+# sleep 5
 
-  # Cleanup
-  g.checkout("main")
+# # Open PR
+# GithubCollaborators::PullRequestCreator.new(params).create_pull_request
 
-  # Return branch name for PR creation
-  branch_name
-end
-
-# Returns string for PR body
-def pull_hash(branch)
-  {
-    title: "Outside Collaborator PR",
-    head: branch,
-    base: "main",
-    body: <<~EOF
-      Hi there
-      
-      Please merge this pull request to add the attached outside collaborator to GitHub.
-      
-      If you have any questions, please post in #ask-operations-engineering on Slack.
-    EOF
-  }
-end
-
-# Grab the new collaborators and insert them into file
-GithubCollaborators::TerraformBlockCreator.new(JSON.parse(ENV.fetch("ISSUE"))).insert
-
-# Create branch and open PR
-params = {
-  owner: owner,
-  repository: "github-collaborators",
-  pull_file: nil,
-  branch: create_branch_for_pr
-}
-
-GithubCollaborators::PullRequestCreator.new(params).create(pull_hash(params.fetch(:branch)))
+# puts "Finished"
