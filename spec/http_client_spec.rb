@@ -43,31 +43,31 @@ class GithubCollaborators
       it "call fetch and return a good response with empty body" do
         stub_request(:get, TEST_URL).to_return(body: "", status: 200)
         reply = hc.fetch_json(TEST_URL)
-        expect( reply ).to eq("")
+        expect(reply).to eq("")
       end
 
       it "call fetch and return a good response with body" do
         stub_request(:get, TEST_URL).to_return(body: "abc", status: 200)
         reply = hc.fetch_json(TEST_URL)
-        expect( reply ).to eq("abc")
+        expect(reply).to eq("abc")
       end
 
       it "call post" do
         stub_request(:post, TEST_URL).to_return(body: "abc", status: 200)
         reply = hc.post_json(TEST_URL, nil)
-        expect( reply ).to be_instance_of(Net::HTTPOK)
+        expect(reply).to be_instance_of(Net::HTTPOK)
       end
 
       it "call patch" do
         stub_request(:patch, TEST_URL).to_return(body: "abc", status: 200)
         reply = hc.patch_json(TEST_URL, nil)
-        expect( reply ).to be_instance_of(Net::HTTPOK)
+        expect(reply).to be_instance_of(Net::HTTPOK)
       end
 
       it "call delete" do
         stub_request(:delete, TEST_URL).to_return(body: "abc", status: 200)
         reply = hc.delete(TEST_URL)
-        expect( reply ).to be_instance_of(Net::HTTPOK)
+        expect(reply).to be_instance_of(Net::HTTPOK)
       end
     end
   end
