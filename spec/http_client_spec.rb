@@ -1,6 +1,5 @@
 class GithubCollaborators
   describe HttpClient do
-
     subject(:hc) { described_class.new }
 
     context "when token is missing" do
@@ -40,13 +39,13 @@ class GithubCollaborators
       end
 
       it "good response with empty body" do
-        stub_request(:get, "https://api.github.com/repos/ministryofjustice/github-collaborators/issues").to_return(body: '' , status: 200)
-        hc.fetch_json("https://api.github.com/repos/ministryofjustice/github-collaborators/issues") 
+        stub_request(:get, "https://api.github.com/repos/ministryofjustice/github-collaborators/issues").to_return(body: "", status: 200)
+        hc.fetch_json("https://api.github.com/repos/ministryofjustice/github-collaborators/issues")
       end
 
       it "good response with body" do
         stub_request(:get, "https://api.github.com/repos/ministryofjustice/github-collaborators/issues").to_return(body: "abc", status: 200)
-        hc.fetch_json("https://api.github.com/repos/ministryofjustice/github-collaborators/issues") 
+        hc.fetch_json("https://api.github.com/repos/ministryofjustice/github-collaborators/issues")
       end
     end
   end

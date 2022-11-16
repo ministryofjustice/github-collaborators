@@ -4,7 +4,7 @@ SimpleCov.start do
 end
 
 require_relative "../lib/github_collaborators"
-require 'webmock/rspec'
+require "webmock/rspec"
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
