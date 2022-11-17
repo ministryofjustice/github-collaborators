@@ -549,7 +549,7 @@ class GithubCollaborators
       logger.debug "check_repository_file_exist"
       file_exists = false
       @terraform_files.terraform_files.each do |terraform_file|
-        if terraform_file == repository_name
+        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
           file_exists = true
           break
         end
