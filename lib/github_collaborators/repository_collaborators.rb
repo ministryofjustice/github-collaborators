@@ -36,6 +36,8 @@ class GithubCollaborators
       outside_collaborators
     end
 
+    private
+
     def outside_collaborators_query(end_cursor, repository)
       logger.debug "outside_collaborators_query"
       after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")

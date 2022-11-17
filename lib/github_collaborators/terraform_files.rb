@@ -156,6 +156,25 @@ class GithubCollaborators
       @terraform_file_data = File.read(@file_path).split("\n")
     end
 
+    def get_collaborator_permission(collaborator_name)
+      logger.debug "get_collaborator_permission"
+      @terraform_blocks.each do |terraform_block|
+        if terraform_block.username == collaborator_name
+          return terraform_block.permission
+        end
+      end
+      ""
+    end
+
+    def change_collaborator_permission(collaborator_name, permission)
+      logger.debug "get_collaborator_permission"
+      @terraform_blocks.each do |terraform_block|
+        if terraform_block.username == collaborator_name
+          terraform_block.permission = permission
+        end
+      end
+    end
+
     def create_terraform_collaborator_blocks
       logger.debug "create_terraform_collaborator_blocks"
       # In the file find the "github_user" lines

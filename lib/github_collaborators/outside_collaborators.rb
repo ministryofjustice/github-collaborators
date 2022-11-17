@@ -34,8 +34,9 @@ class GithubCollaborators
     def start
       compare_terraform_and_github
       collaborator_checks
-      full_org_members
+      full_org_members_check
       remove_empty_files
+      print_full_org_member_collaborators
     end
 
     private
@@ -107,10 +108,8 @@ class GithubCollaborators
       has_review_date_expired(collaborators_with_issues)
     end
 
-    def full_org_members
-      logger.debug "full_org_members"
-      # Print full org members
-      full_org_members_check
+    def print_full_org_member_collaborators
+      logger.debug "print_full_org_member_collaborators"
       logger.info "There are #{@organization.collaborators_and_org_members.length} full Org member / outside collaborators."
       @organization.collaborators_and_org_members.each { |collaborator| logger.info "#{collaborator} is a full Org member / outside collaborator." }
     end
@@ -203,6 +202,11 @@ class GithubCollaborators
         if full_org_member.do_repositories_match == false
           # Where collaborator is not defined in Terraform, create a PR with collaborator added to those files
           create_add_collaborator_pull_requests(full_org_member.login, full_org_member.missing_repositories)
+        end
+
+        if full_org_member.check_repository_permissions_match(@terraform_files) == false
+          # Where collaborator has difference in repository permission, create a PR using GitHub permission
+          collaborator_permission_pull_requests(full_org_member.login, full_org_member.repository_permission_mismatches)
         end
 
         # Find the collaborators that are attached to no GitHub repositories
@@ -410,6 +414,16 @@ class GithubCollaborators
       end
     end
 
+    def change_collaborator_permission_in_file(collaborator_name, repository_name, permission)
+      logger.debug "change_collaborator_permission_in_file"
+      @terraform_files.terraform_files.each do |terraform_file|
+        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
+          terraform_file.change_collaborator_permission(collaborator_name, permission)
+          terraform_file.write_to_file
+        end
+      end
+    end
+
     def add_collaborator_to_file(repository_name, login)
       logger.debug "add_collaborator_to_file"
       @terraform_files.terraform_files.each do |terraform_file|
@@ -558,6 +572,46 @@ class GithubCollaborators
       if file_exists == false
         # It doesn't so create a new file
         @terraform_files.create_new_file(repository_name)
+      end
+    end
+
+    def collaborator_permission_pull_requests(collaborator_name, repositories)
+      logger.debug "collaborator_permission_pull_requests"
+
+      title_message = CHANGE_PERMISSION_PR_TITLE + " " + collaborator_name
+
+      # Remove the repository if an open pull request is already open with the modified permission
+      repositories.delete_if { |repository| does_pr_already_exist("#{repository[:repository_name]}.tf", title_message) }
+
+      edited_files = []
+      repositories.each do |repository|
+        # No pull request exists, modify the file/s
+        repository_name = repository[:repository_name]
+        check_repository_file_exist(repository_name)
+        change_collaborator_permission_in_file(collaborator_name, repository_name, repository[:permission])
+        edited_files.push("terraform/#{repository_name}.tf")
+      end
+
+      if edited_files.length > 0
+        # Ready a new branch
+        bc = GithubCollaborators::BranchCreator.new
+        branch_name = "modify-collaborator-permission-#{collaborator_name}"
+        branch_name = bc.check_branch_name_is_valid(branch_name, collaborator_name)
+        bc.create_branch(branch_name)
+        edited_files.each { |file_name| bc.add(file_name) }
+        bc.commit_and_push(title_message)
+
+        # Create a pull request
+        params = {
+          repository: GITHUB_COLLABORATORS,
+          hash_body: modify_collaborator_permission_hash(collaborator_name, branch_name)
+        }
+
+        GithubCollaborators::PullRequestCreator.new(params).create_pull_request
+
+        pull_request = PullRequest.new
+        pull_request.add_local_data(title_message, edited_files)
+        @repo_pull_requests.push(pull_request)
       end
     end
 
@@ -781,13 +835,38 @@ class GithubCollaborators
           
           This is the GitHub-Collaborator repository bot. 
 
-          #{login} was found to be missing from the file/s in this pull request.
+          The collaborator #{login} was found to be missing from the file/s in this pull request.
 
           This is because the collaborator is a full organization member and is able to join repositories outside of Terraform.
 
           This pull request ensures we keep track of those collaborators and which repositories they are accessing.
 
           Edit the pull request file/s because Terraform requires the collaborators repository permission.
+
+          Permission can either be admin, push, maintain, pull or triage.
+
+        EOF
+      }
+    end
+
+    def modify_collaborator_permission_hash(login, branch_name)
+      logger.debug "modify_collaborator_permission_hash"
+      {
+        title: CHANGE_PERMISSION_PR_TITLE + " " + login,
+        head: branch_name,
+        base: "main",
+        body: <<~EOF
+          Hi there
+          
+          This is the GitHub-Collaborator repository bot. 
+
+          The collaborator #{login} permission on Github is different to the permission in the Terraform file for the repository.
+
+          This is because the collaborator is a full organization member, is able to join repositories outside of Terraform and may have different access to the repository now they are in a Team.
+
+          The permission on Github is given the priority.
+          
+          This pull request ensures we keep track of those collaborators, which repositories they are accessing and their permission.
 
           Permission can either be admin, push, maintain, pull or triage.
 

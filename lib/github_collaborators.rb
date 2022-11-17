@@ -52,6 +52,7 @@ class GithubCollaborators
   ADD_FULL_ORG_MEMBER_PR_TITLE = "Add full Org member / collaborator to Terraform file/s for"
   EXTEND_REVIEW_DATE_PR_TITLE = "Extend review date in Terraform file/s for"
   REMOVE_EXPIRED_COLLABORATOR_PR_TITLE = "Remove expired collaborator from Terraform file/s for"
+  CHANGE_PERMISSION_PR_TITLE = "Modify permission in Terraform file/s for"
 
   def self.tf_safe(string)
     string.tr(".", "-")

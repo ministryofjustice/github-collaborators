@@ -1,7 +1,7 @@
 class GithubCollaborators
   class FullOrgMember
     include Logging
-    attr_reader :login, :missing_repositories
+    attr_reader :login, :missing_repositories, :repository_permission_mismatches
 
     def initialize(login)
       logger.debug "initialize"
@@ -15,6 +15,7 @@ class GithubCollaborators
       @terraform_repositories = []
       @missing_repositories = []
       @excluded_repositories = []
+      @repository_permission_mismatches = []
     end
 
     # Check whether a collaborator is attached to no repositories
@@ -99,6 +100,42 @@ class GithubCollaborators
         return true
       end
       false
+    end
+
+    def check_repository_permissions_match(terraform_files)
+      logger.debug "check_repository_permissions_match"
+
+      permission_mismatch = false
+      # Search through the collaborators repositories
+      @github_repositories.each do |github_repository_name|
+
+        # Find the matching Terraform file
+        terraform_files.terraform_files.each do |terraform_file|
+
+          if terraform_file.filename == GithubCollaborators.tf_safe(github_repository_name)
+
+            # Get the github permission for that repository
+            github_permission = get_repository_permission(github_repository_name)
+
+            # Get the permission for the Terraform file
+            terraform_permission = terraform_file.get_collaborator_permission(login)
+
+            if github_permission != terraform_permission
+              permission_mismatch = true
+              # Store values as a hash like this { :permission => "value", :repository_name => "repo_name" }
+              @repository_permission_mismatches.push({ :permission => "#{github_permission}", :repository_name => "#{github_repository_name}" })
+            end
+          end
+        end
+      end
+      permission_mismatch
+    end
+
+    def get_repository_permission(repository_name)
+      logger.debug "get_repository_permission"
+      url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/collaborators/#{@login}/permission"
+      json = GithubCollaborators::HttpClient.new.fetch_json(url)
+      JSON.parse(json).dig("permission")
     end
 
     private
