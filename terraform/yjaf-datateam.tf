@@ -40,7 +40,7 @@ module "yjaf-datateam" {
       org          = "NEC SWS"
       reason       = "New front end developer on YJAF team"
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2022-11-19"
+      review_after = "2023-05-18"
     },
     {
       github_user  = "AndrewTRichards"
