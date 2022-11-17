@@ -524,10 +524,11 @@ class GithubCollaborators
             collaborators_in_slack_message.push(collaborator)
 
             # If collaborator is a full org member, record have removed that file for later on
-            full_org_member = @full_org_members.select { |full_org_member| full_org_member.login == login }
-            repository_name = File.basename(terraform_file_name, ".tf")
-            if full_org_member.length > 0
-              full_org_member.record_removed_from_repository(repository_name)
+            @full_org_members.each do |full_org_member|
+              if full_org_member.login == login
+                repository_name = File.basename(terraform_file_name, ".tf")
+                full_org_member.record_removed_from_repository(repository_name)
+              end
             end
           end
         end
