@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "staff-external-dynamic-list" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "staff-external-dynamic-list"
   collaborators = [
     {
       github_user  = "emileswarts"

@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "PaloAlto-pipelines" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "PaloAlto-pipelines"
   collaborators = [
     {
       github_user  = "emileswarts"

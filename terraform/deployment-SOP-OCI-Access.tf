@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "deployment-SOP-OCI-Access" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "deployment-SOP-OCI-Access"
   collaborators = [
     {
       github_user  = "emileswarts"

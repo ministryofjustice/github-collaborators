@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "staff-device-dns-dhcp-disaster-recovery" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "staff-device-dns-dhcp-disaster-recovery"
   collaborators = [
     {
       github_user  = "emileswarts"

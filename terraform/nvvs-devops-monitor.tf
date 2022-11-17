@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "nvvs-devops-monitor" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "nvvs-devops-monitor"
   collaborators = [
     {
       github_user  = "emileswarts"

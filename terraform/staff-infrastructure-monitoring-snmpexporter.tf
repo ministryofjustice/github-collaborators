@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "staff-infrastructure-monitoring-snmpexporter" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "staff-infrastructure-monitoring-snmpexporter"
   collaborators = [
     {
       github_user  = "emileswarts"

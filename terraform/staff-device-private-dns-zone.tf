@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "staff-device-private-dns-zone" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "staff-device-private-dns-zone"
   collaborators = [
     {
       github_user  = "emileswarts"

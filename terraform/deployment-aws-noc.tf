@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "deployment-aws-noc" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "deployment-aws-noc"
   collaborators = [
     {
       github_user  = "emileswarts"

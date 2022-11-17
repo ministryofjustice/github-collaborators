@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "aws-ta-testing" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "aws-ta-testing"
   collaborators = [
     {
       github_user  = "emileswarts"

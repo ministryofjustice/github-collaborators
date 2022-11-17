@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "mojo-aws-github-oidc-provider" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "mojo-aws-github-oidc-provider"
   collaborators = [
     {
       github_user  = "emileswarts"

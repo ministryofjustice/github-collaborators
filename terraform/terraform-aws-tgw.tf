@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "terraform-aws-tgw" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "terraform-aws-tgw"
   collaborators = [
     {
       github_user  = "emileswarts"

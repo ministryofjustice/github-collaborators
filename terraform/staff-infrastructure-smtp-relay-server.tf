@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "staff-infrastructure-smtp-relay-server" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "staff-infrastructure-smtp-relay-server"
   collaborators = [
     {
       github_user  = "emileswarts"

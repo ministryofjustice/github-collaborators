@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "aws-trusted-advisor-to-github-issues" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "aws-trusted-advisor-to-github-issues"
   collaborators = [
     {
       github_user  = "emileswarts"

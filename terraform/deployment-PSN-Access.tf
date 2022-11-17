@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "deployment-PSN-Access" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "deployment-PSN-Access"
   collaborators = [
     {
       github_user  = "emileswarts"

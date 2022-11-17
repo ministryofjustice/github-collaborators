@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "deployment-GlobalProtect-ASG" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "deployment-GlobalProtect-ASG"
   collaborators = [
     {
       github_user  = "emileswarts"

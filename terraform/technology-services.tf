@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "technology-services" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "technology-services"
   collaborators = [
     {
       github_user  = "emileswarts"

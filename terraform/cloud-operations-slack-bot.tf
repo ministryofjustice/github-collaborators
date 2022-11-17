@@ -1,6 +1,6 @@
-module "staff-device-docker-base-images" {
+module "cloud-operations-slack-bot" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-docker-base-images"
+  repository = "cloud-operations-slack-bot"
   collaborators = [
     {
       github_user  = "emileswarts"
