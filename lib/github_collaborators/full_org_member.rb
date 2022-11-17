@@ -135,7 +135,19 @@ class GithubCollaborators
       logger.debug "get_repository_permission"
       url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/collaborators/#{@login}/permission"
       json = GithubCollaborators::HttpClient.new.fetch_json(url)
-      JSON.parse(json).dig("permission")
+      permission = ""
+      if JSON.parse(json).dig("user","permissions", "admin")
+        permission = "admin"
+      elsif JSON.parse(json).dig("user","permissions", "maintain")
+        permission = "maintain"
+      elsif JSON.parse(json).dig("user","permissions", "push")
+        permission = "push"
+      elsif JSON.parse(json).dig("user","permissions", "triage")
+        permission = "triage"
+      else
+        permission = "pull"
+      end
+      permission
     end
 
     private

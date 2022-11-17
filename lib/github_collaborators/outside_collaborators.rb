@@ -204,7 +204,7 @@ class GithubCollaborators
           create_add_collaborator_pull_requests(full_org_member.login, full_org_member.missing_repositories)
         end
 
-        if full_org_member.check_repository_permissions_match(@terraform_files) == false
+        if full_org_member.check_repository_permissions_match(@terraform_files)
           # Where collaborator has difference in repository permission, create a PR using GitHub permission
           collaborator_permission_pull_requests(full_org_member.login, full_org_member.repository_permission_mismatches)
         end
