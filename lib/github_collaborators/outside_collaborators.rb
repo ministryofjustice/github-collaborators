@@ -269,24 +269,30 @@ class GithubCollaborators
       expired_collaborators = all_collaborators.select { |collaborator| !is_collaborator_org_member(collaborator.login) }
 
       if expired_collaborators.length > 0
-        # Raise Slack message
-        GithubCollaborators::SlackNotifier.new(GithubCollaborators::Expired.new, expired_collaborators).post_slack_message
-
         # Remove collaborators from the files and raise PRs
-        create_remove_collaborator_pull_requests(expired_collaborators)
+        removed_collaborators = create_remove_collaborator_pull_requests(expired_collaborators)
+
+        if removed_collaborators.length > 0
+          # Raise Slack message
+          GithubCollaborators::SlackNotifier.new(GithubCollaborators::Expired.new, removed_collaborators).post_slack_message
+        end
       end
     end
 
     def remove_expired_full_org_members(all_collaborators)
       logger.debug "remove_expired_full_org_members"
+
       # Find the collaborators that have full org membership
       full_org_collaborators = all_collaborators.select { |collaborator| is_collaborator_org_member(collaborator.login) }
-      if full_org_collaborators.length > 0
-        # Raise Slack message
-        GithubCollaborators::SlackNotifier.new(GithubCollaborators::FullOrgMemberExpired.new, full_org_collaborators).post_slack_message
 
+      if full_org_collaborators.length > 0
         # Remove full org member from the files and raise PRs
-        create_remove_collaborator_pull_requests(full_org_collaborators)
+        removed_collaborators = create_remove_collaborator_pull_requests(full_org_collaborators)
+
+        if removed_collaborators.length > 0
+          # Raise Slack message
+          GithubCollaborators::SlackNotifier.new(GithubCollaborators::FullOrgMemberExpired.new, removed_collaborators).post_slack_message
+        end
       end
     end
 
@@ -297,11 +303,14 @@ class GithubCollaborators
       # Find the collaborators that have full org membership
       full_org_collaborators = all_collaborators.select { |collaborator| is_collaborator_org_member(collaborator.login) }
       if full_org_collaborators.length > 0
-        # Raise Slack message
-        GithubCollaborators::SlackNotifier.new(GithubCollaborators::FullOrgMemberExpiresSoon.new, full_org_collaborators).post_slack_message
 
         # For the full Org members extend the review date in the collaborator files and raise PRs
-        create_extend_date_pull_requests(full_org_collaborators)
+        extended_collaborators = create_extend_date_pull_requests(full_org_collaborators)
+
+        if extended_collaborators.length > 0
+          # Raise Slack message
+          GithubCollaborators::SlackNotifier.new(GithubCollaborators::FullOrgMemberExpiresSoon.new, extended_collaborators).post_slack_message
+        end
       end
     end
 
@@ -328,12 +337,14 @@ class GithubCollaborators
       collaborators = all_collaborators.select { |collaborator| !is_collaborator_org_member(collaborator.login) }
 
       if collaborators.length > 0
-
-        # Raise Slack message
-        GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, collaborators).post_slack_message
-
         # Extend the date in the collaborator files and raise PRs
-        create_extend_date_pull_requests(collaborators)
+
+        extended_collaborators = create_extend_date_pull_requests(collaborators)
+
+        if extended_collaborators.length > 0
+          # Raise Slack message
+          GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, extended_collaborators).post_slack_message
+        end
       end
     end
 
@@ -412,6 +423,9 @@ class GithubCollaborators
 
     def create_extend_date_pull_requests(collaborators_who_expire_soon)
       logger.debug "create_extend_date_pull_requests"
+
+      collaborators_in_slack_message = []
+
       # Put collaborators into groups to commit multiple files per branch
       collaborator_groups = collaborators_who_expire_soon.group_by { |collaborator| collaborator.login }
       collaborator_groups.each do |group|
@@ -433,6 +447,7 @@ class GithubCollaborators
             extend_date_in_file(collaborator.repository, login)
             file_name = "terraform/#{terraform_file_name}"
             edited_files.push(file_name)
+            collaborators_in_slack_message.push(collaborator)
           end
         end
 
@@ -457,10 +472,14 @@ class GithubCollaborators
           @repo_pull_requests.push(pull_request)
         end
       end
+      collaborators_in_slack_message
     end
 
     def create_remove_collaborator_pull_requests(expired_collaborators)
       logger.debug "create_remove_collaborator_pull_requests"
+
+      collaborators_in_slack_message = []
+
       # Put collaborators into groups to commit multiple files per branch
       collaborators_groups = expired_collaborators.group_by { |collaborator| collaborator.login }
       collaborators_groups.each do |group|
@@ -482,6 +501,7 @@ class GithubCollaborators
             file_name = "terraform/#{terraform_file_name}"
             remove_collaborator_from_file(collaborator.repository, login)
             edited_files.push(file_name)
+            collaborators_in_slack_message.push(collaborator)
           end
         end
 
@@ -506,6 +526,7 @@ class GithubCollaborators
           @repo_pull_requests.push(pull_request)
         end
       end
+      collaborators_in_slack_message
     end
 
     def does_pr_already_exist(terraform_file_name, title_message)
