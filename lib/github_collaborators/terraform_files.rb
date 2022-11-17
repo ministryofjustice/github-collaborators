@@ -2,7 +2,7 @@ class GithubCollaborators
   class TerraformBlock
     include Logging
     attr_reader :username, :permission, :reason, :added_by, :review_after, :email, :name, :org
-    attr_writer :review_after
+    attr_writer :review_after, :permission
 
     def initialize
       logger.debug "initialize"
