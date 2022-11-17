@@ -165,6 +165,10 @@ class GithubCollaborators
       # Get the all org members team repositories
       all_org_members_team_repositories = get_all_org_members_team_repositories
 
+      # Some Terraform collaborators have been upgraded to full organization members,
+      # this should find them and add them to the organisation object
+      @collaborators.each { |collaborator| is_collaborator_org_member(collaborator.login) }
+
       # Collect the GitHub and Terraform repositories for each full org member
       @organization.collaborators_and_org_members.each do |collaborator|
         full_org_member = GithubCollaborators::FullOrgMember.new(collaborator)
