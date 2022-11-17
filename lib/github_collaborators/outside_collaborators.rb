@@ -296,19 +296,6 @@ class GithubCollaborators
       end
     end
 
-    def remove_expired_full_org_members(all_collaborators)
-      logger.debug "remove_expired_full_org_members"
-      # Find the collaborators that have full org membership
-      full_org_collaborators = all_collaborators.select { |collaborator| is_collaborator_org_member(collaborator.login) }
-      if full_org_collaborators.length > 0
-        # Raise Slack message
-        GithubCollaborators::SlackNotifier.new(GithubCollaborators::FullOrgMemberExpired.new, full_org_collaborators).post_slack_message
-
-        # Remove full org member from the files and raise PRs
-        create_remove_collaborator_pull_requests(full_org_collaborators)
-      end
-    end
-
     # Extend the review date for collaborators that are defined in Terraform files
     # but are all full org members
     def extend_full_org_member_review_date(all_collaborators)
