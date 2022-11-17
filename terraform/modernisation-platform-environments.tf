@@ -5,132 +5,112 @@ module "modernisation-platform-environments" {
     {
       github_user  = "hullcoastie"
       permission   = "push"
-      name         = "John Broom"                                                                                  #  The name of the person behind github_user
-      email        = "John.Broom@roctechnologies.com"                                                              #  Their email address
-      org          = "Roc Technologies"                                                                            #  The organisation/entity they belong to
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform" #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"                  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2022-11-01"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "John Broom"
+      email        = "John.Broom@roctechnologies.com"
+      org          = "Roc Technologies"
+      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2022-11-01"
     },
     {
       github_user  = "jamesashton-roc"
       permission   = "push"
-      name         = "James Ashton"                                                                                #  The name of the person behind github_user
-      email        = "James.Ashton@roctechnologies.com"                                                            #  Their email address
-      org          = "Roc Technologies"                                                                            #  The organisation/entity they belong to
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform" #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"                  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2022-11-01"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
-    },
-    {
-      github_user  = "MMBroc"
-      permission   = "push"
-      name         = "Michael Bullen"                                                                              #  The name of the person behind github_user
-      email        = "Michael.Bullen@roctechnologies.com"                                                          #  Their email address
-      org          = "Roc Technologies"                                                                            #  The organisation/entity they belong to
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform" #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"                  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2022-11-01"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "James Ashton"
+      email        = "James.Ashton@roctechnologies.com"
+      org          = "Roc Technologies"
+      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2022-11-01"
     },
     {
       github_user  = "md-roc"
       permission   = "push"
-      name         = "Mittul Datani"                                                                               #  The name of the person behind github_user
-      email        = "Mittul.Datani@roctechnologies.com"                                                           #  Their email address
-      org          = "Roc Technologies"                                                                            #  The organisation/entity they belong to
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform" #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"                  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2022-11-01"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Mittul Datani"
+      email        = "Mittul.Datani@roctechnologies.com"
+      org          = "Roc Technologies"
+      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2022-11-01"
     },
     {
       github_user  = "craigygordon"
       permission   = "push"
-      name         = "Craig Gordon"                                                                                #  The name of the person behind github_user
-      email        = "Craig.Gordon@roctechnologies.com"                                                            #  Their email address
-      org          = "Roc Technologies"                                                                            #  The organisation/entity they belong to
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform" #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"                  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2022-11-01"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Craig Gordon"
+      email        = "Craig.Gordon@roctechnologies.com"
+      org          = "Roc Technologies"
+      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2022-11-01"
     },
     {
       github_user  = "andylandroc"
       permission   = "push"
-      name         = "Andy Land"                                                                                   #  The name of the person behind github_user
-      email        = "Andy.Land@roctechnologies.com"                                                               #  Their email address
-      org          = "Roc Technologies"                                                                            #  The organisation/entity they belong to
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform" #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"                  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2022-11-01"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Andy Land"
+      email        = "Andy.Land@roctechnologies.com"
+      org          = "Roc Technologies"
+      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2022-11-01"
     },
     {
       github_user  = "trudley"
       permission   = "push"
-      name         = "Tom Rudley"                                                                                  #  The name of the person behind github_user
-      email        = "Tom.Rudley@roctechnologies.com"                                                              #  Their email address
-      org          = "Roc Technologies"                                                                            #  The organisation/entity they belong to
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform" #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"                  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2022-11-01"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Tom Rudley"
+      email        = "Tom.Rudley@roctechnologies.com"
+      org          = "Roc Technologies"
+      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2022-11-01"
     },
     {
       github_user  = "helenvickers-roc"
       permission   = "push"
-      name         = "Helen Vickers"                                                                               #  The name of the person behind github_user
-      email        = "Helen.Vickers@roctechnologies.com"                                                           #  Their email address
-      org          = "Roc Technologies"                                                                            #  The organisation/entity they belong to
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform" #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"                  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2022-11-01"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
-    },
-    {
-      github_user  = "Tom-Whi"
-      permission   = "push"
-      name         = "Tom Whiteley"                                                                                #  The name of the person behind github_user
-      email        = "Tom.Whiteley@roctechnologies.com"                                                            #  Their email address
-      org          = "Roc Technologies"                                                                            #  The organisation/entity they belong to
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform" #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"                  #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2022-11-01"                                                                                  #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Helen Vickers"
+      email        = "Helen.Vickers@roctechnologies.com"
+      org          = "Roc Technologies"
+      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2022-11-01"
     },
     {
       github_user  = "agilisys-agardner"
       permission   = "push"
-      name         = "Andrew Gardener"                                                            #  The name of the person behind github_user
-      email        = "andrew.gardner@agilisys.co.uk"                                              #  Their email address
-      org          = "Agilisys"                                                                   #  The organisation/entity they belong to
-      reason       = "Get access to data-and-insights-hub on Modernisation Platform"              #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2023-02-23"                                                                 #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Andrew Gardener"
+      email        = "andrew.gardner@agilisys.co.uk"
+      org          = "Agilisys"
+      reason       = "Get access to data-and-insights-hub on Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2023-02-23"
     },
     {
       github_user  = "umeshc-roy"
       permission   = "push"
-      name         = "Umesh Ray"                                                                  #  The name of the person behind github_user
-      email        = "Umesh.Ray@lumen.com"                                                        #  Their email address
-      org          = "Lumen"                                                                      #  The organisation/entity they belong to
-      reason       = "Get access to PPUD on Modernisation Platform"                               #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2023-11-04"                                                                 #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Umesh Ray"
+      email        = "Umesh.Ray@lumen.com"
+      org          = "Lumen"
+      reason       = "Get access to PPUD on Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2023-11-04"
     },
     {
       github_user  = "pankaj-pant-lumen"
       permission   = "push"
-      name         = "Pankaj Pant"                                                                #  The name of the person behind github_user
-      email        = "Pankaj.Pant@lumen.com"                                                      #  Their email address
-      org          = "Lumen"                                                                      #  The organisation/entity they belong to
-      reason       = "Get access to PPUD on Modernisation Platform"                               #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2023-11-04"                                                                 #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Pankaj Pant"
+      email        = "Pankaj.Pant@lumen.com"
+      org          = "Lumen"
+      reason       = "Get access to PPUD on Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2023-11-04"
     },
     {
       github_user  = "larnal-lumen"
       permission   = "push"
-      name         = "Luis Martinez Arnal"                                                        #  The name of the person behind github_user
-      email        = "Luis.MartinezArnal@lumen.com"                                               #  Their email address
-      org          = "Lumen"                                                                      #  The organisation/entity they belong to
-      reason       = "Get access to PPUD on Modernisation Platform"                               #  Why is this person being granted access?
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk" #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2023-11-04"                                                                 #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
-    }
+      name         = "Luis Martinez Arnal"
+      email        = "Luis.MartinezArnal@lumen.com"
+      org          = "Lumen"
+      reason       = "Get access to PPUD on Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2023-11-04"
+    },
   ]
 }
