@@ -13,16 +13,6 @@ module "yjaf-pnomis" {
       review_after = "2022-12-13"
     },
     {
-      github_user  = "VasilDimitrov22"
-      permission   = "push"
-      name         = "Vasil Dimitrov"
-      email        = "vasil.dimitrov@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "dev needs access to make app changes"
-      added_by     = "Joanna Harvey <joanna.harvey@necsws.com>"
-      review_after = "2022-08-04"
-    },
-    {
       github_user  = "ttipler"
       permission   = "admin"
       name         = "Thomas Tipler"
