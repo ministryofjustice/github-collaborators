@@ -16,6 +16,12 @@ class GithubCollaborators
       @missing_repositories = []
       @excluded_repositories = []
       @repository_permission_mismatches = []
+      @removed_from_repositories  = []
+    end
+
+    def record_removed_from_repository(repository_name)
+      loggin.debug "record_removed_from_repository"
+      @removed_from_repositories.push(repository_name)
     end
 
     # Check whether a collaborator is attached to no repositories
@@ -112,18 +118,22 @@ class GithubCollaborators
         # Find the matching Terraform file
         terraform_files.terraform_files.each do |terraform_file|
 
-          if terraform_file.filename == GithubCollaborators.tf_safe(github_repository_name)
+          # Check if file has already been removed by the application
+          if !@removed_from_repositories.include?(terraform_file)
 
-            # Get the github permission for that repository
-            github_permission = get_repository_permission(github_repository_name)
+            if terraform_file.filename == GithubCollaborators.tf_safe(github_repository_name)
 
-            # Get the permission for the Terraform file
-            terraform_permission = terraform_file.get_collaborator_permission(login)
+              # Get the github permission for that repository
+              github_permission = get_repository_permission(github_repository_name)
 
-            if github_permission != terraform_permission
-              permission_mismatch = true
-              # Store values as a hash like this { :permission => "value", :repository_name => "repo_name" }
-              @repository_permission_mismatches.push({ :permission => "#{github_permission}", :repository_name => "#{github_repository_name}" })
+              # Get the permission for the Terraform file
+              terraform_permission = terraform_file.get_collaborator_permission(login)
+
+              if github_permission != terraform_permission
+                permission_mismatch = true
+                # Store values as a hash like this { :permission => "value", :repository_name => "repo_name" }
+                @repository_permission_mismatches.push({ :permission => "#{github_permission}", :repository_name => "#{github_repository_name}" })
+              end
             end
           end
         end

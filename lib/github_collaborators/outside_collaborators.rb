@@ -28,6 +28,8 @@ class GithubCollaborators
 
       # An array to store collaborators login names that are defined in Terraform but are not on GitHub
       @collaborators_missing_on_github = []
+
+      @full_org_members = get_full_org_members
     end
 
     # Entry point from Ruby script, keep the order as-is the compare function will ne
@@ -197,7 +199,7 @@ class GithubCollaborators
       odd_full_org_members = []
 
       # Run full org member tests
-      get_full_org_members.each do |full_org_member|
+      @full_org_members.each do |full_org_member|
         # Compare the GitHub and Terraform repositories
         if full_org_member.do_repositories_match == false
           # Where collaborator is not defined in Terraform, create a PR with collaborator added to those files
@@ -516,6 +518,11 @@ class GithubCollaborators
             remove_collaborator_from_file(collaborator.repository, login)
             edited_files.push(file_name)
             collaborators_in_slack_message.push(collaborator)
+            full_org_member = @full_org_members.select { |full_org_member| full_org_member.login == login }
+            repository_name = File.basename(terraform_file_name, ".tf")
+            if !full_org_member.nil?
+              full_org_member.record_removed_from_repository(repository_name)
+            end
           end
         end
 
