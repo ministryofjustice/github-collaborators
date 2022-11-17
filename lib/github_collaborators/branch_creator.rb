@@ -13,7 +13,7 @@ class GithubCollaborators
       if POST_TO_GH
         @branch_name = branch_name
         @g.config("user.name", "Operations Engineering Bot")
-        @g.config("user.email", "dummy@email.com")
+        @g.config("user.email", "github-actions[bot]@users.noreply.github.com")
         @g.checkout(branch_name, new_branch: true, start_point: "main")
       else
         logger.debug "Didn't create git branch #{branch_name}, this is a dry run"
