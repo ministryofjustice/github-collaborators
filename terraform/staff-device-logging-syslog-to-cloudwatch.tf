@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "staff-device-logging-syslog-to-cloudwatch" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "staff-device-logging-syslog-to-cloudwatch"
   collaborators = [
     {
       github_user  = "emileswarts"

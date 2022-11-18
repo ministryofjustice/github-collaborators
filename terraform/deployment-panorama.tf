@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "deployment-panorama" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "deployment-panorama"
   collaborators = [
     {
       github_user  = "emileswarts"

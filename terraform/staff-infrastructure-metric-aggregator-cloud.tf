@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "staff-infrastructure-metric-aggregator-cloud" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "staff-infrastructure-metric-aggregator-cloud"
   collaborators = [
     {
       github_user  = "emileswarts"

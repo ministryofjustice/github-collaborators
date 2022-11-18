@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "aws-ta-testing" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "aws-ta-testing"
   collaborators = [
     {
       github_user  = "emileswarts"

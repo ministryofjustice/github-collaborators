@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "staff-infrastructure-monitoring-blackbox-exporter" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "staff-infrastructure-monitoring-blackbox-exporter"
   collaborators = [
     {
       github_user  = "emileswarts"

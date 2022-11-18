@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "cloud-operations-slack-bot" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "cloud-operations-slack-bot"
   collaborators = [
     {
       github_user  = "emileswarts"

@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "aws-trusted-advisor-to-github-issues" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "aws-trusted-advisor-to-github-issues"
   collaborators = [
     {
       github_user  = "emileswarts"

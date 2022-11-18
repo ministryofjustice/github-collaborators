@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "deployment-GlobalProtect-ASG" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "deployment-GlobalProtect-ASG"
   collaborators = [
     {
       github_user  = "emileswarts"

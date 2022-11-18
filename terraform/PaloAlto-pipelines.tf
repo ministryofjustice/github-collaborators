@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "PaloAlto-pipelines" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "PaloAlto-pipelines"
   collaborators = [
     {
       github_user  = "emileswarts"

@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "nvvs-devops" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "nvvs-devops"
   collaborators = [
     {
       github_user  = "emileswarts"

@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "staff-external-dynamic-list" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "staff-external-dynamic-list"
   collaborators = [
     {
       github_user  = "emileswarts"

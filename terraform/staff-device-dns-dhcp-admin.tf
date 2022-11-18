@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "staff-device-dns-dhcp-admin" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "staff-device-dns-dhcp-admin"
   collaborators = [
     {
       github_user  = "emileswarts"

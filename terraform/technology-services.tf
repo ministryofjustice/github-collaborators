@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "technology-services" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "technology-services"
   collaborators = [
     {
       github_user  = "emileswarts"

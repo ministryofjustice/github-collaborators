@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "deployment-SOP-OCI-Access" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "deployment-SOP-OCI-Access"
   collaborators = [
     {
       github_user  = "emileswarts"

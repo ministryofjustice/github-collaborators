@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "staff-infrastructure-monitoring-app-reachability" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "staff-infrastructure-monitoring-app-reachability"
   collaborators = [
     {
       github_user  = "emileswarts"

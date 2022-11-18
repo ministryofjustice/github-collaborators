@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "deployment-aws-noc" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "deployment-aws-noc"
   collaborators = [
     {
       github_user  = "emileswarts"

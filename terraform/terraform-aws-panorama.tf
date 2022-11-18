@@ -1,6 +1,6 @@
-module "staff-device-shared-services-infrastructure" {
+module "terraform-aws-panorama" {
   source     = "./modules/repository-collaborators"
-  repository = "staff-device-shared-services-infrastructure"
+  repository = "terraform-aws-panorama"
   collaborators = [
     {
       github_user  = "emileswarts"
