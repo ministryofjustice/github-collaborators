@@ -20,7 +20,7 @@ class GithubCollaborators
     end
 
     def record_removed_from_repository(repository_name)
-      loggin.debug "record_removed_from_repository"
+      logger.debug "record_removed_from_repository"
       @removed_from_repositories.push(repository_name)
     end
 
