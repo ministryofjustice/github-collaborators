@@ -5,22 +5,22 @@ module "staff-device-management-ios-configuration" {
     {
       github_user  = "JazJax"
       permission   = "admin"
-      name         = "Jasper Jackson"               
-      email        = "jasper.jackson@madetech.com"  
-      org          = "MadeTech"                     
-      reason       = "VICTOR product development"   
+      name         = "Jasper Jackson"
+      email        = "jasper.jackson@madetech.com"
+      org          = "MadeTech"
+      reason       = "VICTOR product development"
       added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2022-12-31"                   
+      review_after = "2022-12-31"
     },
     {
       github_user  = "BingliuMT"
       permission   = "admin"
-      name         = "Bingjie Liu"                  
-      email        = "bingjie.liu@madetech.com"     
-      org          = "MadeTech"                     
-      reason       = "VICTOR product development"   
+      name         = "Bingjie Liu"
+      email        = "bingjie.liu@madetech.com"
+      org          = "MadeTech"
+      reason       = "VICTOR product development"
       added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2022-12-31"                   
+      review_after = "2022-12-31"
     }
   ]
 }

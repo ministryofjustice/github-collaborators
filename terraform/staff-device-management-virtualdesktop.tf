@@ -5,22 +5,22 @@ module "staff-device-management-virtualdesktop" {
     {
       github_user  = "VinceThompson"
       permission   = "push"
-      name         = "Vince Thompson"               
+      name         = "Vince Thompson"
       email        = "vthompson@contentandcloud.com"
-      org          = "Content and Cloud"            
-      reason       = "PTTP Tech Team"               
+      org          = "Content and Cloud"
+      reason       = "PTTP Tech Team"
       added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2022-12-31"                   
+      review_after = "2022-12-31"
     },
     {
       github_user  = "BenSnapeCC"
       permission   = "push"
-      name         = "Ben Snape"                    
+      name         = "Ben Snape"
       email        = "ben.snape@contentandcloud.com"
-      org          = "Content and Cloud"            
-      reason       = "PTTP Tech Team"               
+      org          = "Content and Cloud"
+      reason       = "PTTP Tech Team"
       added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2022-12-31"                   
+      review_after = "2022-12-31"
     }
   ]
 }

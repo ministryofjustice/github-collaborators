@@ -5,12 +5,12 @@ module "sharepoint-intranet-support" {
     {
       github_user  = "dkardokas"
       permission   = "push"
-      name         = "Dominykas Kardokas"                                          
-      email        = "Dominykas.Kardokas@justice.gov.uk"                           
-      org          = "Triad Group PLC"                                             
+      name         = "Dominykas Kardokas"
+      email        = "Dominykas.Kardokas@justice.gov.uk"
+      org          = "Triad Group PLC"
       reason       = "Development of custom sharepoint workflows and configuration"
-      added_by     = "Ian Anderson <ian.anderson@digital.justice.gov.uk>"          
-      review_after = "2022-10-31"                                                  
+      added_by     = "Ian Anderson <ian.anderson@digital.justice.gov.uk>"
+      review_after = "2022-10-31"
     },
   ]
 }

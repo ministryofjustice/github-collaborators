@@ -7,10 +7,10 @@ module "dso-infra-azure-ad" {
       permission   = "admin"
       name         = "Simon Givan"
       email        = "s.givan@kainos.com"
-      org          = "Kainos"                                          
+      org          = "Kainos"
       reason       = "Approved by DSO team to add new users into Azure"
       added_by     = "Jake Mulley <jake.mulley@digital.justice.gov.uk>"
-      review_after = "2022-12-31"                                      
+      review_after = "2022-12-31"
     },
   ]
 }
