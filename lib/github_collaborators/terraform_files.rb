@@ -92,6 +92,18 @@ class GithubCollaborators
       @review_after = the_data["review_after"][0]
       @repositories = the_data["repositories"]
     end
+
+    def copy_block(block)
+      logger.debug "copy_block"
+      @username = block.username
+      @permission = block.permission
+      @reason = block.reason
+      @added_by = block.added_by
+      @review_after = block.review_after
+      @email = block.email
+      @name = block.name
+      @org = block.org
+    end
   end
 
   class TerraformFile
@@ -105,6 +117,8 @@ class GithubCollaborators
       @file_path = "terraform/#{GithubCollaborators.tf_safe(@filename)}.tf"
       @terraform_blocks = []
       @terraform_file_data = []
+      @terraform_modified_blocks = []
+      @add_removed_terraform_blocks = []
     end
 
     # This is not used, keeping it, in case
@@ -113,6 +127,20 @@ class GithubCollaborators
       block = GithubCollaborators::TerraformBlock.new
       block.add_collaborator_data(collaborator)
       @terraform_blocks.push(block)
+      @add_removed_terraform_blocks.push({ :added => true, :removed => false, :block => terraform_block.clone, :index => @terraform_blocks.index(block) })
+    end
+
+    def revert_terraform_blocks
+      logger.debug "revert_terraform_blocks"
+      # Revert matching Terraform blocks with the original values
+      @terraform_modified_blocks.each do |original_block|
+        @terraform_blocks.each do |terraform_block|
+          if terraform_block.username == original_block.username
+            terraform_block.copy_block(original_block)
+          end
+        end
+      end
+      @terraform_modified_blocks.clear
     end
 
     def add_org_member_collaborator(login)
@@ -134,6 +162,7 @@ class GithubCollaborators
       logger.debug "extend_review_date"
       @terraform_blocks.each do |terraform_block|
         if terraform_block.username == collaborator_name
+          @terraform_modified_blocks.push(terraform_block.clone)
           terraform_block.review_after = (Date.parse(terraform_block.review_after) + 180).to_s
         end
       end
@@ -142,7 +171,26 @@ class GithubCollaborators
     # Remove collaborator from a Terraform file
     def remove_collaborator(collaborator_name)
       logger.debug "remove_collaborator"
-      @terraform_blocks.delete_if { |block| block.username == collaborator_name }
+      @terraform_blocks.each do |terraform_block|
+        if terraform_block.username == collaborator_name
+          index = @terraform_blocks.index(terraform_block)
+          @add_removed_terraform_blocks.push({ :added => false, :removed => true, :block => terraform_block.clone, :index => index })
+          @terraform_blocks.delete_at(index)
+        end
+      end
+    end
+
+    def restore_terraform_blocks
+      logger.debug "restore_terraform_blocks"
+      # Restore Terraform blocks to original state
+      @add_removed_terraform_blocks.each do |original_block|
+        if original_block[:removed]
+          @terraform_blocks.insert(original_block[:index], original_block[:block])
+        elsif original_block[:added]
+          @terraform_blocks.delete_at(original_block[:index])
+        end
+      end
+      @add_removed_terraform_blocks.clear
     end
 
     # Write Terraform block/s to a single Terraform file
@@ -170,6 +218,7 @@ class GithubCollaborators
       logger.debug "get_collaborator_permission"
       @terraform_blocks.each do |terraform_block|
         if terraform_block.username == collaborator_name
+          @terraform_modified_blocks.push(terraform_block.clone)
           terraform_block.permission = permission
         end
       end

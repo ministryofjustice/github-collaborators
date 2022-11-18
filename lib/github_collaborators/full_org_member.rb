@@ -16,12 +16,12 @@ class GithubCollaborators
       @missing_repositories = []
       @excluded_repositories = []
       @repository_permission_mismatches = []
-      @removed_from_repositories  = []
+      @ignore_repositories = []
     end
 
-    def record_removed_from_repository(repository_name)
-      logger.debug "record_removed_from_repository"
-      @removed_from_repositories.push(repository_name)
+    def ignore_repository(repository_name)
+      logger.debug "ignore_repository"
+      @ignore_repositories.push(repository_name)
     end
 
     # Check whether a collaborator is attached to no repositories
@@ -118,8 +118,9 @@ class GithubCollaborators
         # Find the matching Terraform file
         terraform_files.terraform_files.each do |terraform_file|
 
-          # Check if file has already been removed by the application
-          if !@removed_from_repositories.include?(terraform_file)
+          # Skip this iteration if file name is in the array, the array 
+          # contains repositories / Terraform files that are not on the GitHub yet
+          if !@ignore_repositories.include?(terraform_file.filename)
 
             if terraform_file.filename == GithubCollaborators.tf_safe(github_repository_name)
 

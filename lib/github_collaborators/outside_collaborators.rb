@@ -406,6 +406,7 @@ class GithubCollaborators
         if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
           terraform_file.extend_review_date(login)
           terraform_file.write_to_file
+          terraform_file.revert_terraform_blocks
         end
       end
     end
@@ -416,6 +417,7 @@ class GithubCollaborators
         if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
           terraform_file.remove_collaborator(login)
           terraform_file.write_to_file
+          terraform_file.restore_terraform_blocks
         end
       end
     end
@@ -426,6 +428,7 @@ class GithubCollaborators
         if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
           terraform_file.change_collaborator_permission(collaborator_name, permission)
           terraform_file.write_to_file
+          terraform_file.revert_terraform_blocks
         end
       end
     end
@@ -437,6 +440,7 @@ class GithubCollaborators
           # Add the collaborator to the file
           terraform_file.add_org_member_collaborator(login)
           terraform_file.write_to_file
+          terraform_file.restore_terraform_blocks
         end
       end
     end
@@ -527,7 +531,6 @@ class GithubCollaborators
             @full_org_members.each do |full_org_member|
               if full_org_member.login == login
                 repository_name = File.basename(terraform_file_name, ".tf")
-                full_org_member.record_removed_from_repository(repository_name)
               end
             end
           end
@@ -644,6 +647,15 @@ class GithubCollaborators
         check_repository_file_exist(repository_name)
         add_collaborator_to_file(repository_name, collaborator_name)
         edited_files.push("terraform/#{repository_name}.tf")
+        
+        # Find the matching full_org_member in the array
+        @full_org_members.each do |full_org_member|
+          if full_org_member.login == collaborator_name
+            # Add repository name to this array because related Terraform file is not on the main 
+            # branch on GitHub, this array will exclude checking for this file name later on
+            full_org_member.ignore_repository(repository_name)
+          end
+        end
       end
 
       if edited_files.length > 0
