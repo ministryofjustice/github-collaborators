@@ -73,16 +73,6 @@ module "modernisation-platform-environments" {
       review_after = "2022-11-01"
     },
     {
-      github_user  = "helenvickers-roc"
-      permission   = "push"
-      name         = "Helen Vickers"
-      email        = "Helen.Vickers@roctechnologies.com"
-      org          = "Roc Technologies"
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2022-11-01"
-    },
-    {
       github_user  = "Tom-Whi"
       permission   = "push"
       name         = "Tom Whiteley"
@@ -131,6 +121,6 @@ module "modernisation-platform-environments" {
       reason       = "Get access to PPUD on Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
       review_after = "2023-11-04"
-    }
+    },
   ]
 }
