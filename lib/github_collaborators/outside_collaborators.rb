@@ -385,7 +385,7 @@ class GithubCollaborators
             collaborators_for_slack_message.push(collaborator)
 
             # If collaborator is a full org member, record have removed that file for later on
-            @full_org_members.each do |full_org_member|
+            @organization.full_org_members.each do |full_org_member|
               if full_org_member.login == login
                 repository_name = File.basename(terraform_file_name, ".tf")
               end
@@ -596,8 +596,7 @@ class GithubCollaborators
 
     def add_new_pull_request(title, edited_files)
       logger.debug "add_new_pull_request"
-      pull_requests.push( { :title => "#{title}", :files => files })
-      @repo_pull_requests.push(pull_request)
+      @repo_pull_requests.push( { :title => "#{title}", :files => edited_files })
     end
   end
 end
