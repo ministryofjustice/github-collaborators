@@ -131,6 +131,16 @@ module "modernisation-platform-environments" {
       reason       = "Get access to PPUD on Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
       review_after = "2023-11-04"
-    }
+    },
+    {
+      github_user  = "agilisys-agardner"
+      permission   = "push"
+      name         = ""
+      email        = ""
+      org          = ""
+      reason       = "Full Org member / collaborator missing from Terraform file"
+      added_by     = "opseng-bot@digital.justice.gov.uk"
+      review_after = "2023-02-19"
+    },
   ]
 }
