@@ -18,9 +18,10 @@ class GithubCollaborators
     end
 
     # This is called when a full org member / collaborator is missing from a Terraform file
-    def add_org_member_collaborator_data(collaborator_name)
+    def add_org_member_collaborator_data(collaborator_name, repository_permission)
       logger.debug "add_org_member_collaborator_data"
       @username = collaborator_name
+      @permission = repository_permission
       @reason = "Full Org member / collaborator missing from Terraform file"
       @added_by = "opseng-bot@digital.justice.gov.uk"
       review_date = (Date.today + 90).strftime("%Y-%m-%d")
@@ -143,10 +144,10 @@ class GithubCollaborators
       @terraform_modified_blocks.clear
     end
 
-    def add_org_member_collaborator(login)
+    def add_org_member_collaborator(login, repository_permission)
       logger.debug "add_org_member_collaborator"
       block = GithubCollaborators::TerraformBlock.new
-      block.add_org_member_collaborator_data(login)
+      block.add_org_member_collaborator_data(login, repository_permission)
       @terraform_blocks.push(block)
     end
 
@@ -390,6 +391,61 @@ class GithubCollaborators
         File.delete(path_to_file)
         @terraform_files.delete_if { |terraform_file| terraform_file.filename == empty_file_name }
       end
+    end
+
+    def extend_date_in_file(repository_name, login)
+      logger.debug "extend_date_in_file"
+      @terraform_files.each do |terraform_file|
+        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
+          terraform_file.extend_review_date(login)
+          terraform_file.write_to_file
+          terraform_file.revert_terraform_blocks
+        end
+      end
+    end
+
+    def remove_collaborator_from_file(repository_name, login)
+      logger.debug "remove_collaborator_from_file"
+      @terraform_files.each do |terraform_file|
+        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
+          terraform_file.remove_collaborator(login)
+          terraform_file.write_to_file
+          terraform_file.restore_terraform_blocks
+        end
+      end
+    end
+
+    def change_collaborator_permission_in_file(collaborator_name, repository_name, permission)
+      logger.debug "change_collaborator_permission_in_file"
+      @terraform_files.each do |terraform_file|
+        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
+          terraform_file.change_collaborator_permission(collaborator_name, permission)
+          terraform_file.write_to_file
+          terraform_file.revert_terraform_blocks
+        end
+      end
+    end
+
+    def add_collaborator_to_file(repository_name, login, repository_permission)
+      logger.debug "add_collaborator_to_file"
+      @terraform_files.each do |terraform_file|
+        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
+          terraform_file.add_org_member_collaborator(login, repository_permission)
+          terraform_file.write_to_file
+          terraform_file.restore_terraform_blocks
+        end
+      end
+    end
+
+    def get_empty_files
+      logger.debug "get_empty_files"
+      empty_files = []
+      @terraform_files.each do |terraform_file|
+        if terraform_file.terraform_blocks.length == 0
+          empty_files.push(terraform_file.filename)
+        end
+      end
+      empty_files
     end
 
     private

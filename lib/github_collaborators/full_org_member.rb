@@ -1,7 +1,7 @@
 class GithubCollaborators
   class FullOrgMember
     include Logging
-    attr_reader :login, :missing_repositories, :repository_permission_mismatches
+    attr_reader :login, :missing_from_repositories, :repository_permission_mismatches
 
     def initialize(login)
       logger.debug "initialize"
@@ -13,14 +13,14 @@ class GithubCollaborators
       # Store the repositories the collaborator is associated with in this array for Terraform files
       # This is updated by reading each Terraform file
       @terraform_repositories = []
-      @missing_repositories = []
+      @missing_from_repositories = []
       @excluded_repositories = []
       @repository_permission_mismatches = []
       @ignore_repositories = []
     end
 
-    def ignore_repository(repository_name)
-      logger.debug "ignore_repository"
+    def add_ignore_repository(repository_name)
+      logger.debug "add_ignore_repository"
       @ignore_repositories.push(repository_name)
     end
 
@@ -74,12 +74,12 @@ class GithubCollaborators
       if @github_repositories.length > 0 && @terraform_repositories.length == 0
         # GitHub repository exists and no Terraform files exists
         @github_repositories.each do |github_repository_name|
-          @missing_repositories.push(github_repository_name)
+          @missing_from_repositories.push(github_repository_name)
         end
       elsif @github_repositories.length == 0 && @terraform_repositories.length > 0
         # Terraform files exists but no GitHub repository exists
         @terraform_repositories.each do |terraform_repository_name|
-          @missing_repositories.push(terraform_repository_name)
+          @missing_from_repositories.push(terraform_repository_name)
         end
       else
         # Join the two arrays
@@ -90,19 +90,19 @@ class GithubCollaborators
           if @github_repositories.count(repository_name) == 0 ||
               @terraform_repositories.count(repository_name) == 0
             # Found a missing repository
-            @missing_repositories.push(repository_name)
+            @missing_from_repositories.push(repository_name)
           end
         end
 
         # Sort and filter any duplicates results
-        if @missing_repositories.length > 0
-          @missing_repositories.sort!
-          @missing_repositories.uniq!
+        if @missing_from_repositories.length > 0
+          @missing_from_repositories.sort!
+          @missing_from_repositories.uniq!
         end
       end
 
       # Result is based on any missing repositories
-      if @missing_repositories.length == 0
+      if @missing_from_repositories.length == 0
         return true
       end
       false
@@ -132,7 +132,7 @@ class GithubCollaborators
 
               if github_permission != terraform_permission
                 permission_mismatch = true
-                # Store values as a hash like this { :permission => "value", :repository_name => "repo_name" }
+                # Store values as a hash like this { :permission => "granted_permission", :repository_name => "repo_name" }
                 @repository_permission_mismatches.push({ :permission => "#{github_permission}", :repository_name => "#{github_repository_name}" })
               end
             end
