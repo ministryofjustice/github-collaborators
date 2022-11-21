@@ -103,7 +103,7 @@ class GithubCollaborators
       
       # See if collaborator already exists
       user_exists = false
-      @full_org_members.each |full_org_member|
+      @full_org_members.each do |full_org_member|
         if full_org_member.login == new_collaborator_login
           user_exists = true
         end

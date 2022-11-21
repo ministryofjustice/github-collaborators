@@ -14,15 +14,15 @@ class GithubCollaborators
 
     def initialize
       logger.debug "initialize"
-      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
     end
 
     def fetch_all_collaborators(repository)
       logger.debug "fetch_all_collaborators"
       end_cursor = nil
+      graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
       outside_collaborators = []
       loop do
-        response = @graphql.run_query(outside_collaborators_query(end_cursor, repository))
+        response = graphql.run_query(outside_collaborators_query(end_cursor, repository))
         json_data = JSON.parse(response)
         # Repos with no outside collaborators return an empty array
         break unless !json_data.dig("data", "organization", "repository", "collaborators", "edges").empty?

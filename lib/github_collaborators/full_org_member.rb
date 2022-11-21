@@ -5,7 +5,6 @@ class GithubCollaborators
 
     def initialize(login)
       logger.debug "initialize"
-      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
       @login = login
       # Store the repositories the collaborator is associated with in this array
       # This is updated by a query directly on the collaborator
@@ -43,9 +42,10 @@ class GithubCollaborators
     def get_full_org_member_repositories
       logger.debug "get_full_org_member_repositories"
       end_cursor = nil
+      graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
       loop do
         # Read which Github repositories the collaborator has access to
-        response = @graphql.run_query(full_org_member_query(end_cursor))
+        response = graphql.run_query(full_org_member_query(end_cursor))
         repositories = JSON.parse(response).dig("data", "user", "repositories", "edges")
         repositories.each do |repo|
           # Accept only ministryofjustice repositories

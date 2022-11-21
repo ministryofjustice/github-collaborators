@@ -28,16 +28,16 @@ class GithubCollaborators
 
     def initialize
       logger.debug "initialize"
-      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
     end
 
     def get_active_repositories
       logger.debug "get_active_repositories"
+      graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
       active_repositories = []
       ["public", "private", "internal"].each do |type|
         end_cursor = nil
         loop do
-          response = @graphql.run_query(repositories_query(end_cursor, type))
+          response = graphql.run_query(repositories_query(end_cursor, type))
           repositories = JSON.parse(response).dig("data", "search", "repos")
           repositories.reject { |r| r.dig("repo", "isDisabled") }
           repositories.reject { |r| r.dig("repo", "isLocked") }

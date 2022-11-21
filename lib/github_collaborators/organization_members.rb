@@ -15,18 +15,17 @@ class GithubCollaborators
 
     def initialize
       logger.debug "initialize"
-      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
       @org_members = get_all_organisation_members
     end
 
     private
-
     def get_all_organisation_members
       logger.debug "get_all_organisation_members"
       org_members = []
       end_cursor = nil
+      graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
       loop do
-        response = @graphql.run_query(organisation_members_query(end_cursor))
+        response = graphql.run_query(organisation_members_query(end_cursor))
         members = JSON.parse(response).dig("data", "organization", "membersWithRole", "edges")
         members.each do |member|
           org_members.push(GithubCollaborators::Member.new(member))

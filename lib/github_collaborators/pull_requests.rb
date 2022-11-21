@@ -22,9 +22,10 @@ class GithubCollaborators
       response = graphql.run_query(pull_request_query)
       data = JSON.parse(response).dig("data", "organization", "repository", "pullRequests")
 
+      # Iterate over the pull requests
       data.fetch("nodes").each do |pull_request_data|
-        title = data.fetch("title")
-        files = data.dig("files", "edges").map { |d| d.dig("node", "path") }
+        title = pull_request_data.fetch("title")
+        files = pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
         # Use a hash value like { :title => "", :files => list_of_file }
         pull_requests.push( { :title => "#{title}", :files => files })
       end
