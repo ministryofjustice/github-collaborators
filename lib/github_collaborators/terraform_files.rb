@@ -448,6 +448,22 @@ class GithubCollaborators
       empty_files
     end
 
+    def check_file_exists(repository_name)
+      logger.debug "check_file_exists"
+      file_exists = false
+      @terraform_files.each do |terraform_file|
+        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
+          file_exists = true
+          break
+        end
+      end
+
+      if file_exists == false
+        # It doesn't so create a new file
+        @terraform_files.create_new_file(repository_name)
+      end
+    end
+
     private
 
     # Return absolute paths for the Terraform files in the Terraform directory

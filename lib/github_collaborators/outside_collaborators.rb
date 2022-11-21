@@ -415,7 +415,7 @@ class GithubCollaborators
       repositories.each do |repository|
         # No pull request exists, modify the file/s
         repository_name = repository[:repository_name]
-        check_repository_file_exist(repository_name)
+        @terraform_files.check_file_exists(repository_name)
         @terraform_files.change_collaborator_permission_in_file(collaborator_name, repository_name, repository[:permission])
         edited_files.push("terraform/#{repository_name}.tf")
       end
@@ -442,7 +442,7 @@ class GithubCollaborators
       edited_files = []
       repositories.each do |repository_name|
         # No pull request exists, modify the file/s
-        check_repository_file_exist(repository_name)
+        @terraform_files.check_file_exists(repository_name)
         # Get the github permission for that repository
         repository_permission = collaborator.get_repository_permission(repository_name)
         @terraform_files.add_collaborator_to_file(repository_name, collaborator_name, repository_permission)
