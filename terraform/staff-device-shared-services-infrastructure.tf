@@ -31,6 +31,16 @@ module "staff-device-shared-services-infrastructure" {
       reason       = "MoJ Network Access Control Tech Team"
       added_by     = "justin.fielding@justice.gov.uk"
       review_after = "2022-01-01"
-    }
+    },
+    {
+      github_user  = "emileswarts"
+      permission   = "maintain"
+      name         = ""
+      email        = ""
+      org          = ""
+      reason       = "Full Org member / collaborator missing from Terraform file"
+      added_by     = "opseng-bot@digital.justice.gov.uk"
+      review_after = "2023-02-19"
+    },
   ]
 }
