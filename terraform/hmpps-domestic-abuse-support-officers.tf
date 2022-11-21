@@ -14,7 +14,7 @@ module "hmpps-domestic-abuse-support-officers" {
     },
     {
       github_user  = "miriamgo-civica"
-      permission   = "maintain"
+      permission   = "push"
       name         = "Miriam Gomez-Orozco"
       email        = "Miriam.Gomez-Orozco@civica.co.uk"
       org          = "Civica"
