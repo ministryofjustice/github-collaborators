@@ -74,7 +74,7 @@ module "bichard7-next-ui" {
     },
     {
       github_user  = "tomvaughan77"
-      permission   = "push"
+      permission   = "admin"
       name         = "Tom Vaughan"
       email        = "tom.vaughan@madetech.com"
       org          = "Madetech"
@@ -101,6 +101,6 @@ module "bichard7-next-ui" {
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
       review_after = "2022-12-31"
-    }
+    },
   ]
 }
