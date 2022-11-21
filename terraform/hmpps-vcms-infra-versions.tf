@@ -20,7 +20,7 @@ module "hmpps-vcms-infra-versions" {
       org          = "Civica"
       reason       = "Civica developer for Victims Case Management System"
       added_by     = "Probation WebOps team, probation-webops@digital.justice.gov.uk"
-      review_after = "2022-11-21"
+      review_after = "2023-05-20"
     },
   ]
 }
