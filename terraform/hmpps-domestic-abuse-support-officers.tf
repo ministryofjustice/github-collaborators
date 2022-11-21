@@ -54,7 +54,7 @@ module "hmpps-domestic-abuse-support-officers" {
     },
     {
       github_user  = "shaunthornburgh"
-      permission   = "maintain"
+      permission   = "push"
       name         = "Shaun Thornburgh"
       email        = "shaun.thornburgh@civica.co.uk"
       org          = "Civica"
