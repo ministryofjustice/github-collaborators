@@ -460,7 +460,7 @@ class GithubCollaborators
 
       if file_exists == false
         # It doesn't so create a new file
-        @terraform_files.create_new_file(repository_name)
+        create_new_file(repository_name)
       end
     end
 

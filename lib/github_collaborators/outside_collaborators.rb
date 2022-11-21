@@ -95,7 +95,7 @@ class GithubCollaborators
     def print_full_org_member_collaborators
       logger.debug "print_full_org_member_collaborators"
       logger.info "There are #{@organization.full_org_members.length} full Org member / outside collaborators."
-      @organization.full_org_members.each { |collaborator| logger.info "#{collaborator} is a full Org member / outside collaborator." }
+      @organization.full_org_members.each { |collaborator| logger.info "#{collaborator.login} is a full Org member / outside collaborator." }
     end
 
     # Find if full org members / collaborators are members of repositories but not defined in Terraform
