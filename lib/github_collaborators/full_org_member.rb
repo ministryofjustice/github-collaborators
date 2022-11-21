@@ -114,27 +114,22 @@ class GithubCollaborators
       permission_mismatch = false
       # Search through the collaborators repositories
       @github_repositories.each do |github_repository_name|
-
         # Find the matching Terraform file
         terraform_files.terraform_files.each do |terraform_file|
-
-          # Skip this iteration if file name is in the array, the array 
+          # Skip this iteration if file name is in the array, the array
           # contains repositories / Terraform files that are not on the GitHub yet
-          if !@ignore_repositories.include?(terraform_file.filename)
+          if !@ignore_repositories.include?(terraform_file.filename) && terraform_file.filename == GithubCollaborators.tf_safe(github_repository_name)
 
-            if terraform_file.filename == GithubCollaborators.tf_safe(github_repository_name)
+            # Get the github permission for that repository
+            github_permission = get_repository_permission(github_repository_name)
 
-              # Get the github permission for that repository
-              github_permission = get_repository_permission(github_repository_name)
+            # Get the permission for the Terraform file
+            terraform_permission = terraform_file.get_collaborator_permission(login)
 
-              # Get the permission for the Terraform file
-              terraform_permission = terraform_file.get_collaborator_permission(login)
-
-              if github_permission != terraform_permission
-                permission_mismatch = true
-                # Store values as a hash like this { :permission => "granted_permission", :repository_name => "repo_name" }
-                @repository_permission_mismatches.push({ :permission => "#{github_permission}", :repository_name => "#{github_repository_name}" })
-              end
+            if github_permission != terraform_permission
+              permission_mismatch = true
+              # Store values as a hash like this { :permission => "granted_permission", :repository_name => "repo_name" }
+              @repository_permission_mismatches.push({permission: github_permission.to_s, repository_name: github_repository_name.to_s})
             end
           end
         end
@@ -146,19 +141,17 @@ class GithubCollaborators
       logger.debug "get_repository_permission"
       url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/collaborators/#{@login}/permission"
       json = GithubCollaborators::HttpClient.new.fetch_json(url)
-      permission = ""
-      if JSON.parse(json).dig("user","permissions", "admin")
-        permission = "admin"
-      elsif JSON.parse(json).dig("user","permissions", "maintain")
-        permission = "maintain"
-      elsif JSON.parse(json).dig("user","permissions", "push")
-        permission = "push"
-      elsif JSON.parse(json).dig("user","permissions", "triage")
-        permission = "triage"
+      if JSON.parse(json).dig("user", "permissions", "admin")
+        "admin"
+      elsif JSON.parse(json).dig("user", "permissions", "maintain")
+        "maintain"
+      elsif JSON.parse(json).dig("user", "permissions", "push")
+        "push"
+      elsif JSON.parse(json).dig("user", "permissions", "triage")
+        "triage"
       else
-        permission = "pull"
+        "pull"
       end
-      permission
     end
 
     private

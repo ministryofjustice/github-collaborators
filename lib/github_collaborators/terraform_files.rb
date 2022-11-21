@@ -128,7 +128,7 @@ class GithubCollaborators
       block = GithubCollaborators::TerraformBlock.new
       block.add_collaborator_data(collaborator)
       @terraform_blocks.push(block)
-      @add_removed_terraform_blocks.push({ :added => true, :removed => false, :block => terraform_block.clone, :index => @terraform_blocks.index(block) })
+      @add_removed_terraform_blocks.push({added: true, removed: false, block: terraform_block.clone, index: @terraform_blocks.index(block)})
     end
 
     def revert_terraform_blocks
@@ -175,7 +175,7 @@ class GithubCollaborators
       @terraform_blocks.each do |terraform_block|
         if terraform_block.username == collaborator_name
           index = @terraform_blocks.index(terraform_block)
-          @add_removed_terraform_blocks.push({ :added => false, :removed => true, :block => terraform_block.clone, :index => index })
+          @add_removed_terraform_blocks.push({added: false, removed: true, block: terraform_block.clone, index: index})
           @terraform_blocks.delete_at(index)
         end
       end

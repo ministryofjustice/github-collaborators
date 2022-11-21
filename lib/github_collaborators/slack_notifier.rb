@@ -1,7 +1,6 @@
 class GithubCollaborators
   class SlackNotifier
     include Logging
-    POST_TO_SLACK = ENV.fetch("REALLY_POST_TO_SLACK", 0) == "1"
 
     def initialize(notification, collaborators)
       logger.debug "initialize"
@@ -15,7 +14,7 @@ class GithubCollaborators
       if @collaborators.length > 0
         payload = message_payload
 
-        if POST_TO_SLACK
+        if ENV.fetch("REALLY_POST_TO_SLACK", 0) == "1"
           if ENV.has_key? "SLACK_WEBHOOK_URL"
             HTTP.post(ENV["SLACK_WEBHOOK_URL"], body: JSON.dump(payload))
           else
@@ -30,7 +29,7 @@ class GithubCollaborators
     def message_payload
       logger.debug "message_payload"
       # Use the class singular or multiple message based on number of collaborators in list
-      notification_message = (@collaborators.length == 1) ? @notification.singular_message : @notification.multiple_message(@collaborators.length)
+      notification_message = @collaborators.length == 1 ? @notification.singular_message : @notification.multiple_message(@collaborators.length)
 
       # Create the lines that will be displayed in Slack for each collaborator per repo
       message_lines = @collaborators.map do |collaborator|

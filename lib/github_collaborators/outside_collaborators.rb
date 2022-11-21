@@ -323,7 +323,7 @@ class GithubCollaborators
         if edited_files.length > 0
           branch_name = "update-review-date-#{login}"
           type = "extend"
-          GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type) 
+          GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
           add_new_pull_request(pull_request_title, edited_files)
         end
       end
@@ -383,20 +383,13 @@ class GithubCollaborators
             @terraform_files.remove_collaborator_from_file(collaborator.repository, login)
             edited_files.push(file_name)
             collaborators_for_slack_message.push(collaborator)
-
-            # If collaborator is a full org member, record have removed that file for later on
-            @organization.full_org_members.each do |full_org_member|
-              if full_org_member.login == login
-                repository_name = File.basename(terraform_file_name, ".tf")
-              end
-            end
           end
         end
 
         if edited_files.length > 0
           branch_name = "remove-expired-collaborator-#{login}"
           type = "remove"
-          GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type) 
+          GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
           add_new_pull_request(pull_request_title, edited_files)
         end
       end
@@ -447,8 +440,8 @@ class GithubCollaborators
         repository_permission = collaborator.get_repository_permission(repository_name)
         @terraform_files.add_collaborator_to_file(repository_name, collaborator_name, repository_permission)
         edited_files.push("terraform/#{repository_name}.tf")
-     
-        # Add repository name to this array because related Terraform file is not on the main 
+
+        # Add repository name to this array because related Terraform file is not on the main
         # branch on GitHub, this array will exclude checking for this file name later on
         collaborator.add_ignore_repository(repository_name)
       end
@@ -457,7 +450,7 @@ class GithubCollaborators
         branch_name = "add-collaborator-#{collaborator_name}"
         type = "add"
         pull_request_title = ADD_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name
-        GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type) 
+        GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
       end
     end
@@ -596,7 +589,7 @@ class GithubCollaborators
 
     def add_new_pull_request(title, edited_files)
       logger.debug "add_new_pull_request"
-      @repo_pull_requests.push( { :title => "#{title}", :files => edited_files })
+      @repo_pull_requests.push({title: title.to_s, files: edited_files})
     end
   end
 end

@@ -62,7 +62,6 @@ class GithubCollaborators
       terraform_collaborators.each { |collaborator| is_collaborator_an_org_member(collaborator.login) }
 
       @full_org_members.each do |full_org_member|
-
         # Exclude the all-org-members team repositories
         full_org_member.add_excluded_repositories(all_org_members_team_repositories)
 
@@ -100,7 +99,7 @@ class GithubCollaborators
     # Checks and stores which collaborator have org membership
     def add_new_collaborator_and_org_member(new_collaborator_login)
       logger.debug "add_new_collaborator_and_org_member"
-      
+
       # See if collaborator already exists
       user_exists = false
       @full_org_members.each do |full_org_member|
@@ -108,7 +107,7 @@ class GithubCollaborators
           user_exists = true
         end
       end
-      
+
       # If it doesn't create a new collaborator
       if user_exists == false
         full_org_member = GithubCollaborators::FullOrgMember.new(new_collaborator_login)

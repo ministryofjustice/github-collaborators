@@ -2,7 +2,7 @@ class GithubCollaborators
   class PullRequests
     include Logging
     GITHUB_COLLABORATORS = "github-collaborators"
-    
+
     # Create pull request
     def create_pull_request(hash_body)
       logger.debug "create_pull_request"
@@ -27,7 +27,7 @@ class GithubCollaborators
         title = pull_request_data.fetch("title")
         files = pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
         # Use a hash value like { :title => "", :files => list_of_file }
-        pull_requests.push( { :title => "#{title}", :files => files })
+        pull_requests.push({title: title.to_s, files: files})
       end
       pull_requests
     end
@@ -36,23 +36,23 @@ class GithubCollaborators
       logger.debug "create_branch_and_pull_request"
 
       # Ready a new branch
-      branch_creator = GithubCollaborators::BranchCreator.new  
+      branch_creator = GithubCollaborators::BranchCreator.new
       branch_name = branch_creator.check_branch_name_is_valid(branch_name, collaborator_name)
       branch_creator.create_branch(branch_name)
 
       # Add, commit and push the changes
       edited_files.each { |file_name| branch_creator.add(file_name) }
       branch_creator.commit_and_push(pull_request_title)
-  
+
       if type == "delete"
         create_pull_request(delete_empty_files_hash(branch_name))
       elsif type == "extend"
         create_pull_request(extend_date_hash(collaborator_name, branch_name))
-      elsif type == "remove" 
+      elsif type == "remove"
         create_pull_request(remove_collaborator_hash(collaborator_name, branch_name))
-      elsif type == "permission" 
+      elsif type == "permission"
         create_pull_request(modify_collaborator_permission_hash(collaborator_name, branch_name))
-      elsif type == "add" 
+      elsif type == "add"
         create_pull_request(add_collaborator_hash(collaborator_name, branch_name))
       end
     end

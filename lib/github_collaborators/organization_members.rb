@@ -19,6 +19,7 @@ class GithubCollaborators
     end
 
     private
+
     def get_all_organisation_members
       logger.debug "get_all_organisation_members"
       org_members = []
