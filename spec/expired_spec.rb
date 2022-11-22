@@ -70,6 +70,28 @@ class GithubCollaborators
         expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (2 days ago)")
       end
 
+      it "create line when collaborator expired no date provided" do
+        terraform_block = TerraformBlock.new
+
+        today = (Date.today - 2).strftime("%Y-%m-%d").to_s
+
+        collaborator = {
+          login: "bob123",
+          permission: "maintain",
+          name: "bob jones",
+          email: "bob123@some-emmail.com",
+          org: "some org",
+          reason: "some reason",
+          added_by: "john",
+          review_after: ""
+        }
+
+        terraform_block.add_terraform_file_collaborator_data(collaborator)
+        collaborator = Collaborator.new(terraform_block, "operations")
+        line = expired.create_line(collaborator)
+        expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (today)")
+      end
+
       it "singular message" do
         line = expired.singular_message
         expect(line).to eq("I've found a collaborator whose review date has expired, a pull request has been created to remove the collaborator")
