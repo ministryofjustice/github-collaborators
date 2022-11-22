@@ -303,7 +303,7 @@ class GithubCollaborators
         review_after: collaborator_data[REVIEW_AFTER]
       }
 
-      terraform_block = TerraformBlock.new
+      terraform_block = GithubCollaborators::TerraformBlock.new
       terraform_block.add_terraform_file_collaborator_data(collaborator)
       terraform_block
     end

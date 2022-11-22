@@ -525,9 +525,9 @@ class GithubCollaborators
         if found_name == false
           # Didn't find a match ie unknown collaborator
           # Create a Collaborator object with an issue
-          terraform_block = TerraformBlock.new
+          terraform_block = GithubCollaborators::TerraformBlock.new
           terraform_block.add_unknown_collaborator_data(gc_name)
-          collaborator = Collaborator.new(terraform_block, repository_name)
+          collaborator = GithubCollaborators::Collaborator.new(terraform_block, repository_name)
           collaborator.add_issue("missing")
 
           # Add unknown collaborator to the list of collaborators
