@@ -82,7 +82,7 @@ class GithubCollaborators
         # Add the repositories names to the object
         full_org_member.add_terraform_repositories(tc_repositories)
 
-        # When collaborators already defined in Terraform files, parse them and add them
+        # When collaborators already defined in Terraform files, parse them
         # to get additional information about the full org member
         if does_collaborator_already_exist(full_org_member.login, terraform_collaborators)
           name = get_name(full_org_member.login, terraform_collaborators)
