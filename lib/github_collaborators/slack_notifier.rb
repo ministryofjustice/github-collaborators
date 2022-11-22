@@ -1,7 +1,6 @@
 class GithubCollaborators
   class SlackNotifier
     include Logging
-    POST_TO_SLACK = ENV.fetch("REALLY_POST_TO_SLACK", 0) == "1"
 
     def initialize(notification, collaborators)
       logger.debug "initialize"
@@ -15,7 +14,7 @@ class GithubCollaborators
       if @collaborators.length > 0
         payload = message_payload
 
-        if POST_TO_SLACK
+        if ENV.fetch("REALLY_POST_TO_SLACK", 0) == "1"
           if ENV.has_key? "SLACK_WEBHOOK_URL"
             HTTP.post(ENV["SLACK_WEBHOOK_URL"], body: JSON.dump(payload))
           else

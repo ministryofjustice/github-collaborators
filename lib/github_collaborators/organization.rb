@@ -1,7 +1,7 @@
 class GithubCollaborators
   class Organization
     include Logging
-    attr_reader :repositories, :collaborators_and_org_members
+    attr_reader :repositories, :full_org_members
 
     def initialize
       logger.debug "initialize"
@@ -37,7 +37,7 @@ class GithubCollaborators
       @github_collaborators = @outside_collaborators.length
 
       # There are some collaborators who have full Org membership
-      @collaborators_and_org_members = []
+      @full_org_members = []
     end
 
     def is_collaborator_an_org_member(login)
@@ -46,20 +46,125 @@ class GithubCollaborators
       @organization_members.each do |org_member|
         # See if collaborator name is in the org members list
         if org_member.login == login
-          add_collaborator_and_org_member(login)
+          add_new_collaborator_and_org_member(login)
           return true
         end
       end
       false
     end
 
+    def create_full_org_members(terraform_collaborators)
+      logger.debug "create_full_org_members"
+
+      # Get the all-org members-members team repositories
+      all_org_members_team_repositories = get_all_org_members_team_repositories
+
+      # A list of FullOrgMember objects is created in this function when a full org members is detected
+      terraform_collaborators.each { |collaborator| is_collaborator_an_org_member(collaborator.login) }
+
+      # Iterate over the list of FullOrgMember objects
+      @full_org_members.each do |full_org_member|
+        # Exclude the all-org-members team repositories
+        full_org_member.add_excluded_repositories(all_org_members_team_repositories)
+
+        # Collect the GitHub and Terraform repositories for each full org member
+
+        # Get the GitHub repositories
+        full_org_member.get_full_org_member_repositories
+
+        # Get the repository names where collaborator is defined in Terraform files
+        tc_repositories = []
+        collaborator_repositories = terraform_collaborators.select { |terraform_collaborator| terraform_collaborator.login == full_org_member.login }
+        collaborator_repositories.each do |collaborator|
+          tc_repositories.push(collaborator.repository)
+        end
+
+        # Add the repositories names to the object
+        full_org_member.add_terraform_repositories(tc_repositories)
+
+        # When collaborators already defined in Terraform files, parse them
+        # to get additional information about the full org member
+        if does_collaborator_already_exist(full_org_member.login, terraform_collaborators)
+          name = get_name(full_org_member.login, terraform_collaborators)
+          email = get_email(full_org_member.login, terraform_collaborators)
+          org = get_org(full_org_member.login, terraform_collaborators)
+          full_org_member.add_info_from_file(email, name, org)
+        end
+      end
+    end
+
     private
 
+    def does_collaborator_already_exist(login, collaborators)
+      logger.debug "does_collaborator_already_exist"
+      exists = false
+      collaborators.each do |collaborator|
+        if collaborator.login == login
+          exists = true
+          break
+        end
+      end
+      exists
+    end
+
+    def get_name(login, collaborators)
+      logger.debug "get_name"
+      collaborators.each do |collaborator|
+        if collaborator.login == login && collaborator.name != ""
+          return collaborator.name
+        end
+      end
+      ""
+    end
+
+    def get_email(login, collaborators)
+      logger.debug "get_email"
+      collaborators.each do |collaborator|
+        if collaborator.login == login && collaborator.email != ""
+          return collaborator.email
+        end
+      end
+      ""
+    end
+
+    def get_org(login, collaborators)
+      logger.debug "get_org"
+      collaborators.each do |collaborator|
+        if collaborator.login == login && collaborator.org != ""
+          return collaborator.org
+        end
+      end
+      ""
+    end
+
+    # Query the all_org_members team and return its repositories
+    def get_all_org_members_team_repositories
+      logger.debug "get_all_org_members_team_repositories"
+      all_org_members_team_repositories = []
+      url = "https://api.github.com/orgs/ministryofjustice/teams/all-org-members/repos?per_page=100"
+      json = GithubCollaborators::HttpClient.new.fetch_json(url)
+      JSON.parse(json)
+        .find_all { |repository| repository["name"] }
+        .map { |repository| all_org_members_team_repositories.push(repository["name"]) }
+      all_org_members_team_repositories
+    end
+
     # Checks and stores which collaborator have org membership
-    def add_collaborator_and_org_member(login)
-      logger.debug "add_collaborator_and_org_member"
-      if !@collaborators_and_org_members.include?(login)
-        @collaborators_and_org_members.push(login)
+    def add_new_collaborator_and_org_member(new_collaborator_login)
+      logger.debug "add_new_collaborator_and_org_member"
+
+      # See if collaborator already exists
+      user_exists = false
+      @full_org_members.each do |full_org_member|
+        if full_org_member.login == new_collaborator_login
+          user_exists = true
+        end
+      end
+
+      # If it doesn't create a new collaborator
+      if user_exists == false
+        full_org_member = GithubCollaborators::FullOrgMember.new(new_collaborator_login)
+        @full_org_members.push(full_org_member)
       end
     end
   end

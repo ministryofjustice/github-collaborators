@@ -6,6 +6,7 @@ class GithubCollaborators
     def initialize
       logger.debug "initialize"
       @g = Git.open(".")
+      @files_for_testing = []
     end
 
     def create_branch(branch_name)
@@ -25,6 +26,7 @@ class GithubCollaborators
       if POST_TO_GH
         @g.add(files)
       else
+        @files_for_testing.push(files)
         logger.debug "Didn't add files to git #{files}, this is a dry run"
       end
     end
@@ -39,6 +41,11 @@ class GithubCollaborators
         @g.checkout("main")
         sleep 4
       else
+        # Revert any changed files
+        @files_for_testing.each do |file_name|
+          system("git checkout #{file_name}")
+          system("git clean -f")
+        end
         logger.debug "Didn't commit and push files to github, this is a dry run"
       end
     end

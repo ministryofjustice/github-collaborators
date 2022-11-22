@@ -1,20 +1,36 @@
 class GithubCollaborators
   class FullOrgMember
     include Logging
-    attr_reader :login, :missing_repositories
+    attr_reader :login, :email, :org, :name, :missing_from_repositories, :repository_permission_mismatches
 
     def initialize(login)
       logger.debug "initialize"
-      @graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
-      @login = login
       # Store the repositories the collaborator is associated with in this array
       # This is updated by a query directly on the collaborator
       @github_repositories = []
       # Store the repositories the collaborator is associated with in this array for Terraform files
       # This is updated by reading each Terraform file
       @terraform_repositories = []
-      @missing_repositories = []
+      @missing_from_repositories = []
       @excluded_repositories = []
+      @repository_permission_mismatches = []
+      @ignore_repositories = []
+      @login = login
+      @email = ""
+      @name = ""
+      @org = ""
+    end
+
+    def add_info_from_file(email, name, org)
+      logger.debug "add_info_from_file"
+      @email = email
+      @name = name
+      @org = org
+    end
+
+    def add_ignore_repository(repository_name)
+      logger.debug "add_ignore_repository"
+      @ignore_repositories.push(repository_name)
     end
 
     # Check whether a collaborator is attached to no repositories
@@ -36,9 +52,10 @@ class GithubCollaborators
     def get_full_org_member_repositories
       logger.debug "get_full_org_member_repositories"
       end_cursor = nil
+      graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
       loop do
         # Read which Github repositories the collaborator has access to
-        response = @graphql.run_query(full_org_member_query(end_cursor))
+        response = graphql.run_query(full_org_member_query(end_cursor))
         repositories = JSON.parse(response).dig("data", "user", "repositories", "edges")
         repositories.each do |repo|
           # Accept only ministryofjustice repositories
@@ -67,12 +84,12 @@ class GithubCollaborators
       if @github_repositories.length > 0 && @terraform_repositories.length == 0
         # GitHub repository exists and no Terraform files exists
         @github_repositories.each do |github_repository_name|
-          @missing_repositories.push(github_repository_name)
+          @missing_from_repositories.push(github_repository_name)
         end
       elsif @github_repositories.length == 0 && @terraform_repositories.length > 0
         # Terraform files exists but no GitHub repository exists
         @terraform_repositories.each do |terraform_repository_name|
-          @missing_repositories.push(terraform_repository_name)
+          @missing_from_repositories.push(terraform_repository_name)
         end
       else
         # Join the two arrays
@@ -83,22 +100,68 @@ class GithubCollaborators
           if @github_repositories.count(repository_name) == 0 ||
               @terraform_repositories.count(repository_name) == 0
             # Found a missing repository
-            @missing_repositories.push(repository_name)
+            @missing_from_repositories.push(repository_name)
           end
         end
 
         # Sort and filter any duplicates results
-        if @missing_repositories.length > 0
-          @missing_repositories.sort!
-          @missing_repositories.uniq!
+        if @missing_from_repositories.length > 0
+          @missing_from_repositories.sort!
+          @missing_from_repositories.uniq!
         end
       end
 
       # Result is based on any missing repositories
-      if @missing_repositories.length == 0
+      if @missing_from_repositories.length == 0
         return true
       end
       false
+    end
+
+    def check_repository_permissions_match(terraform_files)
+      logger.debug "check_repository_permissions_match"
+
+      permission_mismatch = false
+      # Search through the collaborators repositories
+      @github_repositories.each do |github_repository_name|
+        # Find the matching Terraform file
+        terraform_files.terraform_files.each do |terraform_file|
+          # Skip this iteration if file name is in the array, the array
+          # contains repositories / Terraform files that are not on the GitHub yet
+          if !@ignore_repositories.include?(terraform_file.filename) && terraform_file.filename == GithubCollaborators.tf_safe(github_repository_name)
+
+            # Get the github permission for that repository
+            github_permission = get_repository_permission(github_repository_name)
+
+            # Get the permission for the Terraform file
+            terraform_permission = terraform_file.get_collaborator_permission(login)
+
+            if github_permission != terraform_permission
+              permission_mismatch = true
+              # Store values as a hash like this { :permission => "granted_permission", :repository_name => "repo_name" }
+              @repository_permission_mismatches.push({permission: github_permission.to_s, repository_name: github_repository_name.to_s})
+            end
+          end
+        end
+      end
+      permission_mismatch
+    end
+
+    def get_repository_permission(repository_name)
+      logger.debug "get_repository_permission"
+      url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/collaborators/#{@login}/permission"
+      json = GithubCollaborators::HttpClient.new.fetch_json(url)
+      if JSON.parse(json).dig("user", "permissions", "admin")
+        "admin"
+      elsif JSON.parse(json).dig("user", "permissions", "maintain")
+        "maintain"
+      elsif JSON.parse(json).dig("user", "permissions", "push")
+        "push"
+      elsif JSON.parse(json).dig("user", "permissions", "triage")
+        "triage"
+      else
+        "pull"
+      end
     end
 
     private
