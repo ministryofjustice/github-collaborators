@@ -16,6 +16,9 @@ class GithubCollaborators
 
       let(:http_client) { double(HttpClient) }
 
+      # Stub sleep
+      before { allow_any_instance_of(AccessRemover).to receive(:sleep) }
+
       it "call github api" do
         url = "https://api.github.com/repos/ministryofjustice/somerepo/collaborators/somegithubuser"
         expect(HttpClient).to receive(:new).and_return(http_client)
