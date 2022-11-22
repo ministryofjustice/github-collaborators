@@ -24,7 +24,7 @@ module "hmpps-vcms-app-cp" {
     },
     {
       github_user  = "miriamgo-civica"
-      permission   = "push"
+      permission   = "maintain"
       name         = "Miriam Gomez-Orozco"
       email        = "Miriam.Gomez-Orozco@civica.co.uk"
       org          = "civica"
