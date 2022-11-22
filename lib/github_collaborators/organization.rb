@@ -59,8 +59,10 @@ class GithubCollaborators
       # Get the all-org members-members team repositories
       all_org_members_team_repositories = get_all_org_members_team_repositories
 
+      # A list of FullOrgMember objects is created in this function when a full org members is detected
       terraform_collaborators.each { |collaborator| is_collaborator_an_org_member(collaborator.login) }
 
+      # Iterate over the list of FullOrgMember objects
       @full_org_members.each do |full_org_member|
         # Exclude the all-org-members team repositories
         full_org_member.add_excluded_repositories(all_org_members_team_repositories)
@@ -79,10 +81,61 @@ class GithubCollaborators
 
         # Add the repositories names to the object
         full_org_member.add_terraform_repositories(tc_repositories)
+
+        # When collaborators already defined in Terraform files, parse them and add them
+        # to get additional information about the full org member
+        if does_collaborator_already_exist(full_org_member.login, terraform_collaborators)
+          name = get_name(full_org_member.login, terraform_collaborators)
+          email = get_email(full_org_member.login, terraform_collaborators)
+          org = get_org(full_org_member.login, terraform_collaborators)
+          full_org_member.add_info_from_file(email, name, org)
+        end
       end
     end
 
     private
+
+    def does_collaborator_already_exist(login, collaborators)
+      logger.debug "does_collaborator_already_exist"
+      exists = false
+      collaborators.each do |collaborator|
+        if collaborator.login == login
+          exists = true
+          break
+        end
+      end
+      exists
+    end
+
+    def get_name(login, collaborators)
+      logger.debug "get_name"
+      collaborators.each do |collaborator|
+        if collaborator.login == login && collaborator.name != ""
+          return collaborator.name
+        end
+      end
+      ""
+    end
+
+    def get_email(login, collaborators)
+      logger.debug "get_email"
+      collaborators.each do |collaborator|
+        if collaborator.login == login && collaborator.email != ""
+          return collaborator.email
+        end
+      end
+      ""
+    end
+
+    def get_org(login, collaborators)
+      logger.debug "get_org"
+      collaborators.each do |collaborator|
+        if collaborator.login == login && collaborator.org != ""
+          return collaborator.org
+        end
+      end
+      ""
+    end
 
     # Query the all_org_members team and return its repositories
     def get_all_org_members_team_repositories

@@ -51,21 +51,23 @@ class GithubCollaborators
         collaborators_on_github = repository.outside_collaborators
 
         # Get the Terraform defined outside collaborators for the repository
-        collaborators_in_file = get_collaborators_in_file(repository.name)
+        collaborators_in_file = @terraform_files.get_collaborators_in_file(repository.name)
 
-        # No collaborators skip to next iteration
-        if collaborators_in_file.length == 0 && collaborators_on_github.length == 0
-          next
-        else
-          # Some Terraform collaborators have been upgraded to full organization members,
-          # get them and add them to the GitHub collaborator array
+        # Some Terraform collaborators have been upgraded to full organization members,
+        # get them and add them to the collaborator GitHub array
+        if collaborators_in_file.length > 0
           collaborators_in_file.each do |collaborator|
             if @organization.is_collaborator_an_org_member(collaborator)
               collaborators_on_github.push(collaborator)
             end
           end
+        end
 
-          # Then print out the difference
+        # No collaborators skip to next iteration
+        if collaborators_on_github.length == 0 && collaborators_in_file.length == 0
+          next
+        else
+          # Print out the difference
           do_comparison(collaborators_in_file, collaborators_on_github, repository.name)
         end
       end
@@ -438,7 +440,7 @@ class GithubCollaborators
         @terraform_files.check_file_exists(repository_name)
         # Get the github permission for that repository
         repository_permission = collaborator.get_repository_permission(repository_name)
-        @terraform_files.add_collaborator_to_file(repository_name, collaborator_name, repository_permission)
+        @terraform_files.add_collaborator_to_file(collaborator, repository_name, repository_permission)
         edited_files.push("terraform/#{repository_name}.tf")
 
         # Add repository name to this array because related Terraform file is not on the main
@@ -455,32 +457,21 @@ class GithubCollaborators
       end
     end
 
-    def get_collaborators_in_file(repository_name)
-      logger.debug "get_collaborators_in_file"
-      collaborators_in_file = []
-      @collaborators.each do |collaborator|
-        if collaborator.repository == GithubCollaborators.tf_safe(repository_name)
-          collaborators_in_file.push(collaborator.login)
-        end
-      end
-      collaborators_in_file
-    end
-
     # Prints out the comparison of GitHub and Terraform collaborators when there is a mismatch
     def do_comparison(collaborators_in_file, collaborators_on_github, repository_name)
       logger.debug "do_comparison"
 
-      # When there is a difference between Github and Terraform§
-      if collaborators_in_file.length != collaborators_on_github.length
+      collaborators_on_github.sort!
+      collaborators_in_file.sort!
+
+      if collaborators_in_file != collaborators_on_github
         logger.warn "=" * 37
         logger.warn "There is a difference in Outside Collaborators for the #{repository_name} repository"
         logger.warn "GitHub Outside Collaborators: #{collaborators_on_github.length}"
         logger.warn "Terraform Outside Collaborators: #{collaborators_in_file.length}"
         logger.warn "Collaborators on GitHub:"
-        collaborators_on_github.sort!
         collaborators_on_github.each { |gc_name| logger.warn "    #{gc_name}" }
         logger.warn "Collaborators in Terraform:"
-        collaborators_in_file.sort!
         collaborators_in_file.each { |tc_name| logger.warn "    #{tc_name}" }
 
         find_unknown_collaborators(collaborators_on_github, collaborators_in_file, repository_name)

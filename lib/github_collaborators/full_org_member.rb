@@ -1,11 +1,10 @@
 class GithubCollaborators
   class FullOrgMember
     include Logging
-    attr_reader :login, :missing_from_repositories, :repository_permission_mismatches
+    attr_reader :login, :email, :org, :name, :missing_from_repositories, :repository_permission_mismatches
 
     def initialize(login)
       logger.debug "initialize"
-      @login = login
       # Store the repositories the collaborator is associated with in this array
       # This is updated by a query directly on the collaborator
       @github_repositories = []
@@ -16,6 +15,17 @@ class GithubCollaborators
       @excluded_repositories = []
       @repository_permission_mismatches = []
       @ignore_repositories = []
+      @login = login
+      @email = ""
+      @name = ""
+      @org = ""
+    end
+
+    def add_info_from_file(email, name, org)
+      logger.debug "add_info_from_file"
+      @email = email
+      @name = name
+      @org = org
     end
 
     def add_ignore_repository(repository_name)
