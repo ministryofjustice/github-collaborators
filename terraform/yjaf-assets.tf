@@ -73,16 +73,6 @@ module "yjaf-assets" {
       review_after = "2023-02-07"
     },
     {
-      github_user  = "SamMohammedUK"
-      permission   = "push"
-      name         = "Sam Mohammed"
-      email        = "contact@sammohammed.uk"
-      org          = "NEC SWS"
-      reason       = "Working on the assets project"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2023-03-01"
-    },
-    {
       github_user  = "AndrewTRichards"
       permission   = "admin"
       name         = "Andrew Richards"
