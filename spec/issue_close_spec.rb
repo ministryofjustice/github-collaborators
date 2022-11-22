@@ -1,40 +1,454 @@
 class GithubCollaborators
   describe IssueClose do
-    let(:http_client) { double(HttpClient) }
+    context "call" do
+      subject(:issue_close) { described_class.new }
 
-    subject(:ic) { described_class.new }
+      # Stub sleep
+      before { allow_any_instance_of(IssueClose).to receive(:sleep) }
+      
+      let(:http_client) { double(HttpClient) }
+      
+      it "remove issue" do
+        url = "https://api.github.com/repos/ministryofjustice/somerepo/issues/1"
+        state = "{\"state\":\"closed\"}"
+        expect(HttpClient).to receive(:new).and_return(http_client)
+        expect(http_client).to receive(:patch_json).with(url, state)
+        issue_close.remove_issue("somerepo", 1)
+      end
 
-    it "close issue three" do
-      response = Net::HTTPSuccess.new(1.0, "200", "OK")
-      expect(response).to receive(:body) { '[{ "number": 3, "created_at": "2022-03-12T04:23:22Z", "state": "open", "assignee": { "login": "somegithubuser" }, "title": "Please define outside collaborators in code", "assignees": [{"login":"somegithubuser"}]} ]' }
-      expect(HttpClient).to receive(:new).and_return(http_client)
-      expect(http_client).to receive(:fetch_json).and_return(response)
-      allow(ic).to receive(:remove_issue).with("somerepo", 3).and_return("")
-      allow_any_instance_of(IssueClose).to receive_message_chain(:sleep)
-      ic.close_expired_issues("somerepo")
     end
 
-    it "close issue not yet" do
-      response = Net::HTTPSuccess.new(1.0, "200", "OK")
-      expect(response).to receive(:body) { '[{ "number": 3, "created_at": "2011-01-01T04:23:22Z", "state": "open", "assignee": { "login": "somegithubuser" }, "title": "Collaborator review date expires soon", "assignees": [{"login":"somegithubuser"}]} ]' }
-      expect(HttpClient).to receive(:new).and_return(http_client)
-      expect(http_client).to receive(:fetch_json).and_return(response)
-      stub_date = Date.parse("2011-02-15")
-      allow(Date).to receive(:today).and_return(stub_date)
-      allow_any_instance_of(IssueClose).to receive_message_chain(:sleep)
-      ic.close_expired_issues("somerepo")
-    end
+    context "call close expired issues" do
+      subject(:issue_close) { described_class.new }
 
-    it "close issue now" do
-      response = Net::HTTPSuccess.new(1.0, "200", "OK")
-      expect(response).to receive(:body) { '[{ "number": 3, "created_at": "2011-01-01T04:23:22Z", "state": "open", "assignee": { "login": "somegithubuser" }, "title": "Collaborator review date expires soon", "assignees": [{"login":"somegithubuser"}]} ]' }
-      expect(HttpClient).to receive(:new).and_return(http_client)
-      expect(http_client).to receive(:fetch_json).and_return(response)
-      stub_date = Date.parse("2011-02-16")
-      allow(Date).to receive(:today).and_return(stub_date)
-      allow(ic).to receive(:remove_issue).with("somerepo", 3).and_return("")
-      allow_any_instance_of(IssueClose).to receive_message_chain(:sleep)
-      ic.close_expired_issues("somerepo")
+      let(:issue_creator) { double(IssueCreator) }
+
+      it "no issue exists" do
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return([])
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "collaborator expires soon, issue has expired and is open" do
+        issues = [
+          issue = { 
+            title: COLLABORATOR_EXPIRES_SOON,
+            created_at: "2019-10-01",
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "collaborator expires soon, grace period okay and is open" do
+
+        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: COLLABORATOR_EXPIRES_SOON,
+            created_at: grace_period_ok,
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "collaborator expires soon, grace period okay and is closed" do
+
+        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: COLLABORATOR_EXPIRES_SOON,
+            created_at: grace_period_ok,
+            state: "closed",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "collaborator expires soon, grace period expired and is open" do
+
+        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: COLLABORATOR_EXPIRES_SOON,
+            created_at: grace_period_expired,
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "collaborator expires soon, grace period expired and is closed" do
+
+        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: COLLABORATOR_EXPIRES_SOON,
+            created_at: grace_period_expired,
+            state: "closed",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+    
+      it "collaborator expiry upcoming, issue has expired and is open" do
+        issues = [
+          issue = { 
+            title: COLLABORATOR_EXPIRY_UPCOMING,
+            created_at: "2019-10-01",
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "collaborator expiry upcoming, grace period okay and is open" do
+
+        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: COLLABORATOR_EXPIRY_UPCOMING,
+            created_at: grace_period_ok,
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "collaborator expiry upcoming, grace period okay and is closed" do
+
+        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: COLLABORATOR_EXPIRY_UPCOMING,
+            created_at: grace_period_ok,
+            state: "closed",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "collaborator expiry upcoming, grace period expired and is open" do
+
+        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: COLLABORATOR_EXPIRY_UPCOMING,
+            created_at: grace_period_expired,
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "collaborator expiry upcoming, grace period expired and is closed" do
+
+        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: COLLABORATOR_EXPIRY_UPCOMING,
+            created_at: grace_period_expired,
+            state: "closed",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "define collaborator in code, issue has expired and is open" do
+        issues = [
+          issue = { 
+            title: DEFINE_COLLABORATOR_IN_CODE,
+            created_at: "2019-10-01",
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+      
+      it "define collaborator in code, grace period okay and is open" do
+
+        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: DEFINE_COLLABORATOR_IN_CODE,
+            created_at: grace_period_ok,
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "define collaborator in code, grace period okay and is closed" do
+
+        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: DEFINE_COLLABORATOR_IN_CODE,
+            created_at: grace_period_ok,
+            state: "closed",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "define collaborator in code, grace period expired and is open" do
+
+        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: DEFINE_COLLABORATOR_IN_CODE,
+            created_at: grace_period_expired,
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "define collaborator in code, grace period expired and is closed" do
+
+        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: DEFINE_COLLABORATOR_IN_CODE,
+            created_at: grace_period_expired,
+            state: "closed",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "use team access, issue has expired and is open" do
+        issues = [
+          issue = { 
+            title: USE_TEAM_ACCESS,
+            created_at: "2019-10-01",
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+      
+      it "use team access, grace period okay and is open" do
+
+        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: USE_TEAM_ACCESS,
+            created_at: grace_period_ok,
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "use team access, grace period okay and is closed" do
+
+        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: USE_TEAM_ACCESS,
+            created_at: grace_period_ok,
+            state: "closed",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "use team access, grace period expired and is open" do
+
+        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: USE_TEAM_ACCESS,
+            created_at: grace_period_expired,
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+
+      it "use team access, grace period expired and is closed" do
+
+        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+
+        issues = [
+          issue = { 
+            title: USE_TEAM_ACCESS,
+            created_at: grace_period_expired,
+            state: "closed",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue)
+        issue_close.close_expired_issues("somerepo")
+      end
+      
+      it "other open issue, ignore" do
+
+        issues = [
+          issue = { 
+            title: "some issue",
+            created_at: "2020-02-11",
+            state: "open",
+            number: 1
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).not_to receive(:remove_issue).with("somerepo", 1)
+        issue_close.close_expired_issues("somerepo")
+      end
+      
+      it "use team access, multiple issues, expired and open" do
+        issues = [
+          issue1 = { 
+            title: USE_TEAM_ACCESS,
+            created_at: "2019-10-01",
+            state: "open",
+            number: 1
+          },
+          issue2 = { 
+            title: USE_TEAM_ACCESS,
+            created_at: "2019-10-01",
+            state: "open",
+            number: 2
+          },
+          issue3 = { 
+            title: USE_TEAM_ACCESS,
+            created_at: "2019-10-01",
+            state: "open",
+            number: 3
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).to receive(:remove_issue).at_least(3).times
+        issue_close.close_expired_issues("somerepo")
+      end
+   
+      it "multiple issues, some expired and open" do
+
+        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+
+        issues = [
+          issue1 = { 
+            title: COLLABORATOR_EXPIRY_UPCOMING,
+            created_at: grace_period_ok,
+            state: "open",
+            number: 1
+          },
+          issue2 = { 
+            title: USE_TEAM_ACCESS,
+            created_at: "2019-10-01",
+            state: "open",
+            number: 2
+          },
+          issue3 = { 
+            title: COLLABORATOR_EXPIRES_SOON,
+            created_at: "2050-10-01",
+            state: "open",
+            number: 3
+          }
+        ]
+        expect(IssueCreator).to receive(:new).and_return(issue_creator)
+        expect(issue_creator).to receive(:get_issues).with("somerepo").and_return(issues)
+        expect(issue_close).to receive(:remove_issue).with("somerepo", 2).at_least(1).times
+        issue_close.close_expired_issues("somerepo")
+      end
     end
   end
 end
