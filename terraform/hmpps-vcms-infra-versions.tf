@@ -22,5 +22,15 @@ module "hmpps-vcms-infra-versions" {
       added_by     = "Probation WebOps team, probation-webops@digital.justice.gov.uk"
       review_after = "2022-11-21"
     },
+    {
+      github_user  = "miriamgo-civica"
+      permission   = "push"
+      name         = "Miriam Gomez-Orozco"
+      email        = "Miriam.Gomez-Orozco@civica.co.uk"
+      org          = "civica"
+      reason       = "Full Org member / collaborator missing from Terraform file"
+      added_by     = "opseng-bot@digital.justice.gov.uk"
+      review_after = "2023-02-20"
+    },
   ]
 }
