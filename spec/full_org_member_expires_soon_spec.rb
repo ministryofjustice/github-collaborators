@@ -29,7 +29,6 @@ class GithubCollaborators
         terraform_block = TerraformBlock.new
 
         tomorrow = (Date.today + 1).strftime("%Y-%m-%d").to_s
-
         collaborator = {
           login: "bob123",
           permission: "maintain",
