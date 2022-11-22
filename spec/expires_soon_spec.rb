@@ -1,10 +1,10 @@
 class GithubCollaborators
-  describe Expired do
+  describe ExpiresSoon do
     context "call" do
 
-      subject(:expired) { described_class.new }
+      subject(:expires_soon) { described_class.new }
 
-      it "create line when collaborator expired today" do
+      it "create line when collaborator expires today" do
         terraform_block = TerraformBlock.new
 
         today = (Date.today).strftime("%Y-%m-%d").to_s
@@ -22,14 +22,14 @@ class GithubCollaborators
 
         terraform_block.add_terraform_file_collaborator_data(collaborator)
         collaborator = Collaborator.new(terraform_block, "operations")
-        line = expired.create_line(collaborator)
+        line = expires_soon.create_line(collaborator)
         expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (today)")
       end
 
-      it "create line when collaborator expired yesterday" do
+      it "create line when collaborator expires tomorrow" do
         terraform_block = TerraformBlock.new
 
-        yesterday = (Date.today - 1).strftime("%Y-%m-%d").to_s
+        tomorrow = (Date.today + 1).strftime("%Y-%m-%d").to_s
         
         collaborator = {
           login: "bob123",
@@ -39,19 +39,19 @@ class GithubCollaborators
           org: "some org",
           reason: "some reason",
           added_by: "john",
-          review_after: yesterday
+          review_after: tomorrow
         }
 
         terraform_block.add_terraform_file_collaborator_data(collaborator)
         collaborator = Collaborator.new(terraform_block, "operations")
-        line = expired.create_line(collaborator)
-        expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (yesterday)")
+        line = expires_soon.create_line(collaborator)
+        expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (tomorrow)")
       end
 
-      it "create line when collaborator expired two days ago" do
+      it "create line when collaborator in two days" do
         terraform_block = TerraformBlock.new
 
-        review_date = (Date.today - 2).strftime("%Y-%m-%d").to_s
+        review_date = (Date.today + 2).strftime("%Y-%m-%d").to_s
 
         collaborator = {
           login: "bob123",
@@ -66,8 +66,8 @@ class GithubCollaborators
 
         terraform_block.add_terraform_file_collaborator_data(collaborator)
         collaborator = Collaborator.new(terraform_block, "operations")
-        line = expired.create_line(collaborator)
-        expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (2 days ago)")
+        line = expires_soon.create_line(collaborator)
+        expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (in 2 days)")
       end
 
       it "create line when collaborator expired no date provided" do
@@ -88,18 +88,18 @@ class GithubCollaborators
 
         terraform_block.add_terraform_file_collaborator_data(collaborator)
         collaborator = Collaborator.new(terraform_block, "operations")
-        line = expired.create_line(collaborator)
+        line = expires_soon.create_line(collaborator)
         expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (today)")
       end
 
       it "singular message" do
-        line = expired.singular_message
-        expect(line).to eq("I've found a collaborator whose review date has expired, a pull request has been created to remove the collaborator")
+        line = expires_soon.singular_message
+        expect(line).to eq("I've found a collaborator whose review date will expire shortly, a pull request has been created to extend the date for this collaborator")
       end
 
       it "multiple message" do
-        line = expired.multiple_message(4)
-        expect(line).to eq("I've found 4 collaborators whose review dates have expired, pull requests have been created to remove these collaborators")
+        line = expires_soon.multiple_message(4)
+        expect(line).to eq("I've found 4 collaborators whose review date will expire shortly, pull requests have been created to extend the date for these collaborators")
       end
     end
   end
