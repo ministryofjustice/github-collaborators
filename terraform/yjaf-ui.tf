@@ -102,5 +102,14 @@ module "yjaf-ui" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2022-12-28"
     },
+    {
+      github_user  = "olusegunonec"
+      permission   = "admin"
+      name         = "Olusegun Odunukan"
+      email        = "olusegun.odunukan@necsws.com"
+      org          = "NEC"
+      reason       = "YJAF"
+      added_by     = "Tony Bishop antony.bishop@digital.justice.gov.uk"
+      review_after = "2023-11-22"
   ]
 }
