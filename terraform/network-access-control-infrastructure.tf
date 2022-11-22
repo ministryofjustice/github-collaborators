@@ -32,15 +32,5 @@ module "network-access-control-infrastructure" {
       added_by     = "justin.fielding@justice.gov.uk"
       review_after = "2022-01-01"
     },
-    {
-      github_user  = "C-gyorfi"
-      permission   = "admin"
-      name         = "Csaba Gyorfi"
-      email        = "csaba@madetech.com"
-      org          = "Made Tech Ltd"
-      reason       = "MoJ Network Access Control Tech Team"
-      added_by     = "justin.fielding@justice.gov.uk"
-      review_after = "2022-01-01"
-    }
   ]
 }

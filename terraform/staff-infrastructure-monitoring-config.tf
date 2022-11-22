@@ -13,16 +13,6 @@ module "staff-infrastructure-monitoring-config" {
       review_after = "2022-01-01"
     },
     {
-      github_user  = "C-gyorfi"
-      permission   = "admin"
-      name         = "Csaba Gyorfi"
-      email        = "csaba@madetech.com"
-      org          = "Made Tech Ltd"
-      reason       = "MoJ NAC Tech Team"
-      added_by     = "justin.fielding@justice.gov.uk"
-      review_after = "2022-01-01"
-    },
-    {
       github_user  = "MichaelCullenMadeTech"
       permission   = "admin"
       name         = "Michael Cullen"
@@ -31,6 +21,6 @@ module "staff-infrastructure-monitoring-config" {
       reason       = "MoJ NAC Tech Team"
       added_by     = "justin.fielding@justice.gov.uk"
       review_after = "2022-01-01"
-    }
+    },
   ]
 }
