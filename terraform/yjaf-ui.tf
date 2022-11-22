@@ -63,16 +63,6 @@ module "yjaf-ui" {
       review_after = "2022-12-12"
     },
     {
-      github_user  = "turtle-nec"
-      permission   = "admin"
-      name         = "Drew Maughan"
-      email        = "drew.maughan@necsws.com"
-      org          = "NEC"
-      reason       = "Part of the Northgate supplier team who are now NEC for the YJB YJAF system"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2023-02-11"
-    },
-    {
       github_user  = "craig-ashford"
       permission   = "admin"
       name         = "Craig Ashford"

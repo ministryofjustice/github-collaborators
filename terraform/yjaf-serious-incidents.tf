@@ -53,16 +53,6 @@ module "yjaf-serious-incidents" {
       review_after = "2023-05-25"
     },
     {
-      github_user  = "turtle-nec"
-      permission   = "admin"
-      name         = "Drew Maughan"
-      email        = "drew.maughan@necsws.com"
-      org          = "NEC"
-      reason       = "Access is needed for development of a new feature for yjaf"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
-      review_after = "2023-05-25"
-    },
-    {
       github_user  = "SamMohammedUK"
       permission   = "admin"
       name         = "Sam Mohammed"

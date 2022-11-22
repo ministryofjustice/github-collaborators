@@ -5,32 +5,32 @@ module "hmpps-delius-api" {
     {
       github_user  = "mlaskowski4"
       permission   = "push"
-      name         = "Michal Laskowski"                                                                  #  The name of the person behind github_user
-      email        = "mlaskowski@unilink.com"                                                            #  Their email address
-      org          = "Unilink"                                                                           #  The organisation/entity they belong to
-      reason       = "To enable Unilink to continue supplying development and testing services to HMPPS" #  Why is this person being granted access?
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"                              #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2023-02-25"                                                                        #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Michal Laskowski"
+      email        = "mlaskowski@unilink.com"
+      org          = "Unilink"
+      reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
+      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      review_after = "2023-02-25"
     },
     {
       github_user  = "peter-bcl"
       permission   = "push"
-      name         = "Peter Wilson"                                                                      #  The name of the person behind github_user
-      email        = "pwilson@unilink.com"                                                               #  Their email address
-      org          = "Unilink"                                                                           #  The organisation/entity they belong to
-      reason       = "To enable Unilink to continue supplying development and testing services to HMPPS" #  Why is this person being granted access?
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"                              #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2023-02-25"                                                                        #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Peter Wilson"
+      email        = "pwilson@unilink.com"
+      org          = "Unilink"
+      reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
+      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      review_after = "2023-02-25"
     },
     {
       github_user  = "Seanvalmonte"
       permission   = "push"
-      name         = "Sean Valmonte"                                                                     #  The name of the person behind github_user
-      email        = "svalmonte@unilink.com"                                                             #  Their email address
-      org          = "Unilink"                                                                           #  The organisation/entity they belong to
-      reason       = "To enable Unilink to continue supplying development and testing services to HMPPS" #  Why is this person being granted access?
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"                              #  Who made the decision to grant them access? e.g. 'Awesome Team <awesome.team@digital.justice.gov.uk>'
-      review_after = "2023-02-25"                                                                        #  Date after which this grant should be reviewed/revoked, e.g. 2021-11-26
+      name         = "Sean Valmonte"
+      email        = "svalmonte@unilink.com"
+      org          = "Unilink"
+      reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
+      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      review_after = "2023-02-25"
     },
   ]
 }

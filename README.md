@@ -67,7 +67,7 @@ module "<repository-name>" {
 
 > The value of `repository` inside the file should be the exact name of the repository, with no substitutions. i.e. if the repository is called `ministryofjustice/foo.bar` then put `repository = "foo.bar"`
 
-To add collaborators to the repository, define each of them inside the `collaborators` block, with the following information inside the quotation marks:
+To add collaborators to the repository, define each of them inside a `collaborators` block, with the following information inside the quotation marks:
 
 ```
     {
@@ -82,7 +82,7 @@ To add collaborators to the repository, define each of them inside the `collabor
     },
 ```
 
-For example:
+An example, please do not add the comments to the file:
 
 ```
   collaborators = [
