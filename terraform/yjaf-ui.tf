@@ -111,5 +111,6 @@ module "yjaf-ui" {
       reason       = "YJAF"
       added_by     = "Tony Bishop antony.bishop@digital.justice.gov.uk"
       review_after = "2023-11-22"
+    },
   ]
 }
