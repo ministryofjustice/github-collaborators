@@ -24,13 +24,13 @@ module "hmpps-vcms" {
     },
     {
       github_user  = "sim-barnes"
-      permission   = "maintain"
+      permission   = "push"
       name         = "Simon Barnes"
       email        = "simon.barnes@civica.co.uk"
       org          = "Civica"
       reason       = "Civica developer for Victims Case Management System"
       added_by     = "Probation Infrastructure AWS Team, maximillian.lakanu@digital.justice.gov.uk"
-      review_after = "2022-12-27"
+      review_after = "2023-12-20"
     },
     {
       github_user  = "ahmedwaqaralam"
