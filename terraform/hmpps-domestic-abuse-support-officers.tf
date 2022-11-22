@@ -24,7 +24,7 @@ module "hmpps-domestic-abuse-support-officers" {
     },
     {
       github_user  = "sim-barnes"
-      permission   = "maintain"
+      permission   = "push"
       name         = "Simon Barnes"
       email        = "simon.barnes@civica.co.uk"
       org          = "Civica"
