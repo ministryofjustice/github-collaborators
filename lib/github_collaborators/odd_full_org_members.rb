@@ -12,7 +12,7 @@ class GithubCollaborators
     end
 
     def multiple_message(collaborators)
-      "I've found #{collaborators} collaborators who are full Org members but are not attached to any GitHub repositories except the all-org-members team respositories. Consider removing these collaborators."
+      "I've found #{collaborators} collaborators who are full Org members but are not attached to any GitHub repositories except the all-org-members team respositories. Consider removing these collaborators"
     end
   end
 end
