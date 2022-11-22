@@ -3,16 +3,6 @@ module "hmpps-vcms" {
   repository = "hmpps-vcms"
   collaborators = [
     {
-      github_user  = "simoncreasy-civica"
-      permission   = "push"
-      name         = "Simon Creasy"
-      email        = "simon.creasy@civica.co.uk"
-      org          = "Civica"
-      reason       = "Civica developer that helps the development of the Victims Case Management System"
-      added_by     = "Probation Infrastructure AWS Team, awssupportteam@digital.justice.gov.uk"
-      review_after = "2022-11-21"
-    },
-    {
       github_user  = "miriamgo-civica"
       permission   = "maintain"
       name         = "Miriam Gomez-Orozco"
