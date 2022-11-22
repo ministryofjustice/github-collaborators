@@ -32,10 +32,10 @@ class GithubCollaborators
 
     # Entry point from Ruby script, keep the order as-is the compare function will ne
     def start
+      remove_empty_files
       compare_terraform_and_github
       collaborator_checks
       full_org_members_check
-      remove_empty_files
       print_full_org_member_collaborators
     end
 
