@@ -6,7 +6,7 @@ class GithubCollaborators
       logger.debug "create_line"
       review_date = collaborator.review_after_date
 
-      if review_date == nil || review_date == ""
+      if review_date.nil? || review_date == ""
         review_date = Date.today
       end
 

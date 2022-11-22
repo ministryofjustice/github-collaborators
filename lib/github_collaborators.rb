@@ -41,7 +41,6 @@ class GithubCollaborators
   DEFINE_COLLABORATOR_IN_CODE = "Please define outside collaborators in code"
   USE_TEAM_ACCESS = "User access removed, access is now via a team"
 
-
   # Internal issues
   REVIEW_DATE_WITHIN_MONTH = "Review after date is within a month"
   REVIEW_DATE_PASSED = "Review after date has passed"

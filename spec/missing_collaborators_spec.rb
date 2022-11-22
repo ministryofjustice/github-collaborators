@@ -1,11 +1,10 @@
 class GithubCollaborators
   describe MissingCollaborators do
     context "call" do
-
       subject(:missing_collaborator) { described_class.new }
 
       it "create line" do
-        collaborator = { :login => "bob", :repository => "operations" }
+        collaborator = {login: "bob", repository: "operations"}
         line = missing_collaborator.create_line(collaborator)
         expect(line).to eq("- bob in operations")
       end

@@ -45,7 +45,11 @@ class GithubCollaborators
 
       subject(:ar) { described_class.new(params) }
 
+      let(:http_client) { double(HttpClient) }
+
       it "dont call github api" do
+        expect(HttpClient).not_to receive(:new)
+        expect(http_client).not_to receive(:delete)
         ar.remove_access
       end
     end

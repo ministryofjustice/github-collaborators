@@ -1,7 +1,6 @@
 class GithubCollaborators
   describe OddFullOrgMembers do
     context "call" do
-
       subject(:odd_collaborator) { described_class.new }
 
       it "create line" do

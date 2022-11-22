@@ -5,9 +5,9 @@ class GithubCollaborators
 
       # Stub sleep
       before { allow_any_instance_of(IssueClose).to receive(:sleep) }
-      
+
       let(:http_client) { double(HttpClient) }
-      
+
       it "remove issue" do
         url = "https://api.github.com/repos/ministryofjustice/somerepo/issues/1"
         state = "{\"state\":\"closed\"}"
@@ -15,7 +15,6 @@ class GithubCollaborators
         expect(http_client).to receive(:patch_json).with(url, state)
         issue_close.remove_issue("somerepo", 1)
       end
-
     end
 
     context "call close expired issues" do
@@ -31,7 +30,7 @@ class GithubCollaborators
 
       it "collaborator expires soon, issue has expired and is open" do
         issues = [
-          issue = { 
+          {
             title: COLLABORATOR_EXPIRES_SOON,
             created_at: "2019-10-01",
             state: "open",
@@ -45,11 +44,10 @@ class GithubCollaborators
       end
 
       it "collaborator expires soon, grace period okay and is open" do
-
         grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: COLLABORATOR_EXPIRES_SOON,
             created_at: grace_period_ok,
             state: "open",
@@ -63,11 +61,10 @@ class GithubCollaborators
       end
 
       it "collaborator expires soon, grace period okay and is closed" do
-
         grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: COLLABORATOR_EXPIRES_SOON,
             created_at: grace_period_ok,
             state: "closed",
@@ -81,11 +78,10 @@ class GithubCollaborators
       end
 
       it "collaborator expires soon, grace period expired and is open" do
-
         grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: COLLABORATOR_EXPIRES_SOON,
             created_at: grace_period_expired,
             state: "open",
@@ -99,11 +95,10 @@ class GithubCollaborators
       end
 
       it "collaborator expires soon, grace period expired and is closed" do
-
         grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: COLLABORATOR_EXPIRES_SOON,
             created_at: grace_period_expired,
             state: "closed",
@@ -115,10 +110,10 @@ class GithubCollaborators
         expect(issue_close).not_to receive(:remove_issue).with("somerepo", 1)
         issue_close.close_expired_issues("somerepo")
       end
-    
+
       it "collaborator expiry upcoming, issue has expired and is open" do
         issues = [
-          issue = { 
+          {
             title: COLLABORATOR_EXPIRY_UPCOMING,
             created_at: "2019-10-01",
             state: "open",
@@ -132,11 +127,10 @@ class GithubCollaborators
       end
 
       it "collaborator expiry upcoming, grace period okay and is open" do
-
         grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: COLLABORATOR_EXPIRY_UPCOMING,
             created_at: grace_period_ok,
             state: "open",
@@ -150,11 +144,10 @@ class GithubCollaborators
       end
 
       it "collaborator expiry upcoming, grace period okay and is closed" do
-
         grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: COLLABORATOR_EXPIRY_UPCOMING,
             created_at: grace_period_ok,
             state: "closed",
@@ -168,11 +161,10 @@ class GithubCollaborators
       end
 
       it "collaborator expiry upcoming, grace period expired and is open" do
-
         grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: COLLABORATOR_EXPIRY_UPCOMING,
             created_at: grace_period_expired,
             state: "open",
@@ -186,11 +178,10 @@ class GithubCollaborators
       end
 
       it "collaborator expiry upcoming, grace period expired and is closed" do
-
         grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: COLLABORATOR_EXPIRY_UPCOMING,
             created_at: grace_period_expired,
             state: "closed",
@@ -205,7 +196,7 @@ class GithubCollaborators
 
       it "define collaborator in code, issue has expired and is open" do
         issues = [
-          issue = { 
+          {
             title: DEFINE_COLLABORATOR_IN_CODE,
             created_at: "2019-10-01",
             state: "open",
@@ -217,13 +208,12 @@ class GithubCollaborators
         expect(issue_close).to receive(:remove_issue).with("somerepo", 1)
         issue_close.close_expired_issues("somerepo")
       end
-      
-      it "define collaborator in code, grace period okay and is open" do
 
+      it "define collaborator in code, grace period okay and is open" do
         grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: DEFINE_COLLABORATOR_IN_CODE,
             created_at: grace_period_ok,
             state: "open",
@@ -237,11 +227,10 @@ class GithubCollaborators
       end
 
       it "define collaborator in code, grace period okay and is closed" do
-
         grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: DEFINE_COLLABORATOR_IN_CODE,
             created_at: grace_period_ok,
             state: "closed",
@@ -255,11 +244,10 @@ class GithubCollaborators
       end
 
       it "define collaborator in code, grace period expired and is open" do
-
         grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: DEFINE_COLLABORATOR_IN_CODE,
             created_at: grace_period_expired,
             state: "open",
@@ -273,11 +261,10 @@ class GithubCollaborators
       end
 
       it "define collaborator in code, grace period expired and is closed" do
-
         grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: DEFINE_COLLABORATOR_IN_CODE,
             created_at: grace_period_expired,
             state: "closed",
@@ -292,7 +279,7 @@ class GithubCollaborators
 
       it "use team access, issue has expired and is open" do
         issues = [
-          issue = { 
+          {
             title: USE_TEAM_ACCESS,
             created_at: "2019-10-01",
             state: "open",
@@ -304,13 +291,12 @@ class GithubCollaborators
         expect(issue_close).to receive(:remove_issue).with("somerepo", 1)
         issue_close.close_expired_issues("somerepo")
       end
-      
-      it "use team access, grace period okay and is open" do
 
+      it "use team access, grace period okay and is open" do
         grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: USE_TEAM_ACCESS,
             created_at: grace_period_ok,
             state: "open",
@@ -324,11 +310,10 @@ class GithubCollaborators
       end
 
       it "use team access, grace period okay and is closed" do
-
         grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: USE_TEAM_ACCESS,
             created_at: grace_period_ok,
             state: "closed",
@@ -342,11 +327,10 @@ class GithubCollaborators
       end
 
       it "use team access, grace period expired and is open" do
-
         grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: USE_TEAM_ACCESS,
             created_at: grace_period_expired,
             state: "open",
@@ -360,11 +344,10 @@ class GithubCollaborators
       end
 
       it "use team access, grace period expired and is closed" do
-
         grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
 
         issues = [
-          issue = { 
+          {
             title: USE_TEAM_ACCESS,
             created_at: grace_period_expired,
             state: "closed",
@@ -376,11 +359,10 @@ class GithubCollaborators
         expect(issue_close).not_to receive(:remove_issue)
         issue_close.close_expired_issues("somerepo")
       end
-      
-      it "other open issue, ignore" do
 
+      it "other open issue, ignore" do
         issues = [
-          issue = { 
+          {
             title: "some issue",
             created_at: "2020-02-11",
             state: "open",
@@ -392,22 +374,22 @@ class GithubCollaborators
         expect(issue_close).not_to receive(:remove_issue).with("somerepo", 1)
         issue_close.close_expired_issues("somerepo")
       end
-      
+
       it "use team access, multiple issues, expired and open" do
         issues = [
-          issue1 = { 
+          {
             title: USE_TEAM_ACCESS,
             created_at: "2019-10-01",
             state: "open",
             number: 1
           },
-          issue2 = { 
+          {
             title: USE_TEAM_ACCESS,
             created_at: "2019-10-01",
             state: "open",
             number: 2
           },
-          issue3 = { 
+          {
             title: USE_TEAM_ACCESS,
             created_at: "2019-10-01",
             state: "open",
@@ -419,25 +401,24 @@ class GithubCollaborators
         expect(issue_close).to receive(:remove_issue).at_least(3).times
         issue_close.close_expired_issues("somerepo")
       end
-   
-      it "multiple issues, some expired and open" do
 
+      it "multiple issues, some expired and open" do
         grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
 
         issues = [
-          issue1 = { 
+          {
             title: COLLABORATOR_EXPIRY_UPCOMING,
             created_at: grace_period_ok,
             state: "open",
             number: 1
           },
-          issue2 = { 
+          {
             title: USE_TEAM_ACCESS,
             created_at: "2019-10-01",
             state: "open",
             number: 2
           },
-          issue3 = { 
+          {
             title: COLLABORATOR_EXPIRES_SOON,
             created_at: "2050-10-01",
             state: "open",

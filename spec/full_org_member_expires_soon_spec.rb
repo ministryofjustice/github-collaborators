@@ -1,14 +1,13 @@
 class GithubCollaborators
   describe FullOrgMemberExpiresSoon do
     context "call" do
-
       subject(:expires_soon) { described_class.new }
 
       it "create line when collaborator expires today" do
         terraform_block = TerraformBlock.new
 
-        today = (Date.today).strftime("%Y-%m-%d").to_s
-        
+        today = Date.today.strftime("%Y-%m-%d").to_s
+
         collaborator = {
           login: "bob123",
           permission: "maintain",
@@ -30,7 +29,7 @@ class GithubCollaborators
         terraform_block = TerraformBlock.new
 
         tomorrow = (Date.today + 1).strftime("%Y-%m-%d").to_s
-        
+
         collaborator = {
           login: "bob123",
           permission: "maintain",
@@ -72,8 +71,6 @@ class GithubCollaborators
 
       it "create line when collaborator expired no date provided" do
         terraform_block = TerraformBlock.new
-
-        today = (Date.today - 2).strftime("%Y-%m-%d").to_s
 
         collaborator = {
           login: "bob123",
