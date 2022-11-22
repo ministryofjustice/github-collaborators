@@ -11,7 +11,6 @@ class GithubCollaborators
       end
 
       age = (review_date - Date.today).to_i
-
       expires_when = if review_date == Date.today
         "today"
       elsif age == 1
