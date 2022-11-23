@@ -388,12 +388,12 @@ class GithubCollaborators
       @terraform_files.push(terraform_file)
     end
 
-    def remove_empty_file(empty_file_name)
-      logger.debug "remove_empty_file"
-      path_to_file = "terraform/#{empty_file_name}.tf"
+    def remove_file(file_name)
+      logger.debug "remove_file"
+      path_to_file = "terraform/#{file_name}.tf"
       if File.exist?(path_to_file)
         File.delete(path_to_file)
-        @terraform_files.delete_if { |terraform_file| terraform_file.filename == empty_file_name }
+        @terraform_files.delete_if { |terraform_file| terraform_file.filename == file_name }
       end
     end
 
@@ -415,6 +415,16 @@ class GithubCollaborators
           terraform_file.remove_collaborator(login)
           terraform_file.write_to_file
           terraform_file.restore_terraform_blocks
+        end
+      end
+    end
+
+    def remove_archieved_repository_file(repository_name)
+      logger.debug "remove_archieved_repository_file"
+      @terraform_files.each do |terraform_file|
+        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
+          index = @terraform_files.index(terraform_file)
+          @terraform_files.delete_at(index)
         end
       end
     end

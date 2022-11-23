@@ -1,7 +1,7 @@
 class GithubCollaborators
   class FullOrgMember
     include Logging
-    attr_reader :login, :email, :org, :name, :missing_from_repositories, :repository_permission_mismatches
+    attr_reader :login, :email, :org, :name, :missing_from_repositories, :repository_permission_mismatches, :attached_archived_repositories
 
     def initialize(login)
       logger.debug "initialize"
@@ -15,6 +15,8 @@ class GithubCollaborators
       @excluded_repositories = []
       @repository_permission_mismatches = []
       @ignore_repositories = []
+      @github_archived_repositories = []
+      @attached_archived_repositories = []
       @login = login
       @email = ""
       @name = ""
@@ -44,6 +46,11 @@ class GithubCollaborators
       false
     end
 
+    def add_archived_repositories(repositories)
+      logger.debug "add_archived_repositories"
+      @github_archived_repositories = repositories
+    end
+
     def add_excluded_repositories(repositories)
       logger.debug "add_excluded_repositories"
       @excluded_repositories = repositories
@@ -53,29 +60,48 @@ class GithubCollaborators
       logger.debug "get_full_org_member_repositories"
       end_cursor = nil
       graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
+
+      repositories = []
+
       loop do
         # Read which Github repositories the collaborator has access to
         response = graphql.run_query(full_org_member_query(end_cursor))
-        repositories = JSON.parse(response).dig("data", "user", "repositories", "edges")
-        repositories.each do |repo|
-          # Accept only ministryofjustice repositories
-          if repo.dig("node", "owner", "login") == "ministryofjustice"
-            repository_name = repo.dig("node", "name")
-            # Ignore excluded repositories ie the all-org-members team repositories
-            if !@excluded_repositories.include?(repository_name)
-              # Store repository
-              @github_repositories.push(repository_name)
-            end
-          end
-        end
+        repos = JSON.parse(response).dig("data", "user", "repositories", "edges")
+        repositories += repos
         break unless JSON.parse(response).dig("data", "user", "repositories", "pageInfo", "hasNextPage")
         end_cursor = JSON.parse(response).dig("data", "user", "repositories", "pageInfo", "endCursor")
       end
+
+      repositories.each do |repo|
+        # Accept only ministryofjustice repositories
+        if repo.dig("node", "owner", "login") == "ministryofjustice"
+          repository_name = repo.dig("node", "name")
+          # Ignore excluded repositories ie the all-org-members team repositories and archived repositories
+          # This is to focus on active repositories that should be tracked
+          if !@excluded_repositories.include?(repository_name) && !@github_archived_repositories.include?(repository_name)
+            # Store repository
+            @github_repositories.push(repository_name)
+          end
+
+          # Store which archived repositories the collaborator is attached to
+          # as will raise Slack alerts for this later on
+          if @github_archived_repositories.include?(repository_name)
+            @attached_archived_repositories.push(repository_name)
+          end
+        end
+      end
     end
 
-    def add_terraform_repositories(repositories)
+    def add_terraform_repositories(terraform_repositories)
       logger.debug "add_terraform_repositories"
-      @terraform_repositories = repositories
+      terraform_repositories.each do |terraform_repository_name|
+        # Ignore excluded repositories ie the all-org-members team repositories and archived repositories
+        # This is to focus on active repositories that should be tracked
+        if !@excluded_repositories.include?(terraform_repository_name) && !@github_archived_repositories.include?(terraform_repository_name)
+          # Store repository
+          @terraform_repositories.push(terraform_repository_name)
+        end
+      end
     end
 
     def do_repositories_match
