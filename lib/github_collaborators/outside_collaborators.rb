@@ -364,7 +364,7 @@ class GithubCollaborators
       archived_repositories.each do |archived_repository_name|
         @terraform_files.remove_file(archived_repository_name)
         file_name = "terraform/#{archived_repository_name}.tf"
-        edited_files.push(archived_repository_name)
+        edited_files.push(file_name)
       end
 
       if edited_files.length > 0
