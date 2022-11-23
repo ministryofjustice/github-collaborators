@@ -33,6 +33,7 @@ class GithubCollaborators
     # Entry point from Ruby script, keep the order as-is the compare function will ne
     def start
       remove_empty_files
+      archived_repository_check
       compare_terraform_and_github
       collaborator_checks
       full_org_members_check
@@ -105,6 +106,7 @@ class GithubCollaborators
       logger.debug "full_org_members_check"
 
       odd_full_org_members = []
+      full_org_members_archived_repositories = []
 
       # Run full org member tests
       @organization.full_org_members.each do |full_org_member|
@@ -123,11 +125,21 @@ class GithubCollaborators
         if full_org_member.odd_full_org_member_check
           odd_full_org_members.push(full_org_member.login)
         end
+
+        # Find if collaborator attached to archived repositories
+        full_org_member.attached_archived_repositories.each do |archived_repository|
+          full_org_members_archived_repositories.push({login: full_org_member.login, repository: archived_repository})
+        end
       end
 
       # Raise Slack message for collaborators that are attached to no Github repositories
       if odd_full_org_members.length > 0
         GithubCollaborators::SlackNotifier.new(GithubCollaborators::OddFullOrgMembers.new, odd_full_org_members).post_slack_message
+      end
+
+      # Raise Slack message for collaborators that are attached to archived repositories
+      if full_org_members_archived_repositories.length > 0
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::ArchivedRepositories.new, full_org_members_archived_repositories).post_slack_message
       end
     end
 
@@ -333,6 +345,48 @@ class GithubCollaborators
       collaborators_for_slack_message
     end
 
+    def archived_repository_check
+      logger.debug "archived_repository_check"
+
+      archived_repositories = []
+
+      @terraform_files.terraform_files.each do |terraform_file|
+        if @organization.archived_repositories.include?(terraform_file.filename)
+          archived_repositories.push(terraform_file.filename)
+        end
+      end
+
+      archived_repositories.sort!
+      archived_repositories.uniq!
+
+      # Delete the archived repository matching file
+      edited_files = []
+      archived_repositories.each do |archived_repository_name|
+        @terraform_files.remove_file(archived_repository_name)
+        file_name = "terraform/#{archived_repository_name}.tf"
+        edited_files.push(file_name)
+      end
+
+      if edited_files.length > 0
+        branch_name = "delete-archived-repository-file"
+        type = "delete_archive_file"
+        pull_request_title = ARCHIVED_REPOSITORY_PR_TITLE
+        collaborator_name = ""
+        GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
+        add_new_pull_request(pull_request_title, edited_files)
+
+        # Remove the archived file from any Collaborator files objects
+        edited_files.each do |archived_repository_name|
+          @collaborators.each do |collaborator|
+            if collaborator.repository == archived_repository_name
+              index = @collaborators.index(collaborator)
+              @collaborators.delete_at(index)
+            end
+          end
+        end
+      end
+    end
+
     def remove_empty_files
       logger.debug "remove_empty_files"
 
@@ -345,7 +399,7 @@ class GithubCollaborators
       # Delete the empty files
       edited_files = []
       empty_files.each do |empty_file_name|
-        @terraform_files.remove_empty_file(empty_file_name)
+        @terraform_files.remove_file(empty_file_name)
         file_name = "terraform/#{empty_file_name}.tf"
         edited_files.push(file_name)
       end

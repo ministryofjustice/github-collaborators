@@ -54,6 +54,8 @@ class GithubCollaborators
         create_pull_request(modify_collaborator_permission_hash(collaborator_name, branch_name))
       elsif type == "add"
         create_pull_request(add_collaborator_hash(collaborator_name, branch_name))
+      elsif type == "delete_archive_file"
+        create_pull_request(delete_archive_file_hash(branch_name))
       end
     end
 
@@ -98,6 +100,25 @@ class GithubCollaborators
           The review date/s have automatically been extended.
 
           Either approve this pull request, modify it or delete it if it is no longer necessary.
+        EOF
+      }
+    end
+
+    def delete_archive_file_hash(branch_name)
+      logger.debug "delete_archive_file_hash"
+      {
+        title: ARCHIVED_REPOSITORY_PR_TITLE,
+        head: branch_name,
+        base: "main",
+        body: <<~EOF
+          Hi there
+          
+          This is the GitHub-Collaborator repository bot.
+
+          The repositories in this pull request have been archived. 
+          
+          This pull request is to remove those Terraform files.
+
         EOF
       }
     end

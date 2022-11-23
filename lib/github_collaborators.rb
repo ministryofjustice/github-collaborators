@@ -10,6 +10,7 @@ require "git"
 require "uuidtools"
 require "logger"
 require_relative "./logging"
+require_relative "./github_collaborators/archived_repositories"
 require_relative "./github_collaborators/access_remover"
 require_relative "./github_collaborators/branch_creator"
 require_relative "./github_collaborators/collaborator"
@@ -52,6 +53,7 @@ class GithubCollaborators
   EXTEND_REVIEW_DATE_PR_TITLE = "Extend review date in Terraform file/s for"
   REMOVE_EXPIRED_COLLABORATOR_PR_TITLE = "Remove expired collaborator from Terraform file/s for"
   CHANGE_PERMISSION_PR_TITLE = "Modify permission in Terraform file/s for"
+  ARCHIVED_REPOSITORY_PR_TITLE = "Delete archived repository Terraform file/s"
 
   def self.tf_safe(string)
     string.tr(".", "-")

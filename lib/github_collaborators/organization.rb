@@ -1,7 +1,7 @@
 class GithubCollaborators
   class Organization
     include Logging
-    attr_reader :repositories, :full_org_members
+    attr_reader :repositories, :full_org_members, :archived_repositories
 
     def initialize
       logger.debug "initialize"
@@ -21,6 +21,9 @@ class GithubCollaborators
 
       # Grab the Org repositories
       @repositories = Repositories.new.get_active_repositories
+
+      # Grab the Org archived repositories
+      @archived_repositories = Repositories.new.get_archived_repositories
 
       # Get all the outside collaborators from GitHub per repo that has an outside collaborator
       repo_collaborators = GithubCollaborators::RepositoryCollaborators.new
@@ -66,6 +69,9 @@ class GithubCollaborators
       @full_org_members.each do |full_org_member|
         # Exclude the all-org-members team repositories
         full_org_member.add_excluded_repositories(all_org_members_team_repositories)
+
+        # Add the archived repositories
+        full_org_member.add_archived_repositories(@archived_repositories)
 
         # Collect the GitHub and Terraform repositories for each full org member
 
