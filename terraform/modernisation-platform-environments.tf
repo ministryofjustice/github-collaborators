@@ -10,7 +10,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2022-11-01"
+      review_after = "2023-05-24"
     },
     {
       github_user  = "jamesashton-roc"
@@ -20,7 +20,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2022-11-01"
+      review_after = "2023-05-24"
     },
     {
       github_user  = "MMBroc"
@@ -30,7 +30,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2022-11-01"
+      review_after = "2023-05-24"
     },
     {
       github_user  = "md-roc"
@@ -40,7 +40,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2022-11-01"
+      review_after = "2023-05-24"
     },
     {
       github_user  = "craigygordon"
@@ -50,7 +50,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2022-11-01"
+      review_after = "2023-05-24"
     },
     {
       github_user  = "andylandroc"
@@ -60,7 +60,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2022-11-01"
+      review_after = "2023-05-24"
     },
     {
       github_user  = "trudley"
@@ -70,7 +70,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2022-11-01"
+      review_after = "2023-05-24"
     },
     {
       github_user  = "helenvickers-roc"
@@ -80,7 +80,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2022-11-01"
+      review_after = "2023-05-24"
     },
     {
       github_user  = "Tom-Whi"
@@ -90,7 +90,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2022-11-01"
+      review_after = "2023-05-24"
     },
     {
       github_user  = "agilisys-agardner"
