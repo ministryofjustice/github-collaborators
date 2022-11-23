@@ -4,7 +4,7 @@ module "hmpps-vcms-app-cp" {
   collaborators = [
     {
       github_user  = "simoncreasy-civica"
-      permission   = "push"
+      permission   = "maintain"
       name         = "Simon Creasy"
       email        = "simon.creasy@civica.co.uk"
       org          = "Civica"
