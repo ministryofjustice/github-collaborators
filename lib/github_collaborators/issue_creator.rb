@@ -60,7 +60,7 @@ class GithubCollaborators
         # Found matching issue
         found_issues = true
       end
-      found_issues
+      found_issues  
     end
 
     def get_issues(repository)
