@@ -80,18 +80,20 @@ class GithubCollaborators
       [http, uri]
     end
 
+    APPLICATION_JSON = "application/json"
+
     def headers
       {
-        "Accept" => "application/json",
-        "Content-Type" => "application/json",
+        "Accept" => APPLICATION_JSON,
+        "Content-Type" => APPLICATION_JSON,
         "Authorization" => "token #{ENV.fetch("ADMIN_GITHUB_TOKEN")}"
       }
     end
 
     def pull_request_headers
       {
-        "Accept" => "application/json",
-        "Content-Type" => "application/json",
+        "Accept" => APPLICATION_JSON,
+        "Content-Type" => APPLICATION_JSON,
         "Authorization" => "token #{ENV.fetch("OPS_BOT_TOKEN")}"
       }
     end
