@@ -10,7 +10,7 @@ module "network-access-control-admin" {
       org          = "Made Tech Ltd"
       reason       = "MoJ Network Access Control Tech Team"
       added_by     = "justin.fielding@justice.gov.uk"
-      review_after = "2022-01-01"
+      review_after = "2023-05-24"
     },
   ]
 }
