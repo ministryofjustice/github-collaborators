@@ -40,6 +40,14 @@ class GithubCollaborators
       http.request(request)
     end
 
+    def post_pull_request_json(url, json)
+      logger.debug "post_pull_request_json"
+      http, uri = create_http_client(url)
+      request = Net::HTTP::Post.new(uri.request_uri, pull_request_headers)
+      request.body = json
+      http.request(request)
+    end
+
     def patch_json(url, json)
       logger.debug "patch_json"
       http, uri = create_http_client(url)
@@ -72,11 +80,21 @@ class GithubCollaborators
       [http, uri]
     end
 
+    APPLICATION_JSON = "application/json"
+
     def headers
       {
-        "Accept" => "application/json",
-        "Content-Type" => "application/json",
+        "Accept" => APPLICATION_JSON,
+        "Content-Type" => APPLICATION_JSON,
         "Authorization" => "token #{ENV.fetch("ADMIN_GITHUB_TOKEN")}"
+      }
+    end
+
+    def pull_request_headers
+      {
+        "Accept" => APPLICATION_JSON,
+        "Content-Type" => APPLICATION_JSON,
+        "Authorization" => "token #{ENV.fetch("OPS_BOT_TOKEN")}"
       }
     end
   end
