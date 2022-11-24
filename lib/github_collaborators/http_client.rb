@@ -92,7 +92,7 @@ class GithubCollaborators
       {
         "Accept" => "application/json",
         "Content-Type" => "application/json",
-        "Authorization" => "token #{ENV.fetch("OPS_ENG_BOT")}"
+        "Authorization" => "token #{ENV.fetch("OPS_BOT_TOKEN")}"
       }
     end
   end
