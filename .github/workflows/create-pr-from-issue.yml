@@ -1,6 +1,7 @@
 name: Create a PR from an issue - Outside Collaborators
 
-# on:
+on:
+  workflow_dispatch:
 #   issues:
 #     types: [opened]
 
