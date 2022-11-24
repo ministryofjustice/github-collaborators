@@ -34,7 +34,7 @@ class GithubCollaborators
 
     def get_issues(repository)
       logger.debug "get_issues"
-      url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues"
+      url = "https://api.github.com/repos/ministryofjustice/#{repository.downcase}/issues"
       response = GithubCollaborators::HttpClient.new.fetch_json(url)
       JSON.parse(response, {symbolize_names: true})
     end
