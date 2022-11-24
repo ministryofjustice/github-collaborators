@@ -12,3 +12,4 @@ gem "webmock", require: false, group: :test
 gem "bundler"
 gem "git"
 gem "uuidtools"
+gem 'cgi', '~> 0.3.5'
