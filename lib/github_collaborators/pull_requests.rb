@@ -9,7 +9,7 @@ class GithubCollaborators
       if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
         url = "https://api.github.com/repos/ministryofjustice/github-collaborators/pulls"
         if ENV.fetch("OPS_BOT_TOKEN")
-          GithubCollaborators::HttpClient.new.post_pull_request_json(url, hash_body.to_json) 
+          GithubCollaborators::HttpClient.new.post_pull_request_json(url, hash_body.to_json)
         else
           GithubCollaborators::HttpClient.new.post_json(url, hash_body.to_json)
         end
