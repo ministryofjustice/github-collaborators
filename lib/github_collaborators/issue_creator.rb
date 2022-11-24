@@ -51,7 +51,7 @@ class GithubCollaborators
       # This is a work around for when collaborators unassign themself from the ticket without updating their review_after
       # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
       bad_issues = issues.select { |issue| issue[:assignees].length == 0 }
-      bad_issues.each { |issue| GithubCollaborators::IssueClose.remove_issue(@repository, issue[:number]) }
+      bad_issues.each { |issue| GithubCollaborators::IssueClose.new.remove_issue(@repository, issue[:number]) }
       issues.delete_if { |issue| issue[:assignees].length == 0 }
 
       # Check which issues are assigned to the collaborator
