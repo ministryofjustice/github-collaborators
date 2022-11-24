@@ -2,7 +2,9 @@ env:
   RUBY_VERSION: 3.1.0
 
 name: Rspec tests
-# on: [push, pull_request]
+on:
+  workflow_dispatch:
+# on: [push, pull_erequest]
 
 jobs:
   rspec-test:
