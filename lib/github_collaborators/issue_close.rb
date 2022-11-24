@@ -1,22 +1,19 @@
 class GithubCollaborators
   class IssueClose
     include Logging
-
-    def initialize
-      logger.debug "initialize"
-      params = {
-        repository: nil,
-        github_user: nil
-      }
-      @issue_creator = GithubCollaborators::IssueCreator.new(params)
-    end
-
+    
     # Close issues that have been open longer than 45 days
     def close_expired_issues(repository)
       logger.debug "close_expired_issues"
       allowed_days = 45
 
-      issues = @issue_creator.get_issues(repository)
+      params = {
+        repository: nil,
+        github_user: nil
+      }
+
+      issues = GithubCollaborators::IssueCreator.new(params).get_issues(repository)
+
       issues.each do |issue|
         # Check for the issues created by this application and that the issue is open
         if (

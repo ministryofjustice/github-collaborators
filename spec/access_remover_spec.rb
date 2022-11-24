@@ -1,6 +1,6 @@
 class GithubCollaborators
   describe AccessRemover do
-    context "when env var not enabled" do
+    context "when env var enabled" do
       before do
         ENV["REALLY_POST_TO_GH"] = "1"
       end
