@@ -1,7 +1,7 @@
 name: Report deleted repos
 
-# on:
-#   workflow_dispatch:
+on:
+  workflow_dispatch:
 #   schedule:
 #     - cron: "0 23 * * 1-5"
 
