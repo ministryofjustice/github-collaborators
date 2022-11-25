@@ -27,7 +27,9 @@ class GithubCollaborators
       @organization.create_full_org_members(@collaborators)
 
       # An array to store collaborators login names that are defined in Terraform but are not on GitHub
-      @collaborators_missing_on_github = []
+      @unknown_collaborators_on_github = []
+
+      @invites = GithubCollaborators::Invites.new
     end
 
     # Entry point from Ruby script, keep the order as-is the compare function will ne
@@ -77,9 +79,9 @@ class GithubCollaborators
     def collaborator_checks
       logger.debug "collaborator_checks"
 
-      if @collaborators_missing_on_github.length > 0
+      if @unknown_collaborators_on_github.length > 0
         # Raise Slack message
-        GithubCollaborators::SlackNotifier.new(GithubCollaborators::MissingCollaborators.new, @collaborators_missing_on_github).post_slack_message
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::UnknownCollaborators.new, @unknown_collaborators_on_github).post_slack_message
       end
 
       collaborators_with_issues = @collaborators.select { |collaborator| collaborator.issues.length > 0 }
@@ -106,7 +108,7 @@ class GithubCollaborators
       logger.debug "full_org_members_check"
 
       odd_full_org_members = []
-      full_org_members_archived_repositories = []
+      full_org_members_in_archived_repositories = []
 
       # Run full org member tests
       @organization.full_org_members.each do |full_org_member|
@@ -126,9 +128,11 @@ class GithubCollaborators
           odd_full_org_members.push(full_org_member.login)
         end
 
-        # Find if collaborator attached to archived repositories
+        # Find which collaborators are attached to archived repositories in the files that we track
         full_org_member.attached_archived_repositories.each do |archived_repository|
-          full_org_members_archived_repositories.push({login: full_org_member.login, repository: archived_repository})
+          if @terraform_files.does_file_exist(archived_repository)
+            full_org_members_in_archived_repositories.push({login: full_org_member.login, repository: archived_repository})
+          end
         end
       end
 
@@ -138,8 +142,8 @@ class GithubCollaborators
       end
 
       # Raise Slack message for collaborators that are attached to archived repositories
-      if full_org_members_archived_repositories.length > 0
-        GithubCollaborators::SlackNotifier.new(GithubCollaborators::ArchivedRepositories.new, full_org_members_archived_repositories).post_slack_message
+      if full_org_members_in_archived_repositories.length > 0
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::ArchivedRepositories.new, full_org_members_in_archived_repositories).post_slack_message
       end
     end
 
@@ -464,7 +468,7 @@ class GithubCollaborators
       repositories.each do |repository|
         # No pull request exists, modify the file/s
         repository_name = repository[:repository_name]
-        @terraform_files.check_file_exists(repository_name)
+        @terraform_files.ensure_file_exists(repository_name)
         @terraform_files.change_collaborator_permission_in_file(collaborator_name, repository_name, repository[:permission])
         edited_files.push("terraform/#{repository_name}.tf")
       end
@@ -491,7 +495,7 @@ class GithubCollaborators
       edited_files = []
       repositories.each do |repository_name|
         # No pull request exists, modify the file/s
-        @terraform_files.check_file_exists(repository_name)
+        @terraform_files.ensure_file_exists(repository_name)
         # Get the github permission for that repository
         repository_permission = collaborator.get_repository_permission(repository_name)
         @terraform_files.add_collaborator_to_file(collaborator, repository_name, repository_permission)
@@ -531,27 +535,34 @@ class GithubCollaborators
         find_unknown_collaborators(collaborators_on_github, collaborators_in_file, repository_name)
 
         # Get the repository invites
-        repository_invites = get_repository_invites(repository_name)
+        repository_invites = @invites.get_repository_invites(repository_name)
 
         # Check the repository invites
         # using a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
         repository_invites.each do |invite|
           invite_login = invite[:login]
-          # Compare Terraform file collaborators name against Open invites
-          if collaborators_in_file.include?(invite_login)
-            if invite[:expired]
-              # Invite expired
-              delete_expired_invite(repository_name, invite)
-            else
-              # When invite is pending
-              logger.info "There is a pending invite for #{invite_login} on #{repository_name}."
-            end
-          else
-            # When no invite exists, this means the collaborator is not found on the GitHub repository
-            # Collaborator is not defined on GitHub, add to the array for a Slack message below
-            # Store as a hash like this { :login => "name", :repository => "repo_name" }
-            @collaborators_missing_on_github.push({login: invite_login, repository: repository_name})
-            logger.warn "#{invite_login} is not defined on the GitHub repository: #{repository_name}."
+          invite_expired = invite[:expired]
+
+          # Compare Terraform file collaborators name against an open invite and
+          # print where an invite is pending
+          if collaborators_in_file.include?(invite_login) && invite_expired == false
+            logger.info "There is a pending invite for #{invite_login} on #{repository_name}."
+          end
+
+          if collaborators_in_file.include?(invite_login) && invite_expired
+            logger.info "The invite for known #{invite_login} on #{repository_name} has expired."
+          end
+
+          # Store unknown collaborator invite username to raise Slack message later on
+          # Store as a hash like this { :login => "name", :repository => "repo_name" }
+          if !collaborators_in_file.include?(invite_login)
+            @unknown_collaborators_on_github.push({login: invite_login, repository: repository_name})
+            logger.warn "Unknown collaborator #{invite_login} invited to repository: #{repository_name}"
+          end
+
+          # Delete expired invites
+          if invite_expired
+            @invites.delete_expired_invite(repository_name, invite)
           end
         end
 
@@ -588,32 +599,6 @@ class GithubCollaborators
           @collaborators.push(collaborator)
         end
       end
-    end
-
-    # Called when an invite has expired
-    def delete_expired_invite(repository_name, invite)
-      logger.debug "delete_expired_invite"
-      logger.warn "The invite for #{invite[:login]} on #{repository_name} has expired. Deleting the invite."
-      if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
-        url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/invitations/#{invite[:invite_id]}"
-        GithubCollaborators::HttpClient.new.delete(url)
-        sleep 1
-      else
-        logger.debug "Didn't delete collaborator repository invite, this is a dry run"
-      end
-    end
-
-    # Get the collaborator invites for the repository and store the data as
-    # a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
-    def get_repository_invites(repository_name)
-      logger.debug "get_repository_invites"
-      repository_invites = []
-      url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/invitations"
-      json = GithubCollaborators::HttpClient.new.fetch_json(url)
-      JSON.parse(json)
-        .find_all { |invite| invite["invitee"]["login"] }
-        .map { |invite| repository_invites.push({login: invite["invitee"]["login"], expired: invite["expired"], invite_id: invite["id"]}) }
-      repository_invites
     end
 
     def does_pr_already_exist(terraform_file_name, title_message)

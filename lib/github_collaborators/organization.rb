@@ -41,6 +41,20 @@ class GithubCollaborators
 
       # There are some collaborators who have full Org membership
       @full_org_members = []
+
+      # Get the all-org members-members team repositories
+      @all_org_members_team_repositories = get_all_org_members_team_repositories
+    end
+
+    def is_collaborator_a_full_org_member(collaborator_name)
+      logger.debug "is_collaborator_a_full_org_member"
+      user_exists = false
+      @full_org_members.each do |full_org_member|
+        if full_org_member.login == collaborator_name
+          user_exists = true
+        end
+      end
+      user_exists
     end
 
     def is_collaborator_an_org_member(login)
@@ -59,16 +73,13 @@ class GithubCollaborators
     def create_full_org_members(terraform_collaborators)
       logger.debug "create_full_org_members"
 
-      # Get the all-org members-members team repositories
-      all_org_members_team_repositories = get_all_org_members_team_repositories
-
       # A list of FullOrgMember objects is created in this function when a full org members is detected
       terraform_collaborators.each { |collaborator| is_collaborator_an_org_member(collaborator.login) }
 
       # Iterate over the list of FullOrgMember objects
       @full_org_members.each do |full_org_member|
-        # Exclude the all-org-members team repositories
-        full_org_member.add_excluded_repositories(all_org_members_team_repositories)
+        # Add the all-org-members team repositories
+        full_org_member.add_all_org_members_team_repositories(@all_org_members_team_repositories)
 
         # Add the archived repositories
         full_org_member.add_archived_repositories(@archived_repositories)
@@ -146,13 +157,18 @@ class GithubCollaborators
     # Query the all_org_members team and return its repositories
     def get_all_org_members_team_repositories
       logger.debug "get_all_org_members_team_repositories"
-      all_org_members_team_repositories = []
+
+      team_repositories = []
+
+      #  Grabs 100 repositories from the team, if team has more than 100 repositories
+      # this will need to be changed to paginate through the results.
       url = "https://api.github.com/orgs/ministryofjustice/teams/all-org-members/repos?per_page=100"
       json = GithubCollaborators::HttpClient.new.fetch_json(url)
       JSON.parse(json)
         .find_all { |repository| repository["name"] }
-        .map { |repository| all_org_members_team_repositories.push(repository["name"]) }
-      all_org_members_team_repositories
+        .map { |repository| team_repositories.push(repository["name"]) }
+
+        team_repositories
     end
 
     # Checks and stores which collaborator have org membership
@@ -160,15 +176,8 @@ class GithubCollaborators
       logger.debug "add_new_collaborator_and_org_member"
 
       # See if collaborator already exists
-      user_exists = false
-      @full_org_members.each do |full_org_member|
-        if full_org_member.login == new_collaborator_login
-          user_exists = true
-        end
-      end
-
       # If it doesn't create a new collaborator
-      if user_exists == false
+      if is_collaborator_a_full_org_member(new_collaborator_login) == false
         full_org_member = GithubCollaborators::FullOrgMember.new(new_collaborator_login)
         @full_org_members.push(full_org_member)
       end
