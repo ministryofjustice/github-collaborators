@@ -168,7 +168,7 @@ class GithubCollaborators
         .find_all { |repository| repository["name"] }
         .map { |repository| team_repositories.push(repository["name"]) }
 
-        team_repositories
+      team_repositories
     end
 
     # Checks and stores which collaborator have org membership

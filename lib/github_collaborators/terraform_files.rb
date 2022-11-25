@@ -469,7 +469,7 @@ class GithubCollaborators
         create_new_file(repository_name)
       end
     end
-    
+
     # Check a file exists
     def does_file_exist(repository_name)
       logger.debug "does_file_exist"
