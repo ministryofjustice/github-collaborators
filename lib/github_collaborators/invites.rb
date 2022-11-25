@@ -3,10 +3,10 @@ class GithubCollaborators
     include Logging
 
     # Called when an invite has expired
-    def delete_expired_invite(repository_name, invite)
+    def delete_expired_invite(repository_name, invite_login)
       logger.debug "delete_expired_invite"
-      logger.warn "The invite for #{invite[:login]} on #{repository_name} has expired. Deleting the invite."
-      url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/invitations/#{invite[:invite_id]}"
+      logger.warn "The invite for #{invite_login} on #{repository_name} has expired. Deleting the invite."
+      url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/invitations/#{invite_login}"
       GithubCollaborators::HttpClient.new.delete(url)
       sleep 1
     end

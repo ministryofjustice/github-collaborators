@@ -562,7 +562,7 @@ class GithubCollaborators
 
           # Delete expired invites
           if invite_expired
-            @invites.delete_expired_invite(repository_name, invite)
+            @invites.delete_expired_invite(repository_name, invite_login)
           end
         end
 
