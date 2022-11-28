@@ -24,7 +24,7 @@ module "sentinel" {
     },
     {
       github_user  = "simoncreasy-civica"
-      permission   = "push"
+      permission   = "admin"
       name         = "Simon Creasy"
       email        = "simon.creasy@civica.co.uk"
       org          = "civica"
