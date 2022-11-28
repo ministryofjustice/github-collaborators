@@ -43,7 +43,7 @@ module "yjaf-serious-incidents" {
       review_after = "2023-07-21"
     },
     {
-      github_user  = "craig-ashford"
+      github_user  = "craig-ashford-nec"
       permission   = "admin"
       name         = "Craig Ashford"
       email        = "craig.ashford@necsws.com"
