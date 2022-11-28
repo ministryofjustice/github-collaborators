@@ -63,7 +63,7 @@ module "yjaf-ui" {
       review_after = "2022-12-12"
     },
     {
-      github_user  = "craig-ashford"
+      github_user  = "craig-ashford-nec"
       permission   = "admin"
       name         = "Craig Ashford"
       email        = "craig.ashford@necsws.com"
