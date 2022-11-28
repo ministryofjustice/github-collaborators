@@ -12,7 +12,7 @@ class GithubCollaborators
       # This is updated by reading each Terraform file
       @terraform_repositories = []
       @missing_from_repositories = []
-      @excluded_repositories = []
+      @org_members_team_repositories = []
       @repository_permission_mismatches = []
       @ignore_repositories = []
       @github_archived_repositories = []
@@ -36,24 +36,22 @@ class GithubCollaborators
     end
 
     # Check whether a collaborator is attached to no repositories
-    # This is called after the API calls below have been called and
-    # the all-org-members team repositories have been removed.
     def odd_full_org_member_check
       logger.debug "odd_full_org_members"
-      if @github_repositories.length == 0
+      if (@github_repositories.length == 0 || @terraform_repositories.length == 0) && @org_members_team_repositories.length == 0
         return true
       end
       false
     end
 
+    def add_all_org_members_team_repositories(repositories)
+      logger.debug "add_all_org_members_team_repositories"
+      @org_members_team_repositories = repositories
+    end
+
     def add_archived_repositories(repositories)
       logger.debug "add_archived_repositories"
       @github_archived_repositories = repositories
-    end
-
-    def add_excluded_repositories(repositories)
-      logger.debug "add_excluded_repositories"
-      @excluded_repositories = repositories
     end
 
     def get_full_org_member_repositories
@@ -78,7 +76,7 @@ class GithubCollaborators
           repository_name = repo.dig("node", "name")
           # Ignore excluded repositories ie the all-org-members team repositories and archived repositories
           # This is to focus on active repositories that should be tracked
-          if !@excluded_repositories.include?(repository_name) && !@github_archived_repositories.include?(repository_name)
+          if !@org_members_team_repositories.include?(repository_name) && !@github_archived_repositories.include?(repository_name)
             # Store repository
             @github_repositories.push(repository_name)
           end
@@ -97,7 +95,7 @@ class GithubCollaborators
       terraform_repositories.each do |terraform_repository_name|
         # Ignore excluded repositories ie the all-org-members team repositories and archived repositories
         # This is to focus on active repositories that should be tracked
-        if !@excluded_repositories.include?(terraform_repository_name) && !@github_archived_repositories.include?(terraform_repository_name)
+        if !@org_members_team_repositories.include?(terraform_repository_name) && !@github_archived_repositories.include?(terraform_repository_name)
           # Store repository
           @terraform_repositories.push(terraform_repository_name)
         end
@@ -107,34 +105,34 @@ class GithubCollaborators
     def do_repositories_match
       logger.debug "do_repositories_match"
 
-      if @github_repositories.length > 0 && @terraform_repositories.length == 0
-        # GitHub repository exists and no Terraform files exists
-        @github_repositories.each do |github_repository_name|
-          @missing_from_repositories.push(github_repository_name)
+      missing_repositories = []
+
+      # Join the two arrays
+      repositories = @github_repositories + @terraform_repositories
+
+      repositories.uniq!
+      repositories.sort!
+
+      # Search all repositories
+      repositories.each do |repository_name|
+        # expect to find repository in both arrays
+        if @github_repositories.count(repository_name) == 0 ||
+            @terraform_repositories.count(repository_name) == 0
+          # Found a missing repository
+          missing_repositories.push(repository_name)
         end
-      elsif @github_repositories.length == 0 && @terraform_repositories.length > 0
-        # Terraform files exists but no GitHub repository exists
-        @terraform_repositories.each do |terraform_repository_name|
-          @missing_from_repositories.push(terraform_repository_name)
-        end
-      else
-        # Join the two arrays
-        repositories = @github_repositories + @terraform_repositories
-        # Search all repositories
-        repositories.each do |repository_name|
-          # expect to find repository in both arrays
-          if @github_repositories.count(repository_name) == 0 ||
-              @terraform_repositories.count(repository_name) == 0
-            # Found a missing repository
+      end
+
+      if missing_repositories.length > 0
+        missing_repositories.each do |repository_name|
+          # Ignore the all_org_members team repositories
+          if !@org_members_team_repositories.include?(repository_name)
             @missing_from_repositories.push(repository_name)
           end
         end
 
-        # Sort and filter any duplicates results
-        if @missing_from_repositories.length > 0
-          @missing_from_repositories.sort!
-          @missing_from_repositories.uniq!
-        end
+        @missing_from_repositories.sort!
+        @missing_from_repositories.uniq!
       end
 
       # Result is based on any missing repositories

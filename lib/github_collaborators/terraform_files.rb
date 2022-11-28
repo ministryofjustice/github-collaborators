@@ -462,8 +462,17 @@ class GithubCollaborators
       empty_files
     end
 
-    def check_file_exists(repository_name)
-      logger.debug "check_file_exists"
+    # Create a file if it doesn't exist
+    def ensure_file_exists(repository_name)
+      logger.debug "ensure_file_exists"
+      if does_file_exist(repository_name) == false
+        create_new_file(repository_name)
+      end
+    end
+
+    # Check a file exists
+    def does_file_exist(repository_name)
+      logger.debug "does_file_exist"
       file_exists = false
       @terraform_files.each do |terraform_file|
         if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
@@ -471,11 +480,7 @@ class GithubCollaborators
           break
         end
       end
-
-      if file_exists == false
-        # It doesn't so create a new file
-        create_new_file(repository_name)
-      end
+      file_exists
     end
 
     def get_collaborators_in_file(repository_name)
