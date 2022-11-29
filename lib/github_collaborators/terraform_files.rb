@@ -20,7 +20,7 @@ class GithubCollaborators
     # This is called when a full org member / collaborator is missing from a Terraform file
     def add_org_member_collaborator_data(collaborator, repository_permission)
       logger.debug "add_org_member_collaborator_data"
-      @username = collaborator.login
+      @username = collaborator.login.downcase
       @permission = repository_permission
       @email = collaborator.email
       @name = collaborator.name
@@ -36,7 +36,7 @@ class GithubCollaborators
     # is used instead.
     def add_missing_collaborator_data(collaborator_name)
       logger.debug "add_missing_collaborator_data"
-      @username = collaborator_name.to_s
+      @username = collaborator_name.to_s.downcase
       @reason = "Collaborator missing from Terraform file"
       @added_by = "opseng-bot@digital.justice.gov.uk"
       review_date = (Date.today + 90).strftime("%Y-%m-%d")
@@ -47,13 +47,13 @@ class GithubCollaborators
     # This is called when a collaborator is found on GitHub but not defined in a Terraform file
     def add_unknown_collaborator_data(collaborator_name)
       logger.debug "add_unknown_collaborator_data"
-      @username = collaborator_name
+      @username = collaborator_name.downcase
       @defined_in_terraform = false
     end
 
     def add_terraform_file_collaborator_data(collaborator)
       logger.debug "add_terraform_file_collaborator_data"
-      @username = collaborator.fetch(:login, "")
+      @username = collaborator.fetch(:login, "").downcase
       @permission = collaborator.fetch(:permission, "")
       @email = collaborator.fetch(:email, "")
       @name = collaborator.fetch(:name, "")
@@ -86,7 +86,7 @@ class GithubCollaborators
         # Map values into array
         .map { |field| [field[0], field.drop(1)] }.to_h
 
-      @username = the_data["username"][0]
+      @username = the_data["username"][0].downcase
       @permission = the_data["permission"][0]
       @email = the_data["email"][0]
       @name = the_data["name"][0]
@@ -99,7 +99,7 @@ class GithubCollaborators
 
     def copy_block(block)
       logger.debug "copy_block"
-      @username = block.username
+      @username = block.username.downcase
       @permission = block.permission
       @reason = block.reason
       @added_by = block.added_by
@@ -116,7 +116,7 @@ class GithubCollaborators
 
     def initialize(repository_name)
       logger.debug "initialize"
-      @filename = repository_name
+      @filename = repository_name.downcase
       @file_path = "terraform/#{GithubCollaborators.tf_safe(@filename)}.tf"
       @terraform_blocks = []
       @terraform_file_data = []
@@ -129,7 +129,7 @@ class GithubCollaborators
       # Revert matching Terraform blocks with the original values
       @terraform_modified_blocks.each do |original_block|
         @terraform_blocks.each do |terraform_block|
-          if terraform_block.username == original_block.username
+          if terraform_block.username.downcase == original_block.username.downcase
             terraform_block.copy_block(original_block)
           end
         end
@@ -166,7 +166,7 @@ class GithubCollaborators
     def extend_review_date(collaborator_name)
       logger.debug "extend_review_date"
       @terraform_blocks.each do |terraform_block|
-        if terraform_block.username == collaborator_name
+        if terraform_block.username.downcase == collaborator_name.downcase
           @terraform_modified_blocks.push(terraform_block.clone)
           terraform_block.review_after = (Date.parse(terraform_block.review_after) + 180).to_s
         end
@@ -177,7 +177,7 @@ class GithubCollaborators
     def remove_collaborator(collaborator_name)
       logger.debug "remove_collaborator"
       @terraform_blocks.each do |terraform_block|
-        if terraform_block.username == collaborator_name
+        if terraform_block.username.downcase == collaborator_name.downcase
           index = @terraform_blocks.index(terraform_block)
           @add_removed_terraform_blocks.push({added: false, removed: true, block: terraform_block.clone, index: index})
           @terraform_blocks.delete_at(index)
@@ -212,7 +212,7 @@ class GithubCollaborators
     def get_collaborator_permission(collaborator_name)
       logger.debug "get_collaborator_permission"
       @terraform_blocks.each do |terraform_block|
-        if terraform_block.username == collaborator_name
+        if terraform_block.username.downcase == collaborator_name.downcase
           return terraform_block.permission
         end
       end
@@ -222,7 +222,7 @@ class GithubCollaborators
     def change_collaborator_permission(collaborator_name, permission)
       logger.debug "get_collaborator_permission"
       @terraform_blocks.each do |terraform_block|
-        if terraform_block.username == collaborator_name
+        if terraform_block.username.downcase == collaborator_name.downcase
           @terraform_modified_blocks.push(terraform_block.clone)
           terraform_block.permission = permission
         end
@@ -293,7 +293,7 @@ class GithubCollaborators
       collaborator_data = REQUIRED_ATTRIBUTES.map { |attr, msg| get_attribute(attr, line_number) }
 
       collaborator = {
-        login: collaborator_data[USERNAME],
+        login: collaborator_data[USERNAME].downcase,
         permission: collaborator_data[PERMISSION],
         name: collaborator_data[NAME],
         email: collaborator_data[EMAIL],
@@ -367,10 +367,10 @@ class GithubCollaborators
       fetch_terraform_files.each do |terraform_file_path|
         terraform_file_name = File.basename(terraform_file_path)
         # Ignore the above named files
-        if !exclude_files.include?(terraform_file_name)
+        if !exclude_files.include?(terraform_file_name.downcase)
           # Strip away prefix and file type
           repository_name = File.basename(terraform_file_path, ".tf")
-          terraform_file = GithubCollaborators::TerraformFile.new(repository_name)
+          terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase)
           # Read the file
           terraform_file.read_file
           # Make Terraform blocks for each collaborator
@@ -383,25 +383,25 @@ class GithubCollaborators
 
     def create_new_file(repository_name)
       logger.debug "create_new_file"
-      terraform_file = GithubCollaborators::TerraformFile.new(repository_name)
+      terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase)
       # Store Terraform file
       @terraform_files.push(terraform_file)
     end
 
     def remove_file(file_name)
       logger.debug "remove_file"
-      path_to_file = "terraform/#{file_name}.tf"
+      path_to_file = "terraform/#{file_name.downcase}.tf"
       if File.exist?(path_to_file)
         File.delete(path_to_file)
-        @terraform_files.delete_if { |terraform_file| terraform_file.filename == file_name }
+        @terraform_files.delete_if { |terraform_file| terraform_file.filename.downcase == file_name.downcase }
       end
     end
 
     def extend_date_in_file(repository_name, login)
       logger.debug "extend_date_in_file"
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
-          terraform_file.extend_review_date(login)
+        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
+          terraform_file.extend_review_date(login.downcase)
           terraform_file.write_to_file
           terraform_file.revert_terraform_blocks
         end
@@ -411,8 +411,8 @@ class GithubCollaborators
     def remove_collaborator_from_file(repository_name, login)
       logger.debug "remove_collaborator_from_file"
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
-          terraform_file.remove_collaborator(login)
+        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
+          terraform_file.remove_collaborator(login.downcase)
           terraform_file.write_to_file
           terraform_file.restore_terraform_blocks
         end
@@ -422,7 +422,7 @@ class GithubCollaborators
     def remove_archieved_repository_file(repository_name)
       logger.debug "remove_archieved_repository_file"
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
+        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
           index = @terraform_files.index(terraform_file)
           @terraform_files.delete_at(index)
         end
@@ -432,8 +432,8 @@ class GithubCollaborators
     def change_collaborator_permission_in_file(collaborator_name, repository_name, permission)
       logger.debug "change_collaborator_permission_in_file"
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
-          terraform_file.change_collaborator_permission(collaborator_name, permission)
+        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
+          terraform_file.change_collaborator_permission(collaborator_name.downcase, permission)
           terraform_file.write_to_file
           terraform_file.revert_terraform_blocks
         end
@@ -443,7 +443,7 @@ class GithubCollaborators
     def add_collaborator_to_file(collaborator, repository_name, repository_permission)
       logger.debug "add_collaborator_to_file"
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
+        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
           terraform_file.add_org_member_collaborator(collaborator, repository_permission)
           terraform_file.write_to_file
           terraform_file.restore_terraform_blocks
@@ -456,7 +456,7 @@ class GithubCollaborators
       empty_files = []
       @terraform_files.each do |terraform_file|
         if terraform_file.terraform_blocks.length == 0
-          empty_files.push(terraform_file.filename)
+          empty_files.push(terraform_file.filename.downcase)
         end
       end
       empty_files
@@ -465,8 +465,8 @@ class GithubCollaborators
     # Create a file if it doesn't exist
     def ensure_file_exists(repository_name)
       logger.debug "ensure_file_exists"
-      if does_file_exist(repository_name) == false
-        create_new_file(repository_name)
+      if does_file_exist(repository_name.downcase) == false
+        create_new_file(repository_name.downcase)
       end
     end
 
@@ -475,7 +475,7 @@ class GithubCollaborators
       logger.debug "does_file_exist"
       file_exists = false
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
+        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
           file_exists = true
           break
         end
@@ -487,9 +487,9 @@ class GithubCollaborators
       logger.debug "get_collaborators_in_file"
       collaborators_in_file = []
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename == GithubCollaborators.tf_safe(repository_name)
+        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
           terraform_file.terraform_blocks.each do |block|
-            collaborators_in_file.push(block.username)
+            collaborators_in_file.push(block.username.downcase)
           end
         end
       end

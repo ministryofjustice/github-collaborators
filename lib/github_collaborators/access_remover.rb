@@ -4,8 +4,8 @@ class GithubCollaborators
 
     def initialize(params)
       logger.debug "initialize"
-      @repository = params.fetch(:repository)
-      @github_user = params.fetch(:github_user)
+      @repository = params.fetch(:repository).downcase
+      @github_user = params.fetch(:github_user).downcase
     end
 
     def remove_access

@@ -17,7 +17,7 @@ class GithubCollaborators
       @ignore_repositories = []
       @github_archived_repositories = []
       @attached_archived_repositories = []
-      @login = login
+      @login = login.downcase
       @email = ""
       @name = ""
       @org = ""
@@ -25,14 +25,14 @@ class GithubCollaborators
 
     def add_info_from_file(email, name, org)
       logger.debug "add_info_from_file"
-      @email = email
-      @name = name
-      @org = org
+      @email = email.downcase
+      @name = name.downcase
+      @org = org.downcase
     end
 
     def add_ignore_repository(repository_name)
       logger.debug "add_ignore_repository"
-      @ignore_repositories.push(repository_name)
+      @ignore_repositories.push(repository_name.downcase)
     end
 
     # Check whether a collaborator is attached to no repositories
@@ -72,8 +72,8 @@ class GithubCollaborators
 
       repositories.each do |repo|
         # Accept only ministryofjustice repositories
-        if repo.dig("node", "owner", "login") == "ministryofjustice"
-          repository_name = repo.dig("node", "name")
+        if repo.dig("node", "owner", "login").downcase == "ministryofjustice"
+          repository_name = repo.dig("node", "name").downcase
           # Ignore excluded repositories ie the all-org-members team repositories and archived repositories
           # This is to focus on active repositories that should be tracked
           if !@org_members_team_repositories.include?(repository_name) && !@github_archived_repositories.include?(repository_name)
@@ -95,9 +95,9 @@ class GithubCollaborators
       terraform_repositories.each do |terraform_repository_name|
         # Ignore excluded repositories ie the all-org-members team repositories and archived repositories
         # This is to focus on active repositories that should be tracked
-        if !@org_members_team_repositories.include?(terraform_repository_name) && !@github_archived_repositories.include?(terraform_repository_name)
+        if !@org_members_team_repositories.include?(terraform_repository_name.downcase) && !@github_archived_repositories.include?(terraform_repository_name.downcase)
           # Store repository
-          @terraform_repositories.push(terraform_repository_name)
+          @terraform_repositories.push(terraform_repository_name.downcase)
         end
       end
     end
@@ -115,6 +115,7 @@ class GithubCollaborators
 
       # Search all repositories
       repositories.each do |repository_name|
+        repository_name = repository_name.downcase
         # expect to find repository in both arrays
         if @github_repositories.count(repository_name) == 0 ||
             @terraform_repositories.count(repository_name) == 0
@@ -125,6 +126,7 @@ class GithubCollaborators
 
       if missing_repositories.length > 0
         missing_repositories.each do |repository_name|
+          repository_name = repository_name.downcase
           # Ignore the all_org_members team repositories
           if !@org_members_team_repositories.include?(repository_name)
             @missing_from_repositories.push(repository_name)
@@ -148,17 +150,18 @@ class GithubCollaborators
       permission_mismatch = false
       # Search through the collaborators repositories
       @github_repositories.each do |github_repository_name|
+        github_repository_name = github_repository_name.downcase
         # Find the matching Terraform file
         terraform_files.terraform_files.each do |terraform_file|
           # Skip this iteration if file name is in the array, the array
           # contains repositories / Terraform files that are not on the GitHub yet
-          if !@ignore_repositories.include?(terraform_file.filename) && terraform_file.filename == GithubCollaborators.tf_safe(github_repository_name)
+          if !@ignore_repositories.include?(terraform_file.filename.downcase) && terraform_file.filename.downcase == GithubCollaborators.tf_safe(github_repository_name)
 
             # Get the github permission for that repository
             github_permission = get_repository_permission(github_repository_name)
 
             # Get the permission for the Terraform file
-            terraform_permission = terraform_file.get_collaborator_permission(login)
+            terraform_permission = terraform_file.get_collaborator_permission(@login)
 
             if github_permission != terraform_permission
               permission_mismatch = true
@@ -173,7 +176,7 @@ class GithubCollaborators
 
     def get_repository_permission(repository_name)
       logger.debug "get_repository_permission"
-      url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/collaborators/#{@login}/permission"
+      url = "https://api.github.com/repos/ministryofjustice/#{repository_name.downcase}/collaborators/#{@login}/permission"
       json = GithubCollaborators::HttpClient.new.fetch_json(url)
       if JSON.parse(json).dig("user", "permissions", "admin")
         "admin"

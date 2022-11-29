@@ -7,7 +7,8 @@ class GithubCollaborators
     def initialize(collaborator, repository_name)
       logger.debug "initialize"
 
-      @login = collaborator.username
+      repository_name = repository_name.downcase
+      @login = collaborator.username.downcase
       @permission = collaborator.permission
       @email = collaborator.email
       @name = collaborator.name

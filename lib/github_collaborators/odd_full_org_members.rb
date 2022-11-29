@@ -4,7 +4,7 @@ class GithubCollaborators
 
     def create_line(collaborator)
       logger.debug "create_line"
-      "- #{collaborator}"
+      "- #{collaborator.downcase}"
     end
 
     def singular_message

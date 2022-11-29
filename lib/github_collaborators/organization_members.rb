@@ -5,7 +5,7 @@ class GithubCollaborators
 
     def initialize(data)
       logger.debug "initialize"
-      @login = data.dig("node", "login")
+      @login = data.dig("node", "login").downcase
     end
   end
 

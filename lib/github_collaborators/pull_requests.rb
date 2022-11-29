@@ -39,9 +39,13 @@ class GithubCollaborators
     def create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
       logger.debug "create_branch_and_pull_request"
 
+      collaborator_name = collaborator_name.downcase
+
       # Ready a new branch
       branch_creator = GithubCollaborators::BranchCreator.new
-      branch_name = branch_creator.check_branch_name_is_valid(branch_name, collaborator_name)
+      branch_name = branch_creator.check_branch_name_is_valid(branch_name.downcase, collaborator_name)
+      branch_name = branch_name.downcase
+
       branch_creator.create_branch(branch_name)
 
       # Add, commit and push the changes
@@ -91,15 +95,15 @@ class GithubCollaborators
     def extend_date_hash(login, branch_name)
       logger.debug "extend_date_hash"
       {
-        title: EXTEND_REVIEW_DATE_PR_TITLE + " " + login,
-        head: branch_name,
+        title: EXTEND_REVIEW_DATE_PR_TITLE + " " + login.downcase,
+        head: branch_name.downcase,
         base: "main",
         body: <<~EOF
           Hi there
           
           This is the GitHub-Collaborator repository bot. 
 
-          The collaborator #{login} has review date/s that are close to expiring. 
+          The collaborator #{login.downcase} has review date/s that are close to expiring. 
           
           The review date/s have automatically been extended.
 
@@ -112,7 +116,7 @@ class GithubCollaborators
       logger.debug "delete_archive_file_hash"
       {
         title: ARCHIVED_REPOSITORY_PR_TITLE,
-        head: branch_name,
+        head: branch_name.downcase,
         base: "main",
         body: <<~EOF
           Hi there
@@ -131,7 +135,7 @@ class GithubCollaborators
       logger.debug "delete_empty_files_hash"
       {
         title: EMPTY_FILES_PR_TITLE,
-        head: branch_name,
+        head: branch_name.downcase,
         base: "main",
         body: <<~EOF
           Hi there
@@ -147,15 +151,15 @@ class GithubCollaborators
     def add_collaborator_hash(login, branch_name)
       logger.debug "add_collaborator_hash"
       {
-        title: ADD_FULL_ORG_MEMBER_PR_TITLE + " " + login,
-        head: branch_name,
+        title: ADD_FULL_ORG_MEMBER_PR_TITLE + " " + login.downcase,
+        head: branch_name.downcase,
         base: "main",
         body: <<~EOF
           Hi there
           
           This is the GitHub-Collaborator repository bot. 
 
-          The collaborator #{login} was found to be missing from the file/s in this pull request.
+          The collaborator #{login.downcase} was found to be missing from the file/s in this pull request.
 
           This is because the collaborator is a full organization member and is able to join repositories outside of Terraform.
 
@@ -170,15 +174,15 @@ class GithubCollaborators
     def remove_collaborator_hash(login, branch_name)
       logger.debug "remove_collaborator_hash"
       {
-        title: REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login,
-        head: branch_name,
+        title: REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login.downcase,
+        head: branch_name.downcase,
         base: "main",
         body: <<~EOF
           Hi there
 
           This is the GitHub-Collaborator repository bot. 
 
-          The collaborator #{login} review date has expired for the file/s contained in this pull request.
+          The collaborator #{login.downcase} review date has expired for the file/s contained in this pull request.
           
           Either approve this pull request, modify it or delete it if it is no longer necessary.
         EOF
@@ -188,15 +192,15 @@ class GithubCollaborators
     def modify_collaborator_permission_hash(login, branch_name)
       logger.debug "modify_collaborator_permission_hash"
       {
-        title: CHANGE_PERMISSION_PR_TITLE + " " + login,
-        head: branch_name,
+        title: CHANGE_PERMISSION_PR_TITLE + " " + login.downcase,
+        head: branch_name.downcase,
         base: "main",
         body: <<~EOF
           Hi there
           
           This is the GitHub-Collaborator repository bot. 
 
-          The collaborator #{login} permission on Github is different to the permission in the Terraform file for the repository.
+          The collaborator #{login.downcase} permission on Github is different to the permission in the Terraform file for the repository.
 
           This is because the collaborator is a full organization member, is able to join repositories outside of Terraform and may have different access to the repository now they are in a Team.
 

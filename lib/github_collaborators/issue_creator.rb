@@ -4,8 +4,8 @@ class GithubCollaborators
 
     def initialize(params)
       logger.debug "initialize"
-      @repository = params.fetch(:repository)
-      @github_user = params.fetch(:github_user)
+      @repository = params.fetch(:repository).downcase
+      @github_user = params.fetch(:github_user).downcase
     end
 
     def create_unknown_collaborator_issue
@@ -63,7 +63,7 @@ class GithubCollaborators
       issues.delete_if { |issue| issue[:assignees].length == 0 }
 
       # Check which issues are assigned to the collaborator
-      issues.select { |issue| issue[:assignee][:login] == @github_user }
+      issues.select { |issue| issue[:assignee][:login].downcase == @github_user }
       if issues.length > 0
         # Found matching issue
         found_issues = true
