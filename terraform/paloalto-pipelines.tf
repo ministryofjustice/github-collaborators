@@ -1,6 +1,6 @@
-module "deployment-PSN-Access" {
+module "paloalto-pipelines" {
   source     = "./modules/repository-collaborators"
-  repository = "deployment-PSN-Access"
+  repository = "paloalto-pipelines"
   collaborators = [
     {
       github_user  = "emileswarts"

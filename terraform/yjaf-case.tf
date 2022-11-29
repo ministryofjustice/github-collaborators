@@ -13,7 +13,7 @@ module "yjaf-case" {
       review_after = "2022-12-13"
     },
     {
-      github_user  = "VasilDimitrov22"
+      github_user  = "vasildimitrov22"
       permission   = "push"
       name         = "Vasil Dimitrov"
       email        = "vasil.dimitrov@northgateps.com"
@@ -73,7 +73,7 @@ module "yjaf-case" {
       review_after = "2022-12-31"
     },
     {
-      github_user  = "AndrewTRichards"
+      github_user  = "andrewtrichards"
       permission   = "admin"
       name         = "Andrew Richards"
       email        = "a.t.richards@btopenworld.com"

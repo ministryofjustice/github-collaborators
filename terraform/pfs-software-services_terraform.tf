@@ -3,7 +3,7 @@ module "pfs-software-services_terraform" {
   repository = "pfs-software-services_terraform"
   collaborators = [
     {
-      github_user  = "SimonGivan"
+      github_user  = "simongivan"
       permission   = "admin"
       name         = "Simon Givan"
       email        = "s.givan@kainos.com"
@@ -13,7 +13,7 @@ module "pfs-software-services_terraform" {
       review_after = "2022-12-18"
     },
     {
-      github_user  = "Nathanials"
+      github_user  = "nathanials"
       permission   = "admin"
       name         = "Nathanials Stewart"
       email        = "n.stewart@kainos.com"

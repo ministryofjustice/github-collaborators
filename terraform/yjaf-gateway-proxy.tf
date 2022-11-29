@@ -53,7 +53,7 @@ module "yjaf-gateway-proxy" {
       review_after = "2023-03-22"
     },
     {
-      github_user  = "AndrewTRichards"
+      github_user  = "andrewtrichards"
       permission   = "admin"
       name         = "Andrew Richards"
       email        = "a.t.richards@btopenworld.com"
@@ -63,7 +63,7 @@ module "yjaf-gateway-proxy" {
       review_after = "2023-05-26"
     },
     {
-      github_user  = "RobGibsonCapita"
+      github_user  = "robgibsoncapita"
       permission   = "pull"
       name         = "Rob Gibson"
       email        = "Robert.gibson2@capita.com"
@@ -73,7 +73,7 @@ module "yjaf-gateway-proxy" {
       review_after = "2023-01-23"
     },
     {
-      github_user  = "RichardWheatleyCapita"
+      github_user  = "richardwheatleycapita"
       permission   = "pull"
       name         = "Richard Wheatley"
       email        = "richard.wheatley2@capita.com"
@@ -123,7 +123,7 @@ module "yjaf-gateway-proxy" {
       review_after = "2023-01-23"
     },
     {
-      github_user  = "BryanMaguireAdvanced"
+      github_user  = "bryanmaguireadvanced"
       permission   = "pull"
       name         = "Bryan Maguire"
       email        = "bryan.maguire@oneadvanced.com"
@@ -133,7 +133,7 @@ module "yjaf-gateway-proxy" {
       review_after = "2023-01-23"
     },
     {
-      github_user  = "Ahmedali-necsws"
+      github_user  = "ahmedali-necsws"
       permission   = "pull"
       name         = "Ahmed Ali"
       email        = "ahmed.ali@necsws.com"
@@ -173,7 +173,7 @@ module "yjaf-gateway-proxy" {
       review_after = "2023-01-23"
     },
     {
-      github_user  = "HowieDouglasAccessGroup"
+      github_user  = "howiedouglasaccessgroup"
       permission   = "pull"
       name         = "Howie Douglas"
       email        = "howie.douglas@theaccessgroup.com"
@@ -193,7 +193,7 @@ module "yjaf-gateway-proxy" {
       review_after = "2023-02-06"
     },
     {
-      github_user  = "SCHUNGCACI"
+      github_user  = "schungcaci"
       permission   = "pull"
       name         = "Sai Chung"
       email        = "schung@caci.co.uk"

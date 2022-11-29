@@ -63,7 +63,7 @@ module "bichard7-next-tests" {
       review_after = "2022-12-31"
     },
     {
-      github_user  = "C-gyorfi"
+      github_user  = "c-gyorfi"
       permission   = "push"
       name         = "Csaba Gyorfi"
       email        = "csaba@madetech.com"
@@ -113,7 +113,7 @@ module "bichard7-next-tests" {
       review_after = "2022-12-31"
     },
     {
-      github_user  = "SachinDangui"
+      github_user  = "sachindangui"
       permission   = "pull"
       name         = "Sachin Dangui"
       email        = "Sachin.Dangui@hmcts.net"
@@ -131,6 +131,6 @@ module "bichard7-next-tests" {
       reason       = "Integration testing for Common Platform"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
       review_after = "2022-12-31"
-    }
+    },
   ]
 }

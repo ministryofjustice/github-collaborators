@@ -3,7 +3,7 @@ module "delius-releases" {
   repository = "delius-releases"
   collaborators = [
     {
-      github_user  = "MichaelWetherallBCL"
+      github_user  = "michaelwetherallbcl"
       permission   = "admin"
       name         = "Michael Wetherall"
       email        = "mwetherall@unilink.com"
