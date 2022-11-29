@@ -1,6 +1,6 @@
-module "deployment-SOP-OCI-Access" {
+module "deployment-sop-oci-access" {
   source     = "./modules/repository-collaborators"
-  repository = "deployment-SOP-OCI-Access"
+  repository = "deployment-sop-oci-access"
   collaborators = [
     {
       github_user  = "emileswarts"

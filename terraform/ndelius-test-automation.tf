@@ -33,7 +33,7 @@ module "ndelius-test-automation" {
       review_after = "2023-02-25"
     },
     {
-      github_user  = "ND070322"
+      github_user  = "nd070322"
       permission   = "admin"
       name         = "Neale Davison"
       email        = "ndavison@unilink.com"
@@ -63,7 +63,7 @@ module "ndelius-test-automation" {
       review_after = "2023-02-25"
     },
     {
-      github_user  = "Linda182"
+      github_user  = "linda182"
       permission   = "admin"
       name         = "Linda Clarke"
       email        = "lclarke@unilink.com"

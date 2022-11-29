@@ -1,6 +1,6 @@
-module "YJAF-POC-APP" {
+module "yjaf-poc-app" {
   source     = "./modules/repository-collaborators"
-  repository = "YJAF-POC-APP"
+  repository = "yjaf-poc-app"
   collaborators = [
     {
       github_user  = "gregi2n"
@@ -33,7 +33,7 @@ module "YJAF-POC-APP" {
       review_after = "2022-12-31"
     },
     {
-      github_user  = "AndrewTRichards"
+      github_user  = "andrewtrichards"
       permission   = "admin"
       name         = "Andrew Richards"
       email        = "a.t.richards@btopenworld.com"

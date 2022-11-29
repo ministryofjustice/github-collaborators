@@ -1,6 +1,6 @@
-module "PaloAlto-pipelines" {
+module "deployment-globalprotect-asg" {
   source     = "./modules/repository-collaborators"
-  repository = "PaloAlto-pipelines"
+  repository = "deployment-globalprotect-asg"
   collaborators = [
     {
       github_user  = "emileswarts"

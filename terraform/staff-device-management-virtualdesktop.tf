@@ -3,7 +3,7 @@ module "staff-device-management-virtualdesktop" {
   repository = "staff-device-management-virtualdesktop"
   collaborators = [
     {
-      github_user  = "VinceThompson"
+      github_user  = "vincethompson"
       permission   = "push"
       name         = "Vince Thompson"
       email        = "vthompson@contentandcloud.com"
@@ -13,7 +13,7 @@ module "staff-device-management-virtualdesktop" {
       review_after = "2022-12-31"
     },
     {
-      github_user  = "BenSnapeCC"
+      github_user  = "bensnapecc"
       permission   = "push"
       name         = "Ben Snape"
       email        = "ben.snape@contentandcloud.com"
@@ -21,6 +21,6 @@ module "staff-device-management-virtualdesktop" {
       reason       = "PTTP Tech Team"
       added_by     = "matthew.white1@justice.gov.uk"
       review_after = "2022-12-31"
-    }
+    },
   ]
 }
