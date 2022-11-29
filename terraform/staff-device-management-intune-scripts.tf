@@ -3,7 +3,7 @@ module "staff-device-management-intune-scripts" {
   repository = "staff-device-management-intune-scripts"
   collaborators = [
     {
-      github_user  = "JazJax"
+      github_user  = "jazjax"
       permission   = "admin"
       name         = "Jasper Jackson"
       email        = "jasper.jackson@madetech.com"
@@ -13,7 +13,7 @@ module "staff-device-management-intune-scripts" {
       review_after = "2022-12-31"
     },
     {
-      github_user  = "BingliuMT"
+      github_user  = "bingliumt"
       permission   = "admin"
       name         = "Bingjie Liu"
       email        = "bingjie.liu@madetech.com"

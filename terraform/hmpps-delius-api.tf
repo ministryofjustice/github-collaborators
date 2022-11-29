@@ -23,7 +23,7 @@ module "hmpps-delius-api" {
       review_after = "2023-02-25"
     },
     {
-      github_user  = "Seanvalmonte"
+      github_user  = "seanvalmonte"
       permission   = "push"
       name         = "Sean Valmonte"
       email        = "svalmonte@unilink.com"

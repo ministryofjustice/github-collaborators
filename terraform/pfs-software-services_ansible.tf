@@ -3,7 +3,7 @@ module "pfs-software-services_ansible" {
   repository = "pfs-software-services_ansible"
   collaborators = [
     {
-      github_user  = "Nathanials"
+      github_user  = "nathanials"
       permission   = "admin"
       name         = "Nathanials Stewart"
       email        = "n.stewart@kainos.com"
@@ -13,7 +13,7 @@ module "pfs-software-services_ansible" {
       review_after = "2022-12-18"
     },
     {
-      github_user  = "SimonGivan"
+      github_user  = "simongivan"
       permission   = "admin"
       name         = "Simon Givan"
       email        = "s.givan@kainos.com"

@@ -1,6 +1,6 @@
-module "deployment-GlobalProtect-ASG" {
+module "deployment-psn-access" {
   source     = "./modules/repository-collaborators"
-  repository = "deployment-GlobalProtect-ASG"
+  repository = "deployment-psn-access"
   collaborators = [
     {
       github_user  = "emileswarts"

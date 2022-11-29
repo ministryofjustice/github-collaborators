@@ -3,7 +3,7 @@ module "staff-device-management-ios-configuration" {
   repository = "staff-device-management-ios-configuration"
   collaborators = [
     {
-      github_user  = "JazJax"
+      github_user  = "jazjax"
       permission   = "admin"
       name         = "Jasper Jackson"
       email        = "jasper.jackson@madetech.com"
@@ -13,7 +13,7 @@ module "staff-device-management-ios-configuration" {
       review_after = "2022-12-31"
     },
     {
-      github_user  = "BingliuMT"
+      github_user  = "bingliumt"
       permission   = "admin"
       name         = "Bingjie Liu"
       email        = "bingjie.liu@madetech.com"
@@ -21,6 +21,6 @@ module "staff-device-management-ios-configuration" {
       reason       = "VICTOR product development"
       added_by     = "matthew.white1@justice.gov.uk"
       review_after = "2022-12-31"
-    }
+    },
   ]
 }

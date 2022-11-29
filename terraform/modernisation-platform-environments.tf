@@ -23,7 +23,7 @@ module "modernisation-platform-environments" {
       review_after = "2023-05-24"
     },
     {
-      github_user  = "MMBroc"
+      github_user  = "mmbroc"
       permission   = "push"
       name         = "Michael Bullen"
       email        = "Michael.Bullen@roctechnologies.com"
@@ -83,7 +83,7 @@ module "modernisation-platform-environments" {
       review_after = "2023-05-24"
     },
     {
-      github_user  = "Tom-Whi"
+      github_user  = "tom-whi"
       permission   = "push"
       name         = "Tom Whiteley"
       email        = "Tom.Whiteley@roctechnologies.com"
@@ -131,6 +131,6 @@ module "modernisation-platform-environments" {
       reason       = "Get access to PPUD on Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
       review_after = "2023-11-04"
-    }
+    },
   ]
 }

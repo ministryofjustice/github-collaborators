@@ -63,7 +63,7 @@ module "yjsm-hub" {
       review_after = "2023-02-07"
     },
     {
-      github_user  = "AndrewTRichards"
+      github_user  = "andrewtrichards"
       permission   = "admin"
       name         = "Andrew Richards"
       email        = "a.t.richards@btopenworld.com"

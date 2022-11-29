@@ -23,7 +23,7 @@ module "hmpps-domestic-abuse-support-officers" {
       review_after = "2023-12-20"
     },
     {
-      github_user  = "CodeSureUK"
+      github_user  = "codesureuk"
       permission   = "maintain"
       name         = "Toby Liddicoat"
       email        = "toby.liddicoat@civica.co.uk"

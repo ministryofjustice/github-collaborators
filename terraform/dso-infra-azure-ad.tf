@@ -3,7 +3,7 @@ module "dso-infra-azure-ad" {
   repository = "dso-infra-azure-ad"
   collaborators = [
     {
-      github_user  = "SimonGivan"
+      github_user  = "simongivan"
       permission   = "admin"
       name         = "Simon Givan"
       email        = "s.givan@kainos.com"
