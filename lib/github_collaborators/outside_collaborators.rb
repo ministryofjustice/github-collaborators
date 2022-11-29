@@ -12,7 +12,7 @@ class GithubCollaborators
       @collaborators = []
       @terraform_files.terraform_files.each do |terraform_file|
         terraform_file.terraform_blocks.each do |terraform_block|
-          collaborator = GithubCollaborators::Collaborator.new(terraform_block, terraform_file.filename)
+          collaborator = GithubCollaborators::Collaborator.new(terraform_block, terraform_file.filename.downcase)
           collaborator.check_for_issues
           @collaborators.push(collaborator)
         end
@@ -54,7 +54,7 @@ class GithubCollaborators
         collaborators_on_github = repository.outside_collaborators
 
         # Get the Terraform defined outside collaborators for the repository
-        collaborators_in_file = @terraform_files.get_collaborators_in_file(repository.name)
+        collaborators_in_file = @terraform_files.get_collaborators_in_file(repository.name.downcase)
 
         # Some Terraform collaborators have been upgraded to full organization members,
         # get them and add them to the collaborator GitHub array
@@ -71,7 +71,7 @@ class GithubCollaborators
           next
         else
           # Print out the difference
-          do_comparison(collaborators_in_file, collaborators_on_github, repository.name)
+          do_comparison(collaborators_in_file, collaborators_on_github, repository.name.downcase)
         end
       end
     end
@@ -100,7 +100,7 @@ class GithubCollaborators
     def print_full_org_member_collaborators
       logger.debug "print_full_org_member_collaborators"
       logger.info "There are #{@organization.full_org_members.length} full Org member / outside collaborators."
-      @organization.full_org_members.each { |collaborator| logger.info "#{collaborator.login} is a full Org member / outside collaborator." }
+      @organization.full_org_members.each { |collaborator| logger.info "#{collaborator.login.downcase} is a full Org member / outside collaborator." }
     end
 
     # Find if full org members / collaborators are members of repositories but not defined in Terraform
@@ -112,6 +112,8 @@ class GithubCollaborators
 
       # Run full org member tests
       @organization.full_org_members.each do |full_org_member|
+        login = full_org_member.login.downcase
+
         # Compare the GitHub and Terraform repositories
         if full_org_member.do_repositories_match == false
           # Where collaborator is not defined in Terraform, add collaborator to those files
@@ -120,18 +122,18 @@ class GithubCollaborators
 
         if full_org_member.check_repository_permissions_match(@terraform_files)
           # Where collaborator has difference in repository permission, create a PR using GitHub permission
-          change_collaborator_permission(full_org_member.login, full_org_member.repository_permission_mismatches)
+          change_collaborator_permission(login, full_org_member.repository_permission_mismatches)
         end
 
         # Find the collaborators that are attached to no GitHub repositories
         if full_org_member.odd_full_org_member_check
-          odd_full_org_members.push(full_org_member.login)
+          odd_full_org_members.push(login)
         end
 
         # Find which collaborators are attached to archived repositories in the files that we track
         full_org_member.attached_archived_repositories.each do |archived_repository|
-          if @terraform_files.does_file_exist(archived_repository)
-            full_org_members_in_archived_repositories.push({login: full_org_member.login, repository: archived_repository})
+          if @terraform_files.does_file_exist(archived_repository.downcase)
+            full_org_members_in_archived_repositories.push({login: login, repository: archived_repository.downcase})
           end
         end
       end
@@ -152,8 +154,8 @@ class GithubCollaborators
       # Check all collaborators
       collaborators.each do |collaborator|
         params = {
-          repository: collaborator.repository,
-          github_user: collaborator.login
+          repository: collaborator.repository.downcase,
+          github_user: collaborator.login.downcase
         }
 
         if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH)
@@ -169,13 +171,13 @@ class GithubCollaborators
       # Check all collaborators
       collaborators.each do |collaborator|
         params = {
-          repository: collaborator.repository,
-          github_user: collaborator.login
+          repository: collaborator.repository.downcase,
+          github_user: collaborator.login.downcase
         }
 
         # Unknown collaborator
         if collaborator.defined_in_terraform == false
-          logger.info "Removing collaborator #{collaborator.login} from GitHub repository #{collaborator.repository}"
+          logger.info "Removing collaborator #{collaborator.login.downcase} from GitHub repository #{collaborator.repository.downcase}"
           # We must create the issue before removing access, because the issue is
           # assigned to the removed collaborator, so that they (hopefully) get a
           # notification about it.
@@ -196,7 +198,7 @@ class GithubCollaborators
       logger.debug "remove_expired_collaborators"
 
       # Filter out full org collaborators
-      expired_collaborators = all_collaborators.select { |collaborator| !@organization.is_collaborator_an_org_member(collaborator.login) }
+      expired_collaborators = all_collaborators.select { |collaborator| !@organization.is_collaborator_an_org_member(collaborator.login.downcase) }
 
       if expired_collaborators.length > 0
         # Remove collaborators from the files and raise PRs
@@ -213,7 +215,7 @@ class GithubCollaborators
       logger.debug "remove_expired_full_org_members"
 
       # Find the collaborators that have full org membership
-      full_org_collaborators = all_collaborators.select { |collaborator| @organization.is_collaborator_an_org_member(collaborator.login) }
+      full_org_collaborators = all_collaborators.select { |collaborator| @organization.is_collaborator_an_org_member(collaborator.login.downcase) }
 
       if full_org_collaborators.length > 0
         # Remove full org member from the files and raise PRs
@@ -231,7 +233,7 @@ class GithubCollaborators
     def extend_full_org_member_review_date(all_collaborators)
       logger.debug "extend_full_org_member_review_date"
       # Find the collaborators that have full org membership
-      full_org_collaborators = all_collaborators.select { |collaborator| @organization.is_collaborator_an_org_member(collaborator.login) }
+      full_org_collaborators = all_collaborators.select { |collaborator| @organization.is_collaborator_an_org_member(collaborator.login.downcase) }
       if full_org_collaborators.length > 0
 
         extended_collaborators = extend_date(full_org_collaborators)
@@ -263,7 +265,7 @@ class GithubCollaborators
       logger.debug "extend_collaborators_review_date"
 
       # Filter out full org collaborators
-      collaborators = all_collaborators.select { |collaborator| !@organization.is_collaborator_an_org_member(collaborator.login) }
+      collaborators = all_collaborators.select { |collaborator| !@organization.is_collaborator_an_org_member(collaborator.login.downcase) }
 
       if collaborators.length > 0
         # Extend the date in the collaborator files and raise PRs
@@ -285,13 +287,13 @@ class GithubCollaborators
         collaborator.issues.each do |issue|
           if issue == REVIEW_DATE_EXPIRES_SOON
             collaborators_who_expire_soon.push(collaborator)
-            logger.info "Review after date is within a week for #{collaborator.login} on #{collaborator.review_after_date}"
+            logger.info "Review after date is within a week for #{collaborator.login.downcase} on #{collaborator.review_after_date}"
           end
         end
       end
 
       # Sort list based on username
-      collaborators_who_expire_soon.sort_by { |collaborator| collaborator.login }
+      collaborators_who_expire_soon.sort_by { |collaborator| collaborator.login.downcase }
     end
 
     # Get list of collaborators whose review date has passed
@@ -302,13 +304,13 @@ class GithubCollaborators
         collaborator.issues.each do |issue|
           if issue == "Review after date has passed"
             collaborators_who_have_expired.push(collaborator)
-            logger.info "Review after date, #{collaborator.review_after_date}, has passed for #{collaborator.login} on #{collaborator.repository}"
+            logger.info "Review after date, #{collaborator.review_after_date}, has passed for #{collaborator.login.downcase} on #{collaborator.repository.downcase}"
           end
         end
       end
 
       # Sort list based on login name
-      collaborators_who_have_expired.sort_by! { |collaborator| collaborator.login }
+      collaborators_who_have_expired.sort_by! { |collaborator| collaborator.login.downcase }
     end
 
     def extend_date(collaborators)
@@ -316,7 +318,7 @@ class GithubCollaborators
       collaborators_for_slack_message = []
 
       # Put collaborators into groups to commit multiple files per branch
-      collaborator_groups = collaborators.group_by { |collaborator| collaborator.login }
+      collaborator_groups = collaborators.group_by { |collaborator| collaborator.login.downcase }
       collaborator_groups.each do |group|
         # For each file that collaborator has an upcoming expiry
         login = ""
@@ -325,13 +327,13 @@ class GithubCollaborators
 
         group[1].each do |collaborator|
           # Check if a pull request is already pending
-          terraform_file_name = File.basename(collaborator.href)
-          login = collaborator.login
+          terraform_file_name = File.basename(collaborator.href).downcase
+          login = collaborator.login.downcase
           pull_request_title = EXTEND_REVIEW_DATE_PR_TITLE + " " + login
 
           if !does_pr_already_exist(terraform_file_name, pull_request_title)
             # No pull request exists, modify the file
-            @terraform_files.extend_date_in_file(collaborator.repository, login)
+            @terraform_files.extend_date_in_file(collaborator.repository.downcase, login)
             file_name = "terraform/#{terraform_file_name}"
             edited_files.push(file_name)
             collaborators_for_slack_message.push(collaborator)
@@ -355,8 +357,8 @@ class GithubCollaborators
       archived_repositories = []
 
       @terraform_files.terraform_files.each do |terraform_file|
-        if @organization.archived_repositories.include?(terraform_file.filename)
-          archived_repositories.push(terraform_file.filename)
+        if @organization.archived_repositories.include?(terraform_file.filename.downcase)
+          archived_repositories.push(terraform_file.filename.downcase)
         end
       end
 
@@ -366,8 +368,8 @@ class GithubCollaborators
       # Delete the archived repository matching file
       edited_files = []
       archived_repositories.each do |archived_repository_name|
-        @terraform_files.remove_file(archived_repository_name)
-        file_name = "terraform/#{archived_repository_name}.tf"
+        @terraform_files.remove_file(archived_repository_name.downcase)
+        file_name = "terraform/#{archived_repository_name.downcase}.tf"
         edited_files.push(file_name)
       end
 
@@ -382,7 +384,7 @@ class GithubCollaborators
         # Remove the archived file from any Collaborator files objects
         edited_files.each do |archived_repository_name|
           @collaborators.each do |collaborator|
-            if collaborator.repository == archived_repository_name
+            if collaborator.repository.downcase == archived_repository_name.downcase
               index = @collaborators.index(collaborator)
               @collaborators.delete_at(index)
             end
@@ -398,13 +400,13 @@ class GithubCollaborators
       empty_files = @terraform_files.get_empty_files
 
       # Remove any files which are in an open pull request already
-      empty_files.delete_if { |empty_file_name| does_pr_already_exist("#{empty_file_name}.tf", EMPTY_FILES_PR_TITLE) }
+      empty_files.delete_if { |empty_file_name| does_pr_already_exist("#{empty_file_name.downcase}.tf", EMPTY_FILES_PR_TITLE) }
 
       # Delete the empty files
       edited_files = []
       empty_files.each do |empty_file_name|
-        @terraform_files.remove_file(empty_file_name)
-        file_name = "terraform/#{empty_file_name}.tf"
+        @terraform_files.remove_file(empty_file_name.downcase)
+        file_name = "terraform/#{empty_file_name.downcase}.tf"
         edited_files.push(file_name)
       end
 
@@ -424,7 +426,7 @@ class GithubCollaborators
       collaborators_for_slack_message = []
 
       # Put collaborators into groups to commit multiple files per branch
-      collaborators_groups = expired_collaborators.group_by { |collaborator| collaborator.login }
+      collaborators_groups = expired_collaborators.group_by { |collaborator| collaborator.login.downcase }
       collaborators_groups.each do |group|
         login = ""
         edited_files = []
@@ -433,14 +435,14 @@ class GithubCollaborators
         # For each file where collaborator has expired
         group[1].each do |collaborator|
           # Check if a pull request is already pending
-          terraform_file_name = File.basename(collaborator.href)
-          login = collaborator.login
+          terraform_file_name = File.basename(collaborator.href).downcase
+          login = collaborator.login.downcase
           pull_request_title = REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login
 
           if !does_pr_already_exist(terraform_file_name, pull_request_title)
             # No pull request exists, modify the file
             file_name = "terraform/#{terraform_file_name}"
-            @terraform_files.remove_collaborator_from_file(collaborator.repository, login)
+            @terraform_files.remove_collaborator_from_file(collaborator.repository.downcase, login)
             edited_files.push(file_name)
             collaborators_for_slack_message.push(collaborator)
           end
@@ -459,15 +461,15 @@ class GithubCollaborators
     def change_collaborator_permission(collaborator_name, repositories)
       logger.debug "change_collaborator_permission"
 
-      pull_request_title = CHANGE_PERMISSION_PR_TITLE + " " + collaborator_name
+      pull_request_title = CHANGE_PERMISSION_PR_TITLE + " " + collaborator_name.downcase
 
       # Remove the repository if an open pull request is already open with the modified permission
-      repositories.delete_if { |repository| does_pr_already_exist("#{repository[:repository_name]}.tf", pull_request_title) }
+      repositories.delete_if { |repository| does_pr_already_exist("#{repository[:repository_name].downcase}.tf", pull_request_title) }
 
       edited_files = []
       repositories.each do |repository|
         # No pull request exists, modify the file/s
-        repository_name = repository[:repository_name]
+        repository_name = repository[:repository_name].downcase
         @terraform_files.ensure_file_exists(repository_name)
         @terraform_files.change_collaborator_permission_in_file(collaborator_name, repository_name, repository[:permission])
         edited_files.push("terraform/#{repository_name}.tf")
@@ -485,15 +487,16 @@ class GithubCollaborators
     def add_collaborator(collaborator)
       logger.debug "add_collaborator"
 
-      collaborator_name = collaborator.login
+      collaborator_name = collaborator.login.downcase
       repositories = collaborator.missing_from_repositories
       title_message = ADD_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name
 
       # Remove the repository if an open pull request is already adding the full org member
-      repositories.delete_if { |repository_name| does_pr_already_exist("#{repository_name}.tf", title_message) }
+      repositories.delete_if { |repository_name| does_pr_already_exist("#{repository_name.downcase}.tf", title_message) }
 
       edited_files = []
       repositories.each do |repository_name|
+        repository_name = repository_name.downcase
         # No pull request exists, modify the file/s
         @terraform_files.ensure_file_exists(repository_name)
         # Get the github permission for that repository
@@ -521,6 +524,7 @@ class GithubCollaborators
 
       collaborators_on_github.sort!
       collaborators_in_file.sort!
+      repository_name = repository_name.downcase
 
       if collaborators_in_file != collaborators_on_github
         logger.warn "=" * 37
@@ -528,9 +532,9 @@ class GithubCollaborators
         logger.warn "GitHub Outside Collaborators: #{collaborators_on_github.length}"
         logger.warn "Terraform Outside Collaborators: #{collaborators_in_file.length}"
         logger.warn "Collaborators on GitHub:"
-        collaborators_on_github.each { |gc_name| logger.warn "    #{gc_name}" }
+        collaborators_on_github.each { |gc_name| logger.warn "    #{gc_name.downcase}" }
         logger.warn "Collaborators in Terraform:"
-        collaborators_in_file.each { |tc_name| logger.warn "    #{tc_name}" }
+        collaborators_in_file.each { |tc_name| logger.warn "    #{tc_name.downcase}" }
 
         find_unknown_collaborators(collaborators_on_github, collaborators_in_file, repository_name)
 
@@ -540,7 +544,7 @@ class GithubCollaborators
         # Check the repository invites
         # using a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
         repository_invites.each do |invite|
-          invite_login = invite[:login]
+          invite_login = invite[:login].downcase
           invite_expired = invite[:expired]
 
           # Compare Terraform file collaborators name against an open invite and
@@ -581,7 +585,7 @@ class GithubCollaborators
 
         # Loop through Terraform file collaborators
         collaborators_in_file.each do |tc_name|
-          if tc_name == gc_name
+          if tc_name.downcase == gc_name.downcase
             # Found a GitHub Collaborator name in Terraform collaborator name
             found_name = true
           end
@@ -591,8 +595,8 @@ class GithubCollaborators
           # Didn't find a match ie unknown collaborator
           # Create a Collaborator object with an issue
           terraform_block = TerraformBlock.new
-          terraform_block.add_unknown_collaborator_data(gc_name)
-          collaborator = Collaborator.new(terraform_block, repository_name)
+          terraform_block.add_unknown_collaborator_data(gc_name.downcase)
+          collaborator = Collaborator.new(terraform_block, repository_name.downcase)
           collaborator.add_issue("missing")
 
           # Add unknown collaborator to the list of collaborators
@@ -603,6 +607,7 @@ class GithubCollaborators
 
     def does_pr_already_exist(terraform_file_name, title_message)
       logger.debug "does_pr_already_exist"
+      terraform_file_name = terraform_file_name.downcase
       @repo_pull_requests.each do |pull_request|
         # Chek the PR title message and check if file in the PR list of files
         if pull_request[:title].include?(title_message.to_s) &&

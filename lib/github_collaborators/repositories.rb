@@ -5,7 +5,7 @@ class GithubCollaborators
 
     def initialize(data)
       logger.debug "initialize"
-      @name = data.fetch("name")
+      @name = data.fetch("name").downcase
       @outside_collaborators_count = data.dig("collaborators", "totalCount")
       @outside_collaborators = []
     end
@@ -13,13 +13,13 @@ class GithubCollaborators
     # Add collaborator based on login name
     def add_outside_collaborator(collaborator)
       logger.debug "add_outside_collaborator"
-      @outside_collaborators.push(collaborator.login)
+      @outside_collaborators.push(collaborator.login.downcase)
     end
 
     # Add collaborators based on login name
     def add_outside_collaborators(collaborators)
       logger.debug "add_outside_collaborators"
-      collaborators.each { |collaborator| @outside_collaborators.push(collaborator.login) }
+      collaborators.each { |collaborator| @outside_collaborators.push(collaborator.login.downcase) }
     end
   end
 

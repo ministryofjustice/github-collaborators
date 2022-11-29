@@ -13,7 +13,7 @@ class GithubCollaborators
       else
         "in #{age} days"
       end
-      "- #{collaborator.login} in <#{collaborator.repo_url}|#{collaborator.repository}> see <#{collaborator.href}|terraform file> (#{expires_when})"
+      "- #{collaborator.login.downcase} in <#{collaborator.repo_url.downcase}|#{collaborator.repository.downcase}> see <#{collaborator.href}|terraform file> (#{expires_when})"
     end
 
     def singular_message

@@ -5,7 +5,7 @@ class GithubCollaborators
 
     def initialize(data)
       logger.debug "initialize"
-      @login = data.dig("node", "login")
+      @login = data.dig("node", "login").downcase
     end
   end
 
@@ -44,7 +44,7 @@ class GithubCollaborators
       %[
         {
           organization(login: "ministryofjustice") {
-            repository(name: "#{repository}") {
+            repository(name: "#{repository.downcase}") {
               collaborators(first:100 affiliation: OUTSIDE #{after}) {
                 pageInfo {
                   hasNextPage

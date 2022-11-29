@@ -16,7 +16,7 @@ class GithubCollaborators
       logger.debug "close_expired_issues"
       allowed_days = 45
 
-      issues = @issue_creator.get_issues(repository)
+      issues = @issue_creator.get_issues(repository.downcase)
       issues.each do |issue|
         # Check for the issues created by this application and that the issue is open
         if (
@@ -30,7 +30,7 @@ class GithubCollaborators
           grace_period = created_date + allowed_days
           if grace_period < Date.today
             # Close issue as grace period has expired
-            remove_issue(repository, issue[:number])
+            remove_issue(repository.downcase, issue[:number])
           end
         end
       end
@@ -39,7 +39,7 @@ class GithubCollaborators
     def remove_issue(repository, issue_id)
       logger.debug "remove_issue"
 
-      url = "https://api.github.com/repos/ministryofjustice/#{repository}/issues/#{issue_id}"
+      url = "https://api.github.com/repos/ministryofjustice/#{repository.downcase}/issues/#{issue_id}"
 
       params = {
         state: "closed"
@@ -47,7 +47,7 @@ class GithubCollaborators
 
       GithubCollaborators::HttpClient.new.patch_json(url, params.to_json)
 
-      logger.info "Closed issue #{issue_id} on repository #{repository}."
+      logger.info "Closed issue #{issue_id} on repository #{repository.downcase}."
 
       sleep 2
     end

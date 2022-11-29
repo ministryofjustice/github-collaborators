@@ -5,7 +5,7 @@ class GithubCollaborators
     def create_line(collaborator)
       logger.debug "create_line"
       # Use a hash like this { :login => "name", :repository => "repo_name" }
-      "- #{collaborator[:login]} in #{collaborator[:repository]}"
+      "- #{collaborator[:login].downcase} in #{collaborator[:repository].downcase}"
     end
 
     def singular_message
