@@ -12,12 +12,12 @@ class GithubCollaborators
     def create_branch(branch_name)
       logger.debug "create_branch"
       if POST_TO_GH
-        @branch_name = branch_name
+        @branch_name = branch_name.downcase
         @g.config("user.name", "Operations Engineering Bot")
         @g.config("user.email", "github-actions[bot]@users.noreply.github.com")
-        @g.checkout(branch_name, new_branch: true, start_point: "main")
+        @g.checkout(branch_name.downcase, new_branch: true, start_point: "main")
       else
-        logger.debug "Didn't create git branch #{branch_name}, this is a dry run"
+        logger.debug "Didn't create git branch #{branch_name.downcase}, this is a dry run"
       end
     end
 
@@ -58,7 +58,7 @@ class GithubCollaborators
       @g.fetch
       remote_branches = @g.branches.remote
       remote_branches.each do |remote_branch|
-        if remote_branch.name == branch_name
+        if remote_branch.name.downcase == branch_name.downcase
           # The branch name already exists
 
           # Search for any numbers in collaborator name and branch name
@@ -68,30 +68,30 @@ class GithubCollaborators
           if number_in_branch_name.nil?
             # The branch name has no number in the name
             # Add a new number to end of the branch name
-            new_branch_name = add_post_fix_number(branch_name, remote_branches)
-            return new_branch_name
+            new_branch_name = add_post_fix_number(branch_name.downcase, remote_branches)
+            return new_branch_name.downcase
           end
 
           if number_in_collaborator_name.nil?
             # The branch name has a number at the end, collaborator name does not
             # Increment number in branch name
-            new_branch_name = increment_post_fix_number(branch_name, remote_branches, number_in_branch_name)
-            return new_branch_name
+            new_branch_name = increment_post_fix_number(branch_name.downcase, remote_branches, number_in_branch_name)
+            return new_branch_name.downcase
           end
 
           if number_in_branch_name.to_i == number_in_collaborator_name.to_i
             # The branch name and collaborator name have the same number in them
             # This can be confused as the branch name number
             # Add a post fix number after the collaborators name
-            new_branch_name = add_post_fix_number(branch_name, remote_branches)
-            return new_branch_name
+            new_branch_name = add_post_fix_number(branch_name.downcase, remote_branches)
+            return new_branch_name.downcase
           end
 
           if number_in_branch_name.to_i != number_in_collaborator_name.to_i
             # The branch name and collaborator name different numbers in them
             # Increment the post fix number after the collaborators name
-            new_branch_name = increment_post_fix_number(branch_name, remote_branches, number_in_branch_name)
-            return new_branch_name
+            new_branch_name = increment_post_fix_number(branch_name.downcase, remote_branches, number_in_branch_name)
+            return new_branch_name.downcase
           end
         end
       end
@@ -104,7 +104,7 @@ class GithubCollaborators
       logger.debug "branch_name_exist"
       exists = false
       remote_branches.each do |remote_branch|
-        if remote_branch.name == new_name
+        if remote_branch.name.downcase == new_name.downcase
           exists = true
         end
       end
@@ -117,23 +117,23 @@ class GithubCollaborators
       new_branch_name = ""
       loop do
         new_post_fix_number += 1
-        new_branch_name = branch_name + "-" + new_post_fix_number.to_s
-        break unless branch_name_exist(new_branch_name, remote_branches)
+        new_branch_name = branch_name.downcase + "-" + new_post_fix_number.to_s
+        break unless branch_name_exist(new_branch_name.downcase, remote_branches)
       end
-      new_branch_name
+      new_branch_name.downcase
     end
 
     def increment_post_fix_number(branch_name, remote_branches, number_in_branch_name)
       logger.debug "increment_post_fix_number"
       length = number_in_branch_name.length
       new_post_fix_number = 0
-      new_branch_name = branch_name
+      new_branch_name = branch_name.downcase
       loop do
         new_post_fix_number = + 1
         new_branch_name[-length..] = new_post_fix_number.to_s
-        break unless branch_name_exist(new_branch_name, remote_branches)
+        break unless branch_name_exist(new_branch_name.downcase, remote_branches)
       end
-      new_branch_name
+      new_branch_name.downcase
     end
   end
 end
