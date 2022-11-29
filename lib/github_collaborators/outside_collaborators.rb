@@ -112,7 +112,6 @@ class GithubCollaborators
 
       # Run full org member tests
       @organization.full_org_members.each do |full_org_member|
-
         login = full_org_member.login.downcase
 
         # Compare the GitHub and Terraform repositories
