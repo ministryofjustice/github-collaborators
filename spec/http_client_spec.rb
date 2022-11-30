@@ -20,6 +20,25 @@ class GithubCollaborators
       it "catch error on delete" do
         expect { hc.delete(TEST_URL) }.to raise_error(KeyError)
       end
+
+      it "catch error on post pull request" do
+        expect { hc.post_pull_request_json(TEST_URL, nil) }.to raise_error(KeyError)
+      end
+    end
+
+    context "when correct pull request token is provided" do
+      before do
+        ENV["OPS_BOT_TOKEN"] = "foobar"
+      end
+
+      # Stub sleep
+      before { allow_any_instance_of(HttpClient).to receive(:sleep) }
+
+      it "call post pull request" do
+        stub_request(:post, TEST_URL).to_return(body: "abc", status: 200)
+        reply = hc.post_pull_request_json(TEST_URL, nil)
+        expect(reply).to be_instance_of(Net::HTTPOK)
+      end
     end
 
     context "when correct token is provided" do
