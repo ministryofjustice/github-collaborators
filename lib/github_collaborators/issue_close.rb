@@ -1,7 +1,7 @@
 class GithubCollaborators
   class IssueClose
     include Logging
-    
+
     # Close issues that have been open longer than 45 days
     def close_expired_issues(repository)
       logger.debug "close_expired_issues"
@@ -14,6 +14,7 @@ class GithubCollaborators
       issue_creator = GithubCollaborators::IssueCreator.new(params)
 
       issues = issue_creator.get_issues(repository.downcase)
+
       issues.each do |issue|
         # Check for the issues created by this application and that the issue is open
         if (

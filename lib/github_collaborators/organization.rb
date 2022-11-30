@@ -25,6 +25,9 @@ class GithubCollaborators
       # Grab the Org archived repositories
       @archived_repositories = Repositories.new.get_archived_repositories
 
+      # Grab the Org archived repositories
+      @archived_repositories = Repositories.new.get_archived_repositories
+
       # Get all the outside collaborators from GitHub per repo that has an outside collaborator
       repo_collaborators = GithubCollaborators::RepositoryCollaborators.new
       @repositories.each do |repository|
