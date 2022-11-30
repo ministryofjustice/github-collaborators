@@ -70,7 +70,7 @@ module "yjsm-hub-svc" {
       org          = "NEC Software Solutions"
       reason       = "YJAF developer. Needing access to the work on backend coding tasks"
       added_by     = "<operations-engineering@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2022-12-02"
+      review_after = "2023-06-02"
     },
     {
       github_user  = "andrewtrichards"
