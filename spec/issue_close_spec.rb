@@ -1,4 +1,7 @@
 class GithubCollaborators
+
+  CREATED_DATE = "2019-10-01"
+
   describe IssueClose do
     context "call" do
       subject(:issue_close) { described_class.new }
@@ -32,7 +35,7 @@ class GithubCollaborators
         issues = [
           {
             title: COLLABORATOR_EXPIRES_SOON,
-            created_at: "2019-10-01",
+            created_at: CREATED_DATE,
             state: "open",
             number: 1
           }
@@ -115,7 +118,7 @@ class GithubCollaborators
         issues = [
           {
             title: COLLABORATOR_EXPIRY_UPCOMING,
-            created_at: "2019-10-01",
+            created_at: CREATED_DATE,
             state: "open",
             number: 1
           }
@@ -198,7 +201,7 @@ class GithubCollaborators
         issues = [
           {
             title: DEFINE_COLLABORATOR_IN_CODE,
-            created_at: "2019-10-01",
+            created_at: CREATED_DATE,
             state: "open",
             number: 1
           }
@@ -281,7 +284,7 @@ class GithubCollaborators
         issues = [
           {
             title: USE_TEAM_ACCESS,
-            created_at: "2019-10-01",
+            created_at: CREATED_DATE,
             state: "open",
             number: 1
           }
@@ -379,19 +382,19 @@ class GithubCollaborators
         issues = [
           {
             title: USE_TEAM_ACCESS,
-            created_at: "2019-10-01",
+            created_at: CREATED_DATE,
             state: "open",
             number: 1
           },
           {
             title: USE_TEAM_ACCESS,
-            created_at: "2019-10-01",
+            created_at: CREATED_DATE,
             state: "open",
             number: 2
           },
           {
             title: USE_TEAM_ACCESS,
-            created_at: "2019-10-01",
+            created_at: CREATED_DATE,
             state: "open",
             number: 3
           }
@@ -414,7 +417,7 @@ class GithubCollaborators
           },
           {
             title: USE_TEAM_ACCESS,
-            created_at: "2019-10-01",
+            created_at: CREATED_DATE,
             state: "open",
             number: 2
           },

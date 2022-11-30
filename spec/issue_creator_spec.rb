@@ -1,4 +1,7 @@
 class GithubCollaborators
+
+  URL = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
+
   describe IssueCreator do
     context "when env var enabled" do
       before do
@@ -24,45 +27,40 @@ class GithubCollaborators
       }
 
       it "call github api in create unknown collaborator issue" do
-        url = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
         expect(HttpClient).to receive(:new).and_return(http_client)
-        expect(http_client).to receive(:post_json).with(url, json1)
+        expect(http_client).to receive(:post_json).with(URL, json1)
         issue_creator.create_unknown_collaborator_issue
       end
 
       it "do not call github api in create review date expires soon issue type one when issue already exists" do
-        url = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
         response = [{assignee: {login: "somegithubuser"}, title: "Collaborator review date expires soon for user somegithubuser", assignees: [{login: "somegithubuser"}]}]
         expect(HttpClient).to receive(:new).and_return(http_client)
-        expect(http_client).to receive(:fetch_json).with(url).and_return(response.to_json)
+        expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
         expect(http_client).not_to receive(:post_json)
         issue_creator.create_review_date_expires_soon_issue
       end
 
       it "do not call github api in create review date expires soon issue type two when issue already exists" do
-        url = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
         response = [{assignee: {login: "somegithubuser"}, title: "Review after date expiry is upcoming for user somegithubuser", assignees: [{login: "somegithubuser"}]}]
         expect(HttpClient).to receive(:new).and_return(http_client)
-        expect(http_client).to receive(:fetch_json).with(url).and_return(response.to_json)
+        expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
         expect(http_client).not_to receive(:post_json)
         issue_creator.create_review_date_expires_soon_issue
       end
 
       it "delete an issue when issue missing an assignee" do
-        url = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
         response = [{number: 3, assignee: {login: "somegithubuser"}, title: "Collaborator review date expires soon for user somegithubuser", assignees: []}]
         expect(HttpClient).to receive(:new).and_return(http_client).at_least(3).times
 
-        close_issue_url = "https://api.github.com/repos/ministryofjustice/somerepo/issues/3"
+        close_issue_url = URL + "/3"
         state = {state: "closed"}
         expect(http_client).to receive(:patch_json).with(close_issue_url, state.to_json)
-        expect(http_client).to receive(:fetch_json).with(url).and_return(response.to_json)
-        expect(http_client).to receive(:post_json).with(url, json2)
+        expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
+        expect(http_client).to receive(:post_json).with(URL, json2)
         issue_creator.create_review_date_expires_soon_issue
       end
 
       # it "in create review date expires soon issue type two" do
-      #   url = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
       #   response = '[{"assignee": { "login": "somegithubuser" }, "title": "Review after date expiry is upcoming for user", "assignees": [{"login":"somegithubuser"}]}]'
 
       # end
@@ -112,18 +110,16 @@ class GithubCollaborators
       let(:http_client) { double(HttpClient) }
 
       it "returns an issue" do
-        url = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
         response = '[{"assignee": { "login": "somegithubuser" }, "title": "Collaborator review date expires soon for user", "assignees": [{"login":"somegithubuser"}]}]'
         expect(HttpClient).to receive(:new).and_return(http_client)
-        expect(http_client).to receive(:fetch_json).with(url).and_return(response.to_json)
+        expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
         expect(issue_creator.get_issues("somerepo")).equal?(response)
       end
 
       it "returns [] if no issues" do
-        url = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
         response = "[]"
         expect(HttpClient).to receive(:new).and_return(http_client)
-        expect(http_client).to receive(:fetch_json).with(url).and_return(response.to_json)
+        expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
         expect(issue_creator.get_issues("somerepo")).equal?([])
       end
     end
