@@ -68,7 +68,7 @@ class GithubCollaborators
         # Found matching issue
         found_issues = true
       end
-      found_issues  
+      found_issues
     end
 
     def unknown_collaborator_hash

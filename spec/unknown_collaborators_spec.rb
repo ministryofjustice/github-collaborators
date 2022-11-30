@@ -1,5 +1,5 @@
 class GithubCollaborators
-  describe UnknownCollaborators do    
+  describe UnknownCollaborators do
     context "call" do
       subject(:unknown_collaborator) { described_class.new }
 
