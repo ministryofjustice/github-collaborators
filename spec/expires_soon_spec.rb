@@ -6,7 +6,7 @@ class GithubCollaborators
       it "create line when collaborator expires today" do
         terraform_block = TerraformBlock.new
 
-        today = Date.today.strftime("%Y-%m-%d").to_s
+        today = Date.today.strftime(DATE_FORMAT).to_s
 
         collaborator = {
           login: "bob123",
@@ -28,7 +28,7 @@ class GithubCollaborators
       it "create line when collaborator expires tomorrow" do
         terraform_block = TerraformBlock.new
 
-        tomorrow = (Date.today + 1).strftime("%Y-%m-%d").to_s
+        tomorrow = (Date.today + 1).strftime(DATE_FORMAT).to_s
         collaborator = {
           login: "bob123",
           permission: "maintain",
@@ -49,7 +49,7 @@ class GithubCollaborators
       it "create line when collaborator in two days" do
         terraform_block = TerraformBlock.new
 
-        review_date = (Date.today + 2).strftime("%Y-%m-%d").to_s
+        review_date = (Date.today + 2).strftime(DATE_FORMAT).to_s
 
         collaborator = {
           login: "bob123",

@@ -44,7 +44,7 @@ class GithubCollaborators
       end
 
       it "collaborator expires soon, grace period okay and is open" do
-        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+        grace_period_ok = (Date.today - 45).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -61,7 +61,7 @@ class GithubCollaborators
       end
 
       it "collaborator expires soon, grace period okay and is closed" do
-        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+        grace_period_ok = (Date.today - 45).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -78,7 +78,7 @@ class GithubCollaborators
       end
 
       it "collaborator expires soon, grace period expired and is open" do
-        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+        grace_period_expired = (Date.today - 46).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -95,7 +95,7 @@ class GithubCollaborators
       end
 
       it "collaborator expires soon, grace period expired and is closed" do
-        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+        grace_period_expired = (Date.today - 46).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -127,7 +127,7 @@ class GithubCollaborators
       end
 
       it "collaborator expiry upcoming, grace period okay and is open" do
-        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+        grace_period_ok = (Date.today - 45).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -144,7 +144,7 @@ class GithubCollaborators
       end
 
       it "collaborator expiry upcoming, grace period okay and is closed" do
-        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+        grace_period_ok = (Date.today - 45).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -161,7 +161,7 @@ class GithubCollaborators
       end
 
       it "collaborator expiry upcoming, grace period expired and is open" do
-        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+        grace_period_expired = (Date.today - 46).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -178,7 +178,7 @@ class GithubCollaborators
       end
 
       it "collaborator expiry upcoming, grace period expired and is closed" do
-        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+        grace_period_expired = (Date.today - 46).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -210,7 +210,7 @@ class GithubCollaborators
       end
 
       it "define collaborator in code, grace period okay and is open" do
-        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+        grace_period_ok = (Date.today - 45).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -227,7 +227,7 @@ class GithubCollaborators
       end
 
       it "define collaborator in code, grace period okay and is closed" do
-        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+        grace_period_ok = (Date.today - 45).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -244,7 +244,7 @@ class GithubCollaborators
       end
 
       it "define collaborator in code, grace period expired and is open" do
-        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+        grace_period_expired = (Date.today - 46).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -261,7 +261,7 @@ class GithubCollaborators
       end
 
       it "define collaborator in code, grace period expired and is closed" do
-        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+        grace_period_expired = (Date.today - 46).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -293,7 +293,7 @@ class GithubCollaborators
       end
 
       it "use team access, grace period okay and is open" do
-        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+        grace_period_ok = (Date.today - 45).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -310,7 +310,7 @@ class GithubCollaborators
       end
 
       it "use team access, grace period okay and is closed" do
-        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+        grace_period_ok = (Date.today - 45).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -327,7 +327,7 @@ class GithubCollaborators
       end
 
       it "use team access, grace period expired and is open" do
-        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+        grace_period_expired = (Date.today - 46).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -344,7 +344,7 @@ class GithubCollaborators
       end
 
       it "use team access, grace period expired and is closed" do
-        grace_period_expired = (Date.today - 46).strftime("%Y-%m-%d")
+        grace_period_expired = (Date.today - 46).strftime(DATE_FORMAT)
 
         issues = [
           {
@@ -403,7 +403,7 @@ class GithubCollaborators
       end
 
       it "multiple issues, some expired and open" do
-        grace_period_ok = (Date.today - 45).strftime("%Y-%m-%d")
+        grace_period_ok = (Date.today - 45).strftime(DATE_FORMAT)
 
         issues = [
           {

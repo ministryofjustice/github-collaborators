@@ -27,7 +27,7 @@ class GithubCollaborators
       @org = collaborator.org
       @reason = "Full Org member / collaborator missing from Terraform file"
       @added_by = "opseng-bot@digital.justice.gov.uk"
-      review_date = (Date.today + 90).strftime("%Y-%m-%d")
+      review_date = (Date.today + 90).strftime(DATE_FORMAT)
       @review_after = review_date.to_s
     end
 
@@ -39,7 +39,7 @@ class GithubCollaborators
       @username = collaborator_name.to_s.downcase
       @reason = "Collaborator missing from Terraform file"
       @added_by = "opseng-bot@digital.justice.gov.uk"
-      review_date = (Date.today + 90).strftime("%Y-%m-%d")
+      review_date = (Date.today + 90).strftime(DATE_FORMAT)
       @review_after = review_date.to_s
       @defined_in_terraform = false
     end

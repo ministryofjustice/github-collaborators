@@ -6,7 +6,7 @@ class GithubCollaborators
       it "create line" do
         terraform_block = TerraformBlock.new
 
-        today = Date.today.strftime("%Y-%m-%d").to_s
+        today = Date.today.strftime(DATE_FORMAT).to_s
 
         collaborator = {
           login: "bob123",

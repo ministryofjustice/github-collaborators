@@ -37,6 +37,9 @@ require_relative "./github_collaborators/terraform_files"
 require_relative "./github_collaborators/unknown_collaborators"
 
 class GithubCollaborators
+
+  DATE_FORMAT = "%Y-%m-%d"
+
   # Issue raised on Github
   COLLABORATOR_EXPIRES_SOON = "Collaborator review date expires soon for user"
   COLLABORATOR_EXPIRY_UPCOMING = "Review after date expiry is upcoming for user"
