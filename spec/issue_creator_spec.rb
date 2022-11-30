@@ -50,10 +50,14 @@ class GithubCollaborators
 
       it "delete an issue when issue missing an assignee" do
         url = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
-        response = [{"title": "Collaborator review date expires soon for user somegithubuser", "assignees": [{"login":"somegithubuser"}]}]
-        expect(HttpClient).to receive(:new).and_return(http_client)
+        response = [{"number": 3, "assignee": { "login": "somegithubuser" }, "title": "Collaborator review date expires soon for user somegithubuser", "assignees": []}]
+        expect(HttpClient).to receive(:new).and_return(http_client).at_least(3).times
+
+        close_issue_url = "https://api.github.com/repos/ministryofjustice/somerepo/issues/3"
+        state = { state: "closed" }
+        expect(http_client).to receive(:patch_json).with(close_issue_url, state.to_json)
         expect(http_client).to receive(:fetch_json).with(url).and_return(response.to_json)
-        expect(http_client).not_to receive(:post_json)
+        expect(http_client).to receive(:post_json).with(url, json2)
         issue_creator.create_review_date_expires_soon_issue
       end
 
