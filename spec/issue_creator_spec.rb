@@ -46,7 +46,7 @@ class GithubCollaborators
         expect(http_client).not_to receive(:post_json)
         issue_creator.create_review_date_expires_soon_issue
       end
-      
+
       let(:json2) {
         %({"title":"Collaborator review date expires soon for user somegithubuser","assignees":["somegithubuser"],"body":"Hi there\\n\\nThe user @somegithubuser has its access for this repository maintained in code here: https://github.com/ministryofjustice/github-collaborators\\n\\nThe review_after date is due to expire within one month, please update this via a PR if they still require access.\\n\\nIf you have any questions, please post in #ask-operations-engineering on Slack.\\n\\nFailure to update the review_date will result in the collaborator being removed from the repository via our automation.\\n"})
       }

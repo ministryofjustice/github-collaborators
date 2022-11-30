@@ -31,7 +31,7 @@ class GithubCollaborators
           org: TEST_COLLABORATOR_ORG,
           reason: TEST_COLLABORATOR_REASON,
           added_by: TEST_COLLABORATOR_ADDED_BY,
-          review_after: (Date.today - 1).strftime(DATE_FORMAT).to_s 
+          review_after: (Date.today - 1).strftime(DATE_FORMAT).to_s
         }
 
         terraform_block.add_terraform_file_collaborator_data(collaborator)
@@ -49,7 +49,7 @@ class GithubCollaborators
           org: TEST_COLLABORATOR_ORG,
           reason: TEST_COLLABORATOR_REASON,
           added_by: TEST_COLLABORATOR_ADDED_BY,
-          review_after: (Date.today + 370).strftime(DATE_FORMAT).to_s 
+          review_after: (Date.today + 370).strftime(DATE_FORMAT).to_s
         }
 
         terraform_block.add_terraform_file_collaborator_data(collaborator)
@@ -67,7 +67,7 @@ class GithubCollaborators
           org: TEST_COLLABORATOR_ORG,
           reason: TEST_COLLABORATOR_REASON,
           added_by: TEST_COLLABORATOR_ADDED_BY,
-          review_after: (Date.today + 6).strftime(DATE_FORMAT).to_s 
+          review_after: (Date.today + 6).strftime(DATE_FORMAT).to_s
         }
 
         terraform_block.add_terraform_file_collaborator_data(collaborator)
@@ -85,7 +85,7 @@ class GithubCollaborators
           org: TEST_COLLABORATOR_ORG,
           reason: TEST_COLLABORATOR_REASON,
           added_by: TEST_COLLABORATOR_ADDED_BY,
-          review_after: (Date.today + 28).strftime(DATE_FORMAT).to_s 
+          review_after: (Date.today + 28).strftime(DATE_FORMAT).to_s
         }
 
         terraform_block.add_terraform_file_collaborator_data(collaborator)
@@ -103,7 +103,7 @@ class GithubCollaborators
           org: TEST_COLLABORATOR_ORG,
           reason: TEST_COLLABORATOR_REASON,
           added_by: TEST_COLLABORATOR_ADDED_BY,
-          review_after: (Date.today + 31).strftime(DATE_FORMAT).to_s 
+          review_after: (Date.today + 31).strftime(DATE_FORMAT).to_s
         }
 
         terraform_block.add_terraform_file_collaborator_data(collaborator)
@@ -139,7 +139,7 @@ class GithubCollaborators
           org: TEST_COLLABORATOR_ORG,
           reason: TEST_COLLABORATOR_REASON,
           added_by: TEST_COLLABORATOR_ADDED_BY,
-          review_after: (Date.today + 31).strftime(DATE_FORMAT).to_s 
+          review_after: (Date.today + 31).strftime(DATE_FORMAT).to_s
         }
 
         terraform_block.add_terraform_file_collaborator_data(collaborator)
@@ -150,8 +150,3 @@ class GithubCollaborators
     end
   end
 end
-           
-            
-            
-            
-            
