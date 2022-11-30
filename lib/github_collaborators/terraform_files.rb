@@ -117,6 +117,7 @@ class GithubCollaborators
     def initialize(repository_name)
       logger.debug "initialize"
       @filename = repository_name.downcase
+      @real_repository_name = ""
       @file_path = "terraform/#{GithubCollaborators.tf_safe(@filename)}.tf"
       @terraform_blocks = []
       @terraform_file_data = []
@@ -229,6 +230,14 @@ class GithubCollaborators
       end
     end
 
+    def get_repository_name
+      logger.debug "get_repository_name"
+      # In the file find the "repository" line
+      line_number = 0
+      name = get_attribute("repository", line_number)
+      @real_repository_name = name.downcase
+    end
+
     def create_terraform_collaborator_blocks
       logger.debug "create_terraform_collaborator_blocks"
       # In the file find the "github_user" lines
@@ -330,7 +339,7 @@ class GithubCollaborators
       template = <<~EOF
         module "<%= @filename %>" {
           source     = "./modules/repository-collaborators"
-          repository = "<%= @filename %>"
+          repository = "<%= @real_repository_name %>"
           collaborators = [
           <% @terraform_blocks.each do |collaborator| %>
           {
@@ -373,6 +382,8 @@ class GithubCollaborators
           terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase)
           # Read the file
           terraform_file.read_file
+          # Read real repository name from file
+          terraform_file.get_repository_name
           # Make Terraform blocks for each collaborator
           terraform_file.create_terraform_collaborator_blocks
           # Store Terraform file
