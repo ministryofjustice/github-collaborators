@@ -59,6 +59,18 @@ class GithubCollaborators
   CHANGE_PERMISSION_PR_TITLE = "Modify permission in Terraform file/s for"
   ARCHIVED_REPOSITORY_PR_TITLE = "Delete archived repository Terraform file/s"
 
+  # Collaborator data issues
+  USERNAME_MISSING = "Collaborator username is missing"
+  PERMISSION_MISSING = "Collaborator permission is missing"
+  NAME_MISSING = "Collaborator name is missing"
+  EMAIL_MISSING = "Collaborator email is missing"
+  ORGANISATION_MISSING = "Collaborator organisation is missing"
+  REASON_MISSING = "Collaborator reason is missing"
+  ADDED_BY_MISSING = "Person who added this collaborator is missing"
+  REVIEW_DATE_MISSING = "Collaboration review date is missing"
+  COLLABORATOR_MISSING = "Collaborator not defined in terraform"
+
+  # Test strings
   TEST_COLLABORATOR_NAME = "bob jones"
   TEST_COLLABORATOR_LOGIN = "bob123"
   TEST_COLLABORATOR_EMAIL = "bob123@some-emmail.com"

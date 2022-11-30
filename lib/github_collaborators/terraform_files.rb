@@ -274,14 +274,14 @@ class GithubCollaborators
     end
 
     REQUIRED_ATTRIBUTES = {
-      "github_user" => "Collaborator username is missing",
-      "permission" => "Collaborator permission is missing",
-      "name" => "Collaborator name is missing",
-      "email" => "Collaborator email is missing",
-      "org" => "Collaborator organisation is missing",
-      "reason" => "Collaborator reason is missing",
-      "added_by" => "Person who added this collaborator is missing",
-      "review_after" => "Collaboration review date is missing"
+      "github_user" => "Collaborator username is missing", # USERNAME_MISSING
+      "permission" => "Collaborator permission is missing", # PERMISSION_MISSING
+      "name" => "Collaborator name is missing", # NAME_MISSING
+      "email" => "Collaborator email is missing", # EMAIL_MISSING
+      "org" => "Collaborator organisation is missing", # ORGANISATION_MISSING
+      "reason" => "Collaborator reason is missing", # REASON_MISSING
+      "added_by" => "Person who added this collaborator is missing", # ADDED_BY_MISSING
+      "review_after" => "Collaboration review date is missing" # REVIEW_DATE_MISSING
     }
 
     USERNAME = 0

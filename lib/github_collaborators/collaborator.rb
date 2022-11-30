@@ -36,35 +36,35 @@ class GithubCollaborators
       logger.debug "check_for_issues"
 
       if @login == ""
-        @issues.push("Collaborator username is missing")
+        @issues.push(USERNAME_MISSING)
       end
 
       if @permission == ""
-        @issues.push("Collaborator permission is missing")
+        @issues.push(PERMISSION_MISSING)
       end
 
       if @email == ""
-        @issues.push("Collaborator email is missing")
+        @issues.push(EMAIL_MISSING)
       end
 
       if @name == ""
-        @issues.push("Collaborator name is missing")
+        @issues.push(NAME_MISSING)
       end
 
       if @org == ""
-        @issues.push("Collaborator organisation is missing")
+        @issues.push(ORGANISATION_MISSING)
       end
 
       if @reason == ""
-        @issues.push("Collaborator reason is missing")
+        @issues.push(REASON_MISSING)
       end
 
       if @added_by == ""
-        @issues.push("Person who added this collaborator is missing")
+        @issues.push(ADDED_BY_MISSING)
       end
 
       if @review_after_date == ""
-        @issues.push("Collaboration review date is missing")
+        @issues.push(REVIEW_DATE_MISSING)
       elsif @review_after_date < Date.today
         @issues.push(REVIEW_DATE_PASSED)
       elsif @review_after_date > (Date.today + YEAR)
@@ -74,12 +74,13 @@ class GithubCollaborators
       elsif (Date.today + MONTH) > @review_after_date
         @issues.push(REVIEW_DATE_WITHIN_MONTH)
       end
+      @issues
     end
 
     def add_issue(reason)
       logger.debug ""
       if reason == "missing"
-        @issues.push("Collaborator not defined in terraform")
+        @issues.push(COLLABORATOR_MISSING)
         @defined_in_terraform = false
       end
     end

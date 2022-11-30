@@ -89,7 +89,7 @@ EOF
       end
 
       it has_an_issue do
-        expect(tc.issues).to eq(["Collaborator not defined in terraform"])
+        expect(tc.issues).to eq([COLLABORATOR_MISSING])
       end
 
       it "links to the terraform directory" do
@@ -166,12 +166,12 @@ EOF
 
       it "has issues" do
         expected = [
-          "Collaborator name is missing",
-          "Collaborator email is missing",
-          "Collaborator organisation is missing",
-          "Collaborator reason is missing",
-          "Person who added this collaborator is missing",
-          "Collaboration review date is missing"
+          NAME_MISSING,
+          EMAIL_MISSING,
+          ORGANISATION_MISSING,
+          REASON_MISSING,
+          ADDED_BY_MISSING,
+          REVIEW_DATE_MISSING
         ].sort
 
         expect(tc.issues.sort).to eq(expected)
@@ -185,12 +185,12 @@ EOF
           "href" => "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/acronyms.tf",
           "review_date" => nil,
           "issues" => [
-            "Collaborator name is missing",
-            "Collaborator email is missing",
-            "Collaborator organisation is missing",
-            "Collaborator reason is missing",
-            "Person who added this collaborator is missing",
-            "Collaboration review date is missing"
+            NAME_MISSING,
+            EMAIL_MISSING,
+            ORGANISATION_MISSING,
+            REASON_MISSING,
+            ADDED_BY_MISSING,
+            REVIEW_DATE_MISSING
           ],
           "defined_in_terraform" => true
         }
@@ -213,7 +213,7 @@ EOF
       end
 
       it has_an_issue do
-        expect(tc.issues).to eq(["Collaborator not defined in terraform"])
+        expect(tc.issues).to eq([COLLABORATOR_MISSING])
       end
 
       # To Do: Find solution why this test fails when added review_date to to_hash()
