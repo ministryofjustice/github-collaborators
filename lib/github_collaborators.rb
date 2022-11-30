@@ -59,6 +59,15 @@ class GithubCollaborators
   CHANGE_PERMISSION_PR_TITLE = "Modify permission in Terraform file/s for"
   ARCHIVED_REPOSITORY_PR_TITLE = "Delete archived repository Terraform file/s"
 
+
+  TEST_COLLABORATOR_NAME = "bob jones"
+  TEST_COLLABORATOR_LOGIN = "bob123"
+  TEST_COLLABORATOR_EMAIL = "bob123@some-emmail.com"
+  TEST_COLLABORATOR_ORG = "some org"
+  TEST_COLLABORATOR_REASON = "some reason"
+  TEST_COLLABORATOR_ADDED_BY = "john"
+  TEST_COLLABORATOR_PERMISSION = "maintain"
+
   def self.tf_safe(string)
     string.tr(".", "-")
   end

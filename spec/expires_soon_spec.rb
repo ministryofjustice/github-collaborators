@@ -9,13 +9,13 @@ class GithubCollaborators
         today = Date.today.strftime(DATE_FORMAT).to_s
 
         collaborator = {
-          login: "bob123",
-          permission: "maintain",
-          name: "bob jones",
-          email: "bob123@some-emmail.com",
-          org: "some org",
-          reason: "some reason",
-          added_by: "john",
+          login: TEST_COLLABORATOR_LOGIN,
+          permission: TEST_COLLABORATOR_PERMISSION,
+          name: TEST_COLLABORATOR_NAME,
+          email: TEST_COLLABORATOR_EMAIL,
+          org: TEST_COLLABORATOR_ORG,
+          reason: TEST_COLLABORATOR_REASON,
+          added_by: TEST_COLLABORATOR_ADDED_BY,
           review_after: today
         }
 
@@ -30,13 +30,13 @@ class GithubCollaborators
 
         tomorrow = (Date.today + 1).strftime(DATE_FORMAT).to_s
         collaborator = {
-          login: "bob123",
-          permission: "maintain",
-          name: "bob jones",
-          email: "bob123@some-emmail.com",
-          org: "some org",
-          reason: "some reason",
-          added_by: "john",
+          login: TEST_COLLABORATOR_LOGIN,
+          permission: TEST_COLLABORATOR_PERMISSION,
+          name: TEST_COLLABORATOR_NAME,
+          email: TEST_COLLABORATOR_EMAIL,
+          org: TEST_COLLABORATOR_ORG,
+          reason: TEST_COLLABORATOR_REASON,
+          added_by: TEST_COLLABORATOR_ADDED_BY,
           review_after: tomorrow
         }
 
@@ -52,13 +52,13 @@ class GithubCollaborators
         review_date = (Date.today + 2).strftime(DATE_FORMAT).to_s
 
         collaborator = {
-          login: "bob123",
-          permission: "maintain",
-          name: "bob jones",
-          email: "bob123@some-emmail.com",
-          org: "some org",
-          reason: "some reason",
-          added_by: "john",
+          login: TEST_COLLABORATOR_LOGIN,
+          permission: TEST_COLLABORATOR_PERMISSION,
+          name: TEST_COLLABORATOR_NAME,
+          email: TEST_COLLABORATOR_EMAIL,
+          org: TEST_COLLABORATOR_ORG,
+          reason: TEST_COLLABORATOR_REASON,
+          added_by: TEST_COLLABORATOR_ADDED_BY,
           review_after: review_date
         }
 
@@ -72,13 +72,13 @@ class GithubCollaborators
         terraform_block = TerraformBlock.new
 
         collaborator = {
-          login: "bob123",
-          permission: "maintain",
-          name: "bob jones",
-          email: "bob123@some-emmail.com",
-          org: "some org",
-          reason: "some reason",
-          added_by: "john",
+          login: TEST_COLLABORATOR_LOGIN,
+          permission: TEST_COLLABORATOR_PERMISSION,
+          name: TEST_COLLABORATOR_NAME,
+          email: TEST_COLLABORATOR_EMAIL,
+          org: TEST_COLLABORATOR_ORG,
+          reason: TEST_COLLABORATOR_REASON,
+          added_by: TEST_COLLABORATOR_ADDED_BY,
           review_after: ""
         }
 
