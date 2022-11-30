@@ -37,7 +37,6 @@ require_relative "./github_collaborators/terraform_files"
 require_relative "./github_collaborators/unknown_collaborators"
 
 class GithubCollaborators
-
   DATE_FORMAT = "%Y-%m-%d"
 
   # Issue raised on Github
