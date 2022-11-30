@@ -5,8 +5,8 @@ class GithubCollaborators
     def initialize
       logger.debug "initialize"
       params = {
-        repository: nil,
-        github_user: nil
+        repository: "",
+        github_user: ""
       }
       @issue_creator = GithubCollaborators::IssueCreator.new(params)
     end
