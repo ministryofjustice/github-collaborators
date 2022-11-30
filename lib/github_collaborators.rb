@@ -37,10 +37,13 @@ require_relative "./github_collaborators/terraform_files"
 require_relative "./github_collaborators/unknown_collaborators"
 
 class GithubCollaborators
+  DATE_FORMAT = "%Y-%m-%d"
+
   # Issue raised on Github
   COLLABORATOR_EXPIRES_SOON = "Collaborator review date expires soon for user"
   COLLABORATOR_EXPIRY_UPCOMING = "Review after date expiry is upcoming for user"
   DEFINE_COLLABORATOR_IN_CODE = "Please define outside collaborators in code"
+  USE_TEAM_ACCESS = "User access removed, access is now via a team"
 
   # Internal issues
   REVIEW_DATE_WITHIN_MONTH = "Review after date is within a month"
@@ -55,6 +58,14 @@ class GithubCollaborators
   REMOVE_EXPIRED_COLLABORATOR_PR_TITLE = "Remove expired collaborator from Terraform file/s for"
   CHANGE_PERMISSION_PR_TITLE = "Modify permission in Terraform file/s for"
   ARCHIVED_REPOSITORY_PR_TITLE = "Delete archived repository Terraform file/s"
+
+  TEST_COLLABORATOR_NAME = "bob jones"
+  TEST_COLLABORATOR_LOGIN = "bob123"
+  TEST_COLLABORATOR_EMAIL = "bob123@some-emmail.com"
+  TEST_COLLABORATOR_ORG = "some org"
+  TEST_COLLABORATOR_REASON = "some reason"
+  TEST_COLLABORATOR_ADDED_BY = "john"
+  TEST_COLLABORATOR_PERMISSION = "maintain"
 
   def self.tf_safe(string)
     string.tr(".", "-")

@@ -17,13 +17,13 @@ class GithubCollaborators
         .map { |collaborator| @outside_collaborators.push(collaborator["login"].downcase) }
 
       # Grab the Org members
-      @organization_members = OrganizationMembers.new.org_members
+      @organization_members = GithubCollaborators::OrganizationMembers.new.org_members
 
       # Grab the Org repositories
-      @repositories = Repositories.new.get_active_repositories
+      @repositories = GithubCollaborators::Repositories.new.get_active_repositories
 
       # Grab the Org archived repositories
-      @archived_repositories = Repositories.new.get_archived_repositories
+      @archived_repositories = GithubCollaborators::Repositories.new.get_archived_repositories
 
       # Get all the outside collaborators from GitHub per repo that has an outside collaborator
       repo_collaborators = GithubCollaborators::RepositoryCollaborators.new

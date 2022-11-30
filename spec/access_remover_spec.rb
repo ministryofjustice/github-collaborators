@@ -1,6 +1,6 @@
 class GithubCollaborators
   describe AccessRemover do
-    context "when env var not enabled" do
+    context "when env var enabled" do
       before do
         ENV["REALLY_POST_TO_GH"] = "1"
       end
@@ -15,6 +15,9 @@ class GithubCollaborators
       subject(:ar) { described_class.new(params) }
 
       let(:http_client) { double(HttpClient) }
+
+      # Stub sleep
+      before { allow_any_instance_of(AccessRemover).to receive(:sleep) }
 
       it "call github api" do
         url = "https://api.github.com/repos/ministryofjustice/somerepo/collaborators/somegithubuser"
@@ -42,7 +45,11 @@ class GithubCollaborators
 
       subject(:ar) { described_class.new(params) }
 
+      let(:http_client) { double(HttpClient) }
+
       it "dont call github api" do
+        expect(HttpClient).not_to receive(:new)
+        expect(http_client).not_to receive(:delete)
         ar.remove_access
       end
     end

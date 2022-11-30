@@ -1,7 +1,6 @@
 class GithubCollaborators
   class IssueCreator
     include Logging
-    POST_TO_GH = ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
 
     def initialize(params)
       logger.debug "initialize"
@@ -11,7 +10,7 @@ class GithubCollaborators
 
     def create_unknown_collaborator_issue
       logger.debug "create_unknown_collaborator_issue"
-      if POST_TO_GH
+      if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
         url = "https://api.github.com/repos/ministryofjustice/#{@repository}/issues"
         GithubCollaborators::HttpClient.new.post_json(url, unknown_collaborator_hash.to_json)
         sleep 2
@@ -23,7 +22,7 @@ class GithubCollaborators
     def create_review_date_expires_soon_issue
       logger.debug "create_review_date_expires_soon_issue"
       if !does_issue_already_exists?
-        if POST_TO_GH
+        if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
           url = "https://api.github.com/repos/ministryofjustice/#{@repository}/issues"
           GithubCollaborators::HttpClient.new.post_json(url, review_date_expires_soon_hash.to_json)
           sleep 2
@@ -32,6 +31,15 @@ class GithubCollaborators
         end
       end
     end
+
+    def get_issues(repository)
+      logger.debug "get_issues"
+      url = "https://api.github.com/repos/ministryofjustice/#{repository.downcase}/issues"
+      response = GithubCollaborators::HttpClient.new.fetch_json(url)
+      JSON.parse(response, {symbolize_names: true})
+    end
+
+    private
 
     # Checks if issue already open for a collaborator
     def does_issue_already_exists?
@@ -62,15 +70,6 @@ class GithubCollaborators
       end
       found_issues
     end
-
-    def get_issues(repository)
-      logger.debug "get_issues"
-      url = "https://api.github.com/repos/ministryofjustice/#{repository.downcase}/issues"
-      response = GithubCollaborators::HttpClient.new.fetch_json(url)
-      JSON.parse(response, {symbolize_names: true})
-    end
-
-    private
 
     def unknown_collaborator_hash
       logger.debug "unknown_collaborator_hash"

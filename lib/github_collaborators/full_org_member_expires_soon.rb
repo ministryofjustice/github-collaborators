@@ -4,8 +4,15 @@ class GithubCollaborators
 
     def create_line(collaborator)
       logger.debug "create_line"
+
       review_date = collaborator.review_after_date
+
+      if review_date.nil? || review_date == ""
+        review_date = Date.today
+      end
+
       age = (review_date - Date.today).to_i
+
       expires_when = if review_date == Date.today
         "today"
       elsif age == 1
