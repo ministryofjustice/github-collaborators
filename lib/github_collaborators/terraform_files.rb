@@ -382,7 +382,7 @@ class GithubCollaborators
           terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase)
           # Read the file
           terraform_file.read_file
-          # Read real repository name from file 
+          # Read real repository name from file
           terraform_file.get_repository_name
           # Make Terraform blocks for each collaborator
           terraform_file.create_terraform_collaborator_blocks
