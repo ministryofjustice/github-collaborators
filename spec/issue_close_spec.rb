@@ -1,5 +1,4 @@
 class GithubCollaborators
-
   CREATED_DATE = "2019-10-01"
 
   describe IssueClose do

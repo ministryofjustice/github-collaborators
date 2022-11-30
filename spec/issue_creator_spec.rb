@@ -1,5 +1,4 @@
 class GithubCollaborators
-
   URL = "https://api.github.com/repos/ministryofjustice/somerepo/issues"
 
   describe IssueCreator do
