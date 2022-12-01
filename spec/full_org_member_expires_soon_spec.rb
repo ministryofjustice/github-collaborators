@@ -1,91 +1,39 @@
 class GithubCollaborators
   describe FullOrgMemberExpiresSoon do
     context "call" do
+
+      REPOSITORY_NAME = "somerepo"
+      REPO_URL = "https://github.com/ministryofjustice/#{REPOSITORY_NAME}|#{REPOSITORY_NAME}"
+      HREF = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/somerepo.tf|terraform file"  
+
       subject(:expires_soon) { described_class.new }
 
       it "create line when collaborator expires today" do
-        terraform_block = TerraformBlock.new
-
-        today = Date.today.strftime(DATE_FORMAT).to_s
-
-        collaborator = {
-          login: TEST_COLLABORATOR_LOGIN,
-          permission: TEST_COLLABORATOR_PERMISSION,
-          name: TEST_COLLABORATOR_NAME,
-          email: TEST_COLLABORATOR_EMAIL,
-          org: TEST_COLLABORATOR_ORG,
-          reason: TEST_COLLABORATOR_REASON,
-          added_by: TEST_COLLABORATOR_ADDED_BY,
-          review_after: today
-        }
-
-        terraform_block.add_terraform_file_collaborator_data(collaborator)
-        collaborator = Collaborator.new(terraform_block, "operations")
+        terraform_block = create_terraform_block_review_date_today
+        collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
         line = expires_soon.create_line(collaborator)
-        expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (today)")
+        expect(line).to eq("- someuser in <#{REPO_URL}> see <#{HREF}> (today)")
       end
 
       it "create line when collaborator expires tomorrow" do
-        terraform_block = TerraformBlock.new
-
-        tomorrow = (Date.today + 1).strftime(DATE_FORMAT).to_s
-        collaborator = {
-          login: TEST_COLLABORATOR_LOGIN,
-          permission: TEST_COLLABORATOR_PERMISSION,
-          name: TEST_COLLABORATOR_NAME,
-          email: TEST_COLLABORATOR_EMAIL,
-          org: TEST_COLLABORATOR_ORG,
-          reason: TEST_COLLABORATOR_REASON,
-          added_by: TEST_COLLABORATOR_ADDED_BY,
-          review_after: tomorrow
-        }
-
-        terraform_block.add_terraform_file_collaborator_data(collaborator)
-        collaborator = Collaborator.new(terraform_block, "operations")
+        terraform_block = create_terraform_block_review_date_tomorrow
+        collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
         line = expires_soon.create_line(collaborator)
-        expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (tomorrow)")
+        expect(line).to eq("- someuser in <#{REPO_URL}> see <#{HREF}> (tomorrow)")
       end
 
       it "create line when collaborator in two days" do
-        terraform_block = TerraformBlock.new
-
-        review_date = (Date.today + 2).strftime(DATE_FORMAT).to_s
-
-        collaborator = {
-          login: TEST_COLLABORATOR_LOGIN,
-          permission: TEST_COLLABORATOR_PERMISSION,
-          name: TEST_COLLABORATOR_NAME,
-          email: TEST_COLLABORATOR_EMAIL,
-          org: TEST_COLLABORATOR_ORG,
-          reason: TEST_COLLABORATOR_REASON,
-          added_by: TEST_COLLABORATOR_ADDED_BY,
-          review_after: review_date
-        }
-
-        terraform_block.add_terraform_file_collaborator_data(collaborator)
-        collaborator = Collaborator.new(terraform_block, "operations")
+        terraform_block = create_terraform_block_review_date_in_two_days
+        collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
         line = expires_soon.create_line(collaborator)
-        expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (in 2 days)")
+        expect(line).to eq("- someuser in <#{REPO_URL}> see <#{HREF}> (in 2 days)")
       end
 
       it "create line when collaborator expired no date provided" do
-        terraform_block = TerraformBlock.new
-
-        collaborator = {
-          login: TEST_COLLABORATOR_LOGIN,
-          permission: TEST_COLLABORATOR_PERMISSION,
-          name: TEST_COLLABORATOR_NAME,
-          email: TEST_COLLABORATOR_EMAIL,
-          org: TEST_COLLABORATOR_ORG,
-          reason: TEST_COLLABORATOR_REASON,
-          added_by: TEST_COLLABORATOR_ADDED_BY,
-          review_after: ""
-        }
-
-        terraform_block.add_terraform_file_collaborator_data(collaborator)
-        collaborator = Collaborator.new(terraform_block, "operations")
+        terraform_block = create_terraform_block_review_date_empty
+        collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
         line = expires_soon.create_line(collaborator)
-        expect(line).to eq("- bob123 in <https://github.com/ministryofjustice/operations|operations> see <https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/operations.tf|terraform file> (today)")
+        expect(line).to eq("- someuser in <#{REPO_URL}> see <#{HREF}> (today)")
       end
 
       it "singular message" do

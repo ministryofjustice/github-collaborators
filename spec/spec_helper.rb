@@ -5,6 +5,11 @@ end
 
 require_relative "../lib/github_collaborators"
 require "webmock/rspec"
+require 'helpers'
+
+RSpec.configure do |c|
+  c.include Helpers
+end
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

@@ -33,7 +33,7 @@ class GithubCollaborators
 
     it "calls github api" do
       url = "https://api.github.com/repos/ministryofjustice/somerepo/pulls"
-      expect(HttpClient).to receive(:new).and_return(http_client)
+      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:post_json).with(url, json)
       ic.create_pull_request
     end

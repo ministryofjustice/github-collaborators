@@ -71,12 +71,12 @@ class GithubCollaborators
   COLLABORATOR_MISSING = "Collaborator not defined in terraform"
 
   # Test strings
-  TEST_COLLABORATOR_NAME = "bob jones"
-  TEST_COLLABORATOR_LOGIN = "bob123"
-  TEST_COLLABORATOR_EMAIL = "bob123@some-emmail.com"
+  TEST_COLLABORATOR_NAME = "some user"
+  TEST_COLLABORATOR_LOGIN = "someuser"
+  TEST_COLLABORATOR_EMAIL = "someuser@some-email.com"
   TEST_COLLABORATOR_ORG = "some org"
   TEST_COLLABORATOR_REASON = "some reason"
-  TEST_COLLABORATOR_ADDED_BY = "john"
+  TEST_COLLABORATOR_ADDED_BY = "other user"
   TEST_COLLABORATOR_PERMISSION = "maintain"
 
   def self.tf_safe(string)
