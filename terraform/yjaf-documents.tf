@@ -16,11 +16,11 @@ module "yjaf-documents" {
       github_user  = "griffinjuknps"
       permission   = "admin"
       name         = "Jeremy Griffin"
-      email        = "jeremy.griffin@northgateps.com"
+      email        = "jeremy.griffin@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF developer. Needing access to the work on BackEnd coding tasks"
       added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2022-12-02"
+      review_after = "2023-06-02"
     },
     {
       github_user  = "vasildimitrov22"
