@@ -64,7 +64,7 @@ class GithubCollaborators
       end
 
       after do
-        ENV["REALLY_POST_TO_GH"] = "0"
+        ENV.delete("REALLY_POST_TO_GH")
       end
     end
 
@@ -73,6 +73,37 @@ class GithubCollaborators
         ENV["REALLY_POST_TO_GH"] = "0"
       end
 
+      let(:params) {
+        {
+          repository: "somerepo",
+          github_user: "somegithubuser"
+        }
+      }
+
+      subject(:issue_creator) { described_class.new(params) }
+
+      let(:http_client) { double(HttpClient) }
+
+      it "dont call github api in create unknown collaborator issue" do
+        expect(HttpClient).not_to receive(:new)
+        expect(http_client).not_to receive(:delete)
+        issue_creator.create_unknown_collaborator_issue
+      end
+
+      it "dont call github api in create review date expires soon issue" do
+        expect(HttpClient).to receive(:new).and_return(http_client)
+        response = []
+        expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
+        expect(http_client).not_to receive(:delete)
+        issue_creator.create_review_date_expires_soon_issue
+      end
+
+      after do
+        ENV.delete("REALLY_POST_TO_GH")
+      end
+    end
+
+    context "when env var is missing" do
       let(:params) {
         {
           repository: "somerepo",

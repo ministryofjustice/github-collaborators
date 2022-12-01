@@ -39,6 +39,10 @@ class GithubCollaborators
         reply = hc.post_pull_request_json(TEST_URL, nil)
         expect(reply).to be_instance_of(Net::HTTPOK)
       end
+
+      after do
+        ENV.delete("OPS_BOT_TOKEN")
+      end
     end
 
     context "when correct token is provided" do
@@ -87,6 +91,10 @@ class GithubCollaborators
         stub_request(:delete, TEST_URL).to_return(body: "abc", status: 200)
         reply = hc.delete(TEST_URL)
         expect(reply).to be_instance_of(Net::HTTPOK)
+      end
+      
+      after do
+        ENV.delete("ADMIN_GITHUB_TOKEN")
       end
     end
   end
