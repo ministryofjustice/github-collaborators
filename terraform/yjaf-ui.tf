@@ -16,11 +16,11 @@ module "yjaf-ui" {
       github_user  = "griffinjuknps"
       permission   = "admin"
       name         = "Jeremy Griffin"
-      email        = "jeremy.griffin@northgateps.com"
-      org          = "Northgate"
+      email        = "jeremy.griffin@necsws.com"
+      org          = "NEC Software Solutions"
       reason       = "Part of the Northgate supplier team for the YJB YJAF system"
       added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2022-12-13"
+      review_after = "2023-06-02"
     },
     {
       github_user  = "oliviergaubert"
