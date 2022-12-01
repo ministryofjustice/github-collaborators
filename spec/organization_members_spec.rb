@@ -1,6 +1,5 @@
 class GithubCollaborators
   describe GithubCollaborators::OrganizationMembers do
-
     let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
 
     context "when env var missing" do
