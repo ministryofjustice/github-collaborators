@@ -31,8 +31,8 @@ class GithubCollaborators
         members.each do |member|
           org_members.push(GithubCollaborators::Member.new(member))
         end
-        break unless JSON.parse(response).dig("data", "organization", "membersWithRole", "pageInfo", "hasNextPage")
         end_cursor = JSON.parse(response).dig("data", "organization", "membersWithRole", "pageInfo", "endCursor")
+        break unless JSON.parse(response).dig("data", "organization", "membersWithRole", "pageInfo", "hasNextPage")
       end
       org_members.sort_by { |org_member| org_member.login }
     end

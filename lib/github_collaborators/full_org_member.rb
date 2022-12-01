@@ -66,8 +66,8 @@ class GithubCollaborators
         response = graphql.run_query(full_org_member_query(end_cursor))
         repos = JSON.parse(response).dig("data", "user", "repositories", "edges")
         repositories += repos
-        break unless JSON.parse(response).dig("data", "user", "repositories", "pageInfo", "hasNextPage")
         end_cursor = JSON.parse(response).dig("data", "user", "repositories", "pageInfo", "endCursor")
+        break unless JSON.parse(response).dig("data", "user", "repositories", "pageInfo", "hasNextPage")
       end
 
       repositories.each do |repo|

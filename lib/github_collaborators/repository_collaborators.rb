@@ -30,8 +30,8 @@ class GithubCollaborators
         collaborators.each do |outside_collaborator|
           outside_collaborators.push(GithubCollaborators::GitHubCollaborator.new(outside_collaborator))
         end
-        break unless JSON.parse(response).dig("data", "organization", "repository", "collaborators", "pageInfo", "hasNextPage")
         end_cursor = JSON.parse(response).dig("data", "organization", "repository", "collaborators", "pageInfo", "endCursor")
+        break unless JSON.parse(response).dig("data", "organization", "repository", "collaborators", "pageInfo", "hasNextPage")
       end
       outside_collaborators
     end

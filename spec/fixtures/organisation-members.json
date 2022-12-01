@@ -1,0 +1,24 @@
+{
+  "data": {
+    "organization": {
+      "membersWithRole": {
+        "edges": [
+          {
+            "node": {
+              "login": "someuser1"
+            }
+          },
+          {
+            "node": {
+              "login": "someuser2"
+            }
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "abc"
+        }
+      }
+    }
+  }
+}

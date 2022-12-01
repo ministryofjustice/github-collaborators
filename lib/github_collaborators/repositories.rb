@@ -40,8 +40,8 @@ class GithubCollaborators
           repositories.each do |repo|
             active_repositories.push(GithubCollaborators::Repository.new(repo.dig("repo")))
           end
-          break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
           end_cursor = JSON.parse(response).dig("data", "search", "pageInfo", "endCursor")
+          break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
         end
       end
       active_repositories.sort_by { |repo| repo.name }
@@ -60,8 +60,8 @@ class GithubCollaborators
             # Get the archived repository name
             archived_repositories.push(repo.dig("repo", "name"))
           end
-          break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
           end_cursor = JSON.parse(response).dig("data", "search", "pageInfo", "endCursor")
+          break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
         end
       end
       archived_repositories.sort!
