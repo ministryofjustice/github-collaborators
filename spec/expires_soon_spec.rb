@@ -1,11 +1,9 @@
 class GithubCollaborators
+  REPOSITORY_NAME = "somerepo"
+  REPO_URL = "https://github.com/ministryofjustice/#{REPOSITORY_NAME}|#{REPOSITORY_NAME}"
+  HREF = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/somerepo.tf|terraform file"
   describe ExpiresSoon do
     context "call" do
-
-      REPOSITORY_NAME = "somerepo"
-      REPO_URL = "https://github.com/ministryofjustice/#{REPOSITORY_NAME}|#{REPOSITORY_NAME}"
-      HREF = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/somerepo.tf|terraform file"  
-
       subject(:expires_soon) { described_class.new }
 
       it "create line when collaborator expires today" do

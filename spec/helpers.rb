@@ -1,7 +1,6 @@
 module Helpers
-
   def create_collaborator_data(review_date)
-    collaborator_data = {
+    {
       login: GithubCollaborators::TEST_COLLABORATOR_LOGIN,
       permission: GithubCollaborators::TEST_COLLABORATOR_PERMISSION,
       name: GithubCollaborators::TEST_COLLABORATOR_NAME,
@@ -14,7 +13,7 @@ module Helpers
   end
 
   def create_empty_block
-    collaborator_data = {
+    {
       login: "",
       permission: "",
       name: "",
@@ -72,11 +71,6 @@ module Helpers
     create_test_data(review_date)
   end
 
-  def create_terraform_block_review_date_more_than_month
-    review_date = (Date.today + 31).strftime(GithubCollaborators::DATE_FORMAT).to_s
-    create_test_data(review_date)
-  end
-
   def create_terraform_block_empty
     collaborator_data = create_empty_block
     create_terraform_block(collaborator_data)
@@ -98,7 +92,7 @@ module Helpers
   end
 
   def create_issues(title, created_at, state, number)
-    issues = [
+    [
       {
         title: title,
         created_at: created_at,
@@ -106,6 +100,5 @@ module Helpers
         number: number
       }
     ]
-    issues
   end
 end

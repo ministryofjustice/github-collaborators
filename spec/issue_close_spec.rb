@@ -1,19 +1,18 @@
 class GithubCollaborators
-  describe IssueClose do
-    CREATED_DATE = "2019-10-01"
+  GRACE_PERIOD_OKAY = (Date.today - 45).strftime(DATE_FORMAT)
+  GRACE_PERIOD_EXPIRED = (Date.today - 46).strftime(DATE_FORMAT)
+  OPEN = "open"
+  CLOSED = "closed"
+  REPOSITORY_NAME = "somerepo"
+  CREATED_DATE = "2019-10-01"
 
+  describe IssueClose do
     subject(:issue_close) { described_class.new }
-    
+
     # Stub sleep
     before { allow_any_instance_of(GithubCollaborators::IssueClose).to receive(:sleep) }
 
     let(:http_client) { double(GithubCollaborators::HttpClient) }
-
-    GRACE_PERIOD_OKAY = (Date.today - 45).strftime(DATE_FORMAT)
-    GRACE_PERIOD_EXPIRED = (Date.today - 46).strftime(DATE_FORMAT)
-    OPEN = "open"
-    CLOSED = "closed"
-    REPOSITORY_NAME = "somerepo"
 
     context "call" do
       it "remove issue" do
@@ -26,7 +25,6 @@ class GithubCollaborators
     end
 
     context "call close expired issues" do
-
       let(:issue_creator) { double(GithubCollaborators::IssueCreator) }
 
       it "no issue exists" do

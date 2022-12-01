@@ -1,9 +1,8 @@
 class GithubCollaborators
+  TEST_URL = "https://api.github.com/repos/ministryofjustice/github-collaborators/issues"
+  BODY = "abc"
+
   describe HttpClient do
-
-    TEST_URL = "https://api.github.com/repos/ministryofjustice/github-collaborators/issues"
-    BODY = "abc"
-
     subject(:hc) { described_class.new }
 
     # Stub sleep
@@ -91,7 +90,7 @@ class GithubCollaborators
         reply = hc.delete(TEST_URL)
         expect(reply).to be_instance_of(Net::HTTPOK)
       end
-      
+
       after do
         ENV.delete("ADMIN_GITHUB_TOKEN")
       end

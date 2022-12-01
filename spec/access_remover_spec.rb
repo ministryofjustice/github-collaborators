@@ -6,12 +6,12 @@ class GithubCollaborators
         github_user: "somegithubuser"
       }
     }
-  
+
     let(:http_client) { double(GithubCollaborators::HttpClient) }
 
     # Stub sleep
     before { allow_any_instance_of(GithubCollaborators::AccessRemover).to receive(:sleep) }
-    
+
     subject(:ar) { described_class.new(params) }
 
     context "when env var enabled" do

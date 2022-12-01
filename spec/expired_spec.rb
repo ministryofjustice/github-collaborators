@@ -1,10 +1,9 @@
 class GithubCollaborators
+  REPOSITORY_NAME = "somerepo"
+  REPO_URL = "https://github.com/ministryofjustice/#{REPOSITORY_NAME}|#{REPOSITORY_NAME}"
+  HREF = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/somerepo.tf|terraform file"
+
   describe Expired do
-
-    REPOSITORY_NAME = "somerepo"
-    REPO_URL = "https://github.com/ministryofjustice/#{REPOSITORY_NAME}|#{REPOSITORY_NAME}"
-    HREF = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/somerepo.tf|terraform file"
-
     context "call" do
       subject(:expired) { described_class.new }
 
@@ -24,7 +23,6 @@ class GithubCollaborators
 
       it "create line when collaborator expired two days ago" do
         terraform_block = create_terraform_block_review_date_two_days_ago
-        review_date = (Date.today - 2).strftime(DATE_FORMAT).to_s
         collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
         line = expired.create_line(collaborator)
         expect(line).to eq("- someuser in <#{REPO_URL}> see <#{HREF}> (2 days ago)")

@@ -1,12 +1,10 @@
 class GithubCollaborators
+  REPOSITORY_NAME = "somerepo"
+  URL = "https://api.github.com/repos/ministryofjustice/#{REPOSITORY_NAME}/issues"
+  LOGIN = "someuser"
+  TITLE_1 = COLLABORATOR_EXPIRES_SOON + " " + LOGIN
+
   describe IssueCreator do
-
-    REPOSITORY_NAME = REPOSITORY_NAME
-    URL = "https://api.github.com/repos/ministryofjustice/#{REPOSITORY_NAME}/issues"
-    LOGIN = "someuser"
-    TITLE_1 = DEFINE_COLLABORATOR_IN_CODE + " " + LOGIN
-    TITLE_2 = COLLABORATOR_EXPIRES_SOON + " " + LOGIN
-
     let(:params) {
       {
         repository: REPOSITORY_NAME,
@@ -26,7 +24,7 @@ class GithubCollaborators
     }
 
     let(:json2) {
-      %({"title":"#{TITLE_2}","assignees":["#{LOGIN}"],"body":"Hi there\\n\\nThe user @#{LOGIN} has its access for this repository maintained in code here: https://github.com/ministryofjustice/github-collaborators\\n\\nThe review_after date is due to expire within one month, please update this via a PR if they still require access.\\n\\nIf you have any questions, please post in #ask-operations-engineering on Slack.\\n\\nFailure to update the review_date will result in the collaborator being removed from the repository via our automation.\\n"})
+      %({"title":"#{TITLE_1}","assignees":["#{LOGIN}"],"body":"Hi there\\n\\nThe user @#{LOGIN} has its access for this repository maintained in code here: https://github.com/ministryofjustice/github-collaborators\\n\\nThe review_after date is due to expire within one month, please update this via a PR if they still require access.\\n\\nIf you have any questions, please post in #ask-operations-engineering on Slack.\\n\\nFailure to update the review_date will result in the collaborator being removed from the repository via our automation.\\n"})
     }
 
     context "when env var enabled" do
@@ -40,7 +38,7 @@ class GithubCollaborators
         issue_creator.create_unknown_collaborator_issue
       end
 
-      it "do not call github api in create review date expires soon issue type one when issue already exists" do        
+      it "do not call github api in create review date expires soon issue type one when issue already exists" do
         response = [{assignee: {login: LOGIN}, title: COLLABORATOR_EXPIRY_UPCOMING, assignees: [{login: LOGIN}]}]
         expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
         expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
@@ -49,7 +47,7 @@ class GithubCollaborators
       end
 
       it "do not call github api in create review date expires soon issue type two when issue already exists" do
-        response = [{assignee: {login: LOGIN}, title: TITLE_2, assignees: [{login: LOGIN}]}]
+        response = [{assignee: {login: LOGIN}, title: TITLE_1, assignees: [{login: LOGIN}]}]
         expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
         expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
         expect(http_client).not_to receive(:post_json)
@@ -97,7 +95,6 @@ class GithubCollaborators
     end
 
     context "when env var is missing" do
-
       it "dont call github api in create unknown collaborator issue" do
         expect(GithubCollaborators::HttpClient).not_to receive(:new)
         expect(http_client).not_to receive(:delete)

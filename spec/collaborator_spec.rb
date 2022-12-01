@@ -1,8 +1,7 @@
 class GithubCollaborators
-  describe Collaborator do
-    
-    REPOSITORY_NAME = "somerepo"
+  REPOSITORY_NAME = "somerepo"
 
+  describe Collaborator do
     context "checks issues" do
       it "check issues when review date is missing" do
         terraform_block = create_terraform_block_review_date_empty
