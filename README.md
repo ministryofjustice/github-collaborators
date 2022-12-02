@@ -180,6 +180,7 @@ To debug in VS Code use the below launch configrations within `.vscode/launch.js
         "ADMIN_GITHUB_TOKEN": "add-token",
         "REALLY_POST_TO_SLACK": "0",
         "REALLY_POST_TO_GH": "0",
+        "OPS_BOT_TOKEN": "0",
         "LOG_LEVEL": "debug",
         "SLACK_WEBHOOK_URL": "add-slack-link",
       }
