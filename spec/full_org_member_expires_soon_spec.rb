@@ -1,5 +1,4 @@
 class GithubCollaborators
-  REPOSITORY_NAME = "somerepo"
   REPO_URL = "https://github.com/ministryofjustice/#{REPOSITORY_NAME}|#{REPOSITORY_NAME}"
   HREF = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/somerepo.tf|terraform file"
 

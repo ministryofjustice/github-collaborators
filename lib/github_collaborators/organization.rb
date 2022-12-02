@@ -1,36 +1,28 @@
 class GithubCollaborators
   class Organization
     include Logging
+    include HelperModule
     attr_reader :repositories, :full_org_members, :archived_repositories
 
     def initialize
       logger.debug "initialize"
 
-      @outside_collaborators = []
-
-      # Grab the Org outside collaborators
-      # This has a hard limit return of 100 collaborators
-      url = "https://api.github.com/orgs/ministryofjustice/outside_collaborators?per_page=100"
-      json = GithubCollaborators::HttpClient.new.fetch_json(url)
-      JSON.parse(json)
-        .find_all { |collaborator| collaborator["login"] }
-        .map { |collaborator| @outside_collaborators.push(collaborator["login"].downcase) }
+      @outside_collaborators = get_org_outside_collaborators
 
       # Grab the Org members
-      @organization_members = GithubCollaborators::OrganizationMembers.new.org_members
+      @organization_members = get_all_organisation_members
 
       # Grab the Org repositories
-      @repositories = GithubCollaborators::Repositories.new.get_active_repositories
+      @repositories = get_active_repositories
 
       # Grab the Org archived repositories
-      @archived_repositories = GithubCollaborators::Repositories.new.get_archived_repositories
+      @archived_repositories = get_archived_repositories
 
       # Get all the outside collaborators from GitHub per repo that has an outside collaborator
-      repo_collaborators = GithubCollaborators::RepositoryCollaborators.new
       @repositories.each do |repository|
         if repository.outside_collaborators_count > 0
           # Get all of the repository outside collaborators login names
-          repository_collaborators = repo_collaborators.fetch_all_collaborators(repository.name)
+          repository_collaborators = fetch_all_collaborators(repository.name)
           # Add collaborators login names to the repository object
           repository.add_outside_collaborators(repository_collaborators)
         end
@@ -111,65 +103,6 @@ class GithubCollaborators
     end
 
     private
-
-    def does_collaborator_already_exist(login, collaborators)
-      logger.debug "does_collaborator_already_exist"
-      exists = false
-      collaborators.each do |collaborator|
-        if collaborator.login.downcase == login.downcase
-          exists = true
-          break
-        end
-      end
-      exists
-    end
-
-    def get_name(login, collaborators)
-      logger.debug "get_name"
-      collaborators.each do |collaborator|
-        if collaborator.login.downcase == login.downcase && collaborator.name != ""
-          return collaborator.name
-        end
-      end
-      ""
-    end
-
-    def get_email(login, collaborators)
-      logger.debug "get_email"
-      collaborators.each do |collaborator|
-        if collaborator.login.downcase == login.downcase && collaborator.email != ""
-          return collaborator.email
-        end
-      end
-      ""
-    end
-
-    def get_org(login, collaborators)
-      logger.debug "get_org"
-      collaborators.each do |collaborator|
-        if collaborator.login.downcase == login.downcase && collaborator.org != ""
-          return collaborator.org
-        end
-      end
-      ""
-    end
-
-    # Query the all_org_members team and return its repositories
-    def get_all_org_members_team_repositories
-      logger.debug "get_all_org_members_team_repositories"
-
-      team_repositories = []
-
-      #  Grabs 100 repositories from the team, if team has more than 100 repositories
-      # this will need to be changed to paginate through the results.
-      url = "https://api.github.com/orgs/ministryofjustice/teams/all-org-members/repos?per_page=100"
-      json = GithubCollaborators::HttpClient.new.fetch_json(url)
-      JSON.parse(json)
-        .find_all { |repository| repository["name"].downcase }
-        .map { |repository| team_repositories.push(repository["name"].downcase) }
-
-      team_repositories
-    end
 
     # Checks and stores which collaborator have org membership
     def add_new_collaborator_and_org_member(new_collaborator_login)

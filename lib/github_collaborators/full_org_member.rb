@@ -1,6 +1,7 @@
 class GithubCollaborators
   class FullOrgMember
     include Logging
+    include HelperModule
     attr_reader :login, :email, :org, :name, :missing_from_repositories, :repository_permission_mismatches, :attached_archived_repositories
 
     def initialize(login)
@@ -57,7 +58,7 @@ class GithubCollaborators
     def get_full_org_member_repositories
       logger.debug "get_full_org_member_repositories"
       end_cursor = nil
-      graphql = GithubCollaborators::GithubGraphQlClient.new(github_token: ENV.fetch("ADMIN_GITHUB_TOKEN"))
+      graphql = GithubCollaborators::GithubGraphQlClient.new
 
       repositories = []
 
@@ -155,7 +156,7 @@ class GithubCollaborators
         terraform_files.terraform_files.each do |terraform_file|
           # Skip this iteration if file name is in the array, the array
           # contains repositories / Terraform files that are not on the GitHub yet
-          if !@ignore_repositories.include?(terraform_file.filename.downcase) && terraform_file.filename.downcase == GithubCollaborators.tf_safe(github_repository_name)
+          if !@ignore_repositories.include?(terraform_file.filename.downcase) && terraform_file.filename.downcase == tf_safe(github_repository_name)
 
             # Get the github permission for that repository
             github_permission = get_repository_permission(github_repository_name)

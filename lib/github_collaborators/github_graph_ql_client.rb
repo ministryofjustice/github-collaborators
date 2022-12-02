@@ -2,11 +2,9 @@ class GithubCollaborators
   class GithubGraphQlClient
     include Logging
 
-    GITHUB_GRAPHQL_URL = "https://api.github.com/graphql"
-
-    def initialize(params)
+    def initialize
       logger.debug "initialize"
-      @github_token = params.fetch(:github_token)
+      @github_token = ENV.fetch("ADMIN_GITHUB_TOKEN")
     end
 
     def run_query(query)
@@ -49,8 +47,7 @@ class GithubCollaborators
       logger.debug "query_github_api"
       json = {query: body}.to_json
       headers = {"Authorization" => "bearer #{@github_token}"}
-
-      uri = URI.parse(GITHUB_GRAPHQL_URL)
+      uri = URI.parse("https://api.github.com/graphql")
       Net::HTTP.post(uri, json, headers)
     end
   end

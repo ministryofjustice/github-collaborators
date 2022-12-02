@@ -1,6 +1,7 @@
 class GithubCollaborators
   class Collaborator
     include Logging
+    include Constants
     attr_reader :repository, :href, :repo_url, :login, :permission, :reason, :added_by, :review_after_date, :email, :name, :org, :issues, :defined_in_terraform
 
     # collaborator: TerraformBlock object

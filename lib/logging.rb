@@ -3,6 +3,10 @@ module Logging
     @logger ||= Logging.logger_for(self.class.name)
   end
 
+  def module_logger
+    @logger ||= Logging.logger_for("HelperModule")
+  end
+
   # Use a hash class-ivar to cache a unique Logger per class:
   @loggers = {}
 

@@ -1,4 +1,5 @@
 # #!/usr/bin/env ruby
+# include HelperModule
 
 # require_relative "../lib/github_collaborators"
 
@@ -39,7 +40,7 @@
 # terraform_repos = Dir.glob("#{terraform_dir}/*.tf").map { |file_name| File.basename(file_name, File.extname(file_name)) }
 
 # # Get all GitHub repos
-# repositories = GithubCollaborators::Repositories.new.get_active_repositories
+# repositories = get_active_repositories
 
 # # Get repos that are not on GitHub and remove files required by Terraform
 # repo_delta = (terraform_repos - repositories) - ["main", "variables", "versions", "backend"]
@@ -61,7 +62,7 @@
 # # Open PRs for all the deleted repos
 
 # # Grab current open PRs
-# pull_requests = GithubCollaborators::PullRequests.new.get_pull_requests
+# pull_requests = get_pull_requests
 
 # # Delete from actionable array if PR already created
 # # Two scenarios:
@@ -90,12 +91,7 @@
 #   sleep 5
 
 #   # Create PR
-#   params = {
-#     repository: "github-collaborators",
-#     hash_body: create_hash(file_name, branch_name)
-#   }
-
-#   GithubCollaborators::PullRequestCreator.new(params).create_pull_request
+#   create_pull_request(create_hash(file_name, branch_name))
 # }
 
 # puts "Finished"

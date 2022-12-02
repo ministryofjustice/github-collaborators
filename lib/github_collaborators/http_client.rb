@@ -2,6 +2,12 @@ class GithubCollaborators
   class HttpClient
     include Logging
 
+    def initialize
+      logger.debug "initialize"
+      @github_token = ENV.fetch("ADMIN_GITHUB_TOKEN")
+      @ops_bot_token = ENV.fetch("OPS_BOT_TOKEN")
+    end
+
     def fetch_json(url)
       logger.debug "fetch_json"
       got_data = false
@@ -86,7 +92,7 @@ class GithubCollaborators
       {
         "Accept" => APPLICATION_JSON,
         "Content-Type" => APPLICATION_JSON,
-        "Authorization" => "token #{ENV.fetch("ADMIN_GITHUB_TOKEN")}"
+        "Authorization" => "token #{@github_token}"
       }
     end
 
@@ -94,7 +100,7 @@ class GithubCollaborators
       {
         "Accept" => APPLICATION_JSON,
         "Content-Type" => APPLICATION_JSON,
-        "Authorization" => "token #{ENV.fetch("OPS_BOT_TOKEN")}"
+        "Authorization" => "token #{@ops_bot_token}"
       }
     end
   end

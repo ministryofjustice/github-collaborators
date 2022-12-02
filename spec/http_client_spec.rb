@@ -6,7 +6,12 @@ class GithubCollaborators
     subject(:hc) { described_class.new }
 
     # Stub sleep
-    before { allow_any_instance_of(GithubCollaborators::HttpClient).to receive(:sleep) }
+    before {
+      allow_any_instance_of(GithubCollaborators).to receive(:sleep)
+      allow_any_instance_of(GithubCollaborators::HttpClient).to receive(:sleep)
+      allow_any_instance_of(GithubCollaborators::BranchCreator).to receive(:sleep)
+      allow_any_instance_of(GithubCollaborators::GithubGraphQlClient).to receive(:sleep)
+    }
 
     context "when token is missing" do
       it "catch error on fetch" do
@@ -32,7 +37,8 @@ class GithubCollaborators
 
     context "when correct pull request token is provided" do
       before do
-        ENV["OPS_BOT_TOKEN"] = "foobar"
+        ENV["OPS_BOT_TOKEN"] = ""
+        ENV["ADMIN_GITHUB_TOKEN"] = ""
       end
 
       it "call post pull request" do
@@ -43,12 +49,14 @@ class GithubCollaborators
 
       after do
         ENV.delete("OPS_BOT_TOKEN")
+        ENV.delete("ADMIN_GITHUB_TOKEN")
       end
     end
 
     context "when correct token is provided" do
       before do
-        ENV["ADMIN_GITHUB_TOKEN"] = "foobar"
+        ENV["OPS_BOT_TOKEN"] = ""
+        ENV["ADMIN_GITHUB_TOKEN"] = ""
       end
 
       it "catch error in response" do
@@ -92,6 +100,7 @@ class GithubCollaborators
       end
 
       after do
+        ENV.delete("OPS_BOT_TOKEN")
         ENV.delete("ADMIN_GITHUB_TOKEN")
       end
     end

@@ -1,6 +1,8 @@
 class GithubCollaborators
   class OutsideCollaborators
     include Logging
+    include Constants
+    include HelperModule
 
     def initialize
       logger.debug "initialize"
@@ -19,7 +21,7 @@ class GithubCollaborators
       end
 
       # Grab the GitHub-Collaborator repository open pull requests
-      @repo_pull_requests = GithubCollaborators::PullRequests.new.get_pull_requests
+      @repo_pull_requests = get_pull_requests
 
       # Create a Organization object, which Contains the Org repositories, full
       # Org members, Org outside collaborators and each repository collaborators.
@@ -28,8 +30,6 @@ class GithubCollaborators
 
       # An array to store collaborators login names that are defined in Terraform but are not on GitHub
       @unknown_collaborators_on_github = []
-
-      @invites = GithubCollaborators::Invites.new
     end
 
     # Entry point from Ruby script, keep the order as-is the compare function will ne
@@ -39,7 +39,7 @@ class GithubCollaborators
       compare_terraform_and_github
       collaborator_checks
       full_org_members_check
-      print_full_org_member_collaborators
+      print_full_org_member_collaborators(@organization)
     end
 
     private
@@ -86,6 +86,8 @@ class GithubCollaborators
 
       collaborators_with_issues = @collaborators.select { |collaborator| collaborator.issues.length > 0 }
 
+      get_repository_issues(collaborators_with_issues, @organization)
+
       # Raise GitHub issues
       is_review_date_within_a_week(collaborators_with_issues)
       is_renewal_within_one_month(collaborators_with_issues)
@@ -95,12 +97,6 @@ class GithubCollaborators
 
       # Extend date or remove collaborator from Terraform file/s
       has_review_date_expired(collaborators_with_issues)
-    end
-
-    def print_full_org_member_collaborators
-      logger.debug "print_full_org_member_collaborators"
-      logger.info "There are #{@organization.full_org_members.length} full Org member / outside collaborators."
-      @organization.full_org_members.each { |collaborator| logger.info "#{collaborator.login.downcase} is a full Org member / outside collaborator." }
     end
 
     # Find if full org members / collaborators are members of repositories but not defined in Terraform
@@ -153,43 +149,12 @@ class GithubCollaborators
       logger.debug "is_renewal_within_one_month"
       # Check all collaborators
       collaborators.each do |collaborator|
-        params = {
-          repository: collaborator.repository.downcase,
-          github_user: collaborator.login.downcase
-        }
-
         if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH)
-          # Create an issue on the repository
-          GithubCollaborators::IssueCreator.new(params).create_review_date_expires_soon_issue
+          if !does_issue_already_exists(@organization, collaborator.repository.downcase, collaborator.login.downcase)
+            # Create an issue on the repository
+            create_review_date_expires_soon_issue(collaborator.login.downcase, collaborator.repository.downcase)
+          end
         end
-      end
-    end
-
-    def remove_unknown_collaborators(collaborators)
-      logger.debug "remove_unknown_collaborators"
-      removed_outside_collaborators = []
-      # Check all collaborators
-      collaborators.each do |collaborator|
-        params = {
-          repository: collaborator.repository.downcase,
-          github_user: collaborator.login.downcase
-        }
-
-        # Unknown collaborator
-        if collaborator.defined_in_terraform == false
-          logger.info "Removing collaborator #{collaborator.login.downcase} from GitHub repository #{collaborator.repository.downcase}"
-          # We must create the issue before removing access, because the issue is
-          # assigned to the removed collaborator, so that they (hopefully) get a
-          # notification about it.
-          GithubCollaborators::IssueCreator.new(params).create_unknown_collaborator_issue
-          GithubCollaborators::AccessRemover.new(params).remove_access
-          removed_outside_collaborators.push(collaborator)
-        end
-      end
-
-      if removed_outside_collaborators.length > 0
-        # Raise Slack message
-        GithubCollaborators::SlackNotifier.new(GithubCollaborators::Removed.new, removed_outside_collaborators).post_slack_message
       end
     end
 
@@ -343,7 +308,7 @@ class GithubCollaborators
         if edited_files.length > 0
           branch_name = "update-review-date-#{login}"
           type = "extend"
-          GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
+          create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
           add_new_pull_request(pull_request_title, edited_files)
         end
       end
@@ -378,7 +343,7 @@ class GithubCollaborators
         type = "delete_archive_file"
         pull_request_title = ARCHIVED_REPOSITORY_PR_TITLE
         collaborator_name = ""
-        GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
+        create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
 
         # Remove the archived file from any Collaborator files objects
@@ -415,7 +380,7 @@ class GithubCollaborators
         type = "delete"
         pull_request_title = EMPTY_FILES_PR_TITLE
         collaborator_name = ""
-        GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
+        create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
       end
     end
@@ -451,7 +416,7 @@ class GithubCollaborators
         if edited_files.length > 0
           branch_name = "remove-expired-collaborator-#{login}"
           type = "remove"
-          GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
+          create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
           add_new_pull_request(pull_request_title, edited_files)
         end
       end
@@ -478,7 +443,7 @@ class GithubCollaborators
       if edited_files.length > 0
         branch_name = "modify-collaborator-permission-#{collaborator_name}"
         type = "permission"
-        GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
+        create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
       end
     end
@@ -513,7 +478,7 @@ class GithubCollaborators
         branch_name = "add-collaborator-#{collaborator_name}"
         type = "add"
         pull_request_title = ADD_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name
-        GithubCollaborators::PullRequests.new.create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
+        create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
       end
     end
@@ -539,7 +504,7 @@ class GithubCollaborators
         find_unknown_collaborators(collaborators_on_github, collaborators_in_file, repository_name)
 
         # Get the repository invites
-        repository_invites = @invites.get_repository_invites(repository_name)
+        repository_invites = get_repository_invites(repository_name)
 
         # Check the repository invites
         # using a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
@@ -566,7 +531,7 @@ class GithubCollaborators
 
           # Delete expired invites
           if invite_expired
-            @invites.delete_expired_invite(repository_name, invite_login)
+            delete_expired_invite(repository_name, invite_login)
           end
         end
 

@@ -1,5 +1,5 @@
 class GithubCollaborators
-  REPOSITORY_NAME = "somerepo"
+  include Constants
 
   describe Collaborator do
     context "checks issues" do

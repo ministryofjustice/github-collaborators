@@ -1,4 +1,6 @@
 class GithubCollaborators
+  include Constants
+
   print_format = DATE_FORMAT
   has_fail_status = "has fail status"
   has_an_issue = "has an issue"

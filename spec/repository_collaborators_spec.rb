@@ -16,7 +16,7 @@ class GithubCollaborators
       ["DangerDawson", "damacus", "digitalronin"]
     }
 
-    let(:graphql) { GithubCollaborators::GithubGraphQlClient.new(github_token: "fake") }
+    let(:graphql) { GithubCollaborators::GithubGraphQlClient.new }
 
     before do
       allow(graphql).to receive(:run_query).and_return(json)
