@@ -15,6 +15,12 @@ describe HelperModule do
     allow_any_instance_of(GithubCollaborators::GithubGraphQlClient).to receive(:sleep)
   }
 
+  terraform_block = create_collaborator_with_login("someuser1")
+  collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+  terraform_block = create_collaborator_with_login("someuser2")
+  collaborator2 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+  collaborators = [collaborator1, collaborator2]
+
   context "test get_issues_from_github" do
     it "return an issue" do
       response = %([{"assignee": { "login":#{LOGIN}}, "title": #{COLLABORATOR_EXPIRES_SOON}, "assignees": [{"login":#{LOGIN} }]}])
@@ -87,18 +93,53 @@ describe HelperModule do
   end
 
   context "test does_collaborator_already_exist" do
-    terraform_block = create_collaborator_with_login("someuser1")
-    collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-    terraform_block = create_collaborator_with_login("someuser2")
-    collaborator2 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-    collaborators = [collaborator1, collaborator2]
-
     it "when collaborator does exist" do
       expect(helper_module.does_collaborator_already_exist("someuser1", collaborators)).to eq(true)
     end
 
-    it "when collaborator doesN'T exist" do
+    it "when collaborator doesn't exist" do
       expect(helper_module.does_collaborator_already_exist("someuser6", collaborators)).to eq(false)
+    end
+  end
+
+  context "test get_name" do
+    it "when collaborator does exist" do
+      expect(helper_module.get_name("someuser1", collaborators)).to eq(TEST_COLLABORATOR_NAME)
+    end
+
+    it "when collaborator doesn't exist" do
+      expect(helper_module.get_name("someuser6", collaborators)).to eq("")
+    end
+  end
+
+  context "test get_email" do
+    it "when collaborator does exist" do
+      expect(helper_module.get_email("someuser1", collaborators)).to eq(TEST_COLLABORATOR_EMAIL)
+    end
+
+    it "when collaborator doesn't exist" do
+      expect(helper_module.get_email("someuser6", collaborators)).to eq("")
+    end
+  end
+
+  context "test get_org" do
+    it "when collaborator does exist" do
+      expect(helper_module.get_org("someuser1", collaborators)).to eq(TEST_COLLABORATOR_ORG)
+    end
+
+    it "when collaborator doesn't exist" do
+      expect(helper_module.get_org("someuser6", collaborators)).to eq("")
+    end
+  end
+
+  context "test get_org_outside_collaborators" do
+    it "call get_org_outside_collaborators" do
+      url = "https://api.github.com/orgs/ministryofjustice/outside_collaborators?per_page=100"
+      json = %([{"login": "someuser1"},{"login": "someuser2"}])
+      response = ["someuser1", "someuser2"]
+      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+      expect(http_client).to receive(:fetch_json).with(url).and_return(json)
+      expect(helper_module.get_org_outside_collaborators).to eq(response)
     end
   end
 
