@@ -81,20 +81,4 @@ describe HelperModule do
       helper_module.create_review_date_expires_soon_issue(LOGIN, REPOSITORY_NAME)
     end
   end
-
-  context "call get issues" do
-    it "returns an issue" do
-      response = %([{"assignee": { "login":#{LOGIN}}, "title": #{COLLABORATOR_EXPIRES_SOON}, "assignees": [{"login":#{LOGIN} }]}])
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
-      expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
-      expect(helper_module.get_issues(REPOSITORY_NAME)).equal?(response)
-    end
-
-    it "returns [] if no issues" do
-      response = []
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
-      expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
-      expect(helper_module.get_issues(REPOSITORY_NAME)).equal?([])
-    end
-  end
 end

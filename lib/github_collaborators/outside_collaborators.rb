@@ -39,7 +39,7 @@ class GithubCollaborators
       compare_terraform_and_github
       collaborator_checks
       full_org_members_check
-      print_full_org_member_collaborators(@organization)
+      print_full_org_member_collaborators
     end
 
     private
@@ -86,7 +86,7 @@ class GithubCollaborators
 
       collaborators_with_issues = @collaborators.select { |collaborator| collaborator.issues.length > 0 }
 
-      get_repository_issues(collaborators_with_issues, @organization)
+      get_repository_issues_from_github(collaborators_with_issues)
 
       # Raise GitHub issues
       is_review_date_within_a_week(collaborators_with_issues)
@@ -149,9 +149,11 @@ class GithubCollaborators
       logger.debug "is_renewal_within_one_month"
       # Check all collaborators
       collaborators.each do |collaborator|
-        if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH) && !does_issue_already_exists(@organization, collaborator.repository.downcase, collaborator.login.downcase)
+        repository_name = collaborator.repository.downcase
+        issues = read_repository_issues(repository_name)
+        if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH) && !does_issue_already_exist(issues, repository_name, collaborator.login.downcase)
           # Create an issue on the repository
-          create_review_date_expires_soon_issue(collaborator.login.downcase, collaborator.repository.downcase)
+          create_review_date_expires_soon_issue(collaborator.login.downcase, repository_name)
         end
       end
     end
@@ -589,5 +591,44 @@ class GithubCollaborators
       logger.debug "add_new_pull_request"
       @repo_pull_requests.push({title: title.to_s, files: edited_files})
     end
+  end
+
+  def print_full_org_member_collaborators(organization)
+    module_logger.debug "print_full_org_member_collaborators"
+    module_logger.info "There are #{@organization.full_org_members.length} full Org member / outside collaborators."
+    @organization.full_org_members.each { |collaborator| module_logger.info "#{collaborator.login.downcase} is a full Org member / outside collaborator." }
+  end
+
+  def get_repository_issues_from_github(collaborators)
+    module_logger.debug "get_repository_issues_from_github"
+    repositories = []
+    collaborators.each do |collaborator|
+      repositories.push(collaborator.repository.downcase)
+    end
+    repositories.sort!
+    repositories.uniq!
+
+    if repositories.length > 0
+      repositories.each do |repository_name|
+        @organization.repositories.each do |org_repository|
+          if org_repository.name == repository_name
+            issues = get_issues_from_github(repository)
+            org_repository.add_issues(issues)
+          end
+        end
+      end
+    end
+  end
+
+  # Get the issues created previously by this application
+  def read_repository_issues(repository_name)
+    module_logger.debug "read_repository_issues"
+    repository_issues = []
+    @organization.repositories.each do |org_repository|
+      if org_repository.name == repository_name
+        repository_issues = repository.issues
+      end
+    end
+    repository_issues
   end
 end

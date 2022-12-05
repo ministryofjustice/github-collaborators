@@ -6,8 +6,8 @@ module HelperModule
     string.tr(".", "-")
   end
 
-  def get_issues(repository)
-    module_logger.debug "get_issues"
+  def get_issues_from_github(repository)
+    module_logger.debug "get_issues_from_github"
     url = "https://api.github.com/repos/ministryofjustice/#{repository.downcase}/issues"
     response = GithubCollaborators::HttpClient.new.fetch_json(url)
     JSON.parse(response, {symbolize_names: true})
@@ -62,7 +62,7 @@ module HelperModule
     module_logger.debug "close_expired_issues"
     allowed_days = 45
 
-    issues = get_issues(repository_name.downcase)
+    issues = get_issues_from_github(repository_name.downcase)
     issues.each do |issue|
       # Check for the issues created by this application and that the issue is open
       if (
@@ -172,28 +172,12 @@ module HelperModule
   end
 
   # Checks if issue already open for a collaborator
-  def does_issue_already_exists(organization, repository_name, user_name)
-    module_logger.debug "does_issue_already_exists"
+  def does_issue_already_exist(issues, repository_name, user_name)
+    module_logger.debug "does_issue_already_exist"
     repository_name = repository_name.downcase
     user_name = user_name.downcase
     found_issues = false
     
-    repository_issues = []
-    organization.repositories.each do |repository|
-      if repository.name == repository_name
-        repository_issues = repository.issues
-      end
-    end
-
-    # Get the issues created previously by this application
-    issues = []
-    repository_issues.each do |issue|
-      if issue[:title].include?(COLLABORATOR_EXPIRES_SOON) ||
-          issue[:title].include?(COLLABORATOR_EXPIRY_UPCOMING)
-        issues.push(issue)
-      end
-    end
-
     # This is a work around for when collaborators unassign themself from the ticket without updating their review_after
     # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
     bad_issues = issues.select { |issue| issue[:assignees].length == 0 }
@@ -318,33 +302,6 @@ module HelperModule
       .find_all { |collaborator| collaborator["login"] }
       .map { |collaborator| outside_collaborators.push(collaborator["login"].downcase) }
     outside_collaborators
-  end
-
-  def print_full_org_member_collaborators(organization)
-    module_logger.debug "print_full_org_member_collaborators"
-    module_logger.info "There are #{organization.full_org_members.length} full Org member / outside collaborators."
-    organization.full_org_members.each { |collaborator| module_logger.info "#{collaborator.login.downcase} is a full Org member / outside collaborator." }
-  end
-
-  def get_repository_issues(collaborators, organization)
-    module_logger.debug "get_repository_issues"
-    repositories = []
-    collaborators.each do |collaborator|
-      repositories.push(collaborator.repository.downcase)
-    end
-    repositories.sort!
-    repositories.uniq!
-
-    if repositories.length > 0
-      repositories.each do |repository|
-        organization.repositories.each do |org_repository|
-          if org_repository.name == repository
-            issues = get_issues(repository)
-            org_repository.add_issues(issues)
-          end
-        end
-      end
-    end
   end
 
   def remove_unknown_collaborators(collaborators)
