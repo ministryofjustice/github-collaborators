@@ -86,7 +86,14 @@ class GithubCollaborators
 
       collaborators_with_issues = @collaborators.select { |collaborator| collaborator.issues.length > 0 }
 
-      get_repository_issues_from_github(collaborators_with_issues)
+      repositories = []
+      collaborators_with_issues.each do |collaborator|
+        repositories.push(collaborator.repository.downcase)
+      end
+      repositories.sort!
+      repositories.uniq!
+
+      get_repository_issues_from_github(repositories)
 
       # Raise GitHub issues
       is_review_date_within_a_week(collaborators_with_issues)
@@ -591,44 +598,35 @@ class GithubCollaborators
       logger.debug "add_new_pull_request"
       @repo_pull_requests.push({title: title.to_s, files: edited_files})
     end
-  end
 
-  def print_full_org_member_collaborators(organization)
-    module_logger.debug "print_full_org_member_collaborators"
-    module_logger.info "There are #{@organization.full_org_members.length} full Org member / outside collaborators."
-    @organization.full_org_members.each { |collaborator| module_logger.info "#{collaborator.login.downcase} is a full Org member / outside collaborator." }
-  end
-
-  def get_repository_issues_from_github(collaborators)
-    module_logger.debug "get_repository_issues_from_github"
-    repositories = []
-    collaborators.each do |collaborator|
-      repositories.push(collaborator.repository.downcase)
-    end
-    repositories.sort!
-    repositories.uniq!
-
-    if repositories.length > 0
+    def get_repository_issues_from_github(repositories)
+      logger.debug "get_repository_issues_from_github"  
       repositories.each do |repository_name|
         @organization.repositories.each do |org_repository|
           if org_repository.name == repository_name
-            issues = get_issues_from_github(repository)
+            issues = get_issues_from_github(repository_name)
             org_repository.add_issues(issues)
           end
         end
       end
     end
-  end
 
-  # Get the issues created previously by this application
-  def read_repository_issues(repository_name)
-    module_logger.debug "read_repository_issues"
-    repository_issues = []
-    @organization.repositories.each do |org_repository|
-      if org_repository.name == repository_name
-        repository_issues = repository.issues
-      end
+    def print_full_org_member_collaborators
+      logger.debug "print_full_org_member_collaborators"
+      logger.info "There are #{@organization.full_org_members.length} full Org member / outside collaborators."
+      @organization.full_org_members.each { |collaborator| logger.info "#{collaborator.login.downcase} is a full Org member / outside collaborator." }
     end
-    repository_issues
+  
+    # Get the issues created previously by this application
+    def read_repository_issues(repository_name)
+      logger.debug "read_repository_issues"
+      repository_issues = []
+      @organization.repositories.each do |org_repository|
+        if org_repository.name == repository_name
+          repository_issues = org_repository.issues
+        end
+      end
+      repository_issues
+    end
   end
 end
