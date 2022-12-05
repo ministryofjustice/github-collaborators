@@ -171,25 +171,36 @@ module HelperModule
     }
   end
 
-  # Checks if issue already open for a collaborator
-  def does_issue_already_exist(issues, repository_name, user_name)
+  # Checks if a specific issue within the repository issues
+  # is already open for the collaborator
+  def does_issue_already_exist(issues, issue_title, repository_name, user_name)
     module_logger.debug "does_issue_already_exist"
     repository_name = repository_name.downcase
     user_name = user_name.downcase
     found_issues = false
     
-    # This is a work around for when collaborators unassign themself from the ticket without updating their review_after
-    # There is a better way to reassign them but would involve some fairly big code edits, this closes the unassigned ticket and makes a new one
-    bad_issues = issues.select { |issue| issue[:assignees].length == 0 }
-    bad_issues.each { |issue| remove_issue(repository_name, issue[:number]) }
-    issues.delete_if { |issue| issue[:assignees].length == 0 }
-
-    # Check which issues are assigned to the collaborator
-    issues.select { |issue| issue[:assignee][:login].downcase == user_name }
-    if issues.length > 0
-      # Found matching issue
-      found_issues = true
+    # Find the specific issue assigned to the collaborator
+    issues.each do |issue|
+      # Match the issue title
+      if issue[:title].include?(issue_title)
+        # Look to see if the collaborator has unassigned themself
+        # from the issue, if so close the unassigned issue
+        if issue[:assignees].length == 0
+          remove_issue(repository_name, issue[:number])
+          index = issues.index(issue)
+          issues.delete_at(index)
+        else
+          # Match issue assignee to collaborator
+          issue[:assignees].each do |assignee|
+            if assignee[:login].downcase == user_name
+              # Found matching issue
+              found_issues = true
+            end
+          end
+        end
+      end
     end
+
     found_issues
   end
 

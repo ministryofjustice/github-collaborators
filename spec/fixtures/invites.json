@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "invitee": {
+      "login": "user1"
+    },
+    "expired": true
+  },
+  {
+    "id": 2,
+    "invitee": {
+      "login": "user2"
+    },
+    "expired": false
+  }
+]
