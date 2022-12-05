@@ -51,7 +51,7 @@ class GithubCollaborators
       # For each repository
       @organization.repositories.each do |repository|
         # Get the GitHub collaborators for the repository
-        collaborators_on_github = repository.outside_collaborators
+        collaborators_on_github = repository.outside_collaborators_names
 
         # Get the Terraform defined outside collaborators for the repository
         collaborators_in_file = @terraform_files.get_collaborators_in_file(repository.name.downcase)
@@ -149,11 +149,9 @@ class GithubCollaborators
       logger.debug "is_renewal_within_one_month"
       # Check all collaborators
       collaborators.each do |collaborator|
-        if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH)
-          if !does_issue_already_exists(@organization, collaborator.repository.downcase, collaborator.login.downcase)
-            # Create an issue on the repository
-            create_review_date_expires_soon_issue(collaborator.login.downcase, collaborator.repository.downcase)
-          end
+        if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH) && !does_issue_already_exists(@organization, collaborator.repository.downcase, collaborator.login.downcase)
+          # Create an issue on the repository
+          create_review_date_expires_soon_issue(collaborator.login.downcase, collaborator.repository.downcase)
         end
       end
     end

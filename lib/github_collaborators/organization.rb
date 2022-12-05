@@ -24,7 +24,8 @@ class GithubCollaborators
           # Get all of the repository outside collaborators login names
           repository_collaborators = fetch_all_collaborators(repository.name)
           # Add collaborators login names to the repository object
-          repository.add_outside_collaborators(repository_collaborators)
+          names = repository_collaborators.select { |collaborator| collaborator.login.downcase }
+          repository.store_collaborators_names(names)
         end
       end
 

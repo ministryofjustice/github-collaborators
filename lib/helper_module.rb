@@ -591,7 +591,12 @@ module HelperModule
         repositories.reject { |r| r.dig("repo", "isDisabled") }
         repositories.reject { |r| r.dig("repo", "isLocked") }
         repositories.each do |repo|
-          active_repositories.push(GithubCollaborators::Repository.new(repo.dig("repo")))
+          repository_name = repo.dig("repo", "name")
+          outside_collaborators_count = repo.dig("collaborators", "totalCount")
+          if outside_collaborators_count.nil?
+            outside_collaborators_count = 0
+          end
+          active_repositories.push(GithubCollaborators::Repository.new(repository_name, outside_collaborators_count))
         end
         end_cursor = JSON.parse(response).dig("data", "search", "pageInfo", "endCursor")
         break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")

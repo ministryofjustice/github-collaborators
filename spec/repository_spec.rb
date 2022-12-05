@@ -1,16 +1,32 @@
 class GithubCollaborators
   describe Repository do
-    # TODO: Remove after re-write test
-    before { skip }
+    context "test repository" do
+      subject(:repository) { described_class.new("somerepo", 4) }
 
-    let(:json) { File.read("spec/fixtures/repository.json") }
+      it "create object" do
+        expect(repository.name).to eq("somerepo")
+        expect(repository.outside_collaborators_names.length).to eq(0)
+        expect(repository.outside_collaborators_count).to eq(4) 
+        expect(repository.issues.length).to eq(0)
+      end
 
-    subject(:repo) { described_class.new(JSON.parse(json)) }
+      it "add issues" do
+        repository.add_issues(["issue1", "issue2"])
+        expect(repository.name).to eq("somerepo")
+        expect(repository.outside_collaborators_names.length).to eq(0)
+        expect(repository.outside_collaborators_count).to eq(4) 
+        expect(repository.issues.length).to eq(2)
+        expect(repository.issues).to eq(["issue1", "issue2"])
+      end
 
-    specify { expect(repo.name).to eq("courtfinder") }
-    specify { expect(repo.url).to eq("https://github.com/ministryofjustice/courtfinder") }
-    specify { expect(repo).to_not be_locked }
-    specify { expect(repo).to be_archived }
-    specify { expect(repo).to_not be_disabled }
+      it "add collaborator names" do
+        repository.store_collaborators_names(["someuser", "otheruser"])
+        expect(repository.name).to eq("somerepo")
+        expect(repository.outside_collaborators_names.length).to eq(2)
+        expect(repository.outside_collaborators_names).to eq(["someuser", "otheruser"])
+        expect(repository.outside_collaborators_count).to eq(4) 
+        expect(repository.issues.length).to eq(0)
+      end
+    end
   end
 end
