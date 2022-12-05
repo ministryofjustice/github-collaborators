@@ -72,5 +72,15 @@ module "yjaf-transitions" {
       added_by     = "Antony Bishop <antony.bishop@digital.justice.gov.uk> Operations Engineering"
       review_after = "2023-10-01"
     },
+    {
+      github_user  = "craig-ashford-nec"
+      permission   = "maintain"
+      name         = "Craig Ashford"
+      email        = "craig.ashford@necsws.com"
+      org          = "NEC SWS"
+      reason       = "New front end developer on YJAF team"
+      added_by     = "Tony Bishop antony.bishop@digital.justice.gov.uk"
+      review_after = "2023-02-07"
+    },
   ]
 }
