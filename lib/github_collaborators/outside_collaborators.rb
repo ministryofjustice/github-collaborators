@@ -526,7 +526,7 @@ class GithubCollaborators
           end
 
           if collaborators_in_file.include?(invite_login) && invite_expired
-            logger.info "The invite for known #{invite_login} on #{repository_name} has expired."
+            logger.info "The invite for known collaborator #{invite_login} on #{repository_name} has expired."
           end
 
           # Store unknown collaborator invite username to raise Slack message later on
