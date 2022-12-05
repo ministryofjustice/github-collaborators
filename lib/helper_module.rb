@@ -315,29 +315,6 @@ module HelperModule
     outside_collaborators
   end
 
-  def remove_unknown_collaborators(collaborators)
-    module_logger.debug "remove_unknown_collaborators"
-    removed_outside_collaborators = []
-    # Check all collaborators
-    collaborators.each do |collaborator|
-      # Unknown collaborator
-      if collaborator.defined_in_terraform == false
-        module_logger.info "Removing collaborator #{collaborator.login.downcase} from GitHub repository #{collaborator.repository.downcase}"
-        # We must create the issue before removing access, because the issue is
-        # assigned to the removed collaborator, so that they (hopefully) get a
-        # notification about it.
-        create_unknown_collaborator_issue(collaborator.login.downcase, collaborator.repository.downcase)
-        remove_access(collaborator.repository.downcase, )
-        removed_outside_collaborators.push(collaborator)
-      end
-    end
-
-    if removed_outside_collaborators.length > 0
-      # Raise Slack message
-      GithubCollaborators::SlackNotifier.new(GithubCollaborators::Removed.new, removed_outside_collaborators).post_slack_message
-    end
-  end
-
   def get_pull_requests
     module_logger.debug "get_pull_requests"
     pull_requests = []

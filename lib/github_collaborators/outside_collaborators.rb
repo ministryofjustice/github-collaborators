@@ -628,5 +628,30 @@ class GithubCollaborators
       end
       repository_issues
     end
+
+    def remove_unknown_collaborators(collaborators)
+      module_logger.debug "remove_unknown_collaborators"
+      removed_outside_collaborators = []
+      # Check all collaborators
+      collaborators.each do |collaborator|
+        login = collaborator.login.downcase
+        repository = collaborator.repository.downcase
+        # Unknown collaborator
+        if collaborator.defined_in_terraform == false
+          module_logger.info "Removing collaborator #{login} from GitHub repository #{repository}"
+          # We must create the issue before removing access, because the issue is
+          # assigned to the removed collaborator, so that they (hopefully) get a
+          # notification about it.
+          create_unknown_collaborator_issue(login, repository)
+          remove_access(repository, login)
+          removed_outside_collaborators.push(collaborator)
+        end
+      end
+  
+      if removed_outside_collaborators.length > 0
+        # Raise Slack message
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::Removed.new, removed_outside_collaborators).post_slack_message
+      end
+    end
   end
 end

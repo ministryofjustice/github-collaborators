@@ -8,8 +8,12 @@ describe HelperModule do
   let(:http_client) { double(GithubCollaborators::HttpClient) }
 
   # Stub sleep
-  before { allow_any_instance_of(helper_module).to receive(:sleep) }
-  before { allow_any_instance_of(GithubCollaborators::HttpClient).to receive(:sleep) }
+  before {
+    allow_any_instance_of(helper_module).to receive(:sleep)
+    allow_any_instance_of(GithubCollaborators::HttpClient).to receive(:sleep)
+    allow_any_instance_of(GithubCollaborators::BranchCreator).to receive(:sleep)
+    allow_any_instance_of(GithubCollaborators::GithubGraphQlClient).to receive(:sleep)
+  }
 
   context "test get_issues_from_github" do
     it "return an issue" do
