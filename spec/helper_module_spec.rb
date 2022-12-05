@@ -1,5 +1,7 @@
 URL = "https://api.github.com/repos/ministryofjustice/#{REPOSITORY_NAME}/issues"
 LOGIN = "someuser"
+COLLABORATOR_EXISTS = "when collaborator does exist"
+COLLABORATOR_DOESNT_EXIST = "when collaborator doesn't exist"
 
 describe HelperModule do
   # extended class
@@ -109,41 +111,41 @@ describe HelperModule do
   end
 
   context "test does_collaborator_already_exist" do
-    it "when collaborator does exist" do
+    it COLLABORATOR_EXISTS do
       expect(helper_module.does_collaborator_already_exist("someuser1", collaborators)).to eq(true)
     end
 
-    it "when collaborator doesn't exist" do
+    it COLLABORATOR_DOESNT_EXIST do
       expect(helper_module.does_collaborator_already_exist("someuser6", collaborators)).to eq(false)
     end
   end
 
   context "test get_name" do
-    it "when collaborator does exist" do
+    it COLLABORATOR_EXISTS do
       expect(helper_module.get_name("someuser1", collaborators)).to eq(TEST_COLLABORATOR_NAME)
     end
 
-    it "when collaborator doesn't exist" do
+    it COLLABORATOR_DOESNT_EXIST do
       expect(helper_module.get_name("someuser6", collaborators)).to eq("")
     end
   end
 
   context "test get_email" do
-    it "when collaborator does exist" do
+    it COLLABORATOR_EXISTS do
       expect(helper_module.get_email("someuser1", collaborators)).to eq(TEST_COLLABORATOR_EMAIL)
     end
 
-    it "when collaborator doesn't exist" do
+    it COLLABORATOR_DOESNT_EXIST do
       expect(helper_module.get_email("someuser6", collaborators)).to eq("")
     end
   end
 
   context "test get_org" do
-    it "when collaborator does exist" do
+    it COLLABORATOR_EXISTS do
       expect(helper_module.get_org("someuser1", collaborators)).to eq(TEST_COLLABORATOR_ORG)
     end
 
-    it "when collaborator doesn't exist" do
+    it COLLABORATOR_DOESNT_EXIST do
       expect(helper_module.get_org("someuser6", collaborators)).to eq("")
     end
   end
