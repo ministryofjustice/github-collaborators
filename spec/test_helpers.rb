@@ -34,6 +34,20 @@ module Helpers
     terraform_block
   end
 
+  def create_collaborator_with_login(login)
+    collaborator_data = {
+      login: login,
+      permission: TEST_COLLABORATOR_PERMISSION,
+      name: TEST_COLLABORATOR_NAME,
+      email: TEST_COLLABORATOR_EMAIL,
+      org: TEST_COLLABORATOR_ORG,
+      reason: TEST_COLLABORATOR_REASON,
+      added_by: TEST_COLLABORATOR_ADDED_BY,
+      review_after: ""
+    }
+    create_terraform_block(collaborator_data)
+  end
+
   def create_test_data(review_date)
     collaborator_data = create_collaborator_data(review_date)
     create_terraform_block(collaborator_data)

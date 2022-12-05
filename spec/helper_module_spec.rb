@@ -71,5 +71,31 @@ describe HelperModule do
     end
   end
 
+  context "test get_all_org_members_team_repositories" do
+    it "call function" do
+      url = "https://api.github.com/orgs/ministryofjustice/teams/all-org-members/repos?per_page=100"
+      response = %([{"name": "somerepo1"},{"name": "somerepo2"}])
+      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+      expect(http_client).to receive(:fetch_json).with(url).and_return(response)
+      repositories = ["somerepo1", "somerepo2"]
+      expect(helper_module.get_all_org_members_team_repositories).to eq(repositories)
+    end
+  end
+
+  context "test does_collaborator_already_exist" do
+    terraform_block = create_collaborator_with_login("someuser1")
+    collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+    terraform_block = create_collaborator_with_login("someuser2")
+    collaborator2 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+    collaborators = [collaborator1, collaborator2]
+
+    it "when collaborator does exist" do
+      expect(helper_module.does_collaborator_already_exist("someuser1", collaborators)).to eq(true)
+    end
+
+    it "when collaborator doesN'T exist" do
+      expect(helper_module.does_collaborator_already_exist("someuser6", collaborators)).to eq(false)
+    end
+  end
 
 end
