@@ -211,12 +211,15 @@ module HelperModule
     graphql = GithubCollaborators::GithubGraphQlClient.new
     loop do
       response = graphql.run_query(organisation_members_query(end_cursor))
-      members = JSON.parse(response).dig("data", "organization", "membersWithRole", "edges")
-      members.each do |member|
-        org_members.push(GithubCollaborators::Member.new(member))
+      json_data = JSON.parse(response)
+      if !json_data.dig("data", "organization", "membersWithRole", "edges").nil?
+        members = json_data.dig("data", "organization", "membersWithRole", "edges")
+        members.each do |member|
+          org_members.push(GithubCollaborators::Member.new(member))
+        end
       end
-      end_cursor = JSON.parse(response).dig("data", "organization", "membersWithRole", "pageInfo", "endCursor")
-      break unless JSON.parse(response).dig("data", "organization", "membersWithRole", "pageInfo", "hasNextPage")
+      end_cursor = json_data.dig("data", "organization", "membersWithRole", "pageInfo", "endCursor")
+      break unless json_data.dig("data", "organization", "membersWithRole", "pageInfo", "hasNextPage")
     end
     org_members.sort_by { |org_member| org_member.login }
   end
@@ -320,14 +323,17 @@ module HelperModule
     pull_requests = []
     graphql = GithubCollaborators::GithubGraphQlClient.new
     response = graphql.run_query(pull_request_query)
-    data = JSON.parse(response).dig("data", "organization", "repository", "pullRequests")
+    json_data = JSON.parse(response)
+    if !json_data.dig("data", "organization", "repository", "pullRequests").nil?
+      data = json_data.dig("data", "organization", "repository", "pullRequests")
 
-    # Iterate over the pull requests
-    data.fetch("nodes").each do |pull_request_data|
-      title = pull_request_data.fetch("title")
-      files = pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
-      # Use a hash value like { :title => "", :files => list_of_file }
-      pull_requests.push({title: title.to_s, files: files})
+      # Iterate over the pull requests
+      data.fetch("nodes").each do |pull_request_data|
+        title = pull_request_data.fetch("title")
+        files = pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
+        # Use a hash value like { :title => "", :files => list_of_file }
+        pull_requests.push({title: title.to_s, files: files})
+      end
     end
     pull_requests
   end
@@ -532,19 +538,22 @@ module HelperModule
       end_cursor = nil
       loop do
         response = graphql.run_query(repositories_query(end_cursor, type))
-        repositories = JSON.parse(response).dig("data", "search", "repos")
-        repositories = repositories.reject { |r| r.dig("repo", "isDisabled") }
-        repositories = repositories.reject { |r| r.dig("repo", "isLocked") }
-        repositories.each do |repo|
-          repository_name = repo.dig("repo", "name")
-          outside_collaborators_count = repo.dig("repo", "collaborators", "totalCount")
-          if outside_collaborators_count.nil?
-            outside_collaborators_count = 0
+        json_data = JSON.parse(response)
+        if !json_data.dig("data", "search", "repos").nil?
+          repositories = json_data.dig("data", "search", "repos")
+          repositories = repositories.reject { |r| r.dig("repo", "isDisabled") }
+          repositories = repositories.reject { |r| r.dig("repo", "isLocked") }
+          repositories.each do |repo|
+            repository_name = repo.dig("repo", "name")
+            outside_collaborators_count = repo.dig("repo", "collaborators", "totalCount")
+            if outside_collaborators_count.nil?
+              outside_collaborators_count = 0
+            end
+            active_repositories.push(GithubCollaborators::Repository.new(repository_name, outside_collaborators_count))
           end
-          active_repositories.push(GithubCollaborators::Repository.new(repository_name, outside_collaborators_count))
         end
-        end_cursor = JSON.parse(response).dig("data", "search", "pageInfo", "endCursor")
-        break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
+        end_cursor = json_data.dig("data", "search", "pageInfo", "endCursor")
+        break unless json_data.dig("data", "search", "pageInfo", "hasNextPage")
       end
     end
     active_repositories.sort_by { |repo| repo.name }
@@ -558,13 +567,16 @@ module HelperModule
       end_cursor = nil
       loop do
         response = graphql.run_query(get_archived_repositories_query(end_cursor, type))
-        repositories = JSON.parse(response).dig("data", "search", "repos")
-        repositories.each do |repo|
-          # Get the archived repository name
-          archived_repositories.push(repo.dig("repo", "name"))
+        json_data = JSON.parse(response)
+        if !json_data.dig("data", "search", "repos").nil?
+          repositories = json_data.dig("data", "search", "repos")
+          repositories.each do |repo|
+            # Get the archived repository name
+            archived_repositories.push(repo.dig("repo", "name"))
+          end
         end
-        end_cursor = JSON.parse(response).dig("data", "search", "pageInfo", "endCursor")
-        break unless JSON.parse(response).dig("data", "search", "pageInfo", "hasNextPage")
+        end_cursor = json_data.dig("data", "search", "pageInfo", "endCursor")
+        break unless json_data.dig("data", "search", "pageInfo", "hasNextPage")
       end
     end
     archived_repositories.sort!
@@ -636,13 +648,15 @@ module HelperModule
       response = graphql.run_query(outside_collaborators_query(end_cursor, repository))
       json_data = JSON.parse(response)
       # Repos with no outside collaborators return an empty array
-      break unless !json_data.dig("data", "organization", "repository", "collaborators", "edges").empty?
-      collaborators = json_data.dig("data", "organization", "repository", "collaborators", "edges")
-      collaborators.each do |outside_collaborator|
-        outside_collaborators.push(GithubCollaborators::GitHubCollaborator.new(outside_collaborator))
+      if !json_data.dig("data", "organization", "repository", "collaborators", "edges").nil?
+        collaborators = json_data.dig("data", "organization", "repository", "collaborators", "edges")
+        collaborators.each do |collaborator|
+          login = collaborator.dig("node", "login").downcase
+          outside_collaborators.push(login)
+        end
       end
-      end_cursor = JSON.parse(response).dig("data", "organization", "repository", "collaborators", "pageInfo", "endCursor")
-      break unless JSON.parse(response).dig("data", "organization", "repository", "collaborators", "pageInfo", "hasNextPage")
+      end_cursor = json_data.dig("data", "organization", "repository", "collaborators", "pageInfo", "endCursor")
+      break unless json_data.dig("data", "organization", "repository", "collaborators", "pageInfo", "hasNextPage")
     end
     outside_collaborators
   end

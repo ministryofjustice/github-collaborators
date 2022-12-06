@@ -452,8 +452,8 @@ describe HelperModule do
 
   context "test get_active_repositories" do
     return_data = File.read("spec/fixtures/repositories.json")
-    it "call get_active_repositories" do
-      json_query_public = %[
+    
+    json_query_public_repo = %[
       {
         search(
           type: REPOSITORY
@@ -480,7 +480,7 @@ describe HelperModule do
       }
     ]
 
-      json_query_private = %[
+    json_query_private_repo = %[
       {
         search(
           type: REPOSITORY
@@ -507,7 +507,7 @@ describe HelperModule do
       }
     ]
 
-      json_query_internal = %[
+    json_query_internal_repo = %[
       {
         search(
           type: REPOSITORY
@@ -533,14 +533,16 @@ describe HelperModule do
         }
       }
     ]
+
+    it "when collaborators exist" do
       # FUT has a loop with tree iterations. Each loop produces these objects.
       repo1 = GithubCollaborators::Repository.new("somerepo1", 1)
       repo2 = GithubCollaborators::Repository.new("somerepo3", 5)
       repo2 = GithubCollaborators::Repository.new("somerepo5", 0)
       expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
-      expect(graphql_client).to receive(:run_query).with(json_query_public).and_return(return_data)
-      expect(graphql_client).to receive(:run_query).with(json_query_private).and_return(return_data)
-      expect(graphql_client).to receive(:run_query).with(json_query_internal).and_return(return_data)
+      expect(graphql_client).to receive(:run_query).with(json_query_public_repo).and_return(return_data)
+      expect(graphql_client).to receive(:run_query).with(json_query_private_repo).and_return(return_data)
+      expect(graphql_client).to receive(:run_query).with(json_query_internal_repo).and_return(return_data)
       # Thus expect these objects to created three times
       expect(GithubCollaborators::Repository).to receive(:new).with("somerepo1", 1).and_return(repo1).at_least(3).times
       expect(GithubCollaborators::Repository).to receive(:new).with("somerepo3", 5).and_return(repo2).at_least(3).times
@@ -548,12 +550,34 @@ describe HelperModule do
       # Thus expects the three iterations to create three objects each to make nine objects in total
       expect(helper_module.get_active_repositories.length).to eq(9)
     end
+
+    return_data_no_repositories =
+    %[
+        {
+          "data": {
+            "search": {
+              "repos": [],
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": null
+              }
+            }
+          }
+        }
+    ]
+
+    it "when no repositories exist" do
+      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
+      expect(graphql_client).to receive(:run_query).with(json_query_public_repo).and_return(return_data_no_repositories)
+      expect(graphql_client).to receive(:run_query).with(json_query_private_repo).and_return(return_data_no_repositories)
+      expect(graphql_client).to receive(:run_query).with(json_query_internal_repo).and_return(return_data_no_repositories)
+      expect(helper_module.get_active_repositories.length).to eq(0)
+    end
   end
 
   context "test get_archived_repositories" do
     return_data = File.read("spec/fixtures/archived_repositories.json")
-    it "call get_archived_repositories" do
-      json_query_public =
+    json_query_public =
     %[
       {
         search(
@@ -575,8 +599,8 @@ describe HelperModule do
         }
       }
     ]
-  
-      json_query_private =
+
+    json_query_private =
     %[
       {
         search(
@@ -598,8 +622,8 @@ describe HelperModule do
         }
       }
     ]
-  
-      json_query_internal =
+
+    json_query_internal =
     %[
       {
         search(
@@ -622,6 +646,7 @@ describe HelperModule do
       }
     ]
 
+    it "when archived repositories exist" do
       # FUT has a loop with tree iterations. Each loop produces a list of repo names.
       expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
       expect(graphql_client).to receive(:run_query).with(json_query_public).and_return(return_data)
@@ -632,12 +657,88 @@ describe HelperModule do
       expect(archived_repositories.length).to eq(9)
       expect(archived_repositories).to eq(["somerepo1", "somerepo1", "somerepo1", "somerepo2", "somerepo2", "somerepo2", "somerepo3", "somerepo3", "somerepo3"])
     end
+
+    return_data_no_repositories =
+    %[
+      {
+        "data": {
+          "search": {
+            "repos": [],
+            "pageInfo": {
+              "hasNextPage": false,
+              "endCursor": null
+            }
+          }
+        }
+      }
+    ]
+
+    it "when archived repositories don't exist" do
+      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
+      expect(graphql_client).to receive(:run_query).with(json_query_public).and_return(return_data_no_repositories)
+      expect(graphql_client).to receive(:run_query).with(json_query_private).and_return(return_data_no_repositories)
+      expect(graphql_client).to receive(:run_query).with(json_query_internal).and_return(return_data_no_repositories)
+      archived_repositories = helper_module.get_archived_repositories
+      expect(archived_repositories.length).to eq(0)
+    end
+
   end
 
-  # context "test fetch_all_collaborators" do
-  #   return_data = File.read("spec/fixtures/archived_repositories.json")
-  #   it "call get_archived_repositories" do
-  #     expect(helper_module.get_archived_repositories.length).to eq(9)
-  #   end
-  # end
+  context "test fetch_all_collaborators" do
+    return_data = File.read("spec/fixtures/repository-collaborators.json")
+    json_query =
+    %[
+      {
+        organization(login: "ministryofjustice") {
+          repository(name: "somerepo") {
+            collaborators(first:100 affiliation: OUTSIDE ) {
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
+              edges {
+                node {
+                  login
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+
+    json_query_no_collaborators =
+    %[
+    {
+      "data": {
+        "organization": {
+          "repository": {
+            "collaborators": {
+              "pageInfo": {
+                "hasNextPage": false,
+                "endCursor": null
+              },
+              "edges": []
+            }
+          }
+        }
+      }
+    }
+    ]
+
+    it "when collaborators exist" do
+      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
+      expect(graphql_client).to receive(:run_query).with(json_query).and_return(return_data)
+      collaborators = helper_module.fetch_all_collaborators("somerepo")
+      expect(collaborators.length).to eq(3)
+      expect(collaborators).to eq(["someuser1", "someuser2", "someuser3"])
+    end
+    
+    it "when collaborators don't exist" do
+      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
+      expect(graphql_client).to receive(:run_query).with(json_query).and_return(json_query_no_collaborators)
+      collaborators = helper_module.fetch_all_collaborators("somerepo")
+      expect(collaborators.length).to eq(0)
+    end
+  end
 end
