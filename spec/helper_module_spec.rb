@@ -2,6 +2,7 @@ URL = "https://api.github.com/repos/ministryofjustice/#{REPOSITORY_NAME}/issues"
 LOGIN = "someuser"
 COLLABORATOR_EXISTS = "when collaborator does exist"
 COLLABORATOR_DOESNT_EXIST = "when collaborator doesn't exist"
+TEST_CREATE_PULL_REQUEST = "test create_pull_request"
 
 describe HelperModule do
   # extended class
@@ -94,7 +95,7 @@ describe HelperModule do
 
   context "test get_all_org_members_team_repositories" do
     url = "https://api.github.com/orgs/ministryofjustice/teams/all-org-members/repos?per_page=100"
-    
+
     it "when team has repositories" do
       response = %([{"name": "somerepo1"},{"name": "somerepo2"}])
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
@@ -153,7 +154,7 @@ describe HelperModule do
 
   context "test get_org_outside_collaborators" do
     url = "https://api.github.com/orgs/ministryofjustice/outside_collaborators?per_page=100"
-    
+
     it "when collaborators exist" do
       json = %([{"login": "someuser1"},{"login": "someuser2"}])
       response = ["someuser1", "someuser2"]
@@ -170,7 +171,7 @@ describe HelperModule do
     end
   end
 
-  context "test create_branch_and_pull_request" do    
+  context "test create_branch_and_pull_request" do
     pull_request_title = "sometitle"
     filenames = ["file1", "file2", "file3"]
     branch_name = "somebranch"
@@ -232,71 +233,219 @@ describe HelperModule do
         helper_module.create_branch_and_pull_request(branch_name, filenames, pull_request_title, collaborator_name, type)
       end
     end
+  end
 
-    TEST_CREATE_PULL_REQUEST = "test create_pull_request"
-    hash_body = ""
-    pull_request_url = "https://api.github.com/repos/ministryofjustice/github-collaborators/pulls"
+  pull_request_url = "https://api.github.com/repos/ministryofjustice/github-collaborators/pulls"
 
-    context TEST_CREATE_PULL_REQUEST do
-      before do
-        ENV.delete("REALLY_POST_TO_GH")
-      end
-
-      it "when token is do nothing" do
-        expect(GithubCollaborators::HttpClient).not_to receive(:new)
-        helper_module.create_pull_request(hash_body)
-      end
-    end
-    
-    context TEST_CREATE_PULL_REQUEST do
-      before do
-        ENV["REALLY_POST_TO_GH"] = "0"
-      end
-
-      it "when post to github env variable is not enabled" do
-        expect(GithubCollaborators::HttpClient).not_to receive(:new)
-        helper_module.create_pull_request(hash_body)
-      end
-
-      after do
-        ENV.delete("REALLY_POST_TO_GH")
-      end
+  context TEST_CREATE_PULL_REQUEST do
+    before do
+      ENV.delete("REALLY_POST_TO_GH")
     end
 
-    context TEST_CREATE_PULL_REQUEST do
-      before do
-        ENV["REALLY_POST_TO_GH"] = "1"
-        ENV["OPS_BOT_TOKEN"] = "1"
-      end
+    it "when token is do nothing" do
+      expect(GithubCollaborators::HttpClient).not_to receive(:new)
+      helper_module.create_pull_request("")
+    end
+  end
 
-      it "when post to github and ops eng bot env variables are set" do
-        expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
-        expect(http_client).to receive(:post_pull_request_json).with(pull_request_url, hash_body.to_json)
-        helper_module.create_pull_request(hash_body)
-      end
-
-      after do
-        ENV.delete("REALLY_POST_TO_GH")
-        ENV.delete("OPS_BOT_TOKEN")
-      end
+  context TEST_CREATE_PULL_REQUEST do
+    before do
+      ENV["REALLY_POST_TO_GH"] = "0"
     end
 
-    context TEST_CREATE_PULL_REQUEST do
-      before do
-        ENV["REALLY_POST_TO_GH"] = "1"
-        ENV["OPS_BOT_TOKEN"] = "0"
-      end
+    it "when post to github env variable is not enabled" do
+      expect(GithubCollaborators::HttpClient).not_to receive(:new)
+      helper_module.create_pull_request("")
+    end
 
-      it "when post to github env variable is set and ops eng bot env variables isn't set" do
-        expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
-        expect(http_client).to receive(:post_json).with(pull_request_url, hash_body.to_json)
-        helper_module.create_pull_request(hash_body)
-      end
+    after do
+      ENV.delete("REALLY_POST_TO_GH")
+    end
+  end
 
-      after do
-        ENV.delete("REALLY_POST_TO_GH")
-        ENV.delete("OPS_BOT_TOKEN")
-      end
+  context TEST_CREATE_PULL_REQUEST do
+    before do
+      ENV["REALLY_POST_TO_GH"] = "1"
+      ENV["OPS_BOT_TOKEN"] = "1"
+    end
+
+    it "when post to github and ops eng bot env variables are set" do
+      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+      expect(http_client).to receive(:post_pull_request_json).with(pull_request_url, "".to_json)
+      helper_module.create_pull_request("")
+    end
+
+    after do
+      ENV.delete("REALLY_POST_TO_GH")
+      ENV.delete("OPS_BOT_TOKEN")
+    end
+  end
+
+  context TEST_CREATE_PULL_REQUEST do
+    before do
+      ENV["REALLY_POST_TO_GH"] = "1"
+      ENV["OPS_BOT_TOKEN"] = "0"
+    end
+
+    it "when post to github env variable is set and ops eng bot env variables isn't set" do
+      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+      expect(http_client).to receive(:post_json).with(pull_request_url, "".to_json)
+      helper_module.create_pull_request("")
+    end
+
+    after do
+      ENV.delete("REALLY_POST_TO_GH")
+      ENV.delete("OPS_BOT_TOKEN")
+    end
+  end
+
+  context "test extend_date_hash" do
+    login = "someuser"
+    branch_name = "somebranch"
+    hash_body = {
+      title: EXTEND_REVIEW_DATE_PR_TITLE + " " + login,
+      head: branch_name,
+      base: "main",
+      body: <<~EOF
+        Hi there
+        
+        This is the GitHub-Collaborator repository bot.
+        
+        The collaborator #{login} has review date/s that are close to expiring.
+        
+        The review date/s have automatically been extended.
+        
+        Either approve this pull request, modify it or delete it if it is no longer necessary.
+      EOF
+    }
+
+    it "call extend_date_hash" do
+      expect(helper_module.extend_date_hash(login, branch_name)).to eq(hash_body)
+    end
+  end
+
+  context "test delete_archive_file_hash" do
+    branch_name = "somebranch"
+    hash_body = {
+      title: ARCHIVED_REPOSITORY_PR_TITLE,
+      head: branch_name,
+      base: "main",
+      body: <<~EOF
+        Hi there
+        
+        This is the GitHub-Collaborator repository bot.
+        
+        The repositories in this pull request have been archived.
+        
+        This pull request is to remove those Terraform files.
+        
+      EOF
+    }
+
+    it "call delete_archive_file_hash" do
+      expect(helper_module.delete_archive_file_hash(branch_name)).to eq(hash_body)
+    end
+  end
+
+  context "test delete_empty_files_hash" do
+    branch_name = "somebranch"
+    hash_body = {
+      title: EMPTY_FILES_PR_TITLE,
+      head: branch_name.downcase,
+      base: "main",
+      body: <<~EOF
+        Hi there
+        
+        This is the GitHub-Collaborator repository bot.
+        
+        The Terraform files in this pull request are empty and serve no purpose, please remove them.
+        
+      EOF
+    }
+
+    it "call delete_empty_files_hash" do
+      expect(helper_module.delete_empty_files_hash(branch_name)).to eq(hash_body)
+    end
+  end
+
+  context "test add_collaborator_hash" do
+    login = "someuser"
+    branch_name = "somebranch"
+    hash_body = {
+      title: ADD_FULL_ORG_MEMBER_PR_TITLE + " " + login.downcase,
+      head: branch_name.downcase,
+      base: "main",
+      body: <<~EOF
+        Hi there
+        
+        This is the GitHub-Collaborator repository bot.
+        
+        The collaborator #{login.downcase} was found to be missing from the file/s in this pull request.
+        
+        This is because the collaborator is a full organization member and is able to join repositories outside of Terraform.
+        
+        This pull request ensures we keep track of those collaborators and which repositories they are accessing.
+        
+        Edit the pull request file/s because some of the data about the collaborator is missing.
+        
+      EOF
+    }
+
+    it "call add_collaborator_hash" do
+      expect(helper_module.add_collaborator_hash(login, branch_name)).to eq(hash_body)
+    end
+  end
+
+  context "test remove_collaborator_hash" do
+    login = "someuser"
+    branch_name = "somebranch"
+    hash_body = {
+      title: REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login.downcase,
+      head: branch_name.downcase,
+      base: "main",
+      body: <<~EOF
+        Hi there
+        
+        This is the GitHub-Collaborator repository bot.
+        
+        The collaborator #{login.downcase} review date has expired for the file/s contained in this pull request.
+        
+        Either approve this pull request, modify it or delete it if it is no longer necessary.
+      EOF
+    }
+
+    it "call remove_collaborator_hash" do
+      expect(helper_module.remove_collaborator_hash(login, branch_name)).to eq(hash_body)
+    end
+  end
+
+  context "test modify_collaborator_permission_hash" do
+    login = "someuser"
+    branch_name = "somebranch"
+    hash_body = {
+      title: CHANGE_PERMISSION_PR_TITLE + " " + login.downcase,
+      head: branch_name.downcase,
+      base: "main",
+      body: <<~EOF
+        Hi there
+        
+        This is the GitHub-Collaborator repository bot.
+        
+        The collaborator #{login.downcase} permission on Github is different to the permission in the Terraform file for the repository.
+        
+        This is because the collaborator is a full organization member, is able to join repositories outside of Terraform and may have different access to the repository now they are in a Team.
+        
+        The permission on Github is given the priority.
+        
+        This pull request ensures we keep track of those collaborators, which repositories they are accessing and their permission.
+        
+        Permission can either be admin, push, maintain, pull or triage.
+        
+      EOF
+    }
+
+    it "call modify_collaborator_permission_hash" do
+      expect(helper_module.modify_collaborator_permission_hash(login, branch_name)).to eq(hash_body)
     end
   end
 end

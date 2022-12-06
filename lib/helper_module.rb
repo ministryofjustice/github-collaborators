@@ -436,6 +436,7 @@ module HelperModule
         The repositories in this pull request have been archived.
         
         This pull request is to remove those Terraform files.
+
       EOF
     }
   end
