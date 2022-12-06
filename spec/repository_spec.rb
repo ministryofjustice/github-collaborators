@@ -6,7 +6,7 @@ class GithubCollaborators
       it "create object" do
         expect(repository.name).to eq("somerepo")
         expect(repository.outside_collaborators_names.length).to eq(0)
-        expect(repository.outside_collaborators_count).to eq(4) 
+        expect(repository.outside_collaborators_count).to eq(4)
         expect(repository.issues.length).to eq(0)
       end
 
@@ -14,7 +14,7 @@ class GithubCollaborators
         repository.add_issues(["issue1", "issue2"])
         expect(repository.name).to eq("somerepo")
         expect(repository.outside_collaborators_names.length).to eq(0)
-        expect(repository.outside_collaborators_count).to eq(4) 
+        expect(repository.outside_collaborators_count).to eq(4)
         expect(repository.issues.length).to eq(2)
         expect(repository.issues).to eq(["issue1", "issue2"])
       end
@@ -24,7 +24,7 @@ class GithubCollaborators
         expect(repository.name).to eq("somerepo")
         expect(repository.outside_collaborators_names.length).to eq(2)
         expect(repository.outside_collaborators_names).to eq(["someuser", "otheruser"])
-        expect(repository.outside_collaborators_count).to eq(4) 
+        expect(repository.outside_collaborators_count).to eq(4)
         expect(repository.issues.length).to eq(0)
       end
     end

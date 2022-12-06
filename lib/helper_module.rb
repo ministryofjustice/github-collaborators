@@ -411,12 +411,12 @@ module HelperModule
       body: <<~EOF
         Hi there
         
-        This is the GitHub-Collaborator repository bot. 
-
-        The collaborator #{login.downcase} has review date/s that are close to expiring. 
+        This is the GitHub-Collaborator repository bot.
+        
+        The collaborator #{login.downcase} has review date/s that are close to expiring.
         
         The review date/s have automatically been extended.
-
+        
         Either approve this pull request, modify it or delete it if it is no longer necessary.
       EOF
     }
@@ -432,11 +432,10 @@ module HelperModule
         Hi there
         
         This is the GitHub-Collaborator repository bot.
-
-        The repositories in this pull request have been archived. 
+        
+        The repositories in this pull request have been archived.
         
         This pull request is to remove those Terraform files.
-
       EOF
     }
   end
@@ -451,9 +450,9 @@ module HelperModule
         Hi there
         
         This is the GitHub-Collaborator repository bot.
-
+        
         The Terraform files in this pull request are empty and serve no purpose, please remove them.
-
+        
       EOF
     }
   end
@@ -467,16 +466,16 @@ module HelperModule
       body: <<~EOF
         Hi there
         
-        This is the GitHub-Collaborator repository bot. 
-
+        This is the GitHub-Collaborator repository bot.
+        
         The collaborator #{login.downcase} was found to be missing from the file/s in this pull request.
-
+        
         This is because the collaborator is a full organization member and is able to join repositories outside of Terraform.
-
+        
         This pull request ensures we keep track of those collaborators and which repositories they are accessing.
-
+        
         Edit the pull request file/s because some of the data about the collaborator is missing.
-
+        
       EOF
     }
   end
@@ -489,9 +488,9 @@ module HelperModule
       base: "main",
       body: <<~EOF
         Hi there
-
-        This is the GitHub-Collaborator repository bot. 
-
+        
+        This is the GitHub-Collaborator repository bot.
+        
         The collaborator #{login.downcase} review date has expired for the file/s contained in this pull request.
         
         Either approve this pull request, modify it or delete it if it is no longer necessary.
@@ -508,18 +507,18 @@ module HelperModule
       body: <<~EOF
         Hi there
         
-        This is the GitHub-Collaborator repository bot. 
-
+        This is the GitHub-Collaborator repository bot.
+        
         The collaborator #{login.downcase} permission on Github is different to the permission in the Terraform file for the repository.
-
+        
         This is because the collaborator is a full organization member, is able to join repositories outside of Terraform and may have different access to the repository now they are in a Team.
-
+        
         The permission on Github is given the priority.
         
         This pull request ensures we keep track of those collaborators, which repositories they are accessing and their permission.
-
+        
         Permission can either be admin, push, maintain, pull or triage.
-
+        
       EOF
     }
   end
