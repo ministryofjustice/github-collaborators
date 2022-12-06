@@ -628,7 +628,16 @@ describe HelperModule do
       expect(graphql_client).to receive(:run_query).with(json_query_private).and_return(return_data)
       expect(graphql_client).to receive(:run_query).with(json_query_internal).and_return(return_data)
       # Thus expects the three iterations to create three repos name each to make nine repo names in total
-      expect(helper_module.get_archived_repositories.length).to eq(9)
+      archived_repositories = helper_module.get_archived_repositories
+      expect(archived_repositories.length).to eq(9)
+      expect(archived_repositories).to eq(["somerepo1", "somerepo1", "somerepo1", "somerepo2", "somerepo2", "somerepo2", "somerepo3", "somerepo3", "somerepo3"])
     end
   end
+
+  # context "test fetch_all_collaborators" do
+  #   return_data = File.read("spec/fixtures/archived_repositories.json")
+  #   it "call get_archived_repositories" do
+  #     expect(helper_module.get_archived_repositories.length).to eq(9)
+  #   end
+  # end
 end
