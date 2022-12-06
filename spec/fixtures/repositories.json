@@ -1,41 +1,62 @@
 {
   "data": {
-    "organization": {
-      "repositories": {
-        "nodes": [
-          {
-            "name": "government-digital-strategy",
-            "url": "https://github.com/ministryofjustice/government-digital-strategy",
+    "search": {
+      "repos": [
+        {
+          "repo": {
+            "name": "somerepo1",
             "isLocked": false,
-            "isArchived": false,
-            "isDisabled": false
-          },
-          {
-            "name": "moj-digital-strategy-2013",
-            "url": "https://github.com/ministryofjustice/moj-digital-strategy-2013",
+            "isDisabled": false,
+            "collaborators": {
+              "totalCount": 1
+            }
+          }
+        },
+        {
+          "repo": {
+            "name": "somerepo2",
             "isLocked": true,
-            "isArchived": false,
-            "isDisabled": false
-          },
-          {
-            "name": "courtfinder",
+            "isDisabled": false,
+            "collaborators": {
+              "totalCount": 0
+            }
+          }
+        },
+        {
+          "repo": {
+            "name": "somerepo3",
             "url": "https://github.com/ministryofjustice/courtfinder",
             "isLocked": false,
-            "isArchived": true,
-            "isDisabled": false
-          },
-          {
-            "name": "worddoc_convert",
-            "url": "https://github.com/ministryofjustice/worddoc_convert",
-            "isLocked": false,
-            "isArchived": false,
-            "isDisabled": true
+            "isDisabled": false,
+            "collaborators": {
+              "totalCount": 5
+            }
           }
-        ],
-        "pageInfo": {
-          "hasNextPage": false,
-          "endCursor": null
+        },
+        {
+          "repo": {
+            "name": "somerepo4",
+            "isLocked": false,
+            "isDisabled": true,
+            "collaborators": {
+              "totalCount": 2
+            }
+          }
+        },
+        {
+          "repo": {
+            "name": "somerepo5",
+            "isLocked": false,
+            "isDisabled": false,
+            "collaborators": {
+              "totalCount": null
+            }
+          }
         }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": null
       }
     }
   }

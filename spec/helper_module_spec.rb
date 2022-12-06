@@ -10,6 +10,7 @@ describe HelperModule do
 
   let(:http_client) { double(GithubCollaborators::HttpClient) }
   let(:branch_creator) { double(GithubCollaborators::BranchCreator) }
+  let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
 
   # Stub sleep
   before {
@@ -446,6 +447,106 @@ describe HelperModule do
 
     it "call modify_collaborator_permission_hash" do
       expect(helper_module.modify_collaborator_permission_hash(login, branch_name)).to eq(hash_body)
+    end
+  end
+
+  context "test get_active_repositories" do
+    return_data = File.read("spec/fixtures/repositories.json")
+    it "call get_active_repositories" do
+      json_query_public = %[
+      {
+        search(
+          type: REPOSITORY
+          query: "org:ministryofjustice, archived:false, is:public"
+          first: 100 
+        ) {
+          repos: edges {
+            repo: node {
+              ... on Repository {
+                name
+                isDisabled
+                isLocked
+                collaborators(affiliation: OUTSIDE) {
+                  totalCount
+                }
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    ]
+
+      json_query_private = %[
+      {
+        search(
+          type: REPOSITORY
+          query: "org:ministryofjustice, archived:false, is:private"
+          first: 100 
+        ) {
+          repos: edges {
+            repo: node {
+              ... on Repository {
+                name
+                isDisabled
+                isLocked
+                collaborators(affiliation: OUTSIDE) {
+                  totalCount
+                }
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    ]
+
+      json_query_internal = %[
+      {
+        search(
+          type: REPOSITORY
+          query: "org:ministryofjustice, archived:false, is:internal"
+          first: 100 
+        ) {
+          repos: edges {
+            repo: node {
+              ... on Repository {
+                name
+                isDisabled
+                isLocked
+                collaborators(affiliation: OUTSIDE) {
+                  totalCount
+                }
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    ]
+      # FUT has a loop with tree iterations. Each loop produces these objects.
+      repo1 = GithubCollaborators::Repository.new("somerepo1", 1)
+      repo2 = GithubCollaborators::Repository.new("somerepo3", 5)
+      repo2 = GithubCollaborators::Repository.new("somerepo5", 0)
+      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
+      expect(graphql_client).to receive(:run_query).with(json_query_public).and_return(return_data)
+      expect(graphql_client).to receive(:run_query).with(json_query_private).and_return(return_data)
+      expect(graphql_client).to receive(:run_query).with(json_query_internal).and_return(return_data)
+      # Thus expect these objects to created three times
+      expect(GithubCollaborators::Repository).to receive(:new).with("somerepo1", 1).and_return(repo1).at_least(3).times
+      expect(GithubCollaborators::Repository).to receive(:new).with("somerepo3", 5).and_return(repo2).at_least(3).times
+      expect(GithubCollaborators::Repository).to receive(:new).with("somerepo5", 0).and_return(repo2).at_least(3).times
+      # Thus expects the three iterations to create three objects each to make nine objects in total
+      expect(helper_module.get_active_repositories.length).to eq(9)
     end
   end
 end

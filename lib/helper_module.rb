@@ -533,11 +533,11 @@ module HelperModule
       loop do
         response = graphql.run_query(repositories_query(end_cursor, type))
         repositories = JSON.parse(response).dig("data", "search", "repos")
-        repositories.reject { |r| r.dig("repo", "isDisabled") }
-        repositories.reject { |r| r.dig("repo", "isLocked") }
+        repositories = repositories.reject { |r| r.dig("repo", "isDisabled") }
+        repositories = repositories.reject { |r| r.dig("repo", "isLocked") }
         repositories.each do |repo|
           repository_name = repo.dig("repo", "name")
-          outside_collaborators_count = repo.dig("collaborators", "totalCount")
+          outside_collaborators_count = repo.dig("repo", "collaborators", "totalCount")
           if outside_collaborators_count.nil?
             outside_collaborators_count = 0
           end
