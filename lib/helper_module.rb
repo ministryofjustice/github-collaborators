@@ -368,7 +368,7 @@ module HelperModule
     module_logger.debug "create_pull_request"
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
       url = "https://api.github.com/repos/ministryofjustice/github-collaborators/pulls"
-      if ENV.fetch("OPS_BOT_TOKEN")
+      if ENV.fetch("OPS_BOT_TOKEN", 0) == "1"
         GithubCollaborators::HttpClient.new.post_pull_request_json(url, hash_body.to_json)
       else
         GithubCollaborators::HttpClient.new.post_json(url, hash_body.to_json)

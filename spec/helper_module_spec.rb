@@ -233,13 +233,70 @@ describe HelperModule do
       end
     end
 
-    # it "when no collaborators exist" do
-    #   expect(GithubCollaborators::BranchCreator).to receive(:new).and_return(branch_creator)
-    #   response = "someuser2"
-    #   expect(branch_creator).to receive(:check_branch_name_is_valid).with(branch_name, collaborator_name).and_return(response)
-    #   expect(branch_creator).to receive(:create_branch).with(branch_name)
-    #   expect(helper_module.create_branch_and_pull_request).to eq([])
-    # end
-  end
+    TEST_CREATE_PULL_REQUEST = "test create_pull_request"
+    hash_body = ""
+    pull_request_url = "https://api.github.com/repos/ministryofjustice/github-collaborators/pulls"
 
+    context TEST_CREATE_PULL_REQUEST do
+      before do
+        ENV.delete("REALLY_POST_TO_GH")
+      end
+
+      it "when token is do nothing" do
+        expect(GithubCollaborators::HttpClient).not_to receive(:new)
+        helper_module.create_pull_request(hash_body)
+      end
+    end
+    
+    context TEST_CREATE_PULL_REQUEST do
+      before do
+        ENV["REALLY_POST_TO_GH"] = "0"
+      end
+
+      it "when post to github env variable is not enabled" do
+        expect(GithubCollaborators::HttpClient).not_to receive(:new)
+        helper_module.create_pull_request(hash_body)
+      end
+
+      after do
+        ENV.delete("REALLY_POST_TO_GH")
+      end
+    end
+
+    context TEST_CREATE_PULL_REQUEST do
+      before do
+        ENV["REALLY_POST_TO_GH"] = "1"
+        ENV["OPS_BOT_TOKEN"] = "1"
+      end
+
+      it "when post to github and ops eng bot env variables are set" do
+        expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+        expect(http_client).to receive(:post_pull_request_json).with(pull_request_url, hash_body.to_json)
+        helper_module.create_pull_request(hash_body)
+      end
+
+      after do
+        ENV.delete("REALLY_POST_TO_GH")
+        ENV.delete("OPS_BOT_TOKEN")
+      end
+    end
+
+    context TEST_CREATE_PULL_REQUEST do
+      before do
+        ENV["REALLY_POST_TO_GH"] = "1"
+        ENV["OPS_BOT_TOKEN"] = "0"
+      end
+
+      it "when post to github env variable is set and ops eng bot env variables isn't set" do
+        expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+        expect(http_client).to receive(:post_json).with(pull_request_url, hash_body.to_json)
+        helper_module.create_pull_request(hash_body)
+      end
+
+      after do
+        ENV.delete("REALLY_POST_TO_GH")
+        ENV.delete("OPS_BOT_TOKEN")
+      end
+    end
+  end
 end
