@@ -1,0 +1,27 @@
+{
+  "data": {
+    "search": {
+      "repos": [
+        {
+          "repo": {
+            "name": "somerepo1"
+          }
+        },
+        {
+          "repo": {
+            "name": "somerepo2"
+          }
+        },
+        {
+          "repo": {
+            "name": "somerepo3"
+          }
+        }
+      ],
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": null
+      }
+    }
+  }
+}
