@@ -8,6 +8,7 @@ describe HelperModule do
   let(:helper_module) { Class.new { extend HelperModule } }
 
   let(:http_client) { double(GithubCollaborators::HttpClient) }
+  let(:branch_creator) { double(GithubCollaborators::BranchCreator) }
 
   # Stub sleep
   before {
@@ -167,6 +168,78 @@ describe HelperModule do
       expect(http_client).to receive(:fetch_json).with(url).and_return(response.to_json)
       expect(helper_module.get_org_outside_collaborators).to eq([])
     end
+  end
+
+  context "test create_branch_and_pull_request" do    
+    pull_request_title = "sometitle"
+    filenames = ["file1", "file2", "file3"]
+    branch_name = "somebranch"
+    collaborator_name = "someuser"
+    types = ["delete", "extend", "remove", "permission", "add", "delete_archive_file"]
+
+    it "when branch name valid and unknown type" do
+      expect(GithubCollaborators::BranchCreator).to receive(:new).and_return(branch_creator)
+      expect(branch_creator).to receive(:check_branch_name_is_valid).with(branch_name, collaborator_name).and_return(branch_name)
+      expect(branch_creator).to receive(:create_branch).with(branch_name)
+      filenames.each do |filename|
+        expect(branch_creator).to receive(:add).with(filename)
+      end
+      expect(branch_creator).to receive(:commit_and_push).with(pull_request_title)
+      helper_module.create_branch_and_pull_request(branch_name, filenames, pull_request_title, collaborator_name, "")
+    end
+
+    it "when branch name isnt valid and unknown type" do
+      expect(GithubCollaborators::BranchCreator).to receive(:new).and_return(branch_creator)
+      new_branch_name = "branchname2"
+      expect(branch_creator).to receive(:check_branch_name_is_valid).with(branch_name, collaborator_name).and_return(new_branch_name)
+      expect(branch_creator).to receive(:create_branch).with(new_branch_name)
+      filenames.each do |filename|
+        expect(branch_creator).to receive(:add).with(filename)
+      end
+      expect(branch_creator).to receive(:commit_and_push).with(pull_request_title)
+      helper_module.create_branch_and_pull_request(branch_name, filenames, pull_request_title, collaborator_name, "")
+    end
+
+    it "when branch name is valid and use known types" do
+      expect(GithubCollaborators::BranchCreator).to receive(:new).and_return(branch_creator).at_least(6).times
+      expect(branch_creator).to receive(:check_branch_name_is_valid).with(branch_name, collaborator_name).and_return(branch_name).at_least(6).times
+      expect(branch_creator).to receive(:create_branch).with(branch_name).at_least(6).times
+      filenames.each do |filename|
+        expect(branch_creator).to receive(:add).with(filename).at_least(6).times
+      end
+      expect(branch_creator).to receive(:commit_and_push).with(pull_request_title).at_least(6).times
+
+      types.each do |type|
+        if type == "delete"
+          expect(helper_module).to receive(:create_pull_request)
+          expect(helper_module).to receive(:delete_empty_files_hash).with(branch_name)
+        elsif type == "extend"
+          expect(helper_module).to receive(:create_pull_request)
+          expect(helper_module).to receive(:extend_date_hash).with(collaborator_name, branch_name)
+        elsif type == "remove"
+          expect(helper_module).to receive(:create_pull_request)
+          expect(helper_module).to receive(:remove_collaborator_hash).with(collaborator_name, branch_name)
+        elsif type == "permission"
+          expect(helper_module).to receive(:create_pull_request)
+          expect(helper_module).to receive(:modify_collaborator_permission_hash).with(collaborator_name, branch_name)
+        elsif type == "add"
+          expect(helper_module).to receive(:create_pull_request)
+          expect(helper_module).to receive(:add_collaborator_hash).with(collaborator_name, branch_name)
+        elsif type == "delete_archive_file"
+          expect(helper_module).to receive(:create_pull_request)
+          expect(helper_module).to receive(:delete_archive_file_hash).with(branch_name)
+        end
+        helper_module.create_branch_and_pull_request(branch_name, filenames, pull_request_title, collaborator_name, type)
+      end
+    end
+
+    # it "when no collaborators exist" do
+    #   expect(GithubCollaborators::BranchCreator).to receive(:new).and_return(branch_creator)
+    #   response = "someuser2"
+    #   expect(branch_creator).to receive(:check_branch_name_is_valid).with(branch_name, collaborator_name).and_return(response)
+    #   expect(branch_creator).to receive(:create_branch).with(branch_name)
+    #   expect(helper_module.create_branch_and_pull_request).to eq([])
+    # end
   end
 
 end
