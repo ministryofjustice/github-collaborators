@@ -25,7 +25,6 @@
         {
           "repo": {
             "name": "somerepo3",
-            "url": "https://github.com/ministryofjustice/courtfinder",
             "isLocked": false,
             "isDisabled": false,
             "collaborators": {
