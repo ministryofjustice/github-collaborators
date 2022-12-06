@@ -549,4 +549,86 @@ describe HelperModule do
       expect(helper_module.get_active_repositories.length).to eq(9)
     end
   end
+
+  context "test get_archived_repositories" do
+    return_data = File.read("spec/fixtures/archived_repositories.json")
+    it "call get_archived_repositories" do
+      json_query_public =
+    %[
+      {
+        search(
+          type: REPOSITORY
+          query: "org:ministryofjustice, archived:true, is:public"
+          first: 100 
+        ) {
+          repos: edges {
+            repo: node {
+              ... on Repository {
+                name
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    ]
+  
+      json_query_private =
+    %[
+      {
+        search(
+          type: REPOSITORY
+          query: "org:ministryofjustice, archived:true, is:private"
+          first: 100 
+        ) {
+          repos: edges {
+            repo: node {
+              ... on Repository {
+                name
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    ]
+  
+      json_query_internal =
+    %[
+      {
+        search(
+          type: REPOSITORY
+          query: "org:ministryofjustice, archived:true, is:internal"
+          first: 100 
+        ) {
+          repos: edges {
+            repo: node {
+              ... on Repository {
+                name
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    ]
+
+      # FUT has a loop with tree iterations. Each loop produces a list of repo names.
+      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
+      expect(graphql_client).to receive(:run_query).with(json_query_public).and_return(return_data)
+      expect(graphql_client).to receive(:run_query).with(json_query_private).and_return(return_data)
+      expect(graphql_client).to receive(:run_query).with(json_query_internal).and_return(return_data)
+      # Thus expects the three iterations to create three repos name each to make nine repo names in total
+      expect(helper_module.get_archived_repositories.length).to eq(9)
+    end
+  end
 end
