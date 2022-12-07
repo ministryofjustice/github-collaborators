@@ -30,7 +30,7 @@ class GithubCollaborators
           got_data = true
         end
         if count > 5
-          logger.fatal "GH GraphQL query error"
+          logger.fatal "HTTP Client REST API query error"
           abort
         end
       end
