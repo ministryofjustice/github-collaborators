@@ -3,6 +3,8 @@ LOGIN = "someuser"
 COLLABORATOR_EXISTS = "when collaborator does exist"
 COLLABORATOR_DOESNT_EXIST = "when collaborator doesn't exist"
 TEST_CREATE_PULL_REQUEST = "test create_pull_request"
+WHEN_COLLABORATORS_EXISTS = "when collaborators exist"
+WHEN_NO_COLLABORATORS_EXISTS = "when collaborators don't exist"
 
 describe HelperModule do
   # extended class
@@ -148,7 +150,7 @@ describe HelperModule do
   context "test get_org_outside_collaborators" do
     url = "https://api.github.com/orgs/ministryofjustice/outside_collaborators?per_page=100"
 
-    it "when collaborators exist" do
+    it WHEN_COLLABORATORS_EXISTS do
       json = %([{"login": "someuser1"},{"login": "someuser2"}])
       response = ["someuser1", "someuser2"]
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
@@ -156,7 +158,7 @@ describe HelperModule do
       expect(helper_module.get_org_outside_collaborators).to eq(response)
     end
 
-    it "when no collaborators exist" do
+    it WHEN_NO_COLLABORATORS_EXISTS do
       response = []
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).with(url).and_return(response.to_json)
@@ -444,13 +446,14 @@ describe HelperModule do
 
   context "test get_active_repositories" do
     return_data = File.read("spec/fixtures/repositories.json")
-    
+
     json_query_public_repo = %[
       {
         search(
           type: REPOSITORY
           query: "org:ministryofjustice, archived:false, is:public"
-          first: 100 
+          first: 100
+          after: null
         ) {
           repos: edges {
             repo: node {
@@ -477,7 +480,8 @@ describe HelperModule do
         search(
           type: REPOSITORY
           query: "org:ministryofjustice, archived:false, is:private"
-          first: 100 
+          first: 100
+          after: null
         ) {
           repos: edges {
             repo: node {
@@ -504,7 +508,8 @@ describe HelperModule do
         search(
           type: REPOSITORY
           query: "org:ministryofjustice, archived:false, is:internal"
-          first: 100 
+          first: 100
+          after: null
         ) {
           repos: edges {
             repo: node {
@@ -526,11 +531,11 @@ describe HelperModule do
       }
     ]
 
-    it "when collaborators exist" do
+    it "when repositories exist" do
       # FUT has a loop with tree iterations. Each loop produces these objects.
       repo1 = GithubCollaborators::Repository.new("somerepo1", 1)
       repo2 = GithubCollaborators::Repository.new("somerepo3", 5)
-      repo2 = GithubCollaborators::Repository.new("somerepo5", 0)
+      repo3 = GithubCollaborators::Repository.new("somerepo5", 0)
       expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
       expect(graphql_client).to receive(:run_query).with(json_query_public_repo).and_return(return_data)
       expect(graphql_client).to receive(:run_query).with(json_query_private_repo).and_return(return_data)
@@ -538,13 +543,13 @@ describe HelperModule do
       # Thus expect these objects to created three times
       expect(GithubCollaborators::Repository).to receive(:new).with("somerepo1", 1).and_return(repo1).at_least(3).times
       expect(GithubCollaborators::Repository).to receive(:new).with("somerepo3", 5).and_return(repo2).at_least(3).times
-      expect(GithubCollaborators::Repository).to receive(:new).with("somerepo5", 0).and_return(repo2).at_least(3).times
+      expect(GithubCollaborators::Repository).to receive(:new).with("somerepo5", 0).and_return(repo3).at_least(3).times
       # Thus expects the three iterations to create three objects each to make nine objects in total
       expect(helper_module.get_active_repositories.length).to eq(9)
     end
 
     return_data_no_repositories =
-    %[
+      %(
         {
           "data": {
             "search": {
@@ -556,7 +561,7 @@ describe HelperModule do
             }
           }
         }
-    ]
+    )
 
     it "when no repositories exist" do
       expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
@@ -570,12 +575,13 @@ describe HelperModule do
   context "test get_archived_repositories" do
     return_data = File.read("spec/fixtures/archived_repositories.json")
     json_query_public =
-    %[
+      %[
       {
         search(
           type: REPOSITORY
           query: "org:ministryofjustice, archived:true, is:public"
-          first: 100 
+          first: 100
+          after: null
         ) {
           repos: edges {
             repo: node {
@@ -593,12 +599,13 @@ describe HelperModule do
     ]
 
     json_query_private =
-    %[
+      %[
       {
         search(
           type: REPOSITORY
           query: "org:ministryofjustice, archived:true, is:private"
-          first: 100 
+          first: 100
+          after: null
         ) {
           repos: edges {
             repo: node {
@@ -616,12 +623,13 @@ describe HelperModule do
     ]
 
     json_query_internal =
-    %[
+      %[
       {
         search(
           type: REPOSITORY
           query: "org:ministryofjustice, archived:true, is:internal"
-          first: 100 
+          first: 100
+          after: null
         ) {
           repos: edges {
             repo: node {
@@ -651,7 +659,7 @@ describe HelperModule do
     end
 
     return_data_no_repositories =
-    %[
+      %(
       {
         "data": {
           "search": {
@@ -663,7 +671,7 @@ describe HelperModule do
           }
         }
       }
-    ]
+    )
 
     it "when archived repositories don't exist" do
       expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
@@ -673,17 +681,20 @@ describe HelperModule do
       archived_repositories = helper_module.get_archived_repositories
       expect(archived_repositories.length).to eq(0)
     end
-
   end
 
   context "test fetch_all_collaborators" do
     return_data = File.read("spec/fixtures/repository-collaborators.json")
     json_query =
-    %[
+      %[
       {
         organization(login: "ministryofjustice") {
           repository(name: "somerepo") {
-            collaborators(first:100 affiliation: OUTSIDE ) {
+            collaborators(
+              affiliation: OUTSIDE
+              first: 100
+              after: null
+            ) {
               pageInfo {
                 hasNextPage
                 endCursor
@@ -699,8 +710,8 @@ describe HelperModule do
       }
     ]
 
-    json_query_no_collaborators =
-    %[
+    json_data_no_collaborators =
+      %(
     {
       "data": {
         "organization": {
@@ -716,19 +727,19 @@ describe HelperModule do
         }
       }
     }
-    ]
+    )
 
-    it "when collaborators exist" do
+    it WHEN_COLLABORATORS_EXISTS do
       expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
       expect(graphql_client).to receive(:run_query).with(json_query).and_return(return_data)
       collaborators = helper_module.fetch_all_collaborators("somerepo")
       expect(collaborators.length).to eq(3)
       expect(collaborators).to eq(["someuser1", "someuser2", "someuser3"])
     end
-    
-    it "when collaborators don't exist" do
+
+    it WHEN_NO_COLLABORATORS_EXISTS do
       expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
-      expect(graphql_client).to receive(:run_query).with(json_query).and_return(json_query_no_collaborators)
+      expect(graphql_client).to receive(:run_query).with(json_query).and_return(json_data_no_collaborators)
       collaborators = helper_module.fetch_all_collaborators("somerepo")
       expect(collaborators.length).to eq(0)
     end

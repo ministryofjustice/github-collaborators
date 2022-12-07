@@ -1,6 +1,7 @@
 class GithubCollaborators
   TEST_URL = "https://api.github.com/repos/ministryofjustice/github-collaborators/issues"
   BODY = "abc"
+  CATCH_ERROR = "catch error"
 
   describe HttpClient do
     subject(:hc) { described_class.new }
@@ -16,7 +17,7 @@ class GithubCollaborators
         ENV["ADMIN_GITHUB_TOKEN"] = ""
       }
 
-      it "catch error" do
+      it CATCH_ERROR do
         expect { GithubCollaborators::HttpClient.new }.to raise_error(KeyError)
       end
 
@@ -47,7 +48,7 @@ class GithubCollaborators
         ENV.delete("ADMIN_GITHUB_TOKEN")
       }
 
-      it "catch error" do
+      it CATCH_ERROR do
         expect { GithubCollaborators::HttpClient.new }.to raise_error(KeyError)
       end
     end
@@ -58,7 +59,7 @@ class GithubCollaborators
         ENV.delete("ADMIN_GITHUB_TOKEN")
       }
 
-      it "catch error" do
+      it CATCH_ERROR do
         expect { GithubCollaborators::HttpClient.new }.to raise_error(KeyError)
       end
     end

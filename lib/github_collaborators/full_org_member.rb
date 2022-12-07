@@ -196,15 +196,15 @@ class GithubCollaborators
 
     def full_org_member_query(end_cursor)
       logger.debug "full_org_member_query"
-      after = end_cursor.nil? ? "" : %(after: "#{end_cursor}")
+      after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
       %[
         {
           user(login: "#{@login}") {
             repositories(
-              first: 100
               affiliations: ORGANIZATION_MEMBER
               ownerAffiliations: ORGANIZATION_MEMBER
-              #{after}
+              first: 100
+              after: #{after}
             ) {
               edges {
                 node {

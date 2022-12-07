@@ -45,13 +45,13 @@ module HelperModule
   # a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
   def get_repository_invites(repository_name)
     module_logger.debug "get_repository_invites"
-    
+
     repository_invites = []
-    
+
     url = "https://api.github.com/repos/ministryofjustice/#{repository_name.downcase}/invitations"
-    
+
     json = GithubCollaborators::HttpClient.new.fetch_json(url)
-    
+
     JSON.parse(json)
       .find_all { |invite| invite["invitee"]["login"].downcase }
       .map { |invite| repository_invites.push({login: invite["invitee"]["login"].downcase, expired: invite["expired"], invite_id: invite["id"]}) }
@@ -102,16 +102,16 @@ module HelperModule
 
   def create_unknown_collaborator_issue(user_name, repository_name)
     module_logger.debug "create_unknown_collaborator_issue"
-    
+
     repository_name = repository_name.downcase
     user_name = user_name.downcase
-    
+
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
       url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/issues"
       GithubCollaborators::HttpClient.new.post_json(url, unknown_collaborator_hash(user_name).to_json)
       sleep 2
     else
-      module_logger.debug "Didn't create unknown collaborator issue for #{user_name} on #{}, this is a dry run"
+      module_logger.debug "Didn't create unknown collaborator issue for #{user_name} on , this is a dry run"
     end
   end
 
@@ -178,7 +178,7 @@ module HelperModule
     repository_name = repository_name.downcase
     user_name = user_name.downcase
     found_issues = false
-    
+
     # Find the specific issue assigned to the collaborator
     issues.each do |issue|
       # Match the issue title
@@ -226,11 +226,14 @@ module HelperModule
 
   def organisation_members_query(end_cursor)
     module_logger.debug "organisation_members_query"
-    after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
+    after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
     %[
       {
         organization(login: "ministryofjustice") {
-          membersWithRole(first: 100 #{after}) {
+          membersWithRole(
+            first: 100
+            after: #{after}
+          ) {
             edges {
               node {
                 login
@@ -584,13 +587,14 @@ module HelperModule
 
   def get_archived_repositories_query(end_cursor, type)
     module_logger.debug "get_archived_repositories_query"
-    after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
+    after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
     %[
       {
         search(
           type: REPOSITORY
           query: "org:ministryofjustice, archived:true, is:#{type}"
-          first: 100 #{after}
+          first: 100
+          after: #{after}
         ) {
           repos: edges {
             repo: node {
@@ -610,13 +614,14 @@ module HelperModule
 
   def repositories_query(end_cursor, type)
     module_logger.debug "repositories_query"
-    after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
+    after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
     %[
       {
         search(
           type: REPOSITORY
           query: "org:ministryofjustice, archived:false, is:#{type}"
-          first: 100 #{after}
+          first: 100
+          after: #{after}
         ) {
           repos: edges {
             repo: node {
@@ -663,12 +668,16 @@ module HelperModule
 
   def outside_collaborators_query(end_cursor, repository)
     module_logger.debug "outside_collaborators_query"
-    after = end_cursor.nil? ? "" : %(, after: "#{end_cursor}")
+    after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
     %[
       {
         organization(login: "ministryofjustice") {
           repository(name: "#{repository.downcase}") {
-            collaborators(first:100 affiliation: OUTSIDE #{after}) {
+            collaborators(
+              affiliation: OUTSIDE
+              first: 100
+              after: #{after}
+            ) {
               pageInfo {
                 hasNextPage
                 endCursor

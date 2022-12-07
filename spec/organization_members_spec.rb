@@ -6,7 +6,10 @@ describe HelperModule do
   json_data = %(
       {
         organization(login: "ministryofjustice") {
-          membersWithRole(first: 100 ) {
+          membersWithRole(
+            first: 100
+            after: null
+          ) {
             edges {
               node {
                 login
@@ -31,8 +34,8 @@ describe HelperModule do
     expect(organization_members[1].login).to eq("someuser2")
   end
 
-  json_query_no_collaborators =
-  %[
+  json_data_no_collaborators =
+    %(
     {
       "data": {
         "organization": {
@@ -46,11 +49,11 @@ describe HelperModule do
         }
       }
     }
-  ]
-  
+  )
+
   it "when no collaborators exist" do
     expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
-    expect(graphql_client).to receive(:run_query).with(json_data).and_return(json_query_no_collaborators)
+    expect(graphql_client).to receive(:run_query).with(json_data).and_return(json_data_no_collaborators)
     organization_members = helper_module.get_all_organisation_members
     expect(organization_members.length).to eq(0)
   end

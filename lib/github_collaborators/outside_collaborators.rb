@@ -600,7 +600,7 @@ class GithubCollaborators
     end
 
     def get_repository_issues_from_github(repositories)
-      logger.debug "get_repository_issues_from_github"  
+      logger.debug "get_repository_issues_from_github"
       repositories.each do |repository_name|
         @organization.repositories.each do |org_repository|
           if org_repository.name == repository_name
@@ -616,7 +616,7 @@ class GithubCollaborators
       logger.info "There are #{@organization.full_org_members.length} full Org member / outside collaborators."
       @organization.full_org_members.each { |collaborator| logger.info "#{collaborator.login.downcase} is a full Org member / outside collaborator." }
     end
-  
+
     # Get the issues created previously by this application
     def read_repository_issues(repository_name)
       logger.debug "read_repository_issues"
@@ -647,7 +647,7 @@ class GithubCollaborators
           removed_outside_collaborators.push(collaborator)
         end
       end
-  
+
       if removed_outside_collaborators.length > 0
         # Raise Slack message
         GithubCollaborators::SlackNotifier.new(GithubCollaborators::Removed.new, removed_outside_collaborators).post_slack_message

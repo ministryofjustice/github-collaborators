@@ -17,7 +17,7 @@ class GithubCollaborators
         before do
           ENV["ADMIN_GITHUB_TOKEN"] = ""
         end
-  
+
         # query = ""
         # it "catch error and abort" do
         #   expect(graphql_client).to receive(:query_github_api).with(query).and_return()

@@ -1,5 +1,4 @@
 module Constants
-
   DATE_FORMAT = "%Y-%m-%d"
 
   # Issue raised on Github
