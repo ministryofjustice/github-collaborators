@@ -7,13 +7,19 @@ class GithubCollaborators
 
     # Stub sleep
     before {
-      allow_any_instance_of(GithubCollaborators).to receive(:sleep)
       allow_any_instance_of(GithubCollaborators::HttpClient).to receive(:sleep)
-      allow_any_instance_of(GithubCollaborators::BranchCreator).to receive(:sleep)
-      allow_any_instance_of(GithubCollaborators::GithubGraphQlClient).to receive(:sleep)
     }
 
-    context "when token is missing" do
+    context "when one env var is missing" do
+      before {
+        ENV.delete("OPS_BOT_TOKEN")
+        ENV["ADMIN_GITHUB_TOKEN"] = ""
+      }
+
+      it "catch error" do
+        expect { GithubCollaborators::HttpClient.new }.to raise_error(KeyError)
+      end
+
       it "catch error on fetch" do
         expect { hc.fetch_json(TEST_URL) }.to raise_error(KeyError)
       end
@@ -35,7 +41,29 @@ class GithubCollaborators
       end
     end
 
-    context "when correct pull request token is provided" do
+    context "when other env var is missing" do
+      before {
+        ENV["OPS_BOT_TOKEN"] = ""
+        ENV.delete("ADMIN_GITHUB_TOKEN")
+      }
+
+      it "catch error" do
+        expect { GithubCollaborators::HttpClient.new }.to raise_error(KeyError)
+      end
+    end
+
+    context "when both env vars are missing" do
+      before {
+        ENV.delete("OPS_BOT_TOKEN")
+        ENV.delete("ADMIN_GITHUB_TOKEN")
+      }
+
+      it "catch error" do
+        expect { GithubCollaborators::HttpClient.new }.to raise_error(KeyError)
+      end
+    end
+
+    context "when correct env vars are provided" do
       before do
         ENV["OPS_BOT_TOKEN"] = ""
         ENV["ADMIN_GITHUB_TOKEN"] = ""
@@ -47,19 +75,7 @@ class GithubCollaborators
         expect(reply).to be_instance_of(Net::HTTPOK)
       end
 
-      after do
-        ENV.delete("OPS_BOT_TOKEN")
-        ENV.delete("ADMIN_GITHUB_TOKEN")
-      end
-    end
-
-    context "when correct token is provided" do
-      before do
-        ENV["OPS_BOT_TOKEN"] = ""
-        ENV["ADMIN_GITHUB_TOKEN"] = ""
-      end
-
-      it "catch error in response" do
+      it "catch error and abort" do
         stub_request(:any, TEST_URL).to_return(body: "errors", status: 401)
         expect { hc.fetch_json(TEST_URL) }.to raise_error(SystemExit)
       end
