@@ -3,8 +3,6 @@ describe HelperModule do
   let(:helper_module) { Class.new { extend HelperModule } }
   let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
 
-  before { allow_any_instance_of(GithubCollaborators::GithubGraphQlClient).to receive(:sleep) }
-
   json_data = %(
       {
         organization(login: "ministryofjustice") {

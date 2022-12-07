@@ -12,14 +12,6 @@ describe HelperModule do
   let(:branch_creator) { double(GithubCollaborators::BranchCreator) }
   let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
 
-  # Stub sleep
-  before {
-    allow_any_instance_of(helper_module).to receive(:sleep)
-    allow_any_instance_of(GithubCollaborators::HttpClient).to receive(:sleep)
-    allow_any_instance_of(GithubCollaborators::BranchCreator).to receive(:sleep)
-    allow_any_instance_of(GithubCollaborators::GithubGraphQlClient).to receive(:sleep)
-  }
-
   terraform_block = create_collaborator_with_login("someuser1")
   collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
   terraform_block = create_collaborator_with_login("someuser2")

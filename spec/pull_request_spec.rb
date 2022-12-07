@@ -4,10 +4,6 @@ describe HelperModule do
   let(:pull_requests_json) { File.read("spec/fixtures/pull-requests.json") }
   let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
 
-  # Stub sleep
-  before { allow_any_instance_of(helper_module).to receive(:sleep) }
-  before { allow_any_instance_of(GithubCollaborators::GithubGraphQlClient).to receive(:sleep) }
-
   query = %(
       {
         organization(login: "ministryofjustice") {

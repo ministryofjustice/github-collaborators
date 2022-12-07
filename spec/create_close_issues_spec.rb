@@ -8,10 +8,6 @@ describe HelperModule do
 
   let(:http_client) { double(GithubCollaborators::HttpClient) }
 
-  # Stub sleep
-  before { allow_any_instance_of(helper_module).to receive(:sleep) }
-  before { allow_any_instance_of(GithubCollaborators::HttpClient).to receive(:sleep) }
-
   let(:json1) {
     %({"title":"#{DEFINE_COLLABORATOR_IN_CODE}","assignees":["#{LOGIN}"],"body":"Hi there\\n\\nWe have a process to manage github collaborators in code: https://github.com/ministryofjustice/github-collaborators\\n\\nPlease follow the procedure described there to grant @#{LOGIN} access to this repository.\\n\\nIf you have any questions, please post in #ask-operations-engineering on Slack.\\n\\nIf the outside collaborator is not needed, close this issue, they have already been removed from this repository.\\n"})
   }

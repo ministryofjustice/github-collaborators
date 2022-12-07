@@ -658,7 +658,7 @@ module HelperModule
       end_cursor = json_data.dig("data", "organization", "repository", "collaborators", "pageInfo", "endCursor")
       break unless json_data.dig("data", "organization", "repository", "collaborators", "pageInfo", "hasNextPage")
     end
-    outside_collaborators
+    outside_collaborators.sort!
   end
 
   def outside_collaborators_query(end_cursor, repository)

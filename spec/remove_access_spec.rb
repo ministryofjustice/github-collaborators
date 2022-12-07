@@ -4,10 +4,6 @@ describe HelperModule do
 
   let(:http_client) { double(GithubCollaborators::HttpClient) }
 
-  # Stub sleep
-  before { allow_any_instance_of(helper_module).to receive(:sleep) }
-  before { allow_any_instance_of(GithubCollaborators::HttpClient).to receive(:sleep) }
-
   context "when env var enabled" do
     before do
       ENV["REALLY_POST_TO_GH"] = "1"
