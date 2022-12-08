@@ -87,13 +87,13 @@ An example, please do not add the comments to the file:
 ```
   collaborators = [
     {
-      github_user  = "digitalronin"
+      github_user  = "someuser"
       permission   = "admin"
-      name         = "David Salgado"
-      email        = "david@acme.com"
+      name         = "Real Name"
+      email        = "name@acme.com"
       org          = "Acme. Corp."
       reason       = "Acme are building some stuff for us"
-      added_by     = "Awesome Team <awesome.team@digital.justice.gov.uk>"
+      added_by     = "Team Name <team-name@digital.justice.gov.uk>"
       review_after = "2021-11-26"
     },
   ]

@@ -10,6 +10,11 @@
 # # Returns the repo name from within a repo file
 # # This is to deal with a difference in file name and defined repo name inside the Terraform modules
 # def get_repo_name(repo_file)
+# if(File.exist?('Hello.rb')) 
+#   puts 'file or directory exists'
+# else 
+#   puts 'file or directory not found'
+# end
 #   File.open repo_file do |file|
 #     # Grab repo line
 #     line = file.find_all { |line| line =~ /\s{1}repository/ }

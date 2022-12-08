@@ -1,10 +1,10 @@
-module "my-repo" {
+module "some-repo" {
   source     = "./modules/repository-collaborators"
-  repository = "my.repo"
+  repository = "some.repo"
   collaborators = [
     {
-      github_user  = "digitalronin"
-      permission   = "admin"
+      github_user  = "someuser"
+      permission   = "maintain"
       name         = ""
       email        = ""
       org          = ""
