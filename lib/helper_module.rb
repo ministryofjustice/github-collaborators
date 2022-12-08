@@ -215,13 +215,14 @@ module HelperModule
       if !json_data.dig("data", "organization", "membersWithRole", "edges").nil?
         members = json_data.dig("data", "organization", "membersWithRole", "edges")
         members.each do |member|
-          org_members.push(GithubCollaborators::Member.new(member))
+          login = member.dig("node", "login")
+          org_members.push(login.downcase)
         end
       end
       end_cursor = json_data.dig("data", "organization", "membersWithRole", "pageInfo", "endCursor")
       break unless json_data.dig("data", "organization", "membersWithRole", "pageInfo", "hasNextPage")
     end
-    org_members.sort_by { |org_member| org_member.login }
+    org_members.sort!
   end
 
   def organisation_members_query(end_cursor)
@@ -357,17 +358,17 @@ module HelperModule
     edited_files.each { |file_name| branch_creator.add(file_name) }
     branch_creator.commit_and_push(pull_request_title)
 
-    if type == "delete"
+    if type == TYPE_DELETE
       create_pull_request(delete_empty_files_hash(branch_name))
-    elsif type == "extend"
+    elsif type == TYPE_EXTEND
       create_pull_request(extend_date_hash(collaborator_name, branch_name))
-    elsif type == "remove"
+    elsif type == TYPE_REMOVE
       create_pull_request(remove_collaborator_hash(collaborator_name, branch_name))
-    elsif type == "permission"
+    elsif type == TYPE_PERMISSION
       create_pull_request(modify_collaborator_permission_hash(collaborator_name, branch_name))
-    elsif type == "add"
+    elsif type == TYPE_ADD
       create_pull_request(add_collaborator_hash(collaborator_name, branch_name))
-    elsif type == "delete_archive_file"
+    elsif type == TYPE_DELETE_ARCHIVE
       create_pull_request(delete_archive_file_hash(branch_name))
     end
   end

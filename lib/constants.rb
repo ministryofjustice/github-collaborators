@@ -1,5 +1,19 @@
 module Constants
   DATE_FORMAT = "%Y-%m-%d"
+  TERRAFORM_DIR = "terraform"
+  ADDED_BY_EMAIL = "opseng-bot@digital.justice.gov.uk"
+  REASON1 = "Full Org member / collaborator missing from Terraform file"
+  REASON2 = "Collaborator missing from Terraform file"
+  EXCLUDE_FILES = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
+  TERRAFORM_FILES = "#{TERRAFORM_DIR}/*.tf"
+  RATE_LIMITED = "RATE_LIMITED"
+
+  TYPE_DELETE = "delete"
+  TYPE_EXTEND = "extend"
+  TYPE_REMOVE = "remove"
+  TYPE_PERMISSION = "permission"
+  TYPE_ADD = "add"
+  TYPE_DELETE_ARCHIVE = "delete_archive_file"
 
   # Issue raised on Github
   COLLABORATOR_EXPIRES_SOON = "Collaborator review date expires soon for user"

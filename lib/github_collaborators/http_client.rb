@@ -19,7 +19,7 @@ class GithubCollaborators
         response = http_get(url)
         if response.code != "200"
           if response.body.include?("errors")
-            if response.body.include?("RATE_LIMITED")
+            if response.body.include?(RATE_LIMITED)
               sleep 300
             else
               logger.fatal "HTTP Client REST API query contains errors"

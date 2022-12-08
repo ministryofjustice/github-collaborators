@@ -28,8 +28,8 @@ class GithubCollaborators
       @email = collaborator.email
       @name = collaborator.name
       @org = collaborator.org
-      @reason = "Full Org member / collaborator missing from Terraform file"
-      @added_by = "opseng-bot@digital.justice.gov.uk"
+      @reason = REASON1
+      @added_by = ADDED_BY_EMAIL
       review_date = (Date.today + 90).strftime(DATE_FORMAT)
       @review_after = review_date.to_s
     end
@@ -40,8 +40,8 @@ class GithubCollaborators
     def add_missing_collaborator_data(collaborator_name)
       logger.debug "add_missing_collaborator_data"
       @username = collaborator_name.to_s.downcase
-      @reason = "Collaborator missing from Terraform file"
-      @added_by = "opseng-bot@digital.justice.gov.uk"
+      @reason = REASON2
+      @added_by = ADDED_BY_EMAIL
       review_date = (Date.today + 90).strftime(DATE_FORMAT)
       @review_after = review_date.to_s
       @defined_in_terraform = false
@@ -66,39 +66,39 @@ class GithubCollaborators
       @review_after = collaborator.fetch(:review_after, "").to_s
     end
 
-    # This functions takes the body generated from a GitHub ticket created from /.github/ISSUE_TEMPLATE/create-pr-from-issue.yaml
-    def add_collector_from_issue_data(issue_data)
-      logger.debug "add_collector_from_issue_data"
-      # Creates a hash of arrays with field: [0] value
-      # From a GitHub issues reponse created from an issue template
-      # Example:
-      # username: Array (1 element)
-      #   [0]: 'al-ben
-      # repositories: Array (4 elements)
-      #   [0]: 'repo1'
-      #   [1]: 'repo2'
-      the_data = issue_data
-        # Fetch the body var and split on field seperator
-        .fetch("body").split("###")
-        # Remove empty lines
-        .map { |line| line.strip }.map { |str| str.gsub(/^$\n/, "") }
-        # Split on \n characters to have field name and field value in seperator hash
-        .map { |line| line.split("\n") }
-        # Drop first hash element as not needed
-        .drop(1)
-        # Map values into array
-        .map { |field| [field[0], field.drop(1)] }.to_h
+    # # This functions takes the body generated from a GitHub ticket created from /.github/ISSUE_TEMPLATE/create-pr-from-issue.yaml
+    # def add_collector_from_issue_data(issue_data)
+    #   logger.debug "add_collector_from_issue_data"
+    #   # Creates a hash of arrays with field: [0] value
+    #   # From a GitHub issues reponse created from an issue template
+    #   # Example:
+    #   # username: Array (1 element)
+    #   #   [0]: 'al-ben
+    #   # repositories: Array (4 elements)
+    #   #   [0]: 'repo1'
+    #   #   [1]: 'repo2'
+    #   the_data = issue_data
+    #     # Fetch the body var and split on field seperator
+    #     .fetch("body").split("###")
+    #     # Remove empty lines
+    #     .map { |line| line.strip }.map { |str| str.gsub(/^$\n/, "") }
+    #     # Split on \n characters to have field name and field value in seperator hash
+    #     .map { |line| line.split("\n") }
+    #     # Drop first hash element as not needed
+    #     .drop(1)
+    #     # Map values into array
+    #     .map { |field| [field[0], field.drop(1)] }.to_h
 
-      @username = the_data["username"][0].downcase
-      @permission = the_data["permission"][0]
-      @email = the_data["email"][0]
-      @name = the_data["name"][0]
-      @org = the_data["org"][0]
-      @reason = the_data["reason"][0]
-      @added_by = the_data["added_by"][0]
-      @review_after = the_data["review_after"][0]
-      @repositories = the_data["repositories"]
-    end
+    #   @username = the_data["username"][0].downcase
+    #   @permission = the_data["permission"][0]
+    #   @email = the_data["email"][0]
+    #   @name = the_data["name"][0]
+    #   @org = the_data["org"][0]
+    #   @reason = the_data["reason"][0]
+    #   @added_by = the_data["added_by"][0]
+    #   @review_after = the_data["review_after"][0]
+    #   @repositories = the_data["repositories"]
+    # end
 
     def copy_block(block)
       logger.debug "copy_block"
@@ -119,11 +119,11 @@ class GithubCollaborators
 
     attr_reader :terraform_blocks, :filename
 
-    def initialize(repository_name)
+    def initialize(repository_name, folder)
       logger.debug "initialize"
       @filename = repository_name.downcase
-      @real_repository_name = ""
-      @file_path = "terraform/#{tf_safe(@filename)}.tf"
+      @real_repository_name = repository_name.downcase
+      @file_path = "#{folder}/#{tf_safe(@filename)}.tf"
       @terraform_blocks = []
       @terraform_file_data = []
       @terraform_modified_blocks = []
@@ -143,15 +143,6 @@ class GithubCollaborators
       @terraform_modified_blocks.clear
     end
 
-    # This is not used, keeping it, in case
-    def add_collaborator(collaborator)
-      logger.debug "add_collaborator"
-      block = GithubCollaborators::TerraformBlock.new
-      block.add_collaborator_data(collaborator)
-      @terraform_blocks.push(block)
-      @add_removed_terraform_blocks.push({added: true, removed: false, block: terraform_block.clone, index: @terraform_blocks.index(block)})
-    end
-
     def add_org_member_collaborator(collaborator, permission)
       logger.debug "add_org_member_collaborator"
       block = GithubCollaborators::TerraformBlock.new
@@ -160,13 +151,13 @@ class GithubCollaborators
       @add_removed_terraform_blocks.push({added: true, removed: false, block: block.clone, index: @terraform_blocks.index(block)})
     end
 
-    def add_collaborators_from_issue(collaborator_data)
-      logger.debug "add_collaborators_from_issue"
-      block = GithubCollaborators::TerraformBlock.new
-      block.add_collector_from_issue_data(collaborator_data)
-      @terraform_blocks.push(block)
-      @add_removed_terraform_blocks.push({added: true, removed: false, block: block.clone, index: @terraform_blocks.index(block)})
-    end
+    # def add_collaborators_from_issue(collaborator_data)
+    #   logger.debug "add_collaborators_from_issue"
+    #   block = GithubCollaborators::TerraformBlock.new
+    #   block.add_collector_from_issue_data(collaborator_data)
+    #   @terraform_blocks.push(block)
+    #   @add_removed_terraform_blocks.push({added: true, removed: false, block: block.clone, index: @terraform_blocks.index(block)})
+    # end
 
     # Extend the review date for a collaborator within a Terraform file
     def extend_review_date(collaborator_name)
@@ -212,7 +203,11 @@ class GithubCollaborators
 
     def read_file
       logger.debug "read_file"
-      @terraform_file_data = File.read(@file_path).split("\n")
+      if File.exist?(@file_path)
+        @terraform_file_data = File.read(@file_path).split("\n")
+      else 
+        logger.error("Read file #{@file_path} does not exist")
+      end
     end
 
     def get_collaborator_permission(collaborator_name)
@@ -254,10 +249,19 @@ class GithubCollaborators
 
     private
 
+    def initialize_read_file
+      logger.debug "initialize_read_file"
+      if @terraform_file_data.length == 0
+        read_file
+      end
+    end
+
     # Search each line for "github_user" and return the line number
     def get_github_user_line_numbers
       logger.debug "get_github_user_line_numbers"
       github_user_line_numbers = []
+
+      initialize_read_file
 
       # Find the strings that contain "github_user"
       github_users = @terraform_file_data.find_all { |line| line =~ /\s{4}github_user/ }
@@ -294,7 +298,7 @@ class GithubCollaborators
     NAME = 2
     EMAIL = 3
     ORG = 4
-    REASON = 5
+    REASON1 = 5
     ADDED_BY = 6
     REVIEW_AFTER = 7
 
@@ -312,7 +316,7 @@ class GithubCollaborators
         name: collaborator_data[NAME],
         email: collaborator_data[EMAIL],
         org: collaborator_data[ORG],
-        reason: collaborator_data[REASON],
+        reason: collaborator_data[REASON1],
         added_by: collaborator_data[ADDED_BY],
         review_after: collaborator_data[REVIEW_AFTER]
       }
@@ -327,6 +331,9 @@ class GithubCollaborators
     # value exists within the file
     def get_attribute(val, line_number)
       logger.debug "get_attribute"
+
+      initialize_read_file
+
       # Extract the "github_user" to "review_after" lines
       collaborator_block = @terraform_file_data[line_number, (REVIEW_AFTER + 1)]
       collaborator_block.grep(/#{val}\s+=/).each do |line|
@@ -335,14 +342,15 @@ class GithubCollaborators
         end
       end
       logger.warn "The attribute #{val} is missing within #{@filename}.tf"
-      nil
+      ""
     end
 
     def create_file_template
       logger.debug "create_file_template"
+      module_name = tf_safe(@filename)
 
       template = <<~EOF
-        module "<%= @filename %>" {
+        module "<%= module_name %>" {
           source     = "./modules/repository-collaborators"
           repository = "<%= @real_repository_name %>"
           collaborators = [
@@ -376,16 +384,16 @@ class GithubCollaborators
 
       # Array Terraform files
       @terraform_files = []
-      exclude_files = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
+      # exclude_files = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
 
       # Go through all the Terraform files
       fetch_terraform_files.each do |terraform_file_path|
         terraform_file_name = File.basename(terraform_file_path)
         # Ignore the above named files
-        if !exclude_files.include?(terraform_file_name.downcase)
+        if !EXCLUDE_FILES.include?(terraform_file_name.downcase)
           # Strip away prefix and file type
           repository_name = File.basename(terraform_file_path, ".tf")
-          terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase)
+          terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase, TERRAFORM_DIR)
           # Read the file
           terraform_file.read_file
           # Read real repository name from file
@@ -398,9 +406,9 @@ class GithubCollaborators
       end
     end
 
-    def create_new_file(repository_name)
-      logger.debug "create_new_file"
-      terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase)
+    def create_new_file_in_memory(repository_name)
+      logger.debug "create_new_file_in_memory"
+      terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase, TERRAFORM_DIR)
       # Store Terraform file
       @terraform_files.push(terraform_file)
     end
@@ -432,16 +440,6 @@ class GithubCollaborators
           terraform_file.remove_collaborator(login.downcase)
           terraform_file.write_to_file
           terraform_file.restore_terraform_blocks
-        end
-      end
-    end
-
-    def remove_archieved_repository_file(repository_name)
-      logger.debug "remove_archieved_repository_file"
-      @terraform_files.each do |terraform_file|
-        if terraform_file.filename.downcase == tf_safe(repository_name.downcase)
-          index = @terraform_files.index(terraform_file)
-          @terraform_files.delete_at(index)
         end
       end
     end
@@ -479,11 +477,11 @@ class GithubCollaborators
       empty_files
     end
 
-    # Create a file if it doesn't exist
-    def ensure_file_exists(repository_name)
-      logger.debug "ensure_file_exists"
+    # Create a terraform file object for the repository nam if it doesn't exist already
+    def ensure_file_exists_in_memory(repository_name)
+      logger.debug "ensure_file_exists_in_memory"
       if does_file_exist(repository_name.downcase) == false
-        create_new_file(repository_name.downcase)
+        create_new_file_in_memory(repository_name.downcase)
       end
     end
 
@@ -516,7 +514,7 @@ class GithubCollaborators
     # Return absolute paths for the Terraform files in the Terraform directory
     def fetch_terraform_files
       logger.debug "fetch_terraform_files"
-      Dir["terraform/*.tf"]
+      Dir[TERRAFORM_FILES]
     end
   end
 end

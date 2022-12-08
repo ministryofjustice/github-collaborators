@@ -1,6 +1,7 @@
 class GithubCollaborators
   class GithubGraphQlClient
     include Logging
+    include Constants
 
     def initialize
       logger.debug "initialize"
@@ -17,7 +18,7 @@ class GithubCollaborators
       if response.body.nil? || response.body == ""
         logger.fatal "GH GraphQL query data is missing"
         abort
-      elsif response.body.include?("RATE_LIMITED")
+      elsif response.body.include?(RATE_LIMITED)
         sleep 300
         return false
       elsif response.body.include?("errors")

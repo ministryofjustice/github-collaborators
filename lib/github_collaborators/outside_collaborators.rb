@@ -274,7 +274,7 @@ class GithubCollaborators
       collaborators_who_have_expired = []
       collaborators.each do |collaborator|
         collaborator.issues.each do |issue|
-          if issue == "Review after date has passed"
+          if issue == REVIEW_DATE_PASSED
             collaborators_who_have_expired.push(collaborator)
             logger.info "Review after date, #{collaborator.review_after_date}, has passed for #{collaborator.login.downcase} on #{collaborator.repository.downcase}"
           end
@@ -314,7 +314,7 @@ class GithubCollaborators
 
         if edited_files.length > 0
           branch_name = "update-review-date-#{login}"
-          type = "extend"
+          type = TYPE_EXTEND
           create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
           add_new_pull_request(pull_request_title, edited_files)
         end
@@ -347,7 +347,7 @@ class GithubCollaborators
 
       if edited_files.length > 0
         branch_name = "delete-archived-repository-file"
-        type = "delete_archive_file"
+        type = TYPE_DELETE_ARCHIVE
         pull_request_title = ARCHIVED_REPOSITORY_PR_TITLE
         collaborator_name = ""
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
@@ -384,7 +384,7 @@ class GithubCollaborators
 
       if edited_files.length > 0
         branch_name = "delete-empty-files"
-        type = "delete"
+        type = TYPE_DELETE
         pull_request_title = EMPTY_FILES_PR_TITLE
         collaborator_name = ""
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
@@ -422,7 +422,7 @@ class GithubCollaborators
 
         if edited_files.length > 0
           branch_name = "remove-expired-collaborator-#{login}"
-          type = "remove"
+          type = TYPE_REMOVE
           create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
           add_new_pull_request(pull_request_title, edited_files)
         end
@@ -442,14 +442,14 @@ class GithubCollaborators
       repositories.each do |repository|
         # No pull request exists, modify the file/s
         repository_name = repository[:repository_name].downcase
-        @terraform_files.ensure_file_exists(repository_name)
+        @terraform_files.ensure_file_exists_in_memory(repository_name)
         @terraform_files.change_collaborator_permission_in_file(collaborator_name, repository_name, repository[:permission])
         edited_files.push("terraform/#{repository_name}.tf")
       end
 
       if edited_files.length > 0
         branch_name = "modify-collaborator-permission-#{collaborator_name}"
-        type = "permission"
+        type = TYPE_PERMISSION
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
       end
@@ -470,7 +470,7 @@ class GithubCollaborators
       repositories.each do |repository_name|
         repository_name = repository_name.downcase
         # No pull request exists, modify the file/s
-        @terraform_files.ensure_file_exists(repository_name)
+        @terraform_files.ensure_file_exists_in_memory(repository_name)
         # Get the github permission for that repository
         repository_permission = collaborator.get_repository_permission(repository_name)
         @terraform_files.add_collaborator_to_file(collaborator, repository_name, repository_permission)
@@ -483,7 +483,7 @@ class GithubCollaborators
 
       if edited_files.length > 0
         branch_name = "add-collaborator-#{collaborator_name}"
-        type = "add"
+        type = TYPE_ADD
         pull_request_title = ADD_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)

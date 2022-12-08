@@ -14,9 +14,9 @@ describe HelperModule do
   let(:branch_creator) { double(GithubCollaborators::BranchCreator) }
   let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
 
-  terraform_block = create_collaborator_with_login("someuser1")
+  terraform_block = create_collaborator_with_login(TEST_USER_1)
   collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-  terraform_block = create_collaborator_with_login("someuser2")
+  terraform_block = create_collaborator_with_login(TEST_USER_2)
   collaborator2 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
   collaborators = [collaborator1, collaborator2]
 
@@ -76,7 +76,7 @@ describe HelperModule do
     it "when no issues exists" do
       issues = JSON.parse(issues_json, {symbolize_names: true})
       expect(helper_module).to receive(:remove_issue).with("somerepo", 159)
-      expect(helper_module.does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, "somerepo", "someuser1")).to eq(false)
+      expect(helper_module.does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, "somerepo", TEST_USER_1)).to eq(false)
       expect(issues.length).to eq(3)
     end
 
@@ -109,7 +109,7 @@ describe HelperModule do
 
   context "test does_collaborator_already_exist" do
     it COLLABORATOR_EXISTS do
-      expect(helper_module.does_collaborator_already_exist("someuser1", collaborators)).to eq(true)
+      expect(helper_module.does_collaborator_already_exist(TEST_USER_1, collaborators)).to eq(true)
     end
 
     it COLLABORATOR_DOESNT_EXIST do
@@ -119,7 +119,7 @@ describe HelperModule do
 
   context "test get_name" do
     it COLLABORATOR_EXISTS do
-      expect(helper_module.get_name("someuser1", collaborators)).to eq(TEST_COLLABORATOR_NAME)
+      expect(helper_module.get_name(TEST_USER_1, collaborators)).to eq(TEST_COLLABORATOR_NAME)
     end
 
     it COLLABORATOR_DOESNT_EXIST do
@@ -129,7 +129,7 @@ describe HelperModule do
 
   context "test get_email" do
     it COLLABORATOR_EXISTS do
-      expect(helper_module.get_email("someuser1", collaborators)).to eq(TEST_COLLABORATOR_EMAIL)
+      expect(helper_module.get_email(TEST_USER_1, collaborators)).to eq(TEST_COLLABORATOR_EMAIL)
     end
 
     it COLLABORATOR_DOESNT_EXIST do
@@ -139,7 +139,7 @@ describe HelperModule do
 
   context "test get_org" do
     it COLLABORATOR_EXISTS do
-      expect(helper_module.get_org("someuser1", collaborators)).to eq(TEST_COLLABORATOR_ORG)
+      expect(helper_module.get_org(TEST_USER_1, collaborators)).to eq(TEST_COLLABORATOR_ORG)
     end
 
     it COLLABORATOR_DOESNT_EXIST do
@@ -152,7 +152,7 @@ describe HelperModule do
 
     it WHEN_COLLABORATORS_EXISTS do
       json = %([{"login": "someuser1"},{"login": "someuser2"}])
-      response = ["someuser1", "someuser2"]
+      response = [TEST_USER_1, TEST_USER_2]
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).with(url).and_return(json)
       expect(helper_module.get_org_outside_collaborators).to eq(response)
@@ -171,7 +171,7 @@ describe HelperModule do
     filenames = ["file1", "file2", "file3"]
     branch_name = "somebranch"
     collaborator_name = "someuser"
-    types = ["delete", "extend", "remove", "permission", "add", "delete_archive_file"]
+    types = [TYPE_DELETE, TYPE_EXTEND, TYPE_REMOVE, TYPE_PERMISSION, TYPE_ADD, TYPE_DELETE_ARCHIVE]
 
     it "when branch name valid and unknown type" do
       expect(GithubCollaborators::BranchCreator).to receive(:new).and_return(branch_creator)
@@ -206,22 +206,22 @@ describe HelperModule do
       expect(branch_creator).to receive(:commit_and_push).with(pull_request_title).at_least(6).times
 
       types.each do |type|
-        if type == "delete"
+        if type == TYPE_DELETE
           expect(helper_module).to receive(:create_pull_request)
           expect(helper_module).to receive(:delete_empty_files_hash).with(branch_name)
-        elsif type == "extend"
+        elsif type == TYPE_EXTEND
           expect(helper_module).to receive(:create_pull_request)
           expect(helper_module).to receive(:extend_date_hash).with(collaborator_name, branch_name)
-        elsif type == "remove"
+        elsif type == TYPE_REMOVE
           expect(helper_module).to receive(:create_pull_request)
           expect(helper_module).to receive(:remove_collaborator_hash).with(collaborator_name, branch_name)
-        elsif type == "permission"
+        elsif type == TYPE_PERMISSION
           expect(helper_module).to receive(:create_pull_request)
           expect(helper_module).to receive(:modify_collaborator_permission_hash).with(collaborator_name, branch_name)
-        elsif type == "add"
+        elsif type == TYPE_ADD
           expect(helper_module).to receive(:create_pull_request)
           expect(helper_module).to receive(:add_collaborator_hash).with(collaborator_name, branch_name)
-        elsif type == "delete_archive_file"
+        elsif type == TYPE_DELETE_ARCHIVE
           expect(helper_module).to receive(:create_pull_request)
           expect(helper_module).to receive(:delete_archive_file_hash).with(branch_name)
         end
@@ -734,7 +734,7 @@ describe HelperModule do
       expect(graphql_client).to receive(:run_query).with(json_query).and_return(return_data)
       collaborators = helper_module.fetch_all_collaborators("somerepo")
       expect(collaborators.length).to eq(3)
-      expect(collaborators).to eq(["someuser1", "someuser2", "someuser3"])
+      expect(collaborators).to eq([TEST_USER_1, TEST_USER_2, TEST_USER_3])
     end
 
     it WHEN_NO_COLLABORATORS_EXISTS do

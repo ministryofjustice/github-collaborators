@@ -54,7 +54,7 @@ class GithubCollaborators
       # Loop through all the org members
       @organization_members.each do |org_member|
         # See if collaborator name is in the org members list
-        if org_member.login.downcase == login.downcase
+        if org_member.downcase == login.downcase
           add_new_collaborator_and_org_member(login.downcase)
           return true
         end
