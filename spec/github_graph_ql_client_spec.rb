@@ -1,7 +1,6 @@
 class GithubCollaborators
   GRAPHQL_URI = "https://api.github.com/graphql"
   describe GithubGraphQlClient do
-
     # Stub sleep
     before {
       allow_any_instance_of(GithubCollaborators::GithubGraphQlClient).to receive(:sleep)

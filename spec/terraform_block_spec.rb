@@ -1,7 +1,6 @@
 class GithubCollaborators
   describe TerraformBlock do
     context "test TerraformBlock" do
-
       def check_terraform_block_empty(terraform_block)
         test_equal(terraform_block.username, "")
         test_equal(terraform_block.permission, "")

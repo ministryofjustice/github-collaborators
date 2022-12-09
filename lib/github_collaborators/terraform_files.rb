@@ -205,7 +205,7 @@ class GithubCollaborators
       logger.debug "read_file"
       if File.exist?(@file_path)
         @terraform_file_data = File.read(@file_path).split("\n")
-      else 
+      else
         logger.error("Read file #{@file_path} does not exist")
       end
     end
@@ -234,6 +234,7 @@ class GithubCollaborators
       logger.debug "get_repository_name"
       # In the file find the "repository" line
       line_number = 0
+      initialize_read_file
       name = get_attribute("repository", line_number)
       @real_repository_name = name.downcase
     end
