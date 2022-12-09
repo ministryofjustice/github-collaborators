@@ -68,6 +68,40 @@ class GithubCollaborators
         test_equal(terraform_block.review_after, review_date)
       end
 
+      it "call add_missing_collaborator_data" do
+        review_date = (Date.today + 90).strftime(DATE_FORMAT)
+        terraform_block = GithubCollaborators::TerraformBlock.new
+        terraform_block.add_missing_collaborator_data(TEST_COLLABORATOR_LOGIN)
+        test_equal(terraform_block.username, TEST_COLLABORATOR_LOGIN)
+        test_equal(terraform_block.permission, "")
+        test_equal(terraform_block.name, "")
+        test_equal(terraform_block.email, "")
+        test_equal(terraform_block.org, "")
+        test_equal(terraform_block.reason, REASON2)
+        test_equal(terraform_block.added_by, ADDED_BY_EMAIL)
+        test_equal(terraform_block.review_after, review_date)
+      end
+
+      it "call add_missing_collaborator_data" do
+        review_date = (Date.today + 90).strftime(DATE_FORMAT)
+        terraform_block1 = GithubCollaborators::TerraformBlock.new
+        terraform_block1.add_terraform_file_collaborator_data({})
+        check_terraform_block_empty(terraform_block1)
+
+        terraform_block2 = GithubCollaborators::TerraformBlock.new
+        terraform_block2.add_missing_collaborator_data(TEST_COLLABORATOR_LOGIN)
+        test_equal(terraform_block2.username, TEST_COLLABORATOR_LOGIN)
+        test_equal(terraform_block2.permission, "")
+        test_equal(terraform_block2.name, "")
+        test_equal(terraform_block2.email, "")
+        test_equal(terraform_block2.org, "")
+        test_equal(terraform_block2.reason, REASON2)
+        test_equal(terraform_block2.added_by, ADDED_BY_EMAIL)
+        test_equal(terraform_block2.review_after, review_date)
+
+        terraform_block2.copy_block(terraform_block1)
+        check_terraform_block_empty(terraform_block2)
+      end
     end
   end
 end
