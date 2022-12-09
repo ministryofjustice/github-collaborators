@@ -60,6 +60,10 @@ class GithubCollaborators
           stub_request(:any, GRAPHQL_URI).to_return(body: "good", status: 200)
           expect(graphql_client.run_query(query)).to eq("good")
         end
+
+        after do
+          ENV.delete("ADMIN_GITHUB_TOKEN")
+        end
       end
     end
   end
