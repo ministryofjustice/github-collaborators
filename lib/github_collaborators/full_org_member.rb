@@ -2,7 +2,7 @@ class GithubCollaborators
   class FullOrgMember
     include Logging
     include HelperModule
-    attr_reader :login, :email, :org, :name, :missing_from_repositories, :repository_permission_mismatches, :attached_archived_repositories
+    attr_reader :login, :email, :org, :name, :missing_from_repositories, :repository_permission_mismatches, :attached_archived_repositories, :github_repositories, :terraform_repositories, :github_archived_repositories, :ignore_repositories, :org_members_team_repositories
 
     def initialize(login)
       logger.debug "initialize"
@@ -34,6 +34,36 @@ class GithubCollaborators
     def add_ignore_repository(repository_name)
       logger.debug "add_ignore_repository"
       @ignore_repositories.push(repository_name.downcase)
+      ignore_repositories.sort!
+      ignore_repositories.uniq!
+    end
+
+    def add_all_org_members_team_repositories(repositories)
+      logger.debug "add_all_org_members_team_repositories"
+      @org_members_team_repositories = repositories
+      @org_members_team_repositories.sort!
+      @org_members_team_repositories.uniq!
+    end
+
+    def add_archived_repositories(repositories)
+      logger.debug "add_archived_repositories"
+      @github_archived_repositories = repositories
+      @github_archived_repositories.sort!
+      @github_archived_repositories.uniq!
+    end
+
+    def add_terraform_repositories(terraform_repositories)
+      logger.debug "add_terraform_repositories"
+      terraform_repositories.each do |terraform_repository_name|
+        # Ignore excluded repositories ie the all-org-members team repositories and archived repositories
+        # This is to focus on active repositories that should be tracked
+        if !@org_members_team_repositories.include?(terraform_repository_name.downcase) && !@github_archived_repositories.include?(terraform_repository_name.downcase)
+          # Store repository
+          @terraform_repositories.push(terraform_repository_name.downcase)
+        end
+      end
+      @terraform_repositories.sort!
+      @terraform_repositories.uniq!
     end
 
     # Check whether a collaborator is attached to no repositories
@@ -45,39 +75,28 @@ class GithubCollaborators
       false
     end
 
-    def add_all_org_members_team_repositories(repositories)
-      logger.debug "add_all_org_members_team_repositories"
-      @org_members_team_repositories = repositories
-    end
-
-    def add_archived_repositories(repositories)
-      logger.debug "add_archived_repositories"
-      @github_archived_repositories = repositories
-    end
-
     def get_full_org_member_repositories
       logger.debug "get_full_org_member_repositories"
       end_cursor = nil
       graphql = GithubCollaborators::GithubGraphQlClient.new
-
       repositories = []
 
       loop do
         # Read which Github repositories the collaborator has access to
         response = graphql.run_query(full_org_member_query(end_cursor))
-        repos = JSON.parse(response).dig("data", "user", "repositories", "edges")
+        json_data = JSON.parse(response)
+        repos = json_data.dig("data", "user", "repositories", "edges")
         repositories += repos
-        end_cursor = JSON.parse(response).dig("data", "user", "repositories", "pageInfo", "endCursor")
-        break unless JSON.parse(response).dig("data", "user", "repositories", "pageInfo", "hasNextPage")
+        end_cursor = json_data.dig("data", "user", "repositories", "pageInfo", "endCursor")
+        break unless json_data.dig("data", "user", "repositories", "pageInfo", "hasNextPage")
       end
 
       repositories.each do |repo|
         # Accept only ministryofjustice repositories
         if repo.dig("node", "owner", "login").downcase == "ministryofjustice"
           repository_name = repo.dig("node", "name").downcase
-          # Ignore excluded repositories ie the all-org-members team repositories and archived repositories
-          # This is to focus on active repositories that should be tracked
-          if !@org_members_team_repositories.include?(repository_name) && !@github_archived_repositories.include?(repository_name)
+
+          if !is_repo_already_known(repository_name)
             # Store repository
             @github_repositories.push(repository_name)
           end
@@ -86,19 +105,9 @@ class GithubCollaborators
           # as will raise Slack alerts for this later on
           if @github_archived_repositories.include?(repository_name)
             @attached_archived_repositories.push(repository_name)
+            @attached_archived_repositories.sort!
+            @attached_archived_repositories.uniq!
           end
-        end
-      end
-    end
-
-    def add_terraform_repositories(terraform_repositories)
-      logger.debug "add_terraform_repositories"
-      terraform_repositories.each do |terraform_repository_name|
-        # Ignore excluded repositories ie the all-org-members team repositories and archived repositories
-        # This is to focus on active repositories that should be tracked
-        if !@org_members_team_repositories.include?(terraform_repository_name.downcase) && !@github_archived_repositories.include?(terraform_repository_name.downcase)
-          # Store repository
-          @terraform_repositories.push(terraform_repository_name.downcase)
         end
       end
     end
@@ -179,13 +188,14 @@ class GithubCollaborators
       logger.debug "get_repository_permission"
       url = "https://api.github.com/repos/ministryofjustice/#{repository_name.downcase}/collaborators/#{@login}/permission"
       json = GithubCollaborators::HttpClient.new.fetch_json(url)
-      if JSON.parse(json).dig("user", "permissions", "admin")
+      json_data = JSON.parse(json)
+      if json_data.dig("user", "permissions", "admin")
         "admin"
-      elsif JSON.parse(json).dig("user", "permissions", "maintain")
+      elsif json_data.dig("user", "permissions", "maintain")
         "maintain"
-      elsif JSON.parse(json).dig("user", "permissions", "push")
+      elsif json_data.dig("user", "permissions", "push")
         "push"
-      elsif JSON.parse(json).dig("user", "permissions", "triage")
+      elsif json_data.dig("user", "permissions", "triage")
         "triage"
       else
         "pull"
@@ -193,6 +203,15 @@ class GithubCollaborators
     end
 
     private
+
+    # Ignore excluded repositories ie the all-org-members team repositories and archived repositories
+    # This is to focus on active repositories that should be tracked      
+    def is_repo_already_known(repository_name)
+      if @org_members_team_repositories.include?(repository_name) || @github_archived_repositories.include?(repository_name)
+        return true
+      end
+      false
+    end
 
     def full_org_member_query(end_cursor)
       logger.debug "full_org_member_query"

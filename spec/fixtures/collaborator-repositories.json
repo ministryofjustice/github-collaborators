@@ -1,0 +1,38 @@
+{
+  "data": {
+    "user": {
+      "repositories": {
+        "edges": [
+          {
+            "node": {
+              "name": "test-repo1",
+              "owner": {
+                "login": "ministryofjustice"
+              }
+            }
+          },
+          {
+            "node": {
+              "name": "test-repo2",
+              "owner": {
+                "login": "ministryofjustice"
+              }
+            }
+          },
+          {
+            "node": {
+              "name": "test-repo3",
+              "owner": {
+                "login": "ministryofjustice"
+              }
+            }
+          }
+        ],
+        "pageInfo": {
+          "endCursor": null,
+          "hasNextPage": false
+        }
+      }
+    }
+  }
+}
