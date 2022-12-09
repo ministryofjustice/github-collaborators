@@ -1,7 +1,6 @@
 class GithubCollaborators
   describe FullOrgMember do
     context "test FullOrgMember" do
-
       # Stub sleep
       before {
         allow_any_instance_of(GithubCollaborators::GithubGraphQlClient).to receive(:sleep)
@@ -15,11 +14,11 @@ class GithubCollaborators
       let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
       let(:http_client) { double(GithubCollaborators::HttpClient) }
       let(:collaborator_repositories_json) { File.read("spec/fixtures/collaborator-repositories.json") }
-      
+
       url = "https://api.github.com/repos/ministryofjustice/test-repo1/collaborators/someuser1/permission"
-      
+
       query =
-      %[
+        %[
         {
           user(login: "#{TEST_USER_1}") {
             repositories(
@@ -54,19 +53,19 @@ class GithubCollaborators
         test_equal(full_org_member.org, TEST_COLLABORATOR_ORG)
       end
 
-      it "call add_archived_repositories" do  
+      it "call add_archived_repositories" do
         full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
         full_org_member.add_archived_repositories([TEST_REPO_NAME1, TEST_REPO_NAME2])
         test_equal(full_org_member.github_archived_repositories.length, 2)
       end
 
-      it "call add_all_org_members_team_repositories" do  
+      it "call add_all_org_members_team_repositories" do
         full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
         full_org_member.add_all_org_members_team_repositories([TEST_REPO_NAME1, TEST_REPO_NAME2])
         test_equal(full_org_member.org_members_team_repositories.length, 2)
       end
 
-      it "call add_ignore_repository" do  
+      it "call add_ignore_repository" do
         full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
         full_org_member.add_ignore_repository(TEST_REPO_NAME1)
         full_org_member.add_ignore_repository(TEST_REPO_NAME2)
@@ -170,7 +169,7 @@ class GithubCollaborators
       end
 
       def create_repo_permission_json_reply(admin, maintain, push, triage, pull)
-        %[
+        %(
           {
             "user": {
               "permissions": {
@@ -182,9 +181,9 @@ class GithubCollaborators
               }
             }
           }
-        ]
+        )
       end
-      
+
       it "call get_repository_permission expect admin" do
         json = create_repo_permission_json_reply(true, true, true, true, true)
         expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)

@@ -205,7 +205,7 @@ class GithubCollaborators
     private
 
     # Ignore excluded repositories ie the all-org-members team repositories and archived repositories
-    # This is to focus on active repositories that should be tracked      
+    # This is to focus on active repositories that should be tracked
     def is_repo_already_known(repository_name)
       if @org_members_team_repositories.include?(repository_name) || @github_archived_repositories.include?(repository_name)
         return true
