@@ -10,38 +10,38 @@ class GithubCollaborators
         terraform_block = create_terraform_block_review_date_today
         collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
         line = expired.create_line(collaborator)
-        expect(line).to eq("- someuser in <#{REPO_URL}> see <#{HREF}> (today)")
+        test_equal(line, "- someuser in <#{REPO_URL}> see <#{HREF}> (today)")
       end
 
       it "create line when collaborator expired yesterday" do
         terraform_block = create_terraform_block_review_date_yesterday
         collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
         line = expired.create_line(collaborator)
-        expect(line).to eq("- someuser in <#{REPO_URL}> see <#{HREF}> (yesterday)")
+        test_equal(line, "- someuser in <#{REPO_URL}> see <#{HREF}> (yesterday)")
       end
 
       it "create line when collaborator expired two days ago" do
         terraform_block = create_terraform_block_review_date_two_days_ago
         collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
         line = expired.create_line(collaborator)
-        expect(line).to eq("- someuser in <#{REPO_URL}> see <#{HREF}> (2 days ago)")
+        test_equal(line, "- someuser in <#{REPO_URL}> see <#{HREF}> (2 days ago)")
       end
 
       it "create line when collaborator expired no date provided" do
         terraform_block = create_terraform_block_review_date_empty
         collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
         line = expired.create_line(collaborator)
-        expect(line).to eq("- someuser in <#{REPO_URL}> see <#{HREF}> (today)")
+        test_equal(line, "- someuser in <#{REPO_URL}> see <#{HREF}> (today)")
       end
 
       it "singular message" do
         line = expired.singular_message
-        expect(line).to eq("I've found a collaborator whose review date has expired, a pull request has been created to remove the collaborator")
+        test_equal(line, "I've found a collaborator whose review date has expired, a pull request has been created to remove the collaborator")
       end
 
       it "multiple message" do
         line = expired.multiple_message(4)
-        expect(line).to eq("I've found 4 collaborators whose review dates have expired, pull requests have been created to remove these collaborators")
+        test_equal(line, "I've found 4 collaborators whose review dates have expired, pull requests have been created to remove these collaborators")
       end
     end
   end

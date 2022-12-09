@@ -44,13 +44,13 @@ describe HelperModule do
       expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
       expect(graphql_client).to receive(:run_query).with(query).and_return(pull_requests_json)
       response = [{title: "Pull request 1", files: ["somefile1", "somefile2", "somefile3"]}, {title: "Pull request 2", files: ["somefile4", "somefile5", "somefile6"]}]
-      expect(helper_module.get_pull_requests).to eq(response)
+      test_equal(helper_module.get_pull_requests, response)
     end
 
     it "call get_pull_requests when no pull requests exist" do
       expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
       expect(graphql_client).to receive(:run_query).with(query).and_return(no_pull_requests_json)
-      expect(helper_module.get_pull_requests).to eq([])
+      test_equal(helper_module.get_pull_requests, [])
     end
   end
 end

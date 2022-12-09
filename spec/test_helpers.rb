@@ -2,6 +2,14 @@ module Helpers
   include Constants
   include TestConstants
 
+  def test_equal(value, expected_value)
+    expect(value).to eq(expected_value)
+  end
+
+  def test_not_equal(value, expected_value)
+    expect(value).not_to eq(expected_value)
+  end
+
   def create_collaborator_data(review_date)
     {
       login: TEST_COLLABORATOR_LOGIN,

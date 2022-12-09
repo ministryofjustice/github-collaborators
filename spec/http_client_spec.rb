@@ -89,13 +89,13 @@ class GithubCollaborators
       it "call fetch and return a good response with empty body" do
         stub_request(:get, TEST_URL).to_return(body: "", status: 200)
         reply = hc.fetch_json(TEST_URL)
-        expect(reply).to eq("")
+        test_equal(reply, "")
       end
 
       it "call fetch and return a good response with body" do
         stub_request(:get, TEST_URL).to_return(body: BODY, status: 200)
         reply = hc.fetch_json(TEST_URL)
-        expect(reply).to eq(BODY)
+        test_equal(reply, BODY)
       end
 
       it "call post" do
