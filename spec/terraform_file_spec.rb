@@ -112,7 +112,7 @@ class GithubCollaborators
         terraform_file.restore_terraform_blocks
         test_equal(terraform_file.terraform_blocks.length, 1)
       end
-      
+
       it "call write_to_file" do
         expected_output = create_test_file_template
         terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
