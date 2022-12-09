@@ -13,4 +13,7 @@ module TestConstants
   TEST_USER_2 = "someuser2"
   TEST_USER_3 = "someuser3"
   TEST_REPO_NAME = "test-repo"
+  TEST_REPO_NAME1 = "test-repo1"
+  TEST_REPO_NAME2 = "test-repo2"
+  TEST_REPO_NAME3 = "test-repo3"
 end
