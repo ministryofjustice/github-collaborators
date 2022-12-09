@@ -71,9 +71,13 @@ class GithubCollaborators
       it "call get_repository_name" do
         File.write(TEST_FILE, original_file)
         terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
-        terraform_file.add_org_member_collaborator(collaborator1, TEST_COLLABORATOR_PERMISSION)
         test_equal(terraform_file.get_repository_name, TEST_REPO_NAME)
         File.delete(TEST_FILE)
+      end
+
+      it "call get_repository_name when repo doesn't exist" do
+        terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
+        test_equal(terraform_file.get_repository_name, "")
       end
 
       it "call create_terraform_collaborator_blocks" do
