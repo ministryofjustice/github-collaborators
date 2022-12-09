@@ -82,7 +82,7 @@ class GithubCollaborators
         test_equal(terraform_block.review_after, review_date)
       end
 
-      it "call add_missing_collaborator_data" do
+      it "call copy_block" do
         review_date = (Date.today + 90).strftime(DATE_FORMAT)
         terraform_block1 = GithubCollaborators::TerraformBlock.new
         terraform_block1.add_terraform_file_collaborator_data({})
