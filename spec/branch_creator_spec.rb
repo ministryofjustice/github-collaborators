@@ -1,6 +1,12 @@
 class GithubCollaborators
-  describe BranchCreator do
+  class Branch
+    attr_reader :name
+    def initialize(branch_name)
+      @name = branch_name
+    end
+  end
 
+  describe BranchCreator do
     # Stub sleep
     before {
       allow_any_instance_of(GithubCollaborators::BranchCreator).to receive(:sleep)
@@ -52,13 +58,6 @@ class GithubCollaborators
     end
 
     context "call check_branch_name_is_valid" do
-      class Branch
-        attr_reader :name
-        def initialize(branch_name)
-          @name = branch_name
-        end
-      end
-
       it "when branch name is valid" do
         allow_any_instance_of(Git::Base).to receive(:fetch)
         branch_name = "branch-name"

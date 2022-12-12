@@ -1,7 +1,6 @@
 class GithubCollaborators
   describe Organization do
     context "test organization" do
-      
       it "initialize object" do
         repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 5)
         repo3 = GithubCollaborators::Repository.new(TEST_REPO_NAME3, 0)
@@ -17,7 +16,7 @@ class GithubCollaborators
         test_equal(organization.archived_repositories.length, 2)
         test_equal(organization.archived_repositories, [TEST_REPO_NAME1, TEST_REPO_NAME2])
       end
-      
+
       it "call is_collaborator_an_org_member when collaborator is not an org member" do
         allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
         allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2])
@@ -66,7 +65,7 @@ class GithubCollaborators
       collaborator2 = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
       terraform_block = create_collaborator_with_login(TEST_USER_3)
       collaborator3 = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
-      
+
       it "call create_full_org_members when collaborators are not org members" do
         allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
         allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])

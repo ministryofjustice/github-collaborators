@@ -306,7 +306,7 @@ class GithubCollaborators
       end
 
       # it "call check_repository_permissions_match ??" do
-# 
+      #
       # end
 
       after do
