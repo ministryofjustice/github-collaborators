@@ -12,11 +12,11 @@ class GithubCollaborators
       # Grab the Org members
       @organization_members = get_all_organisation_members
 
-      # Grab the Org repositories
-      @repositories = get_active_repositories
-
       # Grab the Org archived repositories
       @archived_repositories = get_archived_repositories
+
+      # Grab the Org repositories
+      @repositories = get_active_repositories
 
       # Get all the outside collaborators from GitHub per repo that has an outside collaborator
       @repositories.each do |repository|
@@ -62,6 +62,12 @@ class GithubCollaborators
       false
     end
 
+    def add_full_org_member(login)
+      logger.debug "add_full_org_member"
+      full_org_member = GithubCollaborators::FullOrgMember.new(login.downcase)
+      @full_org_members.push(full_org_member)
+    end
+
     def create_full_org_members(terraform_collaborators)
       logger.debug "create_full_org_members"
 
@@ -104,15 +110,14 @@ class GithubCollaborators
 
     private
 
-    # Checks and stores which collaborator have org membership
+    # Check and store collaborator that have full §org membership
     def add_new_collaborator_and_org_member(new_collaborator_login)
       logger.debug "add_new_collaborator_and_org_member"
 
-      # See if collaborator already exists
-      # If it doesn't create a new collaborator
-      if is_collaborator_a_full_org_member(new_collaborator_login.downcase) == false
-        full_org_member = GithubCollaborators::FullOrgMember.new(new_collaborator_login.downcase)
-        @full_org_members.push(full_org_member)
+      new_collaborator_login = new_collaborator_login.downcase
+
+      if is_collaborator_a_full_org_member(new_collaborator_login) == false
+        add_full_org_member(new_collaborator_login)
       end
     end
   end
