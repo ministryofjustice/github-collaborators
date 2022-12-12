@@ -1,5 +1,6 @@
 class GithubCollaborators
   TEST_TITLE = "call post_slack_message when have a collaborator"
+
   describe SlackNotifier do
     context "test SlackNotifier" do
       it "call post_slack_message when collaborators is zero" do
