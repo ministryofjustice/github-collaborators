@@ -238,6 +238,77 @@ class GithubCollaborators
         test_equal(permission, "pull")
       end
 
+      it "call do_repositories_match when added no repositories" do
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        test_equal(full_org_member.do_repositories_match, true)
+      end
+
+      it "call do_repositories_match when add only github repositories" do
+        expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+        expect(graphql_client).to receive(:run_query).with(query).and_return(collaborator_repositories_json)
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        full_org_member.get_full_org_member_repositories
+        test_equal(full_org_member.github_repositories.length, 3)
+        test_equal(full_org_member.do_repositories_match, false)
+      end
+
+      it "call do_repositories_match when add only terraform repositories" do
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
+        test_equal(full_org_member.terraform_repositories.length, 1)
+        test_equal(full_org_member.do_repositories_match, false)
+      end
+
+      it "call do_repositories_match when github and terraform repositories do not match but a repo is an all org team repo" do
+        expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+        expect(graphql_client).to receive(:run_query).with(query).and_return(collaborator_repositories_json)
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        full_org_member.add_all_org_members_team_repositories([TEST_REPO_NAME1])
+        full_org_member.get_full_org_member_repositories
+        full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
+        test_equal(full_org_member.github_repositories.length, 2)
+        test_equal(full_org_member.terraform_repositories.length, 0)
+        test_equal(full_org_member.do_repositories_match, false)
+      end
+
+      it "call do_repositories_match when github and terraform repositories do not match" do
+        expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+        expect(graphql_client).to receive(:run_query).with(query).and_return(collaborator_repositories_json)
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        full_org_member.get_full_org_member_repositories
+        full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
+        test_equal(full_org_member.github_repositories.length, 3)
+        test_equal(full_org_member.terraform_repositories.length, 1)
+        test_equal(full_org_member.do_repositories_match, false)
+      end
+
+      it "call do_repositories_match when github and terraform repositories do match" do
+        expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+        expect(graphql_client).to receive(:run_query).with(query).and_return(collaborator_repositories_json)
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        full_org_member.get_full_org_member_repositories
+        full_org_member.add_terraform_repositories([TEST_REPO_NAME2, TEST_REPO_NAME1, TEST_REPO_NAME3])
+        test_equal(full_org_member.github_repositories.length, 3)
+        test_equal(full_org_member.terraform_repositories.length, 3)
+        test_equal(full_org_member.do_repositories_match, true)
+      end
+
+      it "call do_repositories_match when github and terraform repositories do match but a repo is an all org team repo" do
+        expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+        expect(graphql_client).to receive(:run_query).with(query).and_return(collaborator_repositories_json)
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        full_org_member.add_all_org_members_team_repositories([TEST_REPO_NAME1])
+        full_org_member.get_full_org_member_repositories
+        full_org_member.add_terraform_repositories([TEST_REPO_NAME2, TEST_REPO_NAME1, TEST_REPO_NAME3])
+        test_equal(full_org_member.github_repositories.length, 2)
+        test_equal(full_org_member.terraform_repositories.length, 2)
+        test_equal(full_org_member.do_repositories_match, true)
+      end
+
+      # it "call check_repository_permissions_match ??" do
+# 
+      # end
+
       after do
         ENV.delete("ADMIN_GITHUB_TOKEN")
       end
