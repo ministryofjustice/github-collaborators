@@ -22,6 +22,24 @@ class GithubCollaborators
         terraform_file2
       end
 
+      it "call start" do
+        allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
+        expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+        expect(terraform_files).to receive(:get_terraform_files).and_return([])
+        expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
+        expect(organization).to receive(:create_full_org_members)
+        expect(terraform_files).not_to receive(:remove_file)
+        outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+
+        expect(outside_collaborators).to receive(:remove_empty_files)
+        expect(outside_collaborators).to receive(:archived_repository_check)
+        expect(outside_collaborators).to receive(:compare_terraform_and_github)
+        expect(outside_collaborators).to receive(:collaborator_checks)
+        expect(outside_collaborators).to receive(:full_org_members_check)
+        expect(outside_collaborators).to receive(:print_full_org_member_collaborators)
+        outside_collaborators.start
+      end
+
       it "call remove_empty_files when no empty file exists" do
         file = create_terraform_file
         allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
