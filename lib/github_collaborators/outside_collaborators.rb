@@ -12,8 +12,10 @@ class GithubCollaborators
 
       # Create Terraform file collaborators as Collaborator objects
       @collaborators = []
-      @terraform_files.terraform_files.each do |terraform_file|
-        terraform_file.terraform_blocks.each do |terraform_block|
+      terraform_files = @terraform_files.get_terraform_files
+      terraform_files.each do |terraform_file|
+        terraform_blocks = terraform_file.get_terraform_blocks
+        terraform_blocks.each do |terraform_block|
           collaborator = GithubCollaborators::Collaborator.new(terraform_block, terraform_file.filename.downcase)
           collaborator.check_for_issues
           @collaborators.push(collaborator)
@@ -32,7 +34,7 @@ class GithubCollaborators
       @unknown_collaborators_on_github = []
     end
 
-    # Entry point from Ruby script, keep the order as-is the compare function will ne
+    # Entry point from Ruby script, keep the order as-is
     def start
       remove_empty_files
       archived_repository_check
@@ -41,8 +43,6 @@ class GithubCollaborators
       full_org_members_check
       print_full_org_member_collaborators
     end
-
-    private
 
     # Print out any differences between GitHub and terraform files
     def compare_terraform_and_github
@@ -328,8 +328,10 @@ class GithubCollaborators
 
       archived_repositories = []
 
-      @terraform_files.terraform_files.each do |terraform_file|
-        if @organization.archived_repositories.include?(terraform_file.filename.downcase)
+      terraform_files = @terraform_files.get_terraform_files
+      the_archived_repositories = @organization.get_org_archived_repositories
+      terraform_files.each do |terraform_file|
+        if the_archived_repositories.include?(terraform_file.filename.downcase)
           archived_repositories.push(terraform_file.filename.downcase)
         end
       end
@@ -355,8 +357,10 @@ class GithubCollaborators
 
         # Remove the archived file from any Collaborator files objects
         edited_files.each do |archived_repository_name|
+          # Strip away prefix and file type
+          repository_name = File.basename(archived_repository_name, ".tf")
           @collaborators.each do |collaborator|
-            if collaborator.repository.downcase == archived_repository_name.downcase
+            if collaborator.repository.downcase == repository_name.downcase
               index = @collaborators.index(collaborator)
               @collaborators.delete_at(index)
             end

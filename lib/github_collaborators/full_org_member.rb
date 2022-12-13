@@ -154,7 +154,7 @@ class GithubCollaborators
       false
     end
 
-    def check_repository_permissions_match(terraform_files)
+    def check_repository_permissions_match(terraform_files_obj)
       logger.debug "check_repository_permissions_match"
 
       permission_mismatch = false
@@ -162,7 +162,8 @@ class GithubCollaborators
       @github_repositories.each do |github_repository_name|
         github_repository_name = github_repository_name.downcase
         # Find the matching Terraform file
-        terraform_files.terraform_files.each do |terraform_file|
+        terraform_files = terraform_files_obj.get_terraform_files
+        terraform_files.each do |terraform_file|
           # Skip this iteration if file name is in the array, the array
           # contains repositories / Terraform files that are not on the GitHub yet
           if !@ignore_repositories.include?(terraform_file.filename.downcase) && terraform_file.filename.downcase == tf_safe(github_repository_name)

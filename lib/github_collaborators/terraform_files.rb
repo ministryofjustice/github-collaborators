@@ -117,7 +117,7 @@ class GithubCollaborators
     include Logging
     include HelperModule
 
-    attr_reader :terraform_blocks, :filename
+    attr_reader :filename
 
     def initialize(repository_name, folder)
       logger.debug "initialize"
@@ -128,6 +128,11 @@ class GithubCollaborators
       @terraform_file_data = []
       @terraform_modified_blocks = []
       @add_removed_terraform_blocks = []
+    end
+
+    def get_terraform_blocks
+      logger.debug "get_terraform_blocks"
+      return @terraform_blocks
     end
 
     def revert_terraform_blocks
@@ -378,14 +383,12 @@ class GithubCollaborators
   class TerraformFiles
     include Logging
     include HelperModule
-    attr_reader :terraform_files
 
     def initialize
       logger.debug "initialize"
 
       # Array Terraform files
       @terraform_files = []
-      # exclude_files = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
 
       # Go through all the Terraform files
       fetch_terraform_files.each do |terraform_file_path|
@@ -416,7 +419,7 @@ class GithubCollaborators
 
     def remove_file(file_name)
       logger.debug "remove_file"
-      path_to_file = "terraform/#{file_name.downcase}.tf"
+      path_to_file = "#{TERRAFORM_DIR}/#{file_name.downcase}.tf"
       if File.exist?(path_to_file)
         File.delete(path_to_file)
         @terraform_files.delete_if { |terraform_file| terraform_file.filename.downcase == file_name.downcase }
@@ -471,7 +474,8 @@ class GithubCollaborators
       logger.debug "get_empty_files"
       empty_files = []
       @terraform_files.each do |terraform_file|
-        if terraform_file.terraform_blocks.length == 0
+        terraform_blocks = terraform_file.get_terraform_blocks
+        if terraform_blocks.length == 0
           empty_files.push(terraform_file.filename.downcase)
         end
       end
@@ -504,12 +508,18 @@ class GithubCollaborators
       collaborators_in_file = []
       @terraform_files.each do |terraform_file|
         if terraform_file.filename.downcase == tf_safe(repository_name.downcase)
-          terraform_file.terraform_blocks.each do |block|
+          terraform_blocks = terraform_file.get_terraform_blocks
+          terraform_blocks.each do |block|
             collaborators_in_file.push(block.username.downcase)
           end
         end
       end
       collaborators_in_file
+    end
+
+    def get_terraform_files
+      logger.debug "get_terraform_files"
+      return @terraform_files
     end
 
     # Return absolute paths for the Terraform files in the Terraform directory

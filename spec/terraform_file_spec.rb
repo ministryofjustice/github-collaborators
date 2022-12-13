@@ -13,21 +13,25 @@ class GithubCollaborators
         terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
         terraform_file.add_org_member_collaborator(collaborator1, TEST_COLLABORATOR_PERMISSION)
         terraform_file.add_org_member_collaborator(collaborator2, TEST_COLLABORATOR_PERMISSION)
-        test_equal(terraform_file.terraform_blocks.length, 2)
+        terraform_blocks = terraform_file.get_terraform_blocks
+        test_equal(terraform_blocks.length, 2)
       end
 
       it "call extend_review_date and revert_terraform_blocks" do
         terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
         terraform_file.add_org_member_collaborator(collaborator1, TEST_COLLABORATOR_PERMISSION)
-        terraform_file.terraform_blocks.each do |terraform_block|
+        terraform_blocks = terraform_file.get_terraform_blocks
+        terraform_blocks.each do |terraform_block|
           test_equal(terraform_block.review_after, review_date)
         end
         terraform_file.extend_review_date(TEST_COLLABORATOR_LOGIN)
-        terraform_file.terraform_blocks.each do |terraform_block|
+        terraform_blocks = terraform_file.get_terraform_blocks
+        terraform_blocks.each do |terraform_block|
           test_equal(terraform_block.review_after, new_review_date)
         end
         terraform_file.revert_terraform_blocks
-        terraform_file.terraform_blocks.each do |terraform_block|
+        terraform_blocks = terraform_file.get_terraform_blocks
+        terraform_blocks.each do |terraform_block|
           test_equal(terraform_block.review_after, review_date)
         end
       end
@@ -36,9 +40,11 @@ class GithubCollaborators
         terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
         terraform_file.add_org_member_collaborator(collaborator1, TEST_COLLABORATOR_PERMISSION)
         terraform_file.add_org_member_collaborator(collaborator2, TEST_COLLABORATOR_PERMISSION)
-        test_equal(terraform_file.terraform_blocks.length, 2)
+        terraform_blocks = terraform_file.get_terraform_blocks
+        test_equal(terraform_blocks.length, 2)
         terraform_file.remove_collaborator(TEST_COLLABORATOR_LOGIN)
-        test_equal(terraform_file.terraform_blocks.length, 1)
+        terraform_blocks = terraform_file.get_terraform_blocks
+        test_equal(terraform_blocks.length, 1)
       end
 
       it "call get_collaborator_permission when collaborator exists" do
@@ -55,15 +61,18 @@ class GithubCollaborators
       it "call change_collaborator_permission and revert_terraform_blocks" do
         terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
         terraform_file.add_org_member_collaborator(collaborator1, TEST_COLLABORATOR_PERMISSION)
-        terraform_file.terraform_blocks.each do |terraform_block|
+        terraform_blocks = terraform_file.get_terraform_blocks
+        terraform_blocks.each do |terraform_block|
           test_equal(terraform_block.permission, TEST_COLLABORATOR_PERMISSION)
         end
         terraform_file.change_collaborator_permission(TEST_COLLABORATOR_LOGIN, "push")
-        terraform_file.terraform_blocks.each do |terraform_block|
+        terraform_blocks = terraform_file.get_terraform_blocks
+        terraform_blocks.each do |terraform_block|
           test_equal(terraform_block.permission, "push")
         end
         terraform_file.revert_terraform_blocks
-        terraform_file.terraform_blocks.each do |terraform_block|
+        terraform_blocks = terraform_file.get_terraform_blocks
+        terraform_blocks.each do |terraform_block|
           test_equal(terraform_block.permission, TEST_COLLABORATOR_PERMISSION)
         end
       end
@@ -85,7 +94,8 @@ class GithubCollaborators
         terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
         terraform_file.create_terraform_collaborator_blocks
         collaborators_in_file = []
-        terraform_file.terraform_blocks.each do |terraform_block|
+        terraform_blocks = terraform_file.get_terraform_blocks
+        terraform_blocks.each do |terraform_block|
           collaborators_in_file.push(terraform_block.username)
         end
         expected_collaborators = [TEST_USER_1, TEST_USER_2]
@@ -96,25 +106,30 @@ class GithubCollaborators
       it "call read_file when no file exists" do
         terraform_file = GithubCollaborators::TerraformFile.new("norepo", TERRAFORM_DIR)
         terraform_file.read_file
-        test_equal(terraform_file.terraform_blocks.length, 0)
+        terraform_blocks = terraform_file.get_terraform_blocks
+        test_equal(terraform_blocks.length, 0)
       end
 
       it "call add_org_member_collaborator and restore_terraform_blocks" do
         terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
         terraform_file.add_org_member_collaborator(collaborator1, TEST_COLLABORATOR_PERMISSION)
-        test_equal(terraform_file.terraform_blocks.length, 1)
+        terraform_blocks = terraform_file.get_terraform_blocks
+        test_equal(terraform_blocks.length, 1)
         terraform_file.restore_terraform_blocks
-        test_equal(terraform_file.terraform_blocks.length, 0)
+        terraform_blocks = terraform_file.get_terraform_blocks
+        test_equal(terraform_blocks.length, 0)
       end
 
       it "call remove_collaborator and restore_terraform_blocks" do
         terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
         terraform_file.add_org_member_collaborator(collaborator1, TEST_COLLABORATOR_PERMISSION)
         terraform_file.add_org_member_collaborator(collaborator2, TEST_COLLABORATOR_PERMISSION)
-        test_equal(terraform_file.terraform_blocks.length, 2)
+        terraform_blocks = terraform_file.get_terraform_blocks
+        test_equal(terraform_blocks.length, 2)
         terraform_file.remove_collaborator(TEST_COLLABORATOR_LOGIN)
         terraform_file.restore_terraform_blocks
-        test_equal(terraform_file.terraform_blocks.length, 1)
+        terraform_blocks = terraform_file.get_terraform_blocks
+        test_equal(terraform_blocks.length, 1)
       end
 
       it "call write_to_file" do

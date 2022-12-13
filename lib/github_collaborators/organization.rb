@@ -38,6 +38,11 @@ class GithubCollaborators
       @all_org_members_team_repositories = get_all_org_members_team_repositories
     end
 
+    def get_org_archived_repositories
+      logger.debug "get_org_archived_repositories"
+      @archived_repositories
+    end
+
     def is_collaborator_a_full_org_member(collaborator_name)
       logger.debug "is_collaborator_a_full_org_member"
       user_exists = false
