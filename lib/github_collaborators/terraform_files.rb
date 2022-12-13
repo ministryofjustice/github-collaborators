@@ -132,7 +132,7 @@ class GithubCollaborators
 
     def get_terraform_blocks
       logger.debug "get_terraform_blocks"
-      return @terraform_blocks
+      @terraform_blocks
     end
 
     def revert_terraform_blocks
@@ -519,7 +519,7 @@ class GithubCollaborators
 
     def get_terraform_files
       logger.debug "get_terraform_files"
-      return @terraform_files
+      @terraform_files
     end
 
     # Return absolute paths for the Terraform files in the Terraform directory

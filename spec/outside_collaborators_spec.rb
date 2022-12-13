@@ -16,7 +16,7 @@ class GithubCollaborators
 
       def create_empty_terraform_file
         stub_const("Constants::TERRAFORM_DIR", "spec/fixtures")
-        terraform_file2 = GithubCollaborators::TerraformFile.new("empty-file", TERRAFORM_DIR)
+        terraform_file2 = GithubCollaborators::TerraformFile.new(EMPTY_REPOSITORY_NAME, TERRAFORM_DIR)
         terraform_file2.read_file
         terraform_file2.get_repository_name
         terraform_file2
@@ -42,8 +42,8 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([file])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).to receive(:get_empty_files).and_return(["empty-file"])
-        expect(terraform_files).to receive(:remove_file).with("empty-file")
+        expect(terraform_files).to receive(:get_empty_files).and_return([EMPTY_REPOSITORY_NAME])
+        expect(terraform_files).to receive(:remove_file).with(EMPTY_REPOSITORY_NAME)
         allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("delete-empty-files", ["terraform/empty-file.tf"], EMPTY_FILES_PR_TITLE, "", TYPE_DELETE)
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
         outside_collaborators.remove_empty_files
@@ -56,7 +56,7 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([file])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).to receive(:get_empty_files).and_return(["empty-file"])
+        expect(terraform_files).to receive(:get_empty_files).and_return([EMPTY_REPOSITORY_NAME])
         allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with("empty-file.tf", EMPTY_FILES_PR_TITLE).and_return(true)
         expect(terraform_files).not_to receive(:remove_file)
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new

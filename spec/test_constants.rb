@@ -8,6 +8,7 @@ module TestConstants
   TEST_COLLABORATOR_ADDED_BY = "other user"
   TEST_COLLABORATOR_PERMISSION = "maintain"
   REPOSITORY_NAME = "somerepo"
+  EMPTY_REPOSITORY_NAME = "empty-file"
   TEST_FILE = "terraform/test-repo.tf"
   TEST_USER_1 = "someuser1"
   TEST_USER_2 = "someuser2"
