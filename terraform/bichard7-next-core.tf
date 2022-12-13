@@ -10,7 +10,7 @@ module "bichard7-next-core" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2022-12-31"
+      review_after = "2023-12-31"
     },
     {
       github_user  = "sioldham"
@@ -20,7 +20,7 @@ module "bichard7-next-core" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2022-12-31"
+      review_after = "2023-12-31"
     },
     {
       github_user  = "emadkaramad"
@@ -30,7 +30,7 @@ module "bichard7-next-core" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2022-12-31"
+      review_after = "2023-12-31"
     },
     {
       github_user  = "daviesjamie"
@@ -40,7 +40,7 @@ module "bichard7-next-core" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2022-12-31"
+      review_after = "2023-12-31"
     },
     {
       github_user  = "monotypical"
@@ -50,7 +50,7 @@ module "bichard7-next-core" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2022-12-31"
+      review_after = "2023-12-31"
     },
     {
       github_user  = "jaskaransarkaria"
@@ -60,7 +60,7 @@ module "bichard7-next-core" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2022-12-31"
+      review_after = "2023-12-31"
     },
     {
       github_user  = "c-gyorfi"
@@ -70,7 +70,7 @@ module "bichard7-next-core" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2022-12-31"
+      review_after = "2023-12-31"
     },
     {
       github_user  = "tomvaughan77"
@@ -80,7 +80,7 @@ module "bichard7-next-core" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2022-12-31"
+      review_after = "2023-12-31"
     },
     {
       github_user  = "joe-fol"
@@ -90,7 +90,7 @@ module "bichard7-next-core" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2022-12-31"
+      review_after = "2023-12-31"
     },
     {
       github_user  = "donnyhyon"
@@ -100,7 +100,27 @@ module "bichard7-next-core" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2022-12-31"
+      review_after = "2023-12-31"
+    },
+    {
+      github_user  = "agnieszkazbikowska-madetech"
+      permission   = "push"
+      name         = "Agnieszka Zbikowska"
+      email        = "agnieszka.zbikowska@madetech.com"
+      org          = "Madetech"
+      reason       = "CJSE Bichard Development"
+      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      review_after = "2023-12-31"
+    },
+    {
+      github_user  = "ian-antking"
+      permission   = "push"
+      name         = "Ian King"
+      email        = "ian.king@madetech.com"
+      org          = "Madetech"
+      reason       = "CJSE Bichard Development"
+      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      review_after = "2023-12-31"
     },
   ]
 }
