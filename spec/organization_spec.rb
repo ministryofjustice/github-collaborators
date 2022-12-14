@@ -101,6 +101,28 @@ class GithubCollaborators
         organization.create_full_org_members([collaborator1, collaborator2, collaborator3])
         test_equal(organization.full_org_members.length, 3)
       end
+
+      it "call get_org_archived_repositories when empty" do
+        allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
+        allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
+        allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([])
+        allow_any_instance_of(HelperModule).to receive(:get_archived_repositories).and_return([])
+        allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])
+        allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:get_full_org_member_repositories)
+        organization = GithubCollaborators::Organization.new
+        test_equal(organization.get_org_archived_repositories.length, 0)
+      end
+
+      it "call get_org_archived_repositories when there are archived_repositories" do
+        allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
+        allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
+        allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([])
+        allow_any_instance_of(HelperModule).to receive(:get_archived_repositories).and_return([TEST_REPO_NAME1, TEST_REPO_NAME2])
+        allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])
+        allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:get_full_org_member_repositories)
+        organization = GithubCollaborators::Organization.new
+        test_equal(organization.get_org_archived_repositories.length, 2)
+      end
     end
   end
 end

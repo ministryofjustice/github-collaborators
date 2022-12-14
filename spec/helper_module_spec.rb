@@ -744,4 +744,28 @@ describe HelperModule do
       test_equal(collaborators.length, 0)
     end
   end
+
+  context "call print_comparison" do
+    it "call print_comparison" do
+      helper_module.print_comparison([TEST_USER_2], [TEST_USER_2], TEST_REPO_NAME2)
+    end
+  end
+
+  context "test find_unknown_collaborators" do
+    it "when no collaborator in terraform file" do  
+      unknown_collaborators = helper_module.find_unknown_collaborators([], [TEST_USER_2], TEST_REPO_NAME2)
+      test_equal(unknown_collaborators.length, 1)
+    end
+
+    it "when no collaborator on github" do
+      unknown_collaborators = helper_module.find_unknown_collaborators([TEST_USER_2], [], TEST_REPO_NAME2)
+      test_equal(unknown_collaborators.length, 0)
+    end
+
+    it "when collaborator on github and in terraform file" do
+      unknown_collaborators = helper_module.find_unknown_collaborators([TEST_USER_2], [TEST_USER_2], TEST_REPO_NAME2)
+      test_equal(unknown_collaborators.length, 0)
+    end
+  end
+
 end

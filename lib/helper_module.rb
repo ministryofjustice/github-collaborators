@@ -694,4 +694,46 @@ module HelperModule
       }
     ]
   end
+
+  # Prints out the comparison of GitHub and Terraform collaborators when there is a mismatch
+  def print_comparison(collaborators_in_file, collaborators_on_github, repository_name)
+    logger.debug "print_comparison"
+    logger.warn "=" * 37
+    logger.warn "There is a difference in Outside Collaborators for the #{repository_name} repository"
+    logger.warn "GitHub Outside Collaborators: #{collaborators_on_github.length}"
+    logger.warn "Terraform Outside Collaborators: #{collaborators_in_file.length}"
+    logger.warn "Collaborators on GitHub:"
+    collaborators_on_github.each { |gc_name| logger.warn "    #{gc_name.downcase}" }
+    logger.warn "Collaborators in Terraform:"
+    collaborators_in_file.each { |tc_name| logger.warn "    #{tc_name.downcase}" }
+    logger.warn "=" * 37
+  end
+
+  # Compare each collaborator name on a Github repo against the
+  # Terraform file collaborator names to find unknown collaborators
+  def find_unknown_collaborators(collaborators_in_file, collaborators_on_github, repository_name)
+    logger.debug "find_unknown_collaborators"
+
+    unknown_collaborators = []
+
+    # Loop through GitHub Collaborators
+    collaborators_on_github.each do |gc_name|
+      gc_name = gc_name.downcase
+      found_name = false
+
+      # Loop through Terraform file collaborators
+      collaborators_in_file.each do |tc_name|
+        if tc_name.downcase == gc_name
+          # Found a GitHub Collaborator name in Terraform collaborator name
+          found_name = true
+        end
+      end
+
+      if found_name == false
+        # Didn't find a match ie unknown collaborator
+        unknown_collaborators.push(gc_name)
+      end
+    end
+    return unknown_collaborators
+  end
 end

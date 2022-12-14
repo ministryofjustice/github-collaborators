@@ -50,11 +50,14 @@ class GithubCollaborators
 
       # For each repository
       @organization.repositories.each do |repository|
+
+        repository_name = repository.name.downcase
+
         # Get the GitHub collaborators for the repository
         collaborators_on_github = repository.outside_collaborators_names
 
         # Get the Terraform defined outside collaborators for the repository
-        collaborators_in_file = @terraform_files.get_collaborators_in_file(repository.name.downcase)
+        collaborators_in_file = @terraform_files.get_collaborators_in_file(repository_name)
 
         # Some Terraform collaborators have been upgraded to full organization members,
         # get them and add them to the collaborator GitHub array
@@ -70,9 +73,30 @@ class GithubCollaborators
         if collaborators_on_github.length == 0 && collaborators_in_file.length == 0
           next
         else
-          # Print out the difference
-          do_comparison(collaborators_in_file, collaborators_on_github, repository.name.downcase)
+          collaborators_on_github.sort!
+          collaborators_in_file.sort!
+    
+          if collaborators_in_file != collaborators_on_github
+            print_comparison(collaborators_in_file, collaborators_on_github, repository_name)
+            unknown_collaborators = find_unknown_collaborators(collaborators_in_file, collaborators_on_github, repository_name)
+            if unknown_collaborators.length > 0
+              create_unknown_collaborators(unknown_collaborators, repository_name)
+            end
+            check_repository_invites(repository_name)
+          end
         end
+      end
+    end
+
+    def create_unknown_collaborators(unknown_collaborators, repository_name)
+      logger.debug "create_unknown_collaborators"
+      unknown_collaborators.each do |collaborator_name|
+        # Create a Collaborator object with an issue
+        terraform_block = GithubCollaborators::TerraformBlock.new
+        terraform_block.add_unknown_collaborator_data(collaborator_name)
+        collaborator = GithubCollaborators::Collaborator.new(terraform_block, repository_name.downcase)
+        collaborator.add_issue("missing")
+        @collaborators.push(collaborator)
       end
     end
 
@@ -494,89 +518,38 @@ class GithubCollaborators
       end
     end
 
-    # Prints out the comparison of GitHub and Terraform collaborators when there is a mismatch
-    def do_comparison(collaborators_in_file, collaborators_on_github, repository_name)
-      logger.debug "do_comparison"
+    def check_repository_invites(repository_name)
+      logger.debug "check_repository_invites"
 
-      collaborators_on_github.sort!
-      collaborators_in_file.sort!
-      repository_name = repository_name.downcase
+      # Get the repository invites
+      repository_invites = get_repository_invites(repository_name)
 
-      if collaborators_in_file != collaborators_on_github
-        logger.warn "=" * 37
-        logger.warn "There is a difference in Outside Collaborators for the #{repository_name} repository"
-        logger.warn "GitHub Outside Collaborators: #{collaborators_on_github.length}"
-        logger.warn "Terraform Outside Collaborators: #{collaborators_in_file.length}"
-        logger.warn "Collaborators on GitHub:"
-        collaborators_on_github.each { |gc_name| logger.warn "    #{gc_name.downcase}" }
-        logger.warn "Collaborators in Terraform:"
-        collaborators_in_file.each { |tc_name| logger.warn "    #{tc_name.downcase}" }
+      # Check the repository invites
+      # using a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
+      repository_invites.each do |invite|
+        invite_login = invite[:login].downcase
+        invite_expired = invite[:expired]
 
-        find_unknown_collaborators(collaborators_on_github, collaborators_in_file, repository_name)
-
-        # Get the repository invites
-        repository_invites = get_repository_invites(repository_name)
-
-        # Check the repository invites
-        # using a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
-        repository_invites.each do |invite|
-          invite_login = invite[:login].downcase
-          invite_expired = invite[:expired]
-
-          # Compare Terraform file collaborators name against an open invite and
-          # print where an invite is pending
-          if collaborators_in_file.include?(invite_login) && invite_expired == false
-            logger.info "There is a pending invite for #{invite_login} on #{repository_name}."
-          end
-
-          if collaborators_in_file.include?(invite_login) && invite_expired
-            logger.info "The invite for known collaborator #{invite_login} on #{repository_name} has expired."
-          end
-
-          # Store unknown collaborator invite username to raise Slack message later on
-          # Store as a hash like this { :login => "name", :repository => "repo_name" }
-          if !collaborators_in_file.include?(invite_login)
-            @unknown_collaborators_on_github.push({login: invite_login, repository: repository_name})
-            logger.warn "Unknown collaborator #{invite_login} invited to repository: #{repository_name}"
-          end
-
-          # Delete expired invites
-          if invite_expired
-            delete_expired_invite(repository_name, invite_login)
-          end
+        # Compare Terraform file collaborators name against an open invite and
+        # print where an invite is pending
+        if collaborators_in_file.include?(invite_login) && invite_expired == false
+          logger.info "There is a pending invite for #{invite_login} on #{repository_name}."
         end
 
-        logger.warn "=" * 37
-      end
-    end
-
-    # Compare each collaborator name on a Github repo against the Terraform file
-    # collaborator names to find unknown collaborators
-    def find_unknown_collaborators(collaborators_on_github, collaborators_in_file, repository_name)
-      logger.debug "find_unknown_collaborators"
-
-      # Loop through GitHub Collaborators
-      collaborators_on_github.each do |gc_name|
-        found_name = false
-
-        # Loop through Terraform file collaborators
-        collaborators_in_file.each do |tc_name|
-          if tc_name.downcase == gc_name.downcase
-            # Found a GitHub Collaborator name in Terraform collaborator name
-            found_name = true
-          end
+        if collaborators_in_file.include?(invite_login) && invite_expired
+          logger.info "The invite for known collaborator #{invite_login} on #{repository_name} has expired."
         end
 
-        if found_name == false
-          # Didn't find a match ie unknown collaborator
-          # Create a Collaborator object with an issue
-          terraform_block = GithubCollaborators::TerraformBlock.new
-          terraform_block.add_unknown_collaborator_data(gc_name.downcase)
-          collaborator = GithubCollaborators::Collaborator.new(terraform_block, repository_name.downcase)
-          collaborator.add_issue("missing")
+        # Store unknown collaborator invite username to raise Slack message later on
+        # Store as a hash like this { :login => "name", :repository => "repo_name" }
+        if !collaborators_in_file.include?(invite_login)
+          @unknown_collaborators_on_github.push({login: invite_login, repository: repository_name})
+          logger.warn "Unknown collaborator #{invite_login} invited to repository: #{repository_name}"
+        end
 
-          # Add unknown collaborator to the list of collaborators
-          @collaborators.push(collaborator)
+        # Delete expired invites
+        if invite_expired
+          delete_expired_invite(repository_name, invite_login)
         end
       end
     end

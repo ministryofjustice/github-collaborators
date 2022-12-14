@@ -163,8 +163,7 @@ class GithubCollaborators
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
 
         expect(my_organization).to receive(:is_collaborator_an_org_member).and_return(TEST_USER_2).at_least(1).times
-        expect(outside_collaborators).to receive(:do_comparison).with([TEST_USER_2], [TEST_USER_2], TEST_REPO_NAME1)
-        expect(outside_collaborators).to receive(:do_comparison).with([TEST_USER_2], [TEST_USER_2], TEST_REPO_NAME2)
+        expect(outside_collaborators).not_to receive(:print_comparison)
 
         outside_collaborators.compare_terraform_and_github
       end
@@ -191,11 +190,39 @@ class GithubCollaborators
 
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
 
-        expect(outside_collaborators).to receive(:do_comparison).with([TEST_USER_1], [TEST_USER_3, TEST_USER_3], TEST_REPO_NAME1)
-        expect(outside_collaborators).to receive(:do_comparison).with([TEST_USER_1], [], TEST_REPO_NAME2)
+        expect(outside_collaborators).to receive(:print_comparison).with([TEST_USER_1], [TEST_USER_3, TEST_USER_3], TEST_REPO_NAME1)
+        expect(outside_collaborators).to receive(:find_unknown_collaborators).with([TEST_USER_1], [TEST_USER_3, TEST_USER_3], TEST_REPO_NAME1).at_least(1).times.and_return([TEST_USER_1])
+        expect(outside_collaborators).to receive(:create_unknown_collaborators).with([TEST_USER_1], TEST_REPO_NAME1)
+        expect(outside_collaborators).to receive(:check_repository_invites).with(TEST_REPO_NAME1)
+        expect(outside_collaborators).to receive(:print_comparison).with([TEST_USER_1], [], TEST_REPO_NAME2)
+        expect(outside_collaborators).to receive(:find_unknown_collaborators).with([TEST_USER_1], [], TEST_REPO_NAME2).and_return([])
+        expect(outside_collaborators).to receive(:check_repository_invites).with(TEST_REPO_NAME2)
 
         outside_collaborators.compare_terraform_and_github
       end
+
+      # it "" do
+      #   terraform_block = create_terraform_block_review_date_today
+      #   expect(GithubCollaborators::TerraformBlock).to receive(:new).and_return(terraform_block)
+      #   expect(terraform_block).to receive(:add_unknown_collaborator_data).with(TEST_USER_2)
+    
+      #   collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)        
+      #   expect(GithubCollaborators::Collaborator).to receive(:new).and_return(collaborator)
+      #   expect(collaborator).to receive(:add_issue).with("missing")        
+      # end
+
+      # it "call check_repository_invites" do
+      #   allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
+      #   expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+      #   expect(terraform_files).to receive(:get_terraform_files).and_return([])
+      #   expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
+      #   expect(organization).to receive(:create_full_org_members)
+      #   expect(terraform_files).not_to receive(:remove_file)
+      #   outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+        
+      #   outside_collaborators.check_repository_invites(TEST_REPO_NAME2)
+      # end
+
     end
   end
 end
