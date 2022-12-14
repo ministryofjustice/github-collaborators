@@ -36,6 +36,14 @@ module Helpers
     terraform_file
   end
 
+  def create_terraform_file_with_collaborator_issue
+    stub_const("Constants::TERRAFORM_DIR", "spec/fixtures")
+    terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME_EXPIRED_USER, TERRAFORM_DIR)
+    terraform_file.read_file
+    terraform_file.get_repository_name
+    terraform_file
+  end
+
   def create_collaborator_data(review_date)
     {
       login: TEST_COLLABORATOR_LOGIN,

@@ -272,20 +272,45 @@ class GithubCollaborators
         outside_collaborators.check_repository_invites([TEST_USER_1], TEST_REPO_NAME2)
       end
 
-      # it "call collaborator_checks " do
-      #   allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
-      #   expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return([terraform_files]).at_least(1).times
-      #   expect(terraform_files).to receive(:get_terraform_files).and_return([])
-      #   expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
-      #   expect(organization).to receive(:create_full_org_members)
+      it "call collaborator_checks when collaborator array is empty" do
+        allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
+        expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+        expect(terraform_files).to receive(:get_terraform_files).and_return([])
+        expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
+        expect(organization).to receive(:create_full_org_members)
 
-      #   outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-      #   invite1 = {login: TEST_USER_1, expired: false, invite_id: 2344}
-      #   invites = [invite1, invite2]
-      #   allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return(invites)
-      #   allow_any_instance_of(HelperModule).to receive(:delete_expired_invite).with(TEST_REPO_NAME2, TEST_USER_1)
-      #   outside_collaborators.check_repository_invites([TEST_USER_2], TEST_REPO_NAME2)
-      # end
+        outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+        expect(outside_collaborators).to receive(:get_repository_issues_from_github).with([])
+        expect(outside_collaborators).to receive(:is_review_date_within_a_week).with([])
+        expect(outside_collaborators).to receive(:is_renewal_within_one_month).with([])
+        expect(outside_collaborators).to receive(:remove_unknown_collaborators).with([])
+        expect(outside_collaborators).to receive(:has_review_date_expired).with([])
+        outside_collaborators.collaborator_checks
+      end
+
+      it "call collaborator_checks when there is a collaborator with an issue" do
+        allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
+        expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+
+        file = create_terraform_file_with_collaborator_issue
+        expect(terraform_files).to receive(:get_terraform_files).and_return([file])
+
+        review_date = (Date.today - 90).strftime(DATE_FORMAT)
+        collaborator_data = create_collaborator_data(review_date)
+        block1 = GithubCollaborators::TerraformBlock.new
+        block1.add_terraform_file_collaborator_data(collaborator_data)
+        expect(file).to receive(:get_terraform_blocks).and_return([block1])
+        expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
+        expect(organization).to receive(:create_full_org_members)
+
+        outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+        expect(outside_collaborators).to receive(:get_repository_issues_from_github).with([TEST_REPO_NAME_EXPIRED_USER])
+        expect(outside_collaborators).to receive(:is_review_date_within_a_week).with([instance_of(GithubCollaborators::Collaborator)])
+        expect(outside_collaborators).to receive(:is_renewal_within_one_month).with([instance_of(GithubCollaborators::Collaborator)])
+        expect(outside_collaborators).to receive(:remove_unknown_collaborators).with([instance_of(GithubCollaborators::Collaborator)])
+        expect(outside_collaborators).to receive(:has_review_date_expired).with([instance_of(GithubCollaborators::Collaborator)])
+        outside_collaborators.collaborator_checks
+      end
     end
   end
 end
