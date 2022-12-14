@@ -50,7 +50,6 @@ class GithubCollaborators
 
       # For each repository
       @organization.repositories.each do |repository|
-
         repository_name = repository.name.downcase
 
         # Get the GitHub collaborators for the repository
@@ -75,7 +74,7 @@ class GithubCollaborators
         else
           collaborators_on_github.sort!
           collaborators_in_file.sort!
-    
+
           if collaborators_in_file != collaborators_on_github
             print_comparison(collaborators_in_file, collaborators_on_github, repository_name)
             unknown_collaborators = find_unknown_collaborators(collaborators_in_file, collaborators_on_github, repository_name)

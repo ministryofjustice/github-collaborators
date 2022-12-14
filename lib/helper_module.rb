@@ -734,6 +734,6 @@ module HelperModule
         unknown_collaborators.push(gc_name)
       end
     end
-    return unknown_collaborators
+    unknown_collaborators
   end
 end
