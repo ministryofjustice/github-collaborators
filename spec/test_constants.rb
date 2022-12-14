@@ -18,4 +18,6 @@ module TestConstants
   TEST_REPO_NAME2 = "test-repo2"
   TEST_REPO_NAME3 = "test-repo3"
   TEST_REPO_NAME_EXPIRED_USER = "test-repo-user-expired"
+  TEST_DIR = "spec/fixtures"
+  TEST_DIR_OVERRIDE = "Constants::TERRAFORM_DIR"
 end

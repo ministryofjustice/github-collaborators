@@ -11,7 +11,7 @@ module Helpers
   end
 
   def create_terraform_file_with_name(repo_name)
-    stub_const("Constants::TERRAFORM_DIR", "spec/fixtures")
+    stub_const(TEST_DIR_OVERRIDE, TEST_DIR)
     terraform_file = GithubCollaborators::TerraformFile.new(repo_name, TERRAFORM_DIR)
     terraform_file.read_file
     terraform_file.get_repository_name
@@ -20,7 +20,7 @@ module Helpers
   end
 
   def create_terraform_file
-    stub_const("Constants::TERRAFORM_DIR", "spec/fixtures")
+    stub_const(TEST_DIR_OVERRIDE, TEST_DIR)
     terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
     terraform_file.read_file
     terraform_file.get_repository_name
@@ -29,7 +29,7 @@ module Helpers
   end
 
   def create_empty_terraform_file
-    stub_const("Constants::TERRAFORM_DIR", "spec/fixtures")
+    stub_const(TEST_DIR_OVERRIDE, TEST_DIR)
     terraform_file = GithubCollaborators::TerraformFile.new(EMPTY_REPOSITORY_NAME, TERRAFORM_DIR)
     terraform_file.read_file
     terraform_file.get_repository_name
@@ -37,7 +37,7 @@ module Helpers
   end
 
   def create_terraform_file_with_collaborator_issue
-    stub_const("Constants::TERRAFORM_DIR", "spec/fixtures")
+    stub_const(TEST_DIR_OVERRIDE, TEST_DIR)
     terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME_EXPIRED_USER, TERRAFORM_DIR)
     terraform_file.read_file
     terraform_file.get_repository_name
