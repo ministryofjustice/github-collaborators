@@ -5,23 +5,6 @@ class GithubCollaborators
     let(:organization) { double(GithubCollaborators::Organization) }
 
     context "test outside collaborators" do
-      def create_terraform_file
-        stub_const("Constants::TERRAFORM_DIR", "spec/fixtures")
-        terraform_file1 = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
-        terraform_file1.read_file
-        terraform_file1.get_repository_name
-        terraform_file1.create_terraform_collaborator_blocks
-        terraform_file1
-      end
-
-      def create_empty_terraform_file
-        stub_const("Constants::TERRAFORM_DIR", "spec/fixtures")
-        terraform_file2 = GithubCollaborators::TerraformFile.new(EMPTY_REPOSITORY_NAME, TERRAFORM_DIR)
-        terraform_file2.read_file
-        terraform_file2.get_repository_name
-        terraform_file2
-      end
-
       it "call start" do
         allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
         expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times

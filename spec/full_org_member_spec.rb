@@ -11,6 +11,7 @@ class GithubCollaborators
         ENV["ADMIN_GITHUB_TOKEN"] = ""
       end
 
+      let(:terraform_files) { double(GithubCollaborators::TerraformFiles) }
       let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
       let(:http_client) { double(GithubCollaborators::HttpClient) }
       let(:collaborator_repositories_json) { File.read("spec/fixtures/collaborator-repositories.json") }
@@ -305,9 +306,64 @@ class GithubCollaborators
         test_equal(full_org_member.do_repositories_match, true)
       end
 
-      # it "call check_repository_permissions_match ??" do
-      #
-      # end
+      it "call check_repository_permissions_match when github_repositories has repositories" do
+        expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+        expect(graphql_client).to receive(:run_query).with(query).and_return(collaborator_repositories_json)
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        full_org_member.get_full_org_member_repositories
+        test_equal(full_org_member.github_repositories.length, 3)
+        expect(terraform_files).to receive(:get_terraform_files).and_return([]).at_least(3).times
+        test_equal(full_org_member.check_repository_permissions_match(terraform_files), false)
+      end
+
+      it "call check_repository_permissions_match when github_repositories and terraform_files have repositories" do
+        expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+        expect(graphql_client).to receive(:run_query).with(query).and_return(collaborator_repositories_json)
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        full_org_member.get_full_org_member_repositories
+        test_equal(full_org_member.github_repositories.length, 3)
+        file = create_empty_terraform_file
+        expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(3).times
+        test_equal(full_org_member.check_repository_permissions_match(terraform_files), false)
+      end
+
+      it "call check_repository_permissions_match when github_repositories and terraform_files have repositories and permissions do not match" do
+        expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+        expect(graphql_client).to receive(:run_query).with(query).and_return(collaborator_repositories_json)
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        full_org_member.get_full_org_member_repositories
+        test_equal(full_org_member.github_repositories.length, 3)
+        file = create_terraform_file_with_name(TEST_REPO_NAME1)
+        expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
+        expect(full_org_member).to receive(:get_repository_permission).with(TEST_REPO_NAME1).and_return("push")
+        expect(file).to receive(:get_collaborator_permission).with(TEST_USER_1).and_return("admin")
+        test_equal(full_org_member.check_repository_permissions_match(terraform_files), true)
+      end
+
+      it "call check_repository_permissions_match when github_repositories and terraform_files have repositories and permissions do match" do
+        expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+        expect(graphql_client).to receive(:run_query).with(query).and_return(collaborator_repositories_json)
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        full_org_member.get_full_org_member_repositories
+        test_equal(full_org_member.github_repositories.length, 3)
+        file = create_terraform_file_with_name(TEST_REPO_NAME1)
+        expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
+        expect(full_org_member).to receive(:get_repository_permission).with(TEST_REPO_NAME1).and_return("push")
+        expect(file).to receive(:get_collaborator_permission).with(TEST_USER_1).and_return("push")
+        test_equal(full_org_member.check_repository_permissions_match(terraform_files), false)
+      end
+
+      it "call check_repository_permissions_match when github_repositories and terraform_files have repositories but repository is in the ignore list" do
+        expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+        expect(graphql_client).to receive(:run_query).with(query).and_return(collaborator_repositories_json)
+        full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+        full_org_member.add_ignore_repository(TEST_REPO_NAME1)
+        full_org_member.get_full_org_member_repositories
+        test_equal(full_org_member.github_repositories.length, 3)
+        file = create_terraform_file_with_name(TEST_REPO_NAME1)
+        expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
+        test_equal(full_org_member.check_repository_permissions_match(terraform_files), false)
+      end
 
       after do
         ENV.delete("ADMIN_GITHUB_TOKEN")

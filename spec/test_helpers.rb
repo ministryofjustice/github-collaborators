@@ -10,6 +10,32 @@ module Helpers
     expect(value).not_to eq(expected_value)
   end
 
+  def create_terraform_file_with_name(repo_name)
+    stub_const("Constants::TERRAFORM_DIR", "spec/fixtures")
+    terraform_file = GithubCollaborators::TerraformFile.new(repo_name, TERRAFORM_DIR)
+    terraform_file.read_file
+    terraform_file.get_repository_name
+    terraform_file.create_terraform_collaborator_blocks
+    terraform_file
+  end
+
+  def create_terraform_file
+    stub_const("Constants::TERRAFORM_DIR", "spec/fixtures")
+    terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
+    terraform_file.read_file
+    terraform_file.get_repository_name
+    terraform_file.create_terraform_collaborator_blocks
+    terraform_file
+  end
+
+  def create_empty_terraform_file
+    stub_const("Constants::TERRAFORM_DIR", "spec/fixtures")
+    terraform_file = GithubCollaborators::TerraformFile.new(EMPTY_REPOSITORY_NAME, TERRAFORM_DIR)
+    terraform_file.read_file
+    terraform_file.get_repository_name
+    terraform_file
+  end
+
   def create_collaborator_data(review_date)
     {
       login: TEST_COLLABORATOR_LOGIN,
