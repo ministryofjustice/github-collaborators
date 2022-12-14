@@ -82,9 +82,14 @@ class GithubCollaborators
             if unknown_collaborators.length > 0
               create_unknown_collaborators(unknown_collaborators, repository_name)
             end
-            check_repository_invites(repository_name)
+            check_repository_invites(collaborators_in_file, repository_name)
           end
         end
+      end
+
+      if @unknown_collaborators_on_github.length > 0
+        # Raise Slack message
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::UnknownCollaborators.new, @unknown_collaborators_on_github).post_slack_message
       end
     end
 
@@ -102,11 +107,6 @@ class GithubCollaborators
 
     def collaborator_checks
       logger.debug "collaborator_checks"
-
-      if @unknown_collaborators_on_github.length > 0
-        # Raise Slack message
-        GithubCollaborators::SlackNotifier.new(GithubCollaborators::UnknownCollaborators.new, @unknown_collaborators_on_github).post_slack_message
-      end
 
       collaborators_with_issues = @collaborators.select { |collaborator| collaborator.issues.length > 0 }
 
@@ -518,7 +518,7 @@ class GithubCollaborators
       end
     end
 
-    def check_repository_invites(repository_name)
+    def check_repository_invites(collaborators_in_file, repository_name)
       logger.debug "check_repository_invites"
 
       # Get the repository invites

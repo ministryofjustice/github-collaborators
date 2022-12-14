@@ -176,10 +176,19 @@ class GithubCollaborators
         expect(outside_collaborators).to receive(:print_comparison).with([TEST_USER_1], [TEST_USER_3, TEST_USER_3], TEST_REPO_NAME1)
         expect(outside_collaborators).to receive(:find_unknown_collaborators).with([TEST_USER_1], [TEST_USER_3, TEST_USER_3], TEST_REPO_NAME1).at_least(1).times.and_return([TEST_USER_1])
         expect(outside_collaborators).to receive(:create_unknown_collaborators).with([TEST_USER_1], TEST_REPO_NAME1)
-        expect(outside_collaborators).to receive(:check_repository_invites).with(TEST_REPO_NAME1)
+
+        invite1 = {login: TEST_USER_2, expired: false, invite_id: 2344}
+        invites = [invite1]
+        allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME1).and_return(invites)
+        allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return(invites)
+        expect(terraform_files).not_to receive(:delete_expired_invite)
+
         expect(outside_collaborators).to receive(:print_comparison).with([TEST_USER_1], [], TEST_REPO_NAME2)
         expect(outside_collaborators).to receive(:find_unknown_collaborators).with([TEST_USER_1], [], TEST_REPO_NAME2).and_return([])
-        expect(outside_collaborators).to receive(:check_repository_invites).with(TEST_REPO_NAME2)
+
+        slack_notififer = GithubCollaborators::SlackNotifier.new(nil, [])
+        expect(GithubCollaborators::SlackNotifier).to receive(:new).and_return(slack_notififer)
+        expect(slack_notififer).to receive(:post_slack_message)
 
         outside_collaborators.compare_terraform_and_github
       end
@@ -194,7 +203,7 @@ class GithubCollaborators
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
         terraform_block = GithubCollaborators::TerraformBlock.new
         collaborator = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME2)
-        
+
         expect(GithubCollaborators::TerraformBlock).to receive(:new).and_return(terraform_block)
         expect(GithubCollaborators::Collaborator).to receive(:new).with(terraform_block, TEST_REPO_NAME2).and_return(collaborator)
         expect(terraform_block).to receive(:add_unknown_collaborator_data).with(TEST_USER_1)
@@ -202,7 +211,7 @@ class GithubCollaborators
         outside_collaborators.create_unknown_collaborators([TEST_USER_1], TEST_REPO_NAME2)
       end
 
-      it "call collaborator_checks" do
+      it "call check_repository_invites when no invites exist" do
         allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
         expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
@@ -210,7 +219,74 @@ class GithubCollaborators
         expect(organization).to receive(:create_full_org_members)
         expect(terraform_files).not_to receive(:remove_file)
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+        allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return([])
+        expect(terraform_files).not_to receive(:delete_expired_invite)
+        outside_collaborators.check_repository_invites([], TEST_REPO_NAME2)
       end
+
+      it "call check_repository_invites when invites exist but passed in array is empty" do
+        allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
+        expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+        expect(terraform_files).to receive(:get_terraform_files).and_return([])
+        expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
+        expect(organization).to receive(:create_full_org_members)
+        expect(terraform_files).not_to receive(:remove_file)
+        outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+        invite1 = {login: TEST_USER_1, expired: false, invite_id: 2344}
+        invite2 = {login: TEST_USER_2, expired: false, invite_id: 7924}
+        invites = [invite1, invite2]
+        allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return(invites)
+        expect(terraform_files).not_to receive(:delete_expired_invite)
+        outside_collaborators.check_repository_invites([], TEST_REPO_NAME2)
+      end
+
+      it "call check_repository_invites when invites exist and passed in array has values" do
+        allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
+        expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+        expect(terraform_files).to receive(:get_terraform_files).and_return([])
+        expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
+        expect(organization).to receive(:create_full_org_members)
+        expect(terraform_files).not_to receive(:remove_file)
+        outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+        invite1 = {login: TEST_USER_1, expired: false, invite_id: 2344}
+        invite2 = {login: TEST_USER_2, expired: false, invite_id: 7924}
+        invites = [invite1, invite2]
+        allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return(invites)
+        expect(terraform_files).not_to receive(:delete_expired_invite)
+        outside_collaborators.check_repository_invites([TEST_USER_1], TEST_REPO_NAME2)
+      end
+
+      it "call check_repository_invites when invites exist but has expired" do
+        allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
+        expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+        expect(terraform_files).to receive(:get_terraform_files).and_return([])
+        expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
+        expect(organization).to receive(:create_full_org_members)
+        expect(terraform_files).not_to receive(:remove_file)
+        outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+        invite1 = {login: TEST_USER_1, expired: true, invite_id: 2344}
+        invite2 = {login: TEST_USER_2, expired: false, invite_id: 7924}
+        invites = [invite1, invite2]
+        allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return(invites)
+        allow_any_instance_of(HelperModule).to receive(:delete_expired_invite).with(TEST_REPO_NAME2, TEST_USER_1)
+        outside_collaborators.check_repository_invites([TEST_USER_1], TEST_REPO_NAME2)
+      end
+
+      # it "call collaborator_checks " do
+      #   allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
+      #   expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+      #   expect(terraform_files).to receive(:get_terraform_files).and_return([])
+      #   expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
+      #   expect(organization).to receive(:create_full_org_members)
+      #   expect(terraform_files).not_to receive(:remove_file)
+      #   outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+      #   invite1 = {login: TEST_USER_1, expired: false, invite_id: 2344}
+      #   invites = [invite1, invite2]
+      #   allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return(invites)
+      #   allow_any_instance_of(HelperModule).to receive(:delete_expired_invite).with(TEST_REPO_NAME2, TEST_USER_1)
+      #   outside_collaborators.check_repository_invites([TEST_USER_2], TEST_REPO_NAME2)
+      # end
+
     end
   end
 end

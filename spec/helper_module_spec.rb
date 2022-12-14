@@ -752,7 +752,7 @@ describe HelperModule do
   end
 
   context "test find_unknown_collaborators" do
-    it "when no collaborator in terraform file" do  
+    it "when no collaborator in terraform file" do
       unknown_collaborators = helper_module.find_unknown_collaborators([], [TEST_USER_2], TEST_REPO_NAME2)
       test_equal(unknown_collaborators.length, 1)
     end
@@ -767,5 +767,4 @@ describe HelperModule do
       test_equal(unknown_collaborators.length, 0)
     end
   end
-
 end
