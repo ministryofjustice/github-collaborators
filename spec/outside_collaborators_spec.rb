@@ -199,7 +199,7 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).not_to receive(:remove_file)
+
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
         terraform_block = GithubCollaborators::TerraformBlock.new
         collaborator = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME2)
@@ -217,7 +217,7 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).not_to receive(:remove_file)
+
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
         allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return([])
         expect(terraform_files).not_to receive(:delete_expired_invite)
@@ -230,7 +230,7 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).not_to receive(:remove_file)
+
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
         invite1 = {login: TEST_USER_1, expired: false, invite_id: 2344}
         invite2 = {login: TEST_USER_2, expired: false, invite_id: 7924}
@@ -246,7 +246,7 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).not_to receive(:remove_file)
+
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
         invite1 = {login: TEST_USER_1, expired: false, invite_id: 2344}
         invite2 = {login: TEST_USER_2, expired: false, invite_id: 7924}
@@ -262,7 +262,7 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).not_to receive(:remove_file)
+
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
         invite1 = {login: TEST_USER_1, expired: true, invite_id: 2344}
         invite2 = {login: TEST_USER_2, expired: false, invite_id: 7924}
@@ -274,11 +274,11 @@ class GithubCollaborators
 
       # it "call collaborator_checks " do
       #   allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
-      #   expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+      #   expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return([terraform_files]).at_least(1).times
       #   expect(terraform_files).to receive(:get_terraform_files).and_return([])
       #   expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
       #   expect(organization).to receive(:create_full_org_members)
-      #   expect(terraform_files).not_to receive(:remove_file)
+
       #   outside_collaborators = GithubCollaborators::OutsideCollaborators.new
       #   invite1 = {login: TEST_USER_1, expired: false, invite_id: 2344}
       #   invites = [invite1, invite2]
@@ -286,7 +286,6 @@ class GithubCollaborators
       #   allow_any_instance_of(HelperModule).to receive(:delete_expired_invite).with(TEST_REPO_NAME2, TEST_USER_1)
       #   outside_collaborators.check_repository_invites([TEST_USER_2], TEST_REPO_NAME2)
       # end
-
     end
   end
 end
