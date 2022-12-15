@@ -5,175 +5,166 @@ CLOSED = "closed"
 CREATED_DATE = "2019-10-01"
 
 describe HelperModule do
-  # extended class
   let(:helper_module) { Class.new { extend HelperModule } }
-
   let(:http_client) { double(GithubCollaborators::HttpClient) }
+  let(:issue_creator) { double(GithubCollaborators::IssueCreator) }
 
-  context "call" do
-    it "remove issue" do
-      url = "https://api.github.com/repos/ministryofjustice/somerepo/issues/1"
-      state = "{\"state\":\"closed\"}"
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
-      expect(http_client).to receive(:patch_json).with(url, state)
-      helper_module.remove_issue(REPOSITORY_NAME, 1)
-    end
+  it "call remove_issue" do
+    url = "https://api.github.com/repos/ministryofjustice/somerepo/issues/1"
+    state = "{\"state\":\"closed\"}"
+    expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+    expect(http_client).to receive(:patch_json).with(url, state)
+    helper_module.remove_issue(REPOSITORY_NAME, 1)
   end
 
-  context "call close expired issues" do
-    let(:issue_creator) { double(GithubCollaborators::IssueCreator) }
+  it "call close_expired_issues when no issue exists" do
+    expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return([])
+    helper_module.close_expired_issues(REPOSITORY_NAME)
+  end
 
-    it "no issue exists" do
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return([])
-      helper_module.close_expired_issues(REPOSITORY_NAME)
+  context "call close_expired_issues" do
+    context "and remove issue" do
+      before do
+        expect(helper_module).to receive(:remove_issue).with(REPOSITORY_NAME, 1)
+      end
+
+      it "when collaborator expires soon, issue has expired and is open" do
+        issues = create_issues(COLLABORATOR_EXPIRES_SOON, CREATED_DATE, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+
+      it "when collaborator expires soon, grace period expired and is open" do
+        issues = create_issues(COLLABORATOR_EXPIRES_SOON, GRACE_PERIOD_EXPIRED, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)          
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+
+      it "when collaborator expiry upcoming, issue has expired and is open" do
+        issues = create_issues(COLLABORATOR_EXPIRY_UPCOMING, CREATED_DATE, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+
+      it "when collaborator expiry upcoming, grace period expired and is open" do
+        issues = create_issues(COLLABORATOR_EXPIRY_UPCOMING, GRACE_PERIOD_EXPIRED, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+
+      it "when define collaborator in code, issue has expired and is open" do
+        issues = create_issues(DEFINE_COLLABORATOR_IN_CODE, CREATED_DATE, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+
+      it "when define collaborator in code, grace period expired and is open" do
+        issues = create_issues(DEFINE_COLLABORATOR_IN_CODE, GRACE_PERIOD_EXPIRED, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+
+      it "when use team access, issue has expired and is open" do
+        issues = create_issues(USE_TEAM_ACCESS, CREATED_DATE, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+
+      it "when use team access, grace period expired and is open" do
+        issues = create_issues(USE_TEAM_ACCESS, GRACE_PERIOD_EXPIRED, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+    end
+    
+    context "and do not remove issue" do
+      before do
+        expect(helper_module).not_to receive(:remove_issue).with(REPOSITORY_NAME, 1)
+      end
+
+      it "when collaborator expires soon, grace period expired and is closed" do
+        issues = create_issues(COLLABORATOR_EXPIRES_SOON, GRACE_PERIOD_EXPIRED, CLOSED, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+
+      it "when collaborator expiry upcoming, grace period expired and is closed" do
+        issues = create_issues(COLLABORATOR_EXPIRY_UPCOMING, GRACE_PERIOD_EXPIRED, CLOSED, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+
+      it "when define collaborator in code, grace period expired and is closed" do
+        issues = create_issues(DEFINE_COLLABORATOR_IN_CODE, GRACE_PERIOD_EXPIRED, CLOSED, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+      
+      it "when other open issue, ignore" do
+        issues = create_issues("some issue", "2020-02-11", OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
     end
 
-    it "collaborator expires soon, issue has expired and is open" do
-      issues = create_issues(COLLABORATOR_EXPIRES_SOON, CREATED_DATE, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
+    context "and do not remove issue" do
+      before do
+        expect(helper_module).not_to receive(:remove_issue)
+      end
 
-    it "collaborator expires soon, grace period okay and is open" do
-      issues = create_issues(COLLABORATOR_EXPIRES_SOON, GRACE_PERIOD_OKAY, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
+      it "when collaborator expires soon, grace period okay and is open" do
+        issues = create_issues(COLLABORATOR_EXPIRES_SOON, GRACE_PERIOD_OKAY, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
+      
+      it "when collaborator expires soon, grace period okay and is closed" do
+        issues = create_issues(COLLABORATOR_EXPIRES_SOON, GRACE_PERIOD_OKAY, CLOSED, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
 
-    it "collaborator expires soon, grace period okay and is closed" do
-      issues = create_issues(COLLABORATOR_EXPIRES_SOON, GRACE_PERIOD_OKAY, CLOSED, 1)
+      it "when collaborator expiry upcoming, grace period okay and is open" do
+        issues = create_issues(COLLABORATOR_EXPIRY_UPCOMING, GRACE_PERIOD_OKAY, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
 
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
+      it "when collaborator expiry upcoming, grace period okay and is closed" do
+        issues = create_issues(COLLABORATOR_EXPIRY_UPCOMING, GRACE_PERIOD_OKAY, CLOSED, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
 
-    it "collaborator expires soon, grace period expired and is open" do
-      issues = create_issues(COLLABORATOR_EXPIRES_SOON, GRACE_PERIOD_EXPIRED, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
+      it "when define collaborator in code, grace period okay and is open" do
+        issues = create_issues(DEFINE_COLLABORATOR_IN_CODE, GRACE_PERIOD_OKAY, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
 
-    it "collaborator expires soon, grace period expired and is closed" do
-      issues = create_issues(COLLABORATOR_EXPIRES_SOON, GRACE_PERIOD_EXPIRED, CLOSED, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
+      it "when define collaborator in code, grace period okay and is closed" do
+        issues = create_issues(DEFINE_COLLABORATOR_IN_CODE, GRACE_PERIOD_OKAY, CLOSED, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
 
-    it "collaborator expiry upcoming, issue has expired and is open" do
-      issues = create_issues(COLLABORATOR_EXPIRY_UPCOMING, CREATED_DATE, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
+      it "when use team access, grace period okay and is open" do
+        issues = create_issues(USE_TEAM_ACCESS, GRACE_PERIOD_OKAY, OPEN, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
 
-    it "collaborator expiry upcoming, grace period okay and is open" do
-      issues = create_issues(COLLABORATOR_EXPIRY_UPCOMING, GRACE_PERIOD_OKAY, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
+      it "when use team access, grace period okay and is closed" do
+        issues = create_issues(USE_TEAM_ACCESS, GRACE_PERIOD_OKAY, CLOSED, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
 
-    it "collaborator expiry upcoming, grace period okay and is closed" do
-      issues = create_issues(COLLABORATOR_EXPIRY_UPCOMING, GRACE_PERIOD_OKAY, CLOSED, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "collaborator expiry upcoming, grace period expired and is open" do
-      issues = create_issues(COLLABORATOR_EXPIRY_UPCOMING, GRACE_PERIOD_EXPIRED, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "collaborator expiry upcoming, grace period expired and is closed" do
-      issues = create_issues(COLLABORATOR_EXPIRY_UPCOMING, GRACE_PERIOD_EXPIRED, CLOSED, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "define collaborator in code, issue has expired and is open" do
-      issues = create_issues(DEFINE_COLLABORATOR_IN_CODE, CREATED_DATE, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "define collaborator in code, grace period okay and is open" do
-      issues = create_issues(DEFINE_COLLABORATOR_IN_CODE, GRACE_PERIOD_OKAY, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "define collaborator in code, grace period okay and is closed" do
-      issues = create_issues(DEFINE_COLLABORATOR_IN_CODE, GRACE_PERIOD_OKAY, CLOSED, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "define collaborator in code, grace period expired and is open" do
-      issues = create_issues(DEFINE_COLLABORATOR_IN_CODE, GRACE_PERIOD_EXPIRED, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "define collaborator in code, grace period expired and is closed" do
-      issues = create_issues(DEFINE_COLLABORATOR_IN_CODE, GRACE_PERIOD_EXPIRED, CLOSED, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "use team access, issue has expired and is open" do
-      issues = create_issues(USE_TEAM_ACCESS, CREATED_DATE, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "use team access, grace period okay and is open" do
-      issues = create_issues(USE_TEAM_ACCESS, GRACE_PERIOD_OKAY, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "use team access, grace period okay and is closed" do
-      issues = create_issues(USE_TEAM_ACCESS, GRACE_PERIOD_OKAY, CLOSED, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "use team access, grace period expired and is open" do
-      issues = create_issues(USE_TEAM_ACCESS, GRACE_PERIOD_EXPIRED, OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "use team access, grace period expired and is closed" do
-      issues = create_issues(USE_TEAM_ACCESS, GRACE_PERIOD_EXPIRED, CLOSED, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
-    end
-
-    it "other open issue, ignore" do
-      issues = create_issues("some issue", "2020-02-11", OPEN, 1)
-      expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
-      expect(helper_module).not_to receive(:remove_issue).with(REPOSITORY_NAME, 1)
-      helper_module.close_expired_issues(REPOSITORY_NAME)
+      it "when use team access, grace period expired and is closed" do
+        issues = create_issues(USE_TEAM_ACCESS, GRACE_PERIOD_EXPIRED, CLOSED, 1)
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
+        helper_module.close_expired_issues(REPOSITORY_NAME)
+      end
     end
 
     it "use team access, multiple issues, expired and open" do
