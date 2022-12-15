@@ -113,6 +113,57 @@ class GithubCollaborators
       end
     end
 
+    # Where collaborator is not defined in Terraform, add collaborator to those files
+    def get_full_org_members_not_in_terraform_file
+      logger.debug "get_full_org_members_not_in_terraform_file"
+      return_list = []
+      @full_org_members.each do |full_org_member|
+        # Compare the GitHub and Terraform repositories
+        if full_org_member.do_repositories_match == false
+          return_list.push(full_org_member.login.downcase)
+        end
+      end
+      return_list
+    end
+
+    # Find which collaborators has a difference in repository permissions
+    def get_full_org_members_with_repository_permission_mismatches(terraform_files_obj)
+      logger.debug "get_full_org_members_with_repository_permission_mismatches"
+      return_list = []
+      @full_org_members.each do |full_org_member|
+        if full_org_member.check_repository_permissions_match(terraform_files_obj)
+          return_list.push({login: full_org_member.login.downcase, mismatches: full_org_member.repository_permission_mismatches})
+        end
+      end
+      return_list
+    end
+
+    # Find the collaborators that are attached to no GitHub repositories
+    def get_odd_full_org_members
+      logger.debug "get_odd_full_org_members"
+      return_list = []
+      @full_org_members.each do |full_org_member|
+        if full_org_member.odd_full_org_member_check
+          return_list.push(full_org_member.login.downcase)
+        end
+      end
+      return_list
+    end
+
+    # Find which collaborators are attached to archived repositories in the files that we track
+    def get_full_org_members_attached_to_archived_repositories(terraform_files_obj)
+      logger.debug "get_full_org_members_attached_to_archived_repositories"
+      return_list = []
+      @full_org_members.each do |full_org_member|
+        full_org_member.attached_archived_repositories.each do |archived_repository|
+          if terraform_files_obj.does_file_exist(archived_repository.downcase)
+            return_list.push({login: full_org_member.login.downcase, repository: archived_repository.downcase})
+          end
+        end
+      end
+      return_list
+    end
+
     private
 
     # Check and store collaborator that have full §org membership

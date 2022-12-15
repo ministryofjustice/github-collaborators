@@ -311,6 +311,53 @@ class GithubCollaborators
         expect(outside_collaborators).to receive(:has_review_date_expired).with([instance_of(GithubCollaborators::Collaborator)])
         outside_collaborators.collaborator_checks
       end
+
+      it "call full_org_members_check when org and arrays are empty" do
+        allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
+        expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+        expect(terraform_files).to receive(:get_terraform_files).and_return([])
+        expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
+        expect(organization).to receive(:create_full_org_members)
+        expect(terraform_files).not_to receive(:remove_file)
+ 
+        outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+
+        expect(organization).to receive(:get_full_org_members_not_in_terraform_file).and_return([])
+        expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([])
+        expect(organization).to receive(:get_odd_full_org_members).and_return([])
+        expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([])
+        
+        expect(outside_collaborators).not_to receive(:add_collaborator)
+        expect(outside_collaborators).not_to receive(:change_collaborator_permission)
+        expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
+        expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
+        outside_collaborators.full_org_members_check
+      end
+
+    #   it "call full_org_members_check when full org member exists" do
+    #     repo1 = GithubCollaborators::Repository.new(TEST_REPO_NAME1, 0)
+    #     repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 0)
+    #     allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
+    #     allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
+    #     allow_any_instance_of(HelperModule).to receive(:fetch_all_collaborators).and_return([])
+    #     allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
+    #     allow_any_instance_of(HelperModule).to receive(:get_archived_repositories).and_return([])
+    #     allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])
+    #     my_organization = GithubCollaborators::Organization.new
+    #     my_organization.add_full_org_member(TEST_USER_1)
+
+    #     allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
+    #     expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+    #     expect(terraform_files).to receive(:get_terraform_files).and_return([])
+    #     expect(GithubCollaborators::Organization).to receive(:new).and_return(my_organization).at_least(1).times
+    #     expect(my_organization).to receive(:create_full_org_members)
+
+
+    #     outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+        
+    #     expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
+    #     outside_collaborators.full_org_members_check
+    #   end
     end
   end
 end

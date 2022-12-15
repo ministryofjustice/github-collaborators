@@ -136,42 +136,24 @@ class GithubCollaborators
       odd_full_org_members = []
       full_org_members_in_archived_repositories = []
 
-      # Run full org member tests
-      @organization.full_org_members.each do |full_org_member|
-        login = full_org_member.login.downcase
-
-        # Compare the GitHub and Terraform repositories
-        if full_org_member.do_repositories_match == false
-          # Where collaborator is not defined in Terraform, add collaborator to those files
-          add_collaborator(full_org_member)
-        end
-
-        if full_org_member.check_repository_permissions_match(@terraform_files)
-          # Where collaborator has difference in repository permission, create a PR using GitHub permission
-          change_collaborator_permission(login, full_org_member.repository_permission_mismatches)
-        end
-
-        # Find the collaborators that are attached to no GitHub repositories
-        if full_org_member.odd_full_org_member_check
-          odd_full_org_members.push(login)
-        end
-
-        # Find which collaborators are attached to archived repositories in the files that we track
-        full_org_member.attached_archived_repositories.each do |archived_repository|
-          if @terraform_files.does_file_exist(archived_repository.downcase)
-            full_org_members_in_archived_repositories.push({login: login, repository: archived_repository.downcase})
-          end
-        end
+      @organization.get_full_org_members_not_in_terraform_file.each do |full_org_member|
+        add_collaborator(full_org_member.downcase)
       end
 
+      @organization.get_full_org_members_with_repository_permission_mismatches(@terraform_files).each do |full_org_member|
+        change_collaborator_permission(full_org_member[:login].downcase, full_org_member[:mismatches])
+      end
+      
       # Raise Slack message for collaborators that are attached to no Github repositories
+      odd_full_org_members = @organization.get_odd_full_org_members
       if odd_full_org_members.length > 0
         GithubCollaborators::SlackNotifier.new(GithubCollaborators::OddFullOrgMembers.new, odd_full_org_members).post_slack_message
       end
-
+      
       # Raise Slack message for collaborators that are attached to archived repositories
-      if full_org_members_in_archived_repositories.length > 0
-        GithubCollaborators::SlackNotifier.new(GithubCollaborators::ArchivedRepositories.new, full_org_members_in_archived_repositories).post_slack_message
+      attached_full_org_members = @organization.get_full_org_members_attached_to_archived_repositories(@terraform_files)
+      if attached_full_org_members.length > 0
+        GithubCollaborators::SlackNotifier.new(GithubCollaborators::ArchivedRepositories.new, attached_full_org_members).post_slack_message
       end
     end
 
