@@ -21,27 +21,30 @@ describe HelperModule do
     end
   end
 
-  context "when env var not enabled" do
+  context "" do
     before do
-      ENV["REALLY_POST_TO_GH"] = "0"
-    end
-
-    it "dont call github api" do
       expect(GithubCollaborators::HttpClient).not_to receive(:new)
       expect(http_client).not_to receive(:delete)
-      helper_module.remove_access("somerepo", "somegithubuser")
     end
 
-    after do
-      ENV.delete("REALLY_POST_TO_GH")
-    end
-  end
+    context "when env var not enabled" do
+      before do
+        ENV["REALLY_POST_TO_GH"] = "0"
+      end
 
-  context "when env var is missing" do
-    it "dont call github api" do
-      expect(GithubCollaborators::HttpClient).not_to receive(:new)
-      expect(http_client).not_to receive(:delete)
-      helper_module.remove_access("somerepo", "somegithubuser")
+      it "dont call github api" do
+        helper_module.remove_access("somerepo", "somegithubuser")
+      end
+
+      after do
+        ENV.delete("REALLY_POST_TO_GH")
+      end
+    end
+
+    context "when env var is missing" do
+      it "dont call github api" do
+        helper_module.remove_access("somerepo", "somegithubuser")
+      end
     end
   end
 end
