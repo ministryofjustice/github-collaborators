@@ -21,23 +21,24 @@ describe HelperModule do
   collaborators = [collaborator1, collaborator2]
 
   context "test get_issues_from_github" do
+    before do
+      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+    end
+
     it "return an issue" do
       response = %([{"assignee": { "login":#{LOGIN}}, "title": #{COLLABORATOR_EXPIRES_SOON}, "assignees": [{"login":#{LOGIN} }]}])
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
       test_equal(helper_module.get_issues_from_github(REPOSITORY_NAME), response)
     end
 
     it "return empty array if no issues" do
       response = []
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
       test_equal(helper_module.get_issues_from_github(REPOSITORY_NAME), [])
     end
 
     let(:json) { File.read("spec/fixtures/issues.json") }
     it "return issues" do
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).with(URL).and_return(json)
       expect(helper_module.get_issues_from_github(REPOSITORY_NAME)).equal?(json)
     end
@@ -54,9 +55,12 @@ describe HelperModule do
 
   context "test get_repository_invites" do
     let(:json) { File.read("spec/fixtures/invites.json") }
+    before do
+      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+    end
+
     it "when invites exist" do
       url = "https://api.github.com/repos/ministryofjustice/somerepo/invitations"
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).with(url).and_return(json)
       expected_result = [{login: "user1", expired: true, invite_id: 1}, {login: "user2", expired: false, invite_id: 2}]
       test_equal(helper_module.get_repository_invites("somerepo"), expected_result)
@@ -65,24 +69,25 @@ describe HelperModule do
     it "when invites don't exist" do
       url = "https://api.github.com/repos/ministryofjustice/somerepo/invitations"
       response = %([])
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).with(url).and_return(response)
       test_equal(helper_module.get_repository_invites("somerepo"), [])
     end
   end
 
   context "test does_issue_already_exist" do
-    let(:issues_json) { File.read("spec/fixtures/issues.json") }
+    issues_json = File.read("spec/fixtures/issues.json")
+    before do
+      expect(helper_module).to receive(:remove_issue).with("somerepo", 159)
+    end
+
     it "when no issues exists" do
       issues = JSON.parse(issues_json, {symbolize_names: true})
-      expect(helper_module).to receive(:remove_issue).with("somerepo", 159)
       test_equal(helper_module.does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, "somerepo", TEST_USER_1), false)
       test_equal(issues.length, 3)
     end
 
     it "when issue exists" do
       issues = JSON.parse(issues_json, {symbolize_names: true})
-      expect(helper_module).to receive(:remove_issue).with("somerepo", 159)
       test_equal(helper_module.does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, "somerepo", "assigneduser1"), true)
       test_equal(issues.length, 3)
     end
@@ -90,10 +95,12 @@ describe HelperModule do
 
   context "test get_all_org_members_team_repositories" do
     url = "https://api.github.com/orgs/ministryofjustice/teams/all-org-members/repos?per_page=100"
+    before do
+      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+    end
 
     it "when team has repositories" do
       response = %([{"name": "somerepo1"},{"name": "somerepo2"}])
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).with(url).and_return(response)
       repositories = ["somerepo1", "somerepo2"]
       test_equal(helper_module.get_all_org_members_team_repositories, repositories)
@@ -101,7 +108,6 @@ describe HelperModule do
 
     it "when team has no repositories" do
       response = []
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).with(url).and_return(response.to_json)
       test_equal(helper_module.get_all_org_members_team_repositories, [])
     end
@@ -149,18 +155,19 @@ describe HelperModule do
 
   context "test get_org_outside_collaborators" do
     url = "https://api.github.com/orgs/ministryofjustice/outside_collaborators?per_page=100"
+    before do
+      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+    end
 
     it WHEN_COLLABORATORS_EXISTS do
       json = %([{"login": "someuser1"},{"login": "someuser2"}])
       response = [TEST_USER_1, TEST_USER_2]
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).with(url).and_return(json)
       test_equal(helper_module.get_org_outside_collaborators, response)
     end
 
     it WHEN_NO_COLLABORATORS_EXISTS do
       response = []
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:fetch_json).with(url).and_return(response.to_json)
       test_equal(helper_module.get_org_outside_collaborators, [])
     end
@@ -531,12 +538,15 @@ describe HelperModule do
       }
     ]
 
+    before do
+      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
+    end
+
     it "when repositories exist" do
       # FUT has a loop with tree iterations. Each loop produces these objects.
       repo1 = GithubCollaborators::Repository.new("somerepo1", 1)
       repo2 = GithubCollaborators::Repository.new("somerepo3", 5)
       repo3 = GithubCollaborators::Repository.new("somerepo5", 0)
-      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
       expect(graphql_client).to receive(:run_query).with(json_query_public_repo).and_return(return_data)
       expect(graphql_client).to receive(:run_query).with(json_query_private_repo).and_return(return_data)
       expect(graphql_client).to receive(:run_query).with(json_query_internal_repo).and_return(return_data)
@@ -564,7 +574,6 @@ describe HelperModule do
     )
 
     it "when no repositories exist" do
-      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
       expect(graphql_client).to receive(:run_query).with(json_query_public_repo).and_return(return_data_no_repositories)
       expect(graphql_client).to receive(:run_query).with(json_query_private_repo).and_return(return_data_no_repositories)
       expect(graphql_client).to receive(:run_query).with(json_query_internal_repo).and_return(return_data_no_repositories)
@@ -646,9 +655,12 @@ describe HelperModule do
       }
     ]
 
+    before do
+      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
+    end
+
     it "when archived repositories exist" do
       # FUT has a loop with tree iterations. Each loop produces a list of repo names.
-      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
       expect(graphql_client).to receive(:run_query).with(json_query_public).and_return(return_data)
       expect(graphql_client).to receive(:run_query).with(json_query_private).and_return(return_data)
       expect(graphql_client).to receive(:run_query).with(json_query_internal).and_return(return_data)
@@ -674,7 +686,6 @@ describe HelperModule do
     )
 
     it "when archived repositories don't exist" do
-      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
       expect(graphql_client).to receive(:run_query).with(json_query_public).and_return(return_data_no_repositories)
       expect(graphql_client).to receive(:run_query).with(json_query_private).and_return(return_data_no_repositories)
       expect(graphql_client).to receive(:run_query).with(json_query_internal).and_return(return_data_no_repositories)
@@ -729,8 +740,11 @@ describe HelperModule do
     }
     )
 
-    it WHEN_COLLABORATORS_EXISTS do
+    before do
       expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
+    end
+
+    it WHEN_COLLABORATORS_EXISTS do
       expect(graphql_client).to receive(:run_query).with(json_query).and_return(return_data)
       collaborators = helper_module.fetch_all_collaborators("somerepo")
       test_equal(collaborators.length, 3)
@@ -738,7 +752,6 @@ describe HelperModule do
     end
 
     it WHEN_NO_COLLABORATORS_EXISTS do
-      expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client).at_least(1).times
       expect(graphql_client).to receive(:run_query).with(json_query).and_return(json_data_no_collaborators)
       collaborators = helper_module.fetch_all_collaborators("somerepo")
       test_equal(collaborators.length, 0)
