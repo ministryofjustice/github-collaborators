@@ -24,9 +24,12 @@ describe HelperModule do
       }
     )
 
+  before do
+    expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+  end
+
   it "create collaborators where no pagination" do
     return_data = File.read("spec/fixtures/organisation-members.json")
-    expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
     expect(graphql_client).to receive(:run_query).with(json_data).and_return(return_data)
     organization_members = helper_module.get_all_organisation_members
     test_equal(organization_members.length, 2)
@@ -51,7 +54,6 @@ describe HelperModule do
   )
 
   it "when no collaborators exist" do
-    expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
     expect(graphql_client).to receive(:run_query).with(json_data).and_return(json_data_no_collaborators)
     organization_members = helper_module.get_all_organisation_members
     test_equal(organization_members.length, 0)
