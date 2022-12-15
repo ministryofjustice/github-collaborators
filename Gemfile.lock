@@ -21,7 +21,7 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    git (1.12.0)
+    git (1.13.0)
       addressable (~> 2.8)
       rchardet (~> 1.8)
     hashdiff (1.0.1)
@@ -37,7 +37,7 @@ GEM
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    public_suffix (5.0.0)
+    public_suffix (5.0.1)
     rake (13.0.6)
     rchardet (1.8.0)
     rexml (3.2.5)
