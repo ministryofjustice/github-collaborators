@@ -14,7 +14,6 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).not_to receive(:remove_file)
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
 
         expect(outside_collaborators).to receive(:remove_empty_files)
@@ -321,7 +320,6 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).not_to receive(:remove_file)
  
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
 
@@ -365,7 +363,6 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).not_to receive(:remove_file)
  
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
 
@@ -391,7 +388,6 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).not_to receive(:remove_file)
  
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
 
@@ -414,7 +410,6 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
-        expect(terraform_files).not_to receive(:remove_file)
  
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
 
@@ -430,6 +425,22 @@ class GithubCollaborators
         expect(full_org_archived_repository_slack_message).to receive(:post_slack_message)
         outside_collaborators.full_org_members_check
       end
+
+      # it "call is_renewal_within_one_month" do
+      #   file = create_terraform_file_with_collaborator_issue
+      #   expect(terraform_files).to receive(:get_terraform_files).and_return([file])
+
+      #   review_date = (Date.today - 90).strftime(DATE_FORMAT)
+      #   collaborator_data = create_collaborator_data(review_date)
+      #   block1 = GithubCollaborators::TerraformBlock.new
+      #   block1.add_terraform_file_collaborator_data(collaborator_data)
+      #   expect(file).to receive(:get_terraform_blocks).and_return([block1])
+
+      #   allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
+      #   expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
+      #   expect(organization).to receive(:create_full_org_members)
+      #   outside_collaborators = GithubCollaborators::OutsideCollaborators.new        
+      # end
     end
   end
 end

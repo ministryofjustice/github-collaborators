@@ -133,9 +133,6 @@ class GithubCollaborators
     def full_org_members_check
       logger.debug "full_org_members_check"
 
-      odd_full_org_members = []
-      full_org_members_in_archived_repositories = []
-
       @organization.get_full_org_members_not_in_terraform_file.each do |full_org_member|
         add_collaborator(full_org_member.downcase)
       end
