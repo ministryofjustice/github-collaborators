@@ -19,16 +19,15 @@ describe HelperModule do
   context "when env var enabled" do
     before do
       ENV["REALLY_POST_TO_GH"] = "1"
+      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
     end
 
     it "call github api in create unknown collaborator issue" do
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:post_json).with(URL, json1)
       helper_module.create_unknown_collaborator_issue(LOGIN, REPOSITORY_NAME)
     end
 
     it "call github api in create review date expires soon issue" do
-      expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:post_json).with(URL, json2)
       helper_module.create_review_date_expires_soon_issue(LOGIN, REPOSITORY_NAME)
     end
@@ -41,17 +40,15 @@ describe HelperModule do
   context "when env var not enabled" do
     before do
       ENV["REALLY_POST_TO_GH"] = "0"
+      expect(GithubCollaborators::HttpClient).not_to receive(:new)
+      expect(http_client).not_to receive(:delete)
     end
 
     it "dont call github api in create unknown collaborator issue" do
-      expect(GithubCollaborators::HttpClient).not_to receive(:new)
-      expect(http_client).not_to receive(:delete)
       helper_module.create_unknown_collaborator_issue(LOGIN, REPOSITORY_NAME)
     end
 
     it "dont call github api in create review date expires soon issue" do
-      expect(GithubCollaborators::HttpClient).not_to receive(:new)
-      expect(http_client).not_to receive(:delete)
       helper_module.create_review_date_expires_soon_issue(LOGIN, REPOSITORY_NAME)
     end
 
@@ -63,17 +60,15 @@ describe HelperModule do
   context "when env var is missing" do
     before do
       ENV.delete("REALLY_POST_TO_GH")
+      expect(GithubCollaborators::HttpClient).not_to receive(:new)
+      expect(http_client).not_to receive(:delete)
     end
 
     it "dont call github api in create unknown collaborator issue" do
-      expect(GithubCollaborators::HttpClient).not_to receive(:new)
-      expect(http_client).not_to receive(:delete)
       helper_module.create_unknown_collaborator_issue(LOGIN, REPOSITORY_NAME)
     end
 
     it "dont call github api in create review date expires soon issue" do
-      expect(GithubCollaborators::HttpClient).not_to receive(:new)
-      expect(http_client).not_to receive(:delete)
       helper_module.create_review_date_expires_soon_issue(LOGIN, REPOSITORY_NAME)
     end
   end
