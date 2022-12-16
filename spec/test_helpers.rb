@@ -121,7 +121,7 @@ module Helpers
   end
 
   def create_terraform_block_review_date_less_than_month
-    review_date = (Date.today + 28).strftime(DATE_FORMAT).to_s
+    review_date = (Date.today + 27).strftime(DATE_FORMAT).to_s
     create_test_data(review_date)
   end
 

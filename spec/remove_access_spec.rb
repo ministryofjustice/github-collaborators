@@ -13,7 +13,7 @@ describe HelperModule do
       url = "https://api.github.com/repos/ministryofjustice/somerepo/collaborators/somegithubuser"
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:delete).with(url)
-      helper_module.remove_access("somerepo", "somegithubuser")
+      helper_module.remove_access(REPOSITORY_NAME, "somegithubuser")
     end
 
     after do
@@ -33,7 +33,7 @@ describe HelperModule do
       end
 
       it "dont call github api" do
-        helper_module.remove_access("somerepo", "somegithubuser")
+        helper_module.remove_access(REPOSITORY_NAME, "somegithubuser")
       end
 
       after do
@@ -43,7 +43,7 @@ describe HelperModule do
 
     context "when env var is missing" do
       it "dont call github api" do
-        helper_module.remove_access("somerepo", "somegithubuser")
+        helper_module.remove_access(REPOSITORY_NAME, "somegithubuser")
       end
     end
   end

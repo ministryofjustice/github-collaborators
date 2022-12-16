@@ -95,7 +95,7 @@ class GithubCollaborators
         terraform_blocks.each do |terraform_block|
           collaborators_in_file.push(terraform_block.username)
         end
-        expected_collaborators = [TEST_USER_1, TEST_USER_2, "someuser"]
+        expected_collaborators = [TEST_USER_1, TEST_USER_2, TEST_USER]
         test_equal(collaborators_in_file, expected_collaborators)
         modified_file = File.read(TEST_FILE)
         test_not_equal(modified_file, original_file)

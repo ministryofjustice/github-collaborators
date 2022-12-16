@@ -10,6 +10,7 @@ module TestConstants
   REPOSITORY_NAME = "somerepo"
   EMPTY_REPOSITORY_NAME = "empty-file"
   TEST_FILE = "terraform/test-repo.tf"
+  TEST_USER = "someuser"
   TEST_USER_1 = "someuser1"
   TEST_USER_2 = "someuser2"
   TEST_USER_3 = "someuser3"

@@ -1,5 +1,4 @@
 URL = "https://api.github.com/repos/ministryofjustice/#{REPOSITORY_NAME}/issues"
-LOGIN = "someuser"
 COLLABORATOR_EXISTS = "when collaborator does exist"
 COLLABORATOR_DOESNT_EXIST = "when collaborator doesn't exist"
 TEST_CREATE_PULL_REQUEST = "test create_pull_request"
@@ -26,7 +25,7 @@ describe HelperModule do
     end
 
     it "return an issue" do
-      response = %([{"assignee": { "login":#{LOGIN}}, "title": #{COLLABORATOR_EXPIRES_SOON}, "assignees": [{"login":#{LOGIN} }]}])
+      response = %([{"assignee": { "login":#{TEST_USER}}, "title": #{COLLABORATOR_EXPIRES_SOON}, "assignees": [{"login":#{TEST_USER} }]}])
       expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
       test_equal(helper_module.get_issues_from_github(REPOSITORY_NAME), response)
     end
@@ -46,10 +45,10 @@ describe HelperModule do
 
   context "test delete_expired_invite" do
     it "call function" do
-      url = "https://api.github.com/repos/ministryofjustice/somerepo/invitations/someuser"
+      url = "https://api.github.com/repos/ministryofjustice/#{REPOSITORY_NAME}/invitations/#{TEST_USER}"
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:delete).with(url)
-      helper_module.delete_expired_invite("somerepo", "someuser")
+      helper_module.delete_expired_invite(REPOSITORY_NAME, TEST_USER)
     end
   end
 
@@ -63,32 +62,32 @@ describe HelperModule do
       url = "https://api.github.com/repos/ministryofjustice/somerepo/invitations"
       expect(http_client).to receive(:fetch_json).with(url).and_return(json)
       expected_result = [{login: "user1", expired: true, invite_id: 1}, {login: "user2", expired: false, invite_id: 2}]
-      test_equal(helper_module.get_repository_invites("somerepo"), expected_result)
+      test_equal(helper_module.get_repository_invites(REPOSITORY_NAME), expected_result)
     end
 
     it "when invites don't exist" do
       url = "https://api.github.com/repos/ministryofjustice/somerepo/invitations"
       response = %([])
       expect(http_client).to receive(:fetch_json).with(url).and_return(response)
-      test_equal(helper_module.get_repository_invites("somerepo"), [])
+      test_equal(helper_module.get_repository_invites(REPOSITORY_NAME), [])
     end
   end
 
   context "test does_issue_already_exist" do
     issues_json = File.read("spec/fixtures/issues.json")
     before do
-      expect(helper_module).to receive(:remove_issue).with("somerepo", 159)
+      expect(helper_module).to receive(:remove_issue).with(REPOSITORY_NAME, 159)
     end
 
     it "when no issues exists" do
       issues = JSON.parse(issues_json, {symbolize_names: true})
-      test_equal(helper_module.does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, "somerepo", TEST_USER_1), false)
+      test_equal(helper_module.does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, REPOSITORY_NAME, TEST_USER_1), false)
       test_equal(issues.length, 3)
     end
 
     it "when issue exists" do
       issues = JSON.parse(issues_json, {symbolize_names: true})
-      test_equal(helper_module.does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, "somerepo", "assigneduser1"), true)
+      test_equal(helper_module.does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, REPOSITORY_NAME, "assigneduser1"), true)
       test_equal(issues.length, 3)
     end
   end
@@ -177,7 +176,7 @@ describe HelperModule do
     pull_request_title = "sometitle"
     filenames = ["file1", "file2", "file3"]
     branch_name = "somebranch"
-    collaborator_name = "someuser"
+    collaborator_name = TEST_USER
     types = [TYPE_DELETE, TYPE_EXTEND, TYPE_REMOVE, TYPE_PERMISSION, TYPE_ADD, TYPE_DELETE_ARCHIVE]
 
     it "when branch name valid and unknown type" do
@@ -302,7 +301,7 @@ describe HelperModule do
   end
 
   context "test extend_date_hash" do
-    login = "someuser"
+    login = TEST_USER
     branch_name = "somebranch"
     hash_body = {
       title: EXTEND_REVIEW_DATE_PR_TITLE + " " + login,
@@ -371,7 +370,7 @@ describe HelperModule do
   end
 
   context "test add_collaborator_hash" do
-    login = "someuser"
+    login = TEST_USER
     branch_name = "somebranch"
     hash_body = {
       title: ADD_FULL_ORG_MEMBER_PR_TITLE + " " + login.downcase,
@@ -399,7 +398,7 @@ describe HelperModule do
   end
 
   context "test remove_collaborator_hash" do
-    login = "someuser"
+    login = TEST_USER
     branch_name = "somebranch"
     hash_body = {
       title: REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login.downcase,
@@ -422,7 +421,7 @@ describe HelperModule do
   end
 
   context "test modify_collaborator_permission_hash" do
-    login = "someuser"
+    login = TEST_USER
     branch_name = "somebranch"
     hash_body = {
       title: CHANGE_PERMISSION_PR_TITLE + " " + login.downcase,
@@ -700,7 +699,7 @@ describe HelperModule do
       %[
       {
         organization(login: "ministryofjustice") {
-          repository(name: "somerepo") {
+          repository(name: "#{REPOSITORY_NAME}") {
             collaborators(
               affiliation: OUTSIDE
               first: 100
@@ -746,14 +745,14 @@ describe HelperModule do
 
     it WHEN_COLLABORATORS_EXISTS do
       expect(graphql_client).to receive(:run_query).with(json_query).and_return(return_data)
-      collaborators = helper_module.fetch_all_collaborators("somerepo")
+      collaborators = helper_module.fetch_all_collaborators(REPOSITORY_NAME)
       test_equal(collaborators.length, 3)
       test_equal(collaborators, [TEST_USER_1, TEST_USER_2, TEST_USER_3])
     end
 
     it WHEN_NO_COLLABORATORS_EXISTS do
       expect(graphql_client).to receive(:run_query).with(json_query).and_return(json_data_no_collaborators)
-      collaborators = helper_module.fetch_all_collaborators("somerepo")
+      collaborators = helper_module.fetch_all_collaborators(REPOSITORY_NAME)
       test_equal(collaborators.length, 0)
     end
   end
