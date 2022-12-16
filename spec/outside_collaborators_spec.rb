@@ -5,14 +5,15 @@ class GithubCollaborators
     let(:organization) { double(GithubCollaborators::Organization) }
     let(:odd_full_org_slack_message) { double(GithubCollaborators::OddFullOrgMembers) }
     let(:full_org_archived_repository_slack_message) { double(GithubCollaborators::ArchivedRepositories) }
-    
+    let(:helper_module) { Class.new { extend HelperModule } }
+
     # The tests below are nested. This is to reduce code duplication.
     # This is because it take alot of object to create the object under test.
     # The before do blocks contain expectations that are common within
     # the nested context block. Therefore consider the top level and
     # nested context block when reading the test code.
 
-    context "test outside_collaborators basic" do
+    context "test outside_collaborators" do
       before do
         allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
         expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
@@ -85,7 +86,7 @@ class GithubCollaborators
 
       end
 
-      it "when terraform files exist and is an archived file" do
+      it "call archived_repository_check when terraform files exist and is an archived file" do
         file = create_terraform_file
         expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
         expect(organization).to receive(:get_org_archived_repositories).and_return([TEST_REPO_NAME])
@@ -263,23 +264,52 @@ class GithubCollaborators
         end
       end
     
-      # it "call is_renewal_within_one_month" do
-      #   file = create_terraform_file_with_collaborator_issue
-      #   expect(terraform_files).to receive(:get_terraform_files).and_return([file])
+      context "call is_renewal_within_one_month" do
+        before do
+          expect(terraform_files).to receive(:get_terraform_files).and_return([])
+        end
 
-      #   review_date = (Date.today - 90).strftime(DATE_FORMAT)
-      #   collaborator_data = create_collaborator_data(review_date)
-      #   block1 = GithubCollaborators::TerraformBlock.new
-      #   block1.add_terraform_file_collaborator_data(collaborator_data)
-      #   expect(file).to receive(:get_terraform_blocks).and_return([block1])
+        it "when collaborator issue is not renewal within a month" do
+          outside_collaborators = GithubCollaborators::OutsideCollaborators.new
 
-      #   allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
-      #   expect(organization).to receive(:create_full_org_members)
-      #   outside_collaborators = GithubCollaborators::OutsideCollaborators.new        
-      # end
+          terraform_block = create_terraform_block_review_date_more_than_month
+          collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          collaborator1.check_for_issues
+
+          expect(outside_collaborators).to receive(:read_repository_issues).with(REPOSITORY_NAME).and_return([])
+          expect(outside_collaborators).not_to receive(:create_review_date_expires_soon_issue)
+          outside_collaborators.is_renewal_within_one_month([collaborator1])
+        end
+
+        it "when collaborator issue is renewal within a month and no issue already exists" do
+          outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+
+          terraform_block = create_terraform_block_review_date_less_than_month
+          collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          collaborator1.check_for_issues
+
+          expect(outside_collaborators).to receive(:read_repository_issues).with(REPOSITORY_NAME).and_return([])
+          allow_any_instance_of(HelperModule).to receive(:does_issue_already_exist).and_return(false)
+          expect(outside_collaborators).to receive(:create_review_date_expires_soon_issue).with(TEST_USER, REPOSITORY_NAME)
+          outside_collaborators.is_renewal_within_one_month([collaborator1])
+        end
+
+        it "when collaborator issue is renewal within a month but issue already exists" do
+          outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+
+          terraform_block = create_terraform_block_review_date_less_than_month
+          collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          collaborator1.check_for_issues
+
+          expect(outside_collaborators).to receive(:read_repository_issues).with(REPOSITORY_NAME).and_return([])
+          allow_any_instance_of(HelperModule).to receive(:does_issue_already_exist).and_return(true)
+          expect(outside_collaborators).not_to receive(:create_review_date_expires_soon_issue)
+          outside_collaborators.is_renewal_within_one_month([collaborator1])
+        end
+      end
     end
 
-    context "test compare_terraform_and_github" do
+    context "test outside_collaborators" do
       before do
         allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
         expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
@@ -296,7 +326,7 @@ class GithubCollaborators
         repo1 = GithubCollaborators::Repository.new(TEST_REPO_NAME1, 0)
         repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 0)
 
-        it "call compare_terraform_and_github when no collaborators exist" do
+        it "when no collaborators exist" do
           allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
           allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
           my_organization = GithubCollaborators::Organization.new
@@ -310,7 +340,7 @@ class GithubCollaborators
           outside_collaborators.compare_terraform_and_github
         end
   
-        it "call compare_terraform_and_github when collaborator is a full org member" do
+        it "when collaborator is a full org member" do
           allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_2])
           allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
           my_organization = GithubCollaborators::Organization.new
@@ -328,7 +358,7 @@ class GithubCollaborators
         end
       end
 
-      it "call compare_terraform_and_github when repository collaborator lengths are different" do
+      it "when repository collaborator lengths are different" do
         repo1 = GithubCollaborators::Repository.new(TEST_REPO_NAME1, 2)
         repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 0)
         allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
@@ -371,4 +401,3 @@ class GithubCollaborators
     end
   end
 end
-

@@ -159,10 +159,12 @@ class GithubCollaborators
       # Check all collaborators
       collaborators.each do |collaborator|
         repository_name = collaborator.repository.downcase
+        collaborator_login = collaborator.login.downcase
         issues = read_repository_issues(repository_name)
-        if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH) && !does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, repository_name, collaborator.login.downcase)
+        issue_exist = does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, repository_name, collaborator_login)
+        if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH) && issue_exist == false
           # Create an issue on the repository
-          create_review_date_expires_soon_issue(collaborator.login.downcase, repository_name)
+          create_review_date_expires_soon_issue(collaborator_login, repository_name)
         end
       end
     end
