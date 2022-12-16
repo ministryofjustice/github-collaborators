@@ -55,7 +55,7 @@ class GithubCollaborators
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
           outside_collaborators.remove_empty_files
         end
-  
+
         it "when empty file exists and pull request already exists" do
           allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with("empty-file.tf", EMPTY_FILES_PR_TITLE).and_return(true)
           expect(terraform_files).not_to receive(:remove_file)
@@ -69,7 +69,7 @@ class GithubCollaborators
           expect(organization).to receive(:get_org_archived_repositories).and_return([])
           expect(terraform_files).not_to receive(:remove_file)
         end
-        
+
         it "when no terraform files exist" do
           expect(terraform_files).to receive(:get_terraform_files).and_return([]).at_least(2).times
           expect(terraform_files).not_to receive(:remove_file)
@@ -79,11 +79,10 @@ class GithubCollaborators
 
         it "when terraform files exist but isnt an archived file" do
           file = create_terraform_file
-          expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times  
+          expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
           outside_collaborators.archived_repository_check
         end
-
       end
 
       it "call archived_repository_check when terraform files exist and is an archived file" do
@@ -95,7 +94,7 @@ class GithubCollaborators
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
         outside_collaborators.archived_repository_check
       end
-    
+
       it "call create_unknown_collaborators" do
         expect(terraform_files).to receive(:get_terraform_files).and_return([])
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
@@ -122,9 +121,9 @@ class GithubCollaborators
 
         invite1 = {login: TEST_USER_1, expired: false, invite_id: 2344}
         invite2 = {login: TEST_USER_2, expired: false, invite_id: 7924}
-        
+
         it "when invites exist but passed in array is empty" do
-          outside_collaborators = GithubCollaborators::OutsideCollaborators.new  
+          outside_collaborators = GithubCollaborators::OutsideCollaborators.new
           invites = [invite1, invite2]
           allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return(invites)
           outside_collaborators.check_repository_invites([], TEST_REPO_NAME2)
@@ -138,7 +137,7 @@ class GithubCollaborators
           expect(terraform_files).not_to receive(:delete_expired_invite)
           outside_collaborators.check_repository_invites([TEST_USER_1], TEST_REPO_NAME2)
         end
-  
+
         it "call check_repository_invites when invites exist but has expired" do
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
           invite1 = {login: TEST_USER_1, expired: true, invite_id: 2344}
@@ -147,9 +146,8 @@ class GithubCollaborators
           allow_any_instance_of(HelperModule).to receive(:delete_expired_invite).with(TEST_REPO_NAME2, TEST_USER_1)
           outside_collaborators.check_repository_invites([TEST_USER_1], TEST_REPO_NAME2)
         end
-        
       end
-    
+
       context "call collaborator_checks" do
         it "when collaborator array is empty" do
           expect(terraform_files).to receive(:get_terraform_files).and_return([])
@@ -181,19 +179,19 @@ class GithubCollaborators
           outside_collaborators.collaborator_checks
         end
       end
-    
+
       context "call full_org_members_check" do
         before do
           expect(terraform_files).to receive(:get_terraform_files).and_return([])
         end
-  
+
         it "when org and arrays are empty" do
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
           expect(organization).to receive(:get_full_org_members_not_in_terraform_file).and_return([])
           expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([])
           expect(organization).to receive(:get_odd_full_org_members).and_return([])
           expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([])
-          
+
           expect(outside_collaborators).not_to receive(:add_collaborator)
           expect(outside_collaborators).not_to receive(:change_collaborator_permission)
           expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
@@ -207,25 +205,25 @@ class GithubCollaborators
           expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([])
           expect(organization).to receive(:get_odd_full_org_members).and_return([])
           expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([])
-          
+
           expect(outside_collaborators).to receive(:add_collaborator).with(TEST_USER_1)
           expect(outside_collaborators).not_to receive(:change_collaborator_permission)
           expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
           expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
           outside_collaborators.full_org_members_check
         end
-  
+
         it "when full org member has repository mismatches" do
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
           expect(organization).to receive(:get_full_org_members_not_in_terraform_file).and_return([])
-          mismatch1 = { permission: "admin", repository_name: TEST_REPO_NAME1 }
-          mismatch2 = { permission: "push", repository_name: TEST_REPO_NAME2 }
+          mismatch1 = {permission: "admin", repository_name: TEST_REPO_NAME1}
+          mismatch2 = {permission: "push", repository_name: TEST_REPO_NAME2}
           mismatches = [mismatch1, mismatch2]
           member = {login: TEST_USER_1, mismatches: mismatches}
           expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([member])
           expect(organization).to receive(:get_odd_full_org_members).and_return([])
           expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([])
-          
+
           expect(outside_collaborators).not_to receive(:add_collaborator)
           expect(outside_collaborators).to receive(:change_collaborator_permission).with(TEST_USER_1, mismatches)
           expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
@@ -239,7 +237,7 @@ class GithubCollaborators
           expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([])
           expect(organization).to receive(:get_odd_full_org_members).and_return([TEST_USER_1])
           expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([])
-          
+
           expect(outside_collaborators).not_to receive(:add_collaborator)
           expect(outside_collaborators).not_to receive(:change_collaborator_permission)
           expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::OddFullOrgMembers), [TEST_USER_1]).and_return(odd_full_org_slack_message)
@@ -255,7 +253,7 @@ class GithubCollaborators
           expect(organization).to receive(:get_odd_full_org_members).and_return([])
           member = {login: TEST_USER_1, repository: TEST_REPO_NAME1}
           expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([member])
-          
+
           expect(outside_collaborators).not_to receive(:add_collaborator)
           expect(outside_collaborators).not_to receive(:change_collaborator_permission)
           expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::ArchivedRepositories), [member]).and_return(full_org_archived_repository_slack_message)
@@ -263,7 +261,7 @@ class GithubCollaborators
           outside_collaborators.full_org_members_check
         end
       end
-    
+
       context "call is_renewal_within_one_month" do
         before do
           expect(terraform_files).to receive(:get_terraform_files).and_return([])
@@ -332,25 +330,25 @@ class GithubCollaborators
           my_organization = GithubCollaborators::Organization.new
           expect(GithubCollaborators::Organization).to receive(:new).and_return(my_organization).at_least(1).times
           expect(my_organization).to receive(:create_full_org_members)
-          
+
           file = create_empty_terraform_file
           expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(1).times
           expect(terraform_files).to receive(:get_collaborators_in_file).and_return([]).at_least(2).times
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
           outside_collaborators.compare_terraform_and_github
         end
-  
+
         it "when collaborator is a full org member" do
           allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_2])
           allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
           my_organization = GithubCollaborators::Organization.new
-      
+
           file = create_terraform_file
           expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(1).times
           expect(GithubCollaborators::Organization).to receive(:new).and_return(my_organization).at_least(1).times
           expect(terraform_files).to receive(:get_collaborators_in_file).and_return([TEST_USER_2]).at_least(2).times
           expect(my_organization).to receive(:create_full_org_members)
-      
+
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
           expect(my_organization).to receive(:is_collaborator_an_org_member).and_return(TEST_USER_2).at_least(1).times
           expect(outside_collaborators).not_to receive(:print_comparison)
@@ -369,33 +367,33 @@ class GithubCollaborators
         allow_any_instance_of(HelperModule).to receive(:fetch_all_collaborators).with(TEST_REPO_NAME2).and_return([])
         allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])
         my_organization = GithubCollaborators::Organization.new
-      
+
         file = create_terraform_file
-      
+
         expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(1).times
         expect(GithubCollaborators::Organization).to receive(:new).and_return(my_organization).at_least(1).times
         expect(terraform_files).to receive(:get_collaborators_in_file).and_return([TEST_USER_1]).at_least(1).times
         expect(my_organization).to receive(:create_full_org_members)
-      
+
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-      
+
         expect(outside_collaborators).to receive(:print_comparison).with([TEST_USER_1], [TEST_USER_3, TEST_USER_3], TEST_REPO_NAME1)
         expect(outside_collaborators).to receive(:find_unknown_collaborators).with([TEST_USER_1], [TEST_USER_3, TEST_USER_3], TEST_REPO_NAME1).at_least(1).times.and_return([TEST_USER_1])
         expect(outside_collaborators).to receive(:create_unknown_collaborators).with([TEST_USER_1], TEST_REPO_NAME1)
-      
+
         invite1 = {login: TEST_USER_2, expired: false, invite_id: 2344}
         invites = [invite1]
         allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME1).and_return(invites)
         allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return(invites)
         expect(terraform_files).not_to receive(:delete_expired_invite)
-      
+
         expect(outside_collaborators).to receive(:print_comparison).with([TEST_USER_1], [], TEST_REPO_NAME2)
         expect(outside_collaborators).to receive(:find_unknown_collaborators).with([TEST_USER_1], [], TEST_REPO_NAME2).and_return([])
-      
+
         slack_notififer = GithubCollaborators::SlackNotifier.new(nil, [])
         expect(GithubCollaborators::SlackNotifier).to receive(:new).and_return(slack_notififer)
         expect(slack_notififer).to receive(:post_slack_message)
-      
+
         outside_collaborators.compare_terraform_and_github
       end
     end

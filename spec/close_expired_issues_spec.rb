@@ -30,7 +30,7 @@ describe HelperModule do
 
       it "when collaborator expires soon, grace period expired and is open" do
         issues = create_issues(COLLABORATOR_EXPIRES_SOON, GRACE_PERIOD_EXPIRED, OPEN, 1)
-        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)          
+        expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
         helper_module.close_expired_issues(REPOSITORY_NAME)
       end
 
@@ -70,7 +70,7 @@ describe HelperModule do
         helper_module.close_expired_issues(REPOSITORY_NAME)
       end
     end
-    
+
     context "and do not remove issue" do
       before do
         expect(helper_module).not_to receive(:remove_issue).with(REPOSITORY_NAME, 1)
@@ -93,7 +93,7 @@ describe HelperModule do
         expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
         helper_module.close_expired_issues(REPOSITORY_NAME)
       end
-      
+
       it "when other open issue, ignore" do
         issues = create_issues("some issue", "2020-02-11", OPEN, 1)
         expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
@@ -111,7 +111,7 @@ describe HelperModule do
         expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
         helper_module.close_expired_issues(REPOSITORY_NAME)
       end
-      
+
       it "when collaborator expires soon, grace period okay and is closed" do
         issues = create_issues(COLLABORATOR_EXPIRES_SOON, GRACE_PERIOD_OKAY, CLOSED, 1)
         expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)

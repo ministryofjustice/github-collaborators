@@ -65,7 +65,7 @@ class GithubCollaborators
             allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:get_full_org_member_repositories)
           end
 
-          it "call create_full_org_members when collaborators are not org members" do          
+          it "call create_full_org_members when collaborators are not org members" do
             allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
             organization = GithubCollaborators::Organization.new
             organization.create_full_org_members([collaborator1, collaborator2, collaborator3])
@@ -80,14 +80,14 @@ class GithubCollaborators
           end
 
           it "call create_full_org_members when collaborators are org members and names are different" do
-            allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2, TEST_USER_3]) 
+            allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2, TEST_USER_3])
             organization = GithubCollaborators::Organization.new
             organization.create_full_org_members([collaborator1, collaborator2, collaborator3])
             test_equal(organization.full_org_members.length, 3)
           end
 
           it "call get_org_archived_repositories when empty" do
-            allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])  
+            allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
             organization = GithubCollaborators::Organization.new
             test_equal(organization.get_org_archived_repositories.length, 0)
           end

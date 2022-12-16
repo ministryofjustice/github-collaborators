@@ -88,7 +88,7 @@ class GithubCollaborators
           branch2 = Branch.new(branch_name3)
           allow_any_instance_of(Git::Branches).to receive(:remote).and_return([branch1, branch2])
           branch_creator = GithubCollaborators::BranchCreator.new
-          new_branch_name = branch_creator.check_branch_name_is_valid(branch_name3, TEST_USER_1)          
+          new_branch_name = branch_creator.check_branch_name_is_valid(branch_name3, TEST_USER_1)
           test_equal(new_branch_name, expected_new_branch_name1)
         end
 
