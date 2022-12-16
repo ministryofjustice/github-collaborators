@@ -7,7 +7,7 @@ class GithubCollaborators
         terraform_block = create_terraform_block_review_date_today
         collaborator = GithubCollaborators::Collaborator.new(terraform_block, "operations")
         line = removed.create_line(collaborator)
-        test_equal(line, "- someuser from operations")
+        test_equal(line, "- #{TEST_USER} from operations")
       end
 
       it "singular message" do

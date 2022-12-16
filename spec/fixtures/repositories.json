@@ -4,7 +4,7 @@
       "repos": [
         {
           "repo": {
-            "name": "somerepo1",
+            "name": "test-repo1",
             "isLocked": false,
             "isDisabled": false,
             "collaborators": {
@@ -14,7 +14,7 @@
         },
         {
           "repo": {
-            "name": "somerepo2",
+            "name": "test-repo2",
             "isLocked": true,
             "isDisabled": false,
             "collaborators": {
@@ -24,7 +24,7 @@
         },
         {
           "repo": {
-            "name": "somerepo3",
+            "name": "test-repo3",
             "isLocked": false,
             "isDisabled": false,
             "collaborators": {
@@ -34,7 +34,7 @@
         },
         {
           "repo": {
-            "name": "somerepo4",
+            "name": "test-repo4",
             "isLocked": false,
             "isDisabled": true,
             "collaborators": {
@@ -44,7 +44,7 @@
         },
         {
           "repo": {
-            "name": "somerepo5",
+            "name": "test-repo5",
             "isLocked": false,
             "isDisabled": false,
             "collaborators": {

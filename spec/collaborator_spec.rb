@@ -1,6 +1,4 @@
 class GithubCollaborators
-  include Constants
-
   describe Collaborator do
     context "checks issues" do
       it "check issues when review date is missing" do
@@ -48,7 +46,7 @@ class GithubCollaborators
       it "add missing issue to collaborator" do
         terraform_block = create_terraform_block_review_date_more_than_month
         collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-        collaborator.add_issue("missing")
+        collaborator.add_issue(MISSING)
         test_equal(collaborator.check_for_issues, [COLLABORATOR_MISSING])
       end
     end

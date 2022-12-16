@@ -7,7 +7,6 @@ class GithubCollaborators
   end
 
   describe BranchCreator do
-    # Stub sleep
     before {
       allow_any_instance_of(GithubCollaborators::BranchCreator).to receive(:sleep)
     }
@@ -63,7 +62,6 @@ class GithubCollaborators
       context " " do
         before {
           allow_any_instance_of(Git::Base).to receive(:fetch)
-
         }
 
         branch_name = "branch-name"

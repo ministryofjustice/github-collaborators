@@ -1,16 +1,10 @@
-GRACE_PERIOD_OKAY = (Date.today - 45).strftime(DATE_FORMAT)
-GRACE_PERIOD_EXPIRED = (Date.today - 46).strftime(DATE_FORMAT)
-OPEN = "open"
-CLOSED = "closed"
-CREATED_DATE = "2019-10-01"
-
 describe HelperModule do
   let(:helper_module) { Class.new { extend HelperModule } }
   let(:http_client) { double(GithubCollaborators::HttpClient) }
   let(:issue_creator) { double(GithubCollaborators::IssueCreator) }
 
   it "call remove_issue" do
-    url = "https://api.github.com/repos/ministryofjustice/somerepo/issues/1"
+    url = "#{URL}/1"
     state = "{\"state\":\"closed\"}"
     expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
     expect(http_client).to receive(:patch_json).with(url, state)

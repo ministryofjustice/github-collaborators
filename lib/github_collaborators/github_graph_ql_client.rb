@@ -52,7 +52,7 @@ class GithubCollaborators
       logger.debug "query_github_api"
       json = {query: body}.to_json
       headers = {"Authorization" => "bearer #{@github_token}"}
-      uri = URI.parse("https://api.github.com/graphql")
+      uri = URI.parse(GRAPHQL_URI)
       Net::HTTP.post(uri, json, headers)
     end
   end

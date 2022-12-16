@@ -1,7 +1,5 @@
 describe HelperModule do
-  # extended class
   let(:helper_module) { Class.new { extend HelperModule } }
-
   let(:http_client) { double(GithubCollaborators::HttpClient) }
 
   context "when env var enabled" do
@@ -10,10 +8,10 @@ describe HelperModule do
     end
 
     it "call github api" do
-      url = "https://api.github.com/repos/ministryofjustice/somerepo/collaborators/somegithubuser"
+      url = "#{GH_API_URL}/#{REPOSITORY_NAME}/collaborators/#{TEST_USER}"
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:delete).with(url)
-      helper_module.remove_access(REPOSITORY_NAME, "somegithubuser")
+      helper_module.remove_access(REPOSITORY_NAME, TEST_USER)
     end
 
     after do
@@ -33,7 +31,7 @@ describe HelperModule do
       end
 
       it "dont call github api" do
-        helper_module.remove_access(REPOSITORY_NAME, "somegithubuser")
+        helper_module.remove_access(REPOSITORY_NAME, TEST_USER)
       end
 
       after do
@@ -43,7 +41,7 @@ describe HelperModule do
 
     context "when env var is missing" do
       it "dont call github api" do
-        helper_module.remove_access(REPOSITORY_NAME, "somegithubuser")
+        helper_module.remove_access(REPOSITORY_NAME, TEST_USER)
       end
     end
   end

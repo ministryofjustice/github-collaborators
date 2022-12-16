@@ -2,14 +2,14 @@
   {
     "id": 1,
     "invitee": {
-      "login": "user1"
+      "login": "someuser1"
     },
     "expired": true
   },
   {
     "id": 2,
     "invitee": {
-      "login": "user2"
+      "login": "someuser2"
     },
     "expired": false
   }

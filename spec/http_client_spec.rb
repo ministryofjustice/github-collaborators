@@ -1,8 +1,4 @@
 class GithubCollaborators
-  TEST_URL = "https://api.github.com/repos/ministryofjustice/github-collaborators/issues"
-  BODY = "abc"
-  CATCH_ERROR = "catch error"
-
   describe HttpClient do
     subject(:hc) { described_class.new }
 

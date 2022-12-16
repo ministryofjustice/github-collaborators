@@ -7,7 +7,7 @@
 #     let(:logger) { double(Logger, warn: nil) }
 #     let(:collabs) {
 #       [
-#         {login: "someuser", permission: "admin"}
+#         {login: #{TEST_USER}, permission: "admin"}
 #       ]
 #     }
 #     let(:oec) { double(OrganizationOutsideCollaborators, fetch_repository_collaborators: collabs) }

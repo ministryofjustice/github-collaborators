@@ -104,7 +104,7 @@ class GithubCollaborators
         expect(GithubCollaborators::TerraformBlock).to receive(:new).and_return(terraform_block)
         expect(GithubCollaborators::Collaborator).to receive(:new).with(terraform_block, TEST_REPO_NAME2).and_return(collaborator)
         expect(terraform_block).to receive(:add_unknown_collaborator_data).with(TEST_USER_1)
-        expect(collaborator).to receive(:add_issue).with("missing")
+        expect(collaborator).to receive(:add_issue).with(MISSING)
         outside_collaborators.create_unknown_collaborators([TEST_USER_1], TEST_REPO_NAME2)
       end
 

@@ -45,4 +45,10 @@ module Constants
   ADDED_BY_MISSING = "Person who added this collaborator is missing"
   REVIEW_DATE_MISSING = "Collaboration review date is missing"
   COLLABORATOR_MISSING = "Collaborator not defined in terraform"
+  MISSING = "missing"
+
+  ORG = "ministryofjustice"
+  GH_API_URL = "https://api.github.com/repos/#{ORG}"
+  GH_ORG_URL = "https://github.com/#{ORG}"
+  GRAPHQL_URI = "https://api.github.com/graphql"
 end

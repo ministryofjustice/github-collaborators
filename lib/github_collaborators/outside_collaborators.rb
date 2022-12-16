@@ -99,7 +99,7 @@ class GithubCollaborators
         terraform_block = GithubCollaborators::TerraformBlock.new
         terraform_block.add_unknown_collaborator_data(collaborator_name)
         collaborator = GithubCollaborators::Collaborator.new(terraform_block, repository_name.downcase)
-        collaborator.add_issue("missing")
+        collaborator.add_issue(MISSING)
         @collaborators.push(collaborator)
       end
     end

@@ -8,7 +8,7 @@ module HelperModule
 
   def get_issues_from_github(repository)
     module_logger.debug "get_issues_from_github"
-    url = "https://api.github.com/repos/ministryofjustice/#{repository.downcase}/issues"
+    url = "#{GH_API_URL}/#{repository.downcase}/issues"
     response = GithubCollaborators::HttpClient.new.fetch_json(url)
     JSON.parse(response, {symbolize_names: true})
   end
@@ -20,7 +20,7 @@ module HelperModule
     username = github_user.downcase
 
     if ENV.fetch("REALLY_POST_TO_GH", "0") == "1"
-      url = "https://api.github.com/repos/ministryofjustice/#{repository}/collaborators/#{github_user}"
+      url = "#{GH_API_URL}/#{repository}/collaborators/#{github_user}"
       GithubCollaborators::HttpClient.new.delete(url)
       sleep 2
     else
@@ -36,7 +36,7 @@ module HelperModule
     invite_login = invite_login.downcase
 
     module_logger.warn "The invite for #{invite_login} on #{repository_name} has expired. Deleting the invite."
-    url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/invitations/#{invite_login}"
+    url = "#{GH_API_URL}/#{repository_name}/invitations/#{invite_login}"
     GithubCollaborators::HttpClient.new.delete(url)
     sleep 1
   end
@@ -48,7 +48,7 @@ module HelperModule
 
     repository_invites = []
 
-    url = "https://api.github.com/repos/ministryofjustice/#{repository_name.downcase}/invitations"
+    url = "#{GH_API_URL}/#{repository_name.downcase}/invitations"
 
     json = GithubCollaborators::HttpClient.new.fetch_json(url)
 
@@ -87,7 +87,7 @@ module HelperModule
 
     repository_name = repository_name.downcase
 
-    url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/issues/#{issue_id}"
+    url = "#{GH_API_URL}/#{repository_name}/issues/#{issue_id}"
 
     params = {
       state: "closed"
@@ -107,7 +107,7 @@ module HelperModule
     user_name = user_name.downcase
 
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
-      url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/issues"
+      url = "#{GH_API_URL}/#{repository_name}/issues"
       GithubCollaborators::HttpClient.new.post_json(url, unknown_collaborator_hash(user_name).to_json)
       sleep 2
     else
@@ -125,7 +125,7 @@ module HelperModule
       body: <<~EOF
         Hi there
         
-        We have a process to manage github collaborators in code: https://github.com/ministryofjustice/github-collaborators
+        We have a process to manage github collaborators in code: #{GH_ORG_URL}/github-collaborators
         
         Please follow the procedure described there to grant @#{user_name} access to this repository.
         
@@ -142,7 +142,7 @@ module HelperModule
     user_name = user_name.downcase
 
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
-      url = "https://api.github.com/repos/ministryofjustice/#{repository_name}/issues"
+      url = "#{GH_API_URL}/#{repository_name}/issues"
       GithubCollaborators::HttpClient.new.post_json(url, review_date_expires_soon_hash(user_name).to_json)
       sleep 2
     else
@@ -160,7 +160,7 @@ module HelperModule
       body: <<~EOF
         Hi there
         
-        The user @#{user_name} has its access for this repository maintained in code here: https://github.com/ministryofjustice/github-collaborators
+        The user @#{user_name} has its access for this repository maintained in code here: #{GH_ORG_URL}/github-collaborators
 
         The review_after date is due to expire within one month, please update this via a PR if they still require access.
         
@@ -230,7 +230,7 @@ module HelperModule
     after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
     %[
       {
-        organization(login: "ministryofjustice") {
+        organization(login: "#{ORG}") {
           membersWithRole(
             first: 100
             after: #{after}
@@ -258,7 +258,7 @@ module HelperModule
 
     #  Grabs 100 repositories from the team, if team has more than 100 repositories
     # this will need to be changed to paginate through the results.
-    url = "https://api.github.com/orgs/ministryofjustice/teams/all-org-members/repos?per_page=100"
+    url = "https://api.github.com/orgs/#{ORG}/teams/all-org-members/repos?per_page=100"
     json = GithubCollaborators::HttpClient.new.fetch_json(url)
     JSON.parse(json)
       .find_all { |repository| repository["name"].downcase }
@@ -314,7 +314,7 @@ module HelperModule
     # Grab the Org outside collaborators
     # This has a hard limit return of 100 collaborators
     outside_collaborators = []
-    url = "https://api.github.com/orgs/ministryofjustice/outside_collaborators?per_page=100"
+    url = "https://api.github.com/orgs/#{ORG}/outside_collaborators?per_page=100"
     json = GithubCollaborators::HttpClient.new.fetch_json(url)
     JSON.parse(json)
       .find_all { |collaborator| collaborator["login"] }
@@ -377,7 +377,7 @@ module HelperModule
   def create_pull_request(hash_body)
     module_logger.debug "create_pull_request"
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
-      url = "https://api.github.com/repos/ministryofjustice/github-collaborators/pulls"
+      url = "#{GH_API_URL}/github-collaborators/pulls"
       if ENV.fetch("OPS_BOT_TOKEN", 0) == "1"
         GithubCollaborators::HttpClient.new.post_pull_request_json(url, hash_body.to_json)
       else
@@ -392,7 +392,7 @@ module HelperModule
   def pull_request_query
     %[
       {
-        organization(login: "ministryofjustice") {
+        organization(login: "#{ORG}") {
           repository(name: "github-collaborators") {
             pullRequests(states: OPEN, last: 100) {
               nodes {
@@ -593,7 +593,7 @@ module HelperModule
       {
         search(
           type: REPOSITORY
-          query: "org:ministryofjustice, archived:true, is:#{type}"
+          query: "org:#{ORG}, archived:true, is:#{type}"
           first: 100
           after: #{after}
         ) {
@@ -620,7 +620,7 @@ module HelperModule
       {
         search(
           type: REPOSITORY
-          query: "org:ministryofjustice, archived:false, is:#{type}"
+          query: "org:#{ORG}, archived:false, is:#{type}"
           first: 100
           after: #{after}
         ) {
@@ -672,7 +672,7 @@ module HelperModule
     after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
     %[
       {
-        organization(login: "ministryofjustice") {
+        organization(login: "#{ORG}") {
           repository(name: "#{repository.downcase}") {
             collaborators(
               affiliation: OUTSIDE

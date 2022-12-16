@@ -1,11 +1,10 @@
 describe HelperModule do
-  # extended class
   let(:helper_module) { Class.new { extend HelperModule } }
   let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
 
   json_data = %(
       {
-        organization(login: "ministryofjustice") {
+        organization(login: "#{ORG}") {
           membersWithRole(
             first: 100
             after: null

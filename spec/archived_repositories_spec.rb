@@ -6,7 +6,7 @@ class GithubCollaborators
       it "create line" do
         collaborator = {login: TEST_USER, repository: REPOSITORY_NAME}
         line = archived_repositories.create_line(collaborator)
-        test_equal(line, "- someuser in somerepo")
+        test_equal(line, "- #{TEST_USER} in #{REPOSITORY_NAME}")
       end
 
       it "singular message" do

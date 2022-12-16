@@ -17,8 +17,8 @@ class GithubCollaborators
       @reason = collaborator.reason
       @added_by = collaborator.added_by
       @issues = []
-      @href = "https://github.com/ministryofjustice/github-collaborators/blob/main/terraform/#{repository_name}.tf"
-      @repo_url = "https://github.com/ministryofjustice/#{repository_name}"
+      @href = "#{GH_ORG_URL}/github-collaborators/blob/main/terraform/#{repository_name}.tf"
+      @repo_url = "#{GH_ORG_URL}/#{repository_name}"
       @repository = repository_name
       @defined_in_terraform = true
 
@@ -80,7 +80,7 @@ class GithubCollaborators
 
     def add_issue(reason)
       logger.debug ""
-      if reason == "missing"
+      if reason == MISSING
         @issues.push(COLLABORATOR_MISSING)
         @defined_in_terraform = false
       end

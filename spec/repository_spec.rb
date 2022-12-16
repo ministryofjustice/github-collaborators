@@ -20,10 +20,10 @@ class GithubCollaborators
       end
 
       it "add collaborator names" do
-        repository.store_collaborators_names([TEST_USER, "otheruser"])
+        repository.store_collaborators_names([TEST_USER, TEST_USER_1])
         test_equal(repository.name, REPOSITORY_NAME)
         test_equal(repository.outside_collaborators_names.length, 2)
-        test_equal(repository.outside_collaborators_names, [TEST_USER, "otheruser"])
+        test_equal(repository.outside_collaborators_names, [TEST_USER, TEST_USER_1])
         test_equal(repository.outside_collaborators_count, 4)
         test_equal(repository.issues.length, 0)
       end

@@ -1,12 +1,4 @@
-URL = "https://api.github.com/repos/ministryofjustice/#{REPOSITORY_NAME}/issues"
-COLLABORATOR_EXISTS = "when collaborator does exist"
-COLLABORATOR_DOESNT_EXIST = "when collaborator doesn't exist"
-TEST_CREATE_PULL_REQUEST = "test create_pull_request"
-WHEN_COLLABORATORS_EXISTS = "when collaborators exist"
-WHEN_NO_COLLABORATORS_EXISTS = "when collaborators don't exist"
-
 describe HelperModule do
-  # extended class
   let(:helper_module) { Class.new { extend HelperModule } }
 
   let(:http_client) { double(GithubCollaborators::HttpClient) }
@@ -45,7 +37,7 @@ describe HelperModule do
 
   context "test delete_expired_invite" do
     it "call function" do
-      url = "https://api.github.com/repos/ministryofjustice/#{REPOSITORY_NAME}/invitations/#{TEST_USER}"
+      url = "#{GH_API_URL}/#{REPOSITORY_NAME}/invitations/#{TEST_USER}"
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:delete).with(url)
       helper_module.delete_expired_invite(REPOSITORY_NAME, TEST_USER)
@@ -58,15 +50,15 @@ describe HelperModule do
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
     end
 
+    url = "#{GH_API_URL}/#{REPOSITORY_NAME}/invitations"
+
     it "when invites exist" do
-      url = "https://api.github.com/repos/ministryofjustice/somerepo/invitations"
       expect(http_client).to receive(:fetch_json).with(url).and_return(json)
-      expected_result = [{login: "user1", expired: true, invite_id: 1}, {login: "user2", expired: false, invite_id: 2}]
+      expected_result = [{login: TEST_USER_1, expired: true, invite_id: 1}, {login: TEST_USER_2, expired: false, invite_id: 2}]
       test_equal(helper_module.get_repository_invites(REPOSITORY_NAME), expected_result)
     end
 
     it "when invites don't exist" do
-      url = "https://api.github.com/repos/ministryofjustice/somerepo/invitations"
       response = %([])
       expect(http_client).to receive(:fetch_json).with(url).and_return(response)
       test_equal(helper_module.get_repository_invites(REPOSITORY_NAME), [])
@@ -93,15 +85,15 @@ describe HelperModule do
   end
 
   context "test get_all_org_members_team_repositories" do
-    url = "https://api.github.com/orgs/ministryofjustice/teams/all-org-members/repos?per_page=100"
+    url = "https://api.github.com/orgs/#{ORG}/teams/all-org-members/repos?per_page=100"
     before do
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
     end
 
     it "when team has repositories" do
-      response = %([{"name": "somerepo1"},{"name": "somerepo2"}])
+      response = %([{"name": "#{TEST_REPO_NAME1}"},{"name": "#{TEST_REPO_NAME2}"}])
       expect(http_client).to receive(:fetch_json).with(url).and_return(response)
-      repositories = ["somerepo1", "somerepo2"]
+      repositories = [TEST_REPO_NAME1, TEST_REPO_NAME2]
       test_equal(helper_module.get_all_org_members_team_repositories, repositories)
     end
 
@@ -118,7 +110,7 @@ describe HelperModule do
     end
 
     it COLLABORATOR_DOESNT_EXIST do
-      test_equal(helper_module.does_collaborator_already_exist("someuser6", collaborators), false)
+      test_equal(helper_module.does_collaborator_already_exist(TEST_USER_6, collaborators), false)
     end
   end
 
@@ -128,7 +120,7 @@ describe HelperModule do
     end
 
     it COLLABORATOR_DOESNT_EXIST do
-      test_equal(helper_module.get_name("someuser6", collaborators), "")
+      test_equal(helper_module.get_name(TEST_USER_6, collaborators), "")
     end
   end
 
@@ -138,7 +130,7 @@ describe HelperModule do
     end
 
     it COLLABORATOR_DOESNT_EXIST do
-      test_equal(helper_module.get_email("someuser6", collaborators), "")
+      test_equal(helper_module.get_email(TEST_USER_6, collaborators), "")
     end
   end
 
@@ -148,18 +140,18 @@ describe HelperModule do
     end
 
     it COLLABORATOR_DOESNT_EXIST do
-      test_equal(helper_module.get_org("someuser6", collaborators), "")
+      test_equal(helper_module.get_org(TEST_USER_6, collaborators), "")
     end
   end
 
   context "test get_org_outside_collaborators" do
-    url = "https://api.github.com/orgs/ministryofjustice/outside_collaborators?per_page=100"
+    url = "https://api.github.com/orgs/#{ORG}/outside_collaborators?per_page=100"
     before do
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
     end
 
     it WHEN_COLLABORATORS_EXISTS do
-      json = %([{"login": "someuser1"},{"login": "someuser2"}])
+      json = %([{"login": "#{TEST_USER_1}"},{"login": "#{TEST_USER_2}"}])
       response = [TEST_USER_1, TEST_USER_2]
       expect(http_client).to receive(:fetch_json).with(url).and_return(json)
       test_equal(helper_module.get_org_outside_collaborators, response)
@@ -175,7 +167,7 @@ describe HelperModule do
   context "test create_branch_and_pull_request" do
     pull_request_title = "sometitle"
     filenames = ["file1", "file2", "file3"]
-    branch_name = "somebranch"
+    branch_name = BRANCH_NAME
     collaborator_name = TEST_USER
     types = [TYPE_DELETE, TYPE_EXTEND, TYPE_REMOVE, TYPE_PERMISSION, TYPE_ADD, TYPE_DELETE_ARCHIVE]
 
@@ -236,7 +228,7 @@ describe HelperModule do
     end
   end
 
-  pull_request_url = "https://api.github.com/repos/ministryofjustice/github-collaborators/pulls"
+  pull_request_url = "#{GH_API_URL}/github-collaborators/pulls"
 
   context TEST_CREATE_PULL_REQUEST do
     before do
@@ -302,7 +294,7 @@ describe HelperModule do
 
   context "test extend_date_hash" do
     login = TEST_USER
-    branch_name = "somebranch"
+    branch_name = BRANCH_NAME
     hash_body = {
       title: EXTEND_REVIEW_DATE_PR_TITLE + " " + login,
       head: branch_name,
@@ -326,7 +318,7 @@ describe HelperModule do
   end
 
   context "test delete_archive_file_hash" do
-    branch_name = "somebranch"
+    branch_name = BRANCH_NAME
     hash_body = {
       title: ARCHIVED_REPOSITORY_PR_TITLE,
       head: branch_name,
@@ -349,7 +341,7 @@ describe HelperModule do
   end
 
   context "test delete_empty_files_hash" do
-    branch_name = "somebranch"
+    branch_name = BRANCH_NAME
     hash_body = {
       title: EMPTY_FILES_PR_TITLE,
       head: branch_name.downcase,
@@ -371,7 +363,7 @@ describe HelperModule do
 
   context "test add_collaborator_hash" do
     login = TEST_USER
-    branch_name = "somebranch"
+    branch_name = BRANCH_NAME
     hash_body = {
       title: ADD_FULL_ORG_MEMBER_PR_TITLE + " " + login.downcase,
       head: branch_name.downcase,
@@ -399,7 +391,7 @@ describe HelperModule do
 
   context "test remove_collaborator_hash" do
     login = TEST_USER
-    branch_name = "somebranch"
+    branch_name = BRANCH_NAME
     hash_body = {
       title: REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login.downcase,
       head: branch_name.downcase,
@@ -422,7 +414,7 @@ describe HelperModule do
 
   context "test modify_collaborator_permission_hash" do
     login = TEST_USER
-    branch_name = "somebranch"
+    branch_name = BRANCH_NAME
     hash_body = {
       title: CHANGE_PERMISSION_PR_TITLE + " " + login.downcase,
       head: branch_name.downcase,
@@ -457,7 +449,7 @@ describe HelperModule do
       {
         search(
           type: REPOSITORY
-          query: "org:ministryofjustice, archived:false, is:public"
+          query: "org:#{ORG}, archived:false, is:public"
           first: 100
           after: null
         ) {
@@ -485,7 +477,7 @@ describe HelperModule do
       {
         search(
           type: REPOSITORY
-          query: "org:ministryofjustice, archived:false, is:private"
+          query: "org:#{ORG}, archived:false, is:private"
           first: 100
           after: null
         ) {
@@ -513,7 +505,7 @@ describe HelperModule do
       {
         search(
           type: REPOSITORY
-          query: "org:ministryofjustice, archived:false, is:internal"
+          query: "org:#{ORG}, archived:false, is:internal"
           first: 100
           after: null
         ) {
@@ -543,16 +535,16 @@ describe HelperModule do
 
     it "when repositories exist" do
       # FUT has a loop with tree iterations. Each loop produces these objects.
-      repo1 = GithubCollaborators::Repository.new("somerepo1", 1)
-      repo2 = GithubCollaborators::Repository.new("somerepo3", 5)
-      repo3 = GithubCollaborators::Repository.new("somerepo5", 0)
+      repo1 = GithubCollaborators::Repository.new(TEST_REPO_NAME1, 1)
+      repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME3, 5)
+      repo3 = GithubCollaborators::Repository.new(TEST_REPO_NAME5, 0)
       expect(graphql_client).to receive(:run_query).with(json_query_public_repo).and_return(return_data)
       expect(graphql_client).to receive(:run_query).with(json_query_private_repo).and_return(return_data)
       expect(graphql_client).to receive(:run_query).with(json_query_internal_repo).and_return(return_data)
       # Thus expect these objects to created three times
-      expect(GithubCollaborators::Repository).to receive(:new).with("somerepo1", 1).and_return(repo1).at_least(3).times
-      expect(GithubCollaborators::Repository).to receive(:new).with("somerepo3", 5).and_return(repo2).at_least(3).times
-      expect(GithubCollaborators::Repository).to receive(:new).with("somerepo5", 0).and_return(repo3).at_least(3).times
+      expect(GithubCollaborators::Repository).to receive(:new).with(TEST_REPO_NAME1, 1).and_return(repo1).at_least(3).times
+      expect(GithubCollaborators::Repository).to receive(:new).with(TEST_REPO_NAME3, 5).and_return(repo2).at_least(3).times
+      expect(GithubCollaborators::Repository).to receive(:new).with(TEST_REPO_NAME5, 0).and_return(repo3).at_least(3).times
       # Thus expects the three iterations to create three objects each to make nine objects in total
       test_equal(helper_module.get_active_repositories.length, 9)
     end
@@ -587,7 +579,7 @@ describe HelperModule do
       {
         search(
           type: REPOSITORY
-          query: "org:ministryofjustice, archived:true, is:public"
+          query: "org:#{ORG}, archived:true, is:public"
           first: 100
           after: null
         ) {
@@ -611,7 +603,7 @@ describe HelperModule do
       {
         search(
           type: REPOSITORY
-          query: "org:ministryofjustice, archived:true, is:private"
+          query: "org:#{ORG}, archived:true, is:private"
           first: 100
           after: null
         ) {
@@ -635,7 +627,7 @@ describe HelperModule do
       {
         search(
           type: REPOSITORY
-          query: "org:ministryofjustice, archived:true, is:internal"
+          query: "org:#{ORG}, archived:true, is:internal"
           first: 100
           after: null
         ) {
@@ -666,7 +658,7 @@ describe HelperModule do
       # Thus expects the three iterations to create three repos name each to make nine repo names in total
       archived_repositories = helper_module.get_archived_repositories
       test_equal(archived_repositories.length, 9)
-      test_equal(archived_repositories, ["somerepo1", "somerepo1", "somerepo1", "somerepo2", "somerepo2", "somerepo2", "somerepo3", "somerepo3", "somerepo3"])
+      test_equal(archived_repositories, [TEST_REPO_NAME1, TEST_REPO_NAME1, TEST_REPO_NAME1, TEST_REPO_NAME2, TEST_REPO_NAME2, TEST_REPO_NAME2, TEST_REPO_NAME3, TEST_REPO_NAME3, TEST_REPO_NAME3])
     end
 
     return_data_no_repositories =
@@ -698,7 +690,7 @@ describe HelperModule do
     json_query =
       %[
       {
-        organization(login: "ministryofjustice") {
+        organization(login: "#{ORG}") {
           repository(name: "#{REPOSITORY_NAME}") {
             collaborators(
               affiliation: OUTSIDE

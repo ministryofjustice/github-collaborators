@@ -93,7 +93,7 @@ class GithubCollaborators
 
       repositories.each do |repo|
         # Accept only ministryofjustice repositories
-        if repo.dig("node", "owner", "login").downcase == "ministryofjustice"
+        if repo.dig("node", "owner", "login").downcase == ORG
           repository_name = repo.dig("node", "name").downcase
 
           if !is_repo_already_known(repository_name)
@@ -187,7 +187,7 @@ class GithubCollaborators
 
     def get_repository_permission(repository_name)
       logger.debug "get_repository_permission"
-      url = "https://api.github.com/repos/ministryofjustice/#{repository_name.downcase}/collaborators/#{@login}/permission"
+      url = "#{GH_API_URL}/#{repository_name.downcase}/collaborators/#{@login}/permission"
       json = GithubCollaborators::HttpClient.new.fetch_json(url)
       json_data = JSON.parse(json)
       if json_data.dig("user", "permissions", "admin")

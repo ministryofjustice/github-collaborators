@@ -1,7 +1,6 @@
 class GithubCollaborators
   describe FullOrgMember do
     context "test FullOrgMember" do
-      # Stub sleep
       before {
         allow_any_instance_of(GithubCollaborators::GithubGraphQlClient).to receive(:sleep)
         allow_any_instance_of(GithubCollaborators::HttpClient).to receive(:sleep)
@@ -16,7 +15,7 @@ class GithubCollaborators
       let(:http_client) { double(GithubCollaborators::HttpClient) }
       let(:collaborator_repositories_json) { File.read("spec/fixtures/collaborator-repositories.json") }
 
-      url = "https://api.github.com/repos/ministryofjustice/test-repo1/collaborators/someuser1/permission"
+      url = "#{GH_API_URL}/test-repo1/collaborators/someuser1/permission"
 
       query =
         %[

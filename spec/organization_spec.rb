@@ -30,7 +30,7 @@ class GithubCollaborators
         it "call is_collaborator_an_org_member when collaborator is not an org member" do
           allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2])
           organization = GithubCollaborators::Organization.new
-          test_equal(organization.is_collaborator_an_org_member("user1"), false)
+          test_equal(organization.is_collaborator_an_org_member(TEST_USER_6), false)
         end
 
         it "call is_collaborator_an_org_member when collaborator is an org member" do

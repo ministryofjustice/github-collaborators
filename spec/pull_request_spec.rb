@@ -1,12 +1,11 @@
 describe HelperModule do
-  # extended class
   let(:helper_module) { Class.new { extend HelperModule } }
   let(:pull_requests_json) { File.read("spec/fixtures/pull-requests.json") }
   let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
 
   query = %(
       {
-        organization(login: "ministryofjustice") {
+        organization(login: "#{ORG}") {
           repository(name: "github-collaborators") {
             pullRequests(states: OPEN, last: 100) {
               nodes {

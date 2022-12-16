@@ -4,17 +4,17 @@
       "repos": [
         {
           "repo": {
-            "name": "somerepo1"
+            "name": "test-repo1"
           }
         },
         {
           "repo": {
-            "name": "somerepo2"
+            "name": "test-repo2"
           }
         },
         {
           "repo": {
-            "name": "somerepo3"
+            "name": "test-repo3"
           }
         }
       ],

@@ -53,8 +53,8 @@
 # # Check to make sure the repo isn't in redirect mode or replacing . with - in the filename for Terraform
 # repo_delta.delete_if { |repo|
 #   repo_name = get_repo_name("#{terraform_dir}/#{repo}.tf")
-#   GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/ministryofjustice/#{repo}").code == "301" ||
-#     GithubCollaborators::HttpClient.new.fetch_json("https://api.github.com/repos/ministryofjustice/#{repo_name}").code != "404"
+#   GithubCollaborators::HttpClient.new.fetch_json("#{GH_API_URL}/#{repo}").code == "301" ||
+#     GithubCollaborators::HttpClient.new.fetch_json("#{GH_API_URL}/#{repo_name}").code != "404"
 # }
 
 # puts "Current repo files that need deleting"
