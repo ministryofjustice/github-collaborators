@@ -134,7 +134,7 @@ class GithubCollaborators
       logger.debug "full_org_members_check"
 
       @organization.get_full_org_members_not_in_terraform_file.each do |full_org_member|
-        add_collaborator(full_org_member.downcase)
+        add_collaborator(full_org_member)
       end
 
       @organization.get_full_org_members_with_repository_permission_mismatches(@terraform_files).each do |full_org_member|

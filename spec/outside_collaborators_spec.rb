@@ -366,12 +366,12 @@ class GithubCollaborators
 
         it "when full org member not in terraform file" do
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-          expect(organization).to receive(:get_full_org_members_not_in_terraform_file).and_return([TEST_USER_1])
+          expect(organization).to receive(:get_full_org_members_not_in_terraform_file).and_return([collaborator1])
           expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([])
           expect(organization).to receive(:get_odd_full_org_members).and_return([])
           expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([])
 
-          expect(outside_collaborators).to receive(:add_collaborator).with(TEST_USER_1)
+          expect(outside_collaborators).to receive(:add_collaborator).with(collaborator1)
           expect(outside_collaborators).not_to receive(:change_collaborator_permission)
           expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
           outside_collaborators.full_org_members_check
