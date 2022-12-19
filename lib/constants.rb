@@ -47,6 +47,12 @@ module Constants
   COLLABORATOR_MISSING = "Collaborator not defined in terraform"
   MISSING = "missing"
 
+  DELETE_ARCHIVE_FILE_BRANCH_NAME = "delete-archived-repository-file"
+  UPDATE_REVIEW_DATE_BRANCH_NAME = "update-review-date-"
+  DELETE_EMPTY_FILE_BRANCH_NAME = "delete-empty-files"
+  REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME = "remove-expired-collaborator-"
+  MODIFY_COLLABORATORS_BRANCH_NAME = "modify-collaborator-permission-"
+
   ORG = "ministryofjustice"
   GH_API_URL = "https://api.github.com/repos/#{ORG}"
   GH_ORG_URL = "https://github.com/#{ORG}"

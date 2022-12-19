@@ -21,22 +21,94 @@ class GithubCollaborators
         expect(organization).to receive(:create_full_org_members)
       end
 
+      terraform_block = create_terraform_block_review_date_yesterday
+      expired_collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+      expired_collaborator.check_for_issues
+
+      terraform_block = create_terraform_block_review_date_less_than_week
+      collaborator_expires_this_week = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+      collaborator_expires_this_week.check_for_issues
+
+      terraform_block = create_terraform_block_review_date_less_than_month
+      collaborator_expires_soon = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+      collaborator_expires_soon.check_for_issues
+
       terraform_block = create_terraform_block_review_date_more_than_month
       collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
       collaborator1.check_for_issues
 
-      it "call start" do
-        expect(terraform_files).to receive(:get_terraform_files).and_return([])
-        outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-        expect(outside_collaborators).to receive(:remove_empty_files)
-        expect(outside_collaborators).to receive(:archived_repository_check)
-        expect(outside_collaborators).to receive(:compare_terraform_and_github)
-        expect(outside_collaborators).to receive(:collaborator_checks)
-        expect(outside_collaborators).to receive(:full_org_members_check)
-        expect(outside_collaborators).to receive(:print_full_org_member_collaborators)
-        outside_collaborators.start
-      end
+      terraform_block = create_collaborator_with_login(TEST_USER_2)
+      collaborator2 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
 
+      context "" do
+        before do
+          expect(terraform_files).to receive(:get_terraform_files).and_return([])
+          @outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+        end
+
+        it "call start" do
+          expect(@outside_collaborators).to receive(:remove_empty_files)
+          expect(@outside_collaborators).to receive(:archived_repository_check)
+          expect(@outside_collaborators).to receive(:compare_terraform_and_github)
+          expect(@outside_collaborators).to receive(:collaborator_checks)
+          expect(@outside_collaborators).to receive(:full_org_members_check)
+          expect(@outside_collaborators).to receive(:print_full_org_member_collaborators)
+          @outside_collaborators.start
+        end
+
+        it "call has_review_date_expired" do
+          expect(@outside_collaborators).to receive(:find_collaborators_who_have_expired).with([collaborator1]).and_return([collaborator1])
+          expect(@outside_collaborators).to receive(:remove_expired_collaborators).with([collaborator1])
+          expect(@outside_collaborators).to receive(:remove_expired_full_org_members).with([collaborator1])
+          @outside_collaborators.has_review_date_expired([collaborator1])
+        end
+
+        it "call is_review_date_within_a_week" do
+          expect(@outside_collaborators).to receive(:find_collaborators_who_expire_soon).with([collaborator1]).and_return([collaborator1])
+          expect(@outside_collaborators).to receive(:extend_collaborators_review_date).with([collaborator1])
+          expect(@outside_collaborators).to receive(:extend_full_org_member_review_date).with([collaborator1])
+          @outside_collaborators.is_review_date_within_a_week([collaborator1])
+        end
+
+        it "call find_collaborators_who_expire_soon when collaborator doesn't have the issue" do
+          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_expire_soon([collaborator1])
+          test_equal(expire_soon_collaborators.length, 0)
+        end
+
+        it "call find_collaborators_who_expire_soon when collaborator has the issue" do
+          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_expire_soon([collaborator_expires_this_week])
+          test_equal(expire_soon_collaborators, [collaborator_expires_this_week])
+        end
+
+        it "call find_collaborators_who_have_expired when collaborator doesn't have the issue" do
+          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_have_expired([collaborator1])
+          test_equal(expire_soon_collaborators.length, 0)
+        end
+
+        it "call find_collaborators_who_have_expired when collaborator has the issue" do
+          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_have_expired([expired_collaborator])
+          test_equal(expire_soon_collaborators, [expired_collaborator])
+        end
+
+        it "call extend_date when no collaborators" do
+          extended_collaborators = @outside_collaborators.extend_date([])
+          test_equal(extended_collaborators.length, 0)
+        end
+
+        it "call extend_date when no collaborators" do
+          expect(terraform_files).to receive(:extend_date_in_file).with(REPOSITORY_NAME, TEST_COLLABORATOR_LOGIN).at_least(2).times
+          expect(terraform_files).to receive(:extend_date_in_file).with(REPOSITORY_NAME, TEST_USER_2).at_least(1).times
+          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(false)
+          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}").and_return(false)
+          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{UPDATE_REVIEW_DATE_BRANCH_NAME}#{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", TEST_COLLABORATOR_LOGIN, TYPE_EXTEND)
+          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{UPDATE_REVIEW_DATE_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH], "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_EXTEND)
+          allow_any_instance_of(OutsideCollaborators).to receive(:add_new_pull_request).with("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
+          allow_any_instance_of(OutsideCollaborators).to receive(:add_new_pull_request).with("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH])
+          extended_collaborators = @outside_collaborators.extend_date([collaborator1, collaborator_expires_soon, collaborator2])
+          test_equal(extended_collaborators.length, 3)
+        end
+      end
+    
       it "call remove_empty_files when no empty file exists" do
         file = create_terraform_file
         expect(terraform_files).to receive(:get_terraform_files).and_return([file])
@@ -56,7 +128,7 @@ class GithubCollaborators
 
         it "when empty file exists" do
           expect(terraform_files).to receive(:remove_file).with(EMPTY_REPOSITORY_NAME)
-          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("delete-empty-files", ["terraform/empty-file.tf"], EMPTY_FILES_PR_TITLE, "", TYPE_DELETE)
+          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with(DELETE_EMPTY_FILE_BRANCH_NAME, ["terraform/empty-file.tf"], EMPTY_FILES_PR_TITLE, "", TYPE_DELETE)
           @outside_collaborators.remove_empty_files
         end
 
@@ -93,7 +165,7 @@ class GithubCollaborators
         expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
         expect(organization).to receive(:get_org_archived_repositories).and_return([TEST_REPO_NAME])
         expect(terraform_files).to receive(:remove_file).with(TEST_REPO_NAME)
-        allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("delete-archived-repository-file", [TEST_FILE], ARCHIVED_REPOSITORY_PR_TITLE, "", TYPE_DELETE_ARCHIVE)
+        allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with(DELETE_ARCHIVE_FILE_BRANCH_NAME, [TEST_FILE], ARCHIVED_REPOSITORY_PR_TITLE, "", TYPE_DELETE_ARCHIVE)
         outside_collaborators = GithubCollaborators::OutsideCollaborators.new
         outside_collaborators.archived_repository_check
       end
@@ -391,13 +463,9 @@ class GithubCollaborators
 
         it "when collaborator issue is renewal within a month and no issue already exists" do
           expect(@outside_collaborators).to receive(:read_repository_issues).with(REPOSITORY_NAME).and_return([])
-          terraform_block = create_terraform_block_review_date_less_than_month
-          collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-          collaborator1.check_for_issues
-
           allow_any_instance_of(HelperModule).to receive(:does_issue_already_exist).and_return(false)
           expect(@outside_collaborators).to receive(:create_review_date_expires_soon_issue).with(TEST_USER, REPOSITORY_NAME)
-          @outside_collaborators.is_renewal_within_one_month([collaborator1])
+          @outside_collaborators.is_renewal_within_one_month([collaborator_expires_soon])
         end
 
         it "when collaborator issue is renewal within a month but issue already exists" do
