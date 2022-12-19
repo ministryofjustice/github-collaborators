@@ -94,7 +94,7 @@ class GithubCollaborators
           extended_collaborators = @outside_collaborators.extend_date([])
           test_equal(extended_collaborators.length, 0)
         end
-        
+
         it "call extend_date when pull request exists" do
           allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(true)
           allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}").and_return(true)
@@ -144,12 +144,12 @@ class GithubCollaborators
           @outside_collaborators.change_collaborator_permission(TEST_USER_2, [])
           expect(terraform_files).not_to receive(:ensure_file_exists_in_memory)
         end
-        
+
         it "call change_collaborator_permission when pull request doesn't exist" do
           repositories = [
-            { permission: "push", repository_name: REPOSITORY_NAME },
-            { permission: "admin", repository_name: REPOSITORY_NAME },
-            { permission: "pull", repository_name: REPOSITORY_NAME },
+            {permission: "push", repository_name: REPOSITORY_NAME},
+            {permission: "admin", repository_name: REPOSITORY_NAME},
+            {permission: "pull", repository_name: REPOSITORY_NAME}
           ]
           allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(false)
           expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(REPOSITORY_NAME).at_least(3).times
@@ -160,12 +160,12 @@ class GithubCollaborators
           expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
           @outside_collaborators.change_collaborator_permission(TEST_USER_2, repositories)
         end
-        
+
         it "call change_collaborator_permission when a pull request does exist" do
           repositories = [
-            { permission: "push", repository_name: REPOSITORY_NAME },
-            { permission: "admin", repository_name: TEST_REPO_NAME },
-            { permission: "pull", repository_name: REPOSITORY_NAME },
+            {permission: "push", repository_name: REPOSITORY_NAME},
+            {permission: "admin", repository_name: TEST_REPO_NAME},
+            {permission: "pull", repository_name: REPOSITORY_NAME}
           ]
           expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(false)
           expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(true)
@@ -176,6 +176,43 @@ class GithubCollaborators
           allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{MODIFY_COLLABORATORS_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_PERMISSION)
           expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
           @outside_collaborators.change_collaborator_permission(TEST_USER_2, repositories)
+        end
+
+        context "call add_collaborator" do
+          before do
+            @full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+          end
+
+          it "when have no mismatch in collaborator repositories" do
+            test_equal(@full_org_member.do_repositories_match, true)
+            expect(terraform_files).not_to receive(:ensure_file_exists_in_memory)
+            @outside_collaborators.add_collaborator(@full_org_member)
+          end
+
+          context "" do
+            before do
+              @full_org_member.add_terraform_repositories([TEST_REPO_NAME])
+              test_equal(@full_org_member.terraform_repositories.length, 1)
+              test_equal(@full_org_member.do_repositories_match, false)
+            end
+
+            it "when have a mismatch in collaborator repositories and pull request does not exist" do
+              expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}").and_return(false)
+              expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(TEST_REPO_NAME)
+              expect(@full_org_member).to receive(:get_repository_permission).with(TEST_REPO_NAME).and_return("triage")
+              expect(terraform_files).to receive(:add_collaborator_to_file).with(@full_org_member, TEST_REPO_NAME, "triage")
+              expect(@full_org_member).to receive(:add_ignore_repository).with(TEST_REPO_NAME)
+              allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{ADD_COLLABORATOR_BRANCH_NAME}#{TEST_USER_1}", [TEST_FILE], "#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}", TEST_USER_1, TYPE_ADD)
+              expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}", [TEST_FILE])
+              @outside_collaborators.add_collaborator(@full_org_member)
+            end
+
+            it "when have a mismatch in collaborator repositories and pull request does not exist" do
+              expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}").and_return(true)
+              expect(terraform_files).not_to receive(:ensure_file_exists_in_memory)
+              @outside_collaborators.add_collaborator(@full_org_member)
+            end
+          end
         end
       end
 

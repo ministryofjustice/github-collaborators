@@ -52,6 +52,7 @@ module Constants
   DELETE_EMPTY_FILE_BRANCH_NAME = "delete-empty-files"
   REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME = "remove-expired-collaborator-"
   MODIFY_COLLABORATORS_BRANCH_NAME = "modify-collaborator-permission-"
+  ADD_COLLABORATOR_BRANCH_NAME = "add-collaborator-"
 
   ORG = "ministryofjustice"
   GH_API_URL = "https://api.github.com/repos/#{ORG}"

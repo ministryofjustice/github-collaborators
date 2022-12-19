@@ -490,7 +490,7 @@ class GithubCollaborators
       end
 
       if edited_files.length > 0
-        branch_name = "add-collaborator-#{collaborator_name}"
+        branch_name = "#{ADD_COLLABORATOR_BRANCH_NAME}#{collaborator_name}"
         type = TYPE_ADD
         pull_request_title = ADD_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
