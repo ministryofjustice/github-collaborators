@@ -272,7 +272,7 @@ class GithubCollaborators
           allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([])
           allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
         end
-        
+
         it "when no full org expired collaborators exist" do
           my_organization = GithubCollaborators::Organization.new
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
@@ -289,18 +289,18 @@ class GithubCollaborators
         it "when is a full org expired collaborator" do
           my_organization = GithubCollaborators::Organization.new
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-          
+
           terraform_block = create_terraform_block_review_date_more_than_month
           collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
           collaborator1.check_for_issues
-          
+
           expect(my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return([true])
           expect(outside_collaborators).not_to receive(:remove_collaborator)
           outside_collaborators.remove_expired_collaborators([collaborator1])
         end
-        
+
         it "when not a full org expired collaborator" do
-        my_organization = GithubCollaborators::Organization.new
+          my_organization = GithubCollaborators::Organization.new
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
 
           terraform_block = create_terraform_block_review_date_more_than_month
@@ -309,7 +309,7 @@ class GithubCollaborators
 
           expect(my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(false)
           expect(outside_collaborators).to receive(:remove_collaborator).with([collaborator1]).and_return([collaborator1])
-          
+
           slack_notififer = GithubCollaborators::SlackNotifier.new(nil, [])
           expect(GithubCollaborators::SlackNotifier).to receive(:new).and_return(slack_notififer)
           expect(slack_notififer).to receive(:post_slack_message)
