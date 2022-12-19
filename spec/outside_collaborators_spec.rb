@@ -95,17 +95,24 @@ class GithubCollaborators
           test_equal(extended_collaborators.length, 0)
         end
 
-        it "call extend_date when no collaborators" do
-          expect(terraform_files).to receive(:extend_date_in_file).with(REPOSITORY_NAME, TEST_COLLABORATOR_LOGIN).at_least(2).times
-          expect(terraform_files).to receive(:extend_date_in_file).with(REPOSITORY_NAME, TEST_USER_2).at_least(1).times
+        it "call extend_date when pull request doesn't exist" do
           allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(false)
           allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}").and_return(false)
+          expect(terraform_files).to receive(:extend_date_in_file).with(REPOSITORY_NAME, TEST_COLLABORATOR_LOGIN).at_least(2).times
+          expect(terraform_files).to receive(:extend_date_in_file).with(REPOSITORY_NAME, TEST_USER_2).at_least(1).times
           allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{UPDATE_REVIEW_DATE_BRANCH_NAME}#{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", TEST_COLLABORATOR_LOGIN, TYPE_EXTEND)
           allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{UPDATE_REVIEW_DATE_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH], "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_EXTEND)
           allow_any_instance_of(OutsideCollaborators).to receive(:add_new_pull_request).with("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
           allow_any_instance_of(OutsideCollaborators).to receive(:add_new_pull_request).with("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH])
           extended_collaborators = @outside_collaborators.extend_date([collaborator1, collaborator_expires_soon, collaborator2])
           test_equal(extended_collaborators.length, 3)
+        end
+
+        it "call extend_date when pull request doesn't exist" do
+          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(true)
+          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}").and_return(true)
+          extended_collaborators = @outside_collaborators.extend_date([collaborator1, collaborator_expires_soon, collaborator2])
+          test_equal(extended_collaborators.length, 0)
         end
       end
     
