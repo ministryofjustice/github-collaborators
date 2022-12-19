@@ -120,7 +120,7 @@ class GithubCollaborators
       @full_org_members.each do |full_org_member|
         # Compare the GitHub and Terraform repositories
         if full_org_member.do_repositories_match == false
-          return_list.push(full_org_member.login.downcase)
+          return_list.push(full_org_member)
         end
       end
       return_list
