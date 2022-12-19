@@ -465,18 +465,18 @@ class GithubCollaborators
         end
 
         context "call extend_collaborators_review_date" do
-          it "when no collaborator is passed in" do
+          it WHEN_NO_COLLABORATORS_PASSED_IN do
             expect(@outside_collaborators).not_to receive(:extend_date)
             @outside_collaborators.extend_collaborators_review_date([])
           end
 
-          it "when collaborator is a full org collaborator" do
+          it WHEN_COLLABORATOR_FULL_ORG_MEMBER do
             expect(@my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(true)
             expect(@outside_collaborators).not_to receive(:extend_date)
             @outside_collaborators.extend_collaborators_review_date([collaborator1])
           end
 
-          it "when collaborator is not a full org collaborator" do
+          it WHEN_COLLABORATOR_NOT_FULL_ORG_MEMBER do
             expect(@my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(false)
             expect(@outside_collaborators).to receive(:extend_date).with([collaborator1]).and_return([collaborator1])
 
@@ -488,18 +488,18 @@ class GithubCollaborators
         end
 
         context "call extend_full_org_member_review_date" do
-          it "when no collaborator is passed in" do
+          it WHEN_NO_COLLABORATORS_PASSED_IN do
             expect(@outside_collaborators).not_to receive(:extend_date)
             @outside_collaborators.extend_full_org_member_review_date([])
           end
 
-          it "when collaborator is not a full org collaborator" do
+          it WHEN_COLLABORATOR_NOT_FULL_ORG_MEMBER do
             expect(@my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(false)
             expect(@outside_collaborators).not_to receive(:extend_date)
             @outside_collaborators.extend_full_org_member_review_date([collaborator1])
           end
 
-          it "when collaborator is a full org collaborator" do
+          it WHEN_COLLABORATOR_FULL_ORG_MEMBER do
             expect(@my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(true)
             expect(@outside_collaborators).to receive(:extend_date).with([collaborator1]).and_return([collaborator1])
             expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::FullOrgMemberExpiresSoon), [collaborator1]).and_return(slack_notififer)
@@ -509,18 +509,18 @@ class GithubCollaborators
         end
 
         context "call remove_expired_full_org_members" do
-          it "when no collaborator is passed in" do
+          it WHEN_NO_COLLABORATORS_PASSED_IN do
             expect(@outside_collaborators).not_to receive(:remove_collaborator)
             @outside_collaborators.remove_expired_full_org_members([])
           end
 
-          it "when collaborator is not a full org collaborator" do
+          it WHEN_COLLABORATOR_NOT_FULL_ORG_MEMBER do
             expect(@my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(false)
             expect(@outside_collaborators).not_to receive(:remove_collaborator)
             @outside_collaborators.remove_expired_full_org_members([collaborator1])
           end
 
-          it "when collaborator is a full org collaborator" do
+          it WHEN_COLLABORATOR_FULL_ORG_MEMBER do
             expect(@my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(true)
             expect(@outside_collaborators).to receive(:remove_collaborator).with([collaborator1]).and_return([collaborator1])
             expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::FullOrgMemberExpired), [collaborator1]).and_return(slack_notififer)
@@ -536,13 +536,13 @@ class GithubCollaborators
             @outside_collaborators.remove_expired_collaborators([])
           end
 
-          it "when collaborator is a full org collaborator" do
+          it WHEN_COLLABORATOR_FULL_ORG_MEMBER do
             expect(@my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(true)
             expect(@outside_collaborators).not_to receive(:remove_collaborator)
             @outside_collaborators.remove_expired_collaborators([collaborator1])
           end
 
-          it "when collaborator is not a full org collaborator" do
+          it WHEN_COLLABORATOR_NOT_FULL_ORG_MEMBER do
             expect(@my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(false)
             expect(@outside_collaborators).to receive(:remove_collaborator).with([collaborator1]).and_return([collaborator1])
             expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::Expired), [collaborator1]).and_return(slack_notififer)

@@ -39,6 +39,9 @@ module TestConstants
   TEST_CREATE_PULL_REQUEST = "test create_pull_request"
   WHEN_COLLABORATORS_EXISTS = "when collaborators exist"
   WHEN_NO_COLLABORATORS_EXISTS = "when collaborators don't exist"
+  WHEN_NO_COLLABORATORS_PASSED_IN = "when no collaborator is passed in"
+  WHEN_COLLABORATOR_FULL_ORG_MEMBER = "when collaborator is a full org collaborator"
+  WHEN_COLLABORATOR_NOT_FULL_ORG_MEMBER = "when collaborator is not a full org collaborator"
   GRACE_PERIOD_OKAY = (Date.today - 45).strftime(DATE_FORMAT)
   GRACE_PERIOD_EXPIRED = (Date.today - 46).strftime(DATE_FORMAT)
   OPEN = "open"
