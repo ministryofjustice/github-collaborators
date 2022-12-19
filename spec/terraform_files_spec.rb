@@ -77,7 +77,6 @@ class GithubCollaborators
         end
 
         context "" do
-
           it "call extend_date_in_file" do
             files = Dir[TERRAFORM_FILES].length - EXCLUDE_FILES.length
             terraform_files = GithubCollaborators::TerraformFiles.new

@@ -26,7 +26,7 @@ class GithubCollaborators
           allow_any_instance_of(HelperModule).to receive(:get_archived_repositories).and_return([])
           allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])
         end
-        
+
         context "" do
           before do
             allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2])
@@ -77,12 +77,12 @@ class GithubCollaborators
               allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
               @organization = GithubCollaborators::Organization.new
             end
-            
+
             it "call create_full_org_members when collaborators are not org members" do
               @organization.create_full_org_members([collaborator1, collaborator2, collaborator3])
               test_equal(@organization.full_org_members.length, 0)
             end
-            
+
             it "call get_org_archived_repositories when empty" do
               test_equal(@organization.get_org_archived_repositories.length, 0)
             end

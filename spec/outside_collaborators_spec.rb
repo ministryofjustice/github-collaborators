@@ -202,7 +202,7 @@ class GithubCollaborators
           before do
             expect(organization).to receive(:get_full_org_members_not_in_terraform_file).and_return([])
           end
-          
+
           it "when org and arrays are empty" do
             outside_collaborators = GithubCollaborators::OutsideCollaborators.new
             expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([])
@@ -247,7 +247,7 @@ class GithubCollaborators
 
           it "when full org member attached to archived repository" do
             outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-            
+
             expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([])
             expect(organization).to receive(:get_odd_full_org_members).and_return([])
             member = {login: TEST_USER_1, repository: TEST_REPO_NAME1}
@@ -278,15 +278,14 @@ class GithubCollaborators
         slack_notififer = GithubCollaborators::SlackNotifier.new(nil, [])
 
         context "call extend_collaborators_review_date" do
-        
           # it "call remove_unknown_collaborators" do
           #   outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-  
+
           #   @outside_collaborators.
           # end
         end
 
-        context "call extend_collaborators_review_date" do          
+        context "call extend_collaborators_review_date" do
           it "when no collaborator is passed in" do
             expect(@outside_collaborators).not_to receive(:extend_date)
             @outside_collaborators.extend_collaborators_review_date([])
@@ -308,7 +307,7 @@ class GithubCollaborators
             @outside_collaborators.extend_collaborators_review_date([collaborator1])
           end
         end
- 
+
         context "call extend_full_org_member_review_date" do
           it "when no collaborator is passed in" do
             expect(@outside_collaborators).not_to receive(:extend_date)

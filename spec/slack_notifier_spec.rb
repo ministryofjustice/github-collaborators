@@ -8,7 +8,7 @@ class GithubCollaborators
         @test_object = GithubCollaborators::FullOrgMemberExpired.new
         @collaborators = []
       end
-      
+
       context "" do
         before do
           @collaborator = GithubCollaborators::Collaborator.new(@terraform_block, REPOSITORY_NAME)
@@ -26,7 +26,7 @@ class GithubCollaborators
             ENV.delete("REALLY_POST_TO_SLACK")
           }
 
-          it TEST_TITLE do          
+          it TEST_TITLE do
             expect(HTTP).not_to receive(:post)
             slack_notififer = GithubCollaborators::SlackNotifier.new(@test_object, @collaborators)
             slack_notififer.post_slack_message
