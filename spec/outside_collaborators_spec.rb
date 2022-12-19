@@ -262,6 +262,62 @@ class GithubCollaborators
         end
       end
 
+      context "call remove_expired_collaborators" do
+        before do
+          expect(terraform_files).to receive(:get_terraform_files).and_return([])
+          allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
+          allow_any_instance_of(HelperModule).to receive(:fetch_all_collaborators).and_return([])
+          allow_any_instance_of(HelperModule).to receive(:get_archived_repositories).and_return([])
+          allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])
+          allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([])
+          allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
+        end
+        
+        it "when no full org expired collaborators exist" do
+          my_organization = GithubCollaborators::Organization.new
+          outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+
+          terraform_block = create_terraform_block_review_date_more_than_month
+          collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          collaborator1.check_for_issues
+
+          expect(my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return([])
+          expect(outside_collaborators).not_to receive(:remove_collaborator)
+          outside_collaborators.remove_expired_collaborators([collaborator1])
+        end
+
+        it "when is a full org expired collaborator" do
+          my_organization = GithubCollaborators::Organization.new
+          outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+          
+          terraform_block = create_terraform_block_review_date_more_than_month
+          collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          collaborator1.check_for_issues
+          
+          expect(my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return([true])
+          expect(outside_collaborators).not_to receive(:remove_collaborator)
+          outside_collaborators.remove_expired_collaborators([collaborator1])
+        end
+        
+        it "when not a full org expired collaborator" do
+        my_organization = GithubCollaborators::Organization.new
+          outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+
+          terraform_block = create_terraform_block_review_date_more_than_month
+          collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          collaborator1.check_for_issues
+
+          expect(my_organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(false)
+          expect(outside_collaborators).to receive(:remove_collaborator).with([collaborator1]).and_return([collaborator1])
+          
+          slack_notififer = GithubCollaborators::SlackNotifier.new(nil, [])
+          expect(GithubCollaborators::SlackNotifier).to receive(:new).and_return(slack_notififer)
+          expect(slack_notififer).to receive(:post_slack_message)
+
+          outside_collaborators.remove_expired_collaborators([collaborator1])
+        end
+      end
+
       context "call is_renewal_within_one_month" do
         before do
           expect(terraform_files).to receive(:get_terraform_files).and_return([])
@@ -356,7 +412,7 @@ class GithubCollaborators
         end
       end
 
-      it "when repository collaborator lengths are different" do
+      it "call compare_terraform_and_github when repository collaborator lengths are different" do
         repo1 = GithubCollaborators::Repository.new(TEST_REPO_NAME1, 2)
         repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 0)
         allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
