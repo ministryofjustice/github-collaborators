@@ -11,13 +11,12 @@ class GithubCollaborators
     let(:unkown_collaborators_slack_message) { double(GithubCollaborators::UnknownCollaborators) }
     let(:removed_collaborators_slack_message) { double(GithubCollaborators::Removed) }
     let(:helper_module) { Class.new { extend HelperModule } }
-    
+
     # The tests below are nested. This is to reduce code duplication.
     # This is because it take alot of object to create the object under test.
     # The before do blocks contain expectations that are common within
     # the nested context block. Therefore consider the top level and
     # nested context block when reading the test code.
-
 
     terraform_block = create_terraform_block_review_date_yesterday
     expired_collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
@@ -498,9 +497,9 @@ class GithubCollaborators
             allow_any_instance_of(HelperModule).to receive(:create_unknown_collaborator_issue).with(TEST_COLLABORATOR_LOGIN, REPOSITORY_NAME)
             allow_any_instance_of(HelperModule).to receive(:remove_access).with(REPOSITORY_NAME, TEST_COLLABORATOR_LOGIN)
             expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::Removed), [collaborator1]).and_return(removed_collaborators_slack_message)
-            expect(removed_collaborators_slack_message).to receive(:post_slack_message)            
+            expect(removed_collaborators_slack_message).to receive(:post_slack_message)
             @outside_collaborators.remove_unknown_collaborators([collaborator1])
-          end 
+          end
         end
 
         context "call extend_collaborators_review_date" do
@@ -704,7 +703,7 @@ class GithubCollaborators
 
           context "" do
             before do
-              allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2]) 
+              allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
               @organization = GithubCollaborators::Organization.new
               expect(GithubCollaborators::Organization).to receive(:new).and_return(@organization)
               @outside_collaborators = GithubCollaborators::OutsideCollaborators.new
