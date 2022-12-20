@@ -86,6 +86,10 @@ class GithubCollaborators
             it "call get_org_archived_repositories when empty" do
               test_equal(@organization.get_org_archived_repositories.length, 0)
             end
+
+            it "call get_full_org_members_not_in_terraform_file when no full org members" do
+              test_equal(@organization.get_full_org_members_not_in_terraform_file, [])
+            end
           end
 
           it "call create_full_org_members when collaborators are org members and names are the same" do
@@ -100,6 +104,25 @@ class GithubCollaborators
             organization = GithubCollaborators::Organization.new
             organization.create_full_org_members([collaborator1, collaborator2, collaborator3])
             test_equal(organization.full_org_members.length, 3)
+          end
+
+          context "call get_full_org_members_not_in_terraform_file" do
+            before do
+              allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2, TEST_USER_3])
+              @organization = GithubCollaborators::Organization.new
+              @organization.create_full_org_members([collaborator1, collaborator2, collaborator3])
+              test_equal(@organization.full_org_members.length, 3)
+            end
+
+            it "when collaborators are defined in terraform file" do
+              allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:do_repositories_match).and_return(true)
+              test_equal(@organization.get_full_org_members_not_in_terraform_file, [])
+            end
+
+            it "when collaborators are not defined in terraform file" do
+              allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:do_repositories_match).and_return(false)
+              test_equal(@organization.get_full_org_members_not_in_terraform_file.length, 3)
+            end
           end
         end
       end
