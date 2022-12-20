@@ -1,6 +1,5 @@
 class GithubCollaborators
   describe OutsideCollaborators do
-    let(:terraform_file) { double(GithubCollaborators::TerraformFile) }
     let(:terraform_files) { double(GithubCollaborators::TerraformFiles) }
     let(:odd_full_org_slack_message) { double(GithubCollaborators::OddFullOrgMembers) }
     let(:full_org_archived_repository_slack_message) { double(GithubCollaborators::ArchivedRepositories) }
@@ -10,7 +9,6 @@ class GithubCollaborators
     let(:expired_slack_message) { double(GithubCollaborators::Expired) }
     let(:unkown_collaborators_slack_message) { double(GithubCollaborators::UnknownCollaborators) }
     let(:removed_collaborators_slack_message) { double(GithubCollaborators::Removed) }
-    let(:helper_module) { Class.new { extend HelperModule } }
 
     # The tests below are nested. This is to reduce code duplication.
     # This is because it take alot of object to create the object under test.
