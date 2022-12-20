@@ -90,6 +90,14 @@ class GithubCollaborators
             it "call get_full_org_members_not_in_terraform_file when no full org members" do
               test_equal(@organization.get_full_org_members_not_in_terraform_file, [])
             end
+
+            it "call get_full_org_members_with_repository_permission_mismatches when no full org members" do
+              test_equal(@organization.get_full_org_members_with_repository_permission_mismatches(nil), [])
+            end
+
+            it "call get_odd_full_org_members when no full org members" do
+              test_equal(@organization.get_odd_full_org_members, [])
+            end
           end
 
           it "call create_full_org_members when collaborators are org members and names are the same" do
@@ -106,7 +114,7 @@ class GithubCollaborators
             test_equal(organization.full_org_members.length, 3)
           end
 
-          context "call get_full_org_members_not_in_terraform_file" do
+          context "" do
             before do
               allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2, TEST_USER_3])
               @organization = GithubCollaborators::Organization.new
@@ -114,14 +122,44 @@ class GithubCollaborators
               test_equal(@organization.full_org_members.length, 3)
             end
 
-            it "when collaborators are defined in terraform file" do
-              allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:do_repositories_match).and_return(true)
-              test_equal(@organization.get_full_org_members_not_in_terraform_file, [])
+            context "call get_full_org_members_with_repository_permission_mismatches" do
+              it "when collaborator permissions do not match" do
+                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:check_repository_permissions_match).and_return(false)
+                test_equal(@organization.get_full_org_members_with_repository_permission_mismatches(nil), [])
+              end
+
+              it "when collaborator permissions do match" do
+                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:check_repository_permissions_match).and_return(true)
+                result = @organization.get_full_org_members_with_repository_permission_mismatches(nil)
+                test_equal(result.length, 3)
+                expected_collaborators = [{login:TEST_USER_1, mismatches:[]}, {login:TEST_USER_2, mismatches:[]}, {login:TEST_USER_3, mismatches:[]}]
+                test_equal(result, expected_collaborators)
+              end
             end
 
-            it "when collaborators are not defined in terraform file" do
-              allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:do_repositories_match).and_return(false)
-              test_equal(@organization.get_full_org_members_not_in_terraform_file.length, 3)
+            context "call get_full_org_members_not_in_terraform_file" do
+              it "when collaborators are defined in terraform file" do
+                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:do_repositories_match).and_return(true)
+                test_equal(@organization.get_full_org_members_not_in_terraform_file, [])
+              end
+
+              it "when collaborators are not defined in terraform file" do
+                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:do_repositories_match).and_return(false)
+                test_equal(@organization.get_full_org_members_not_in_terraform_file.length, 3)
+              end
+            end
+
+            context "call get_odd_full_org_members" do
+              it "when collaborators are odd" do
+                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:odd_full_org_member_check).and_return(false)
+                test_equal(@organization.get_odd_full_org_members, [])
+              end
+
+              it "when collaborators are not odd" do
+                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:odd_full_org_member_check).and_return(true)
+                result = @organization.get_odd_full_org_members
+                test_equal(result, [TEST_USER_1, TEST_USER_2, TEST_USER_3])
+              end
             end
           end
         end
