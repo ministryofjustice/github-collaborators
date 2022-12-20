@@ -71,7 +71,7 @@ describe HelperModule do
       end
     end
 
-    context "and do not remove issue" do
+    context "do not remove issue" do
       before do
         expect(helper_module).not_to receive(:remove_issue).with(REPOSITORY_NAME, 1)
       end
@@ -101,7 +101,7 @@ describe HelperModule do
       end
     end
 
-    context "and do not remove issue" do
+    context "do not remove issue" do
       before do
         expect(helper_module).not_to receive(:remove_issue)
       end
@@ -161,7 +161,7 @@ describe HelperModule do
       end
     end
 
-    it "use team access, multiple issues, expired and open" do
+    it "call close_expired_issues when use team access, multiple issues, expired and open" do
       issues = [
         {
           title: USE_TEAM_ACCESS,
@@ -187,7 +187,7 @@ describe HelperModule do
       helper_module.close_expired_issues(REPOSITORY_NAME)
     end
 
-    it "multiple issues, some expired and open" do
+    it "call close_expired_issues when multiple issues, some expired and open" do
       issues = [
         {
           title: COLLABORATOR_EXPIRY_UPCOMING,

@@ -64,27 +64,29 @@ class GithubCollaborators
           @outside_collaborators.add_new_pull_request("some-title", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_FILE])
         end
 
-        it "call does_pr_already_exist when no pull request exists" do
-          result = @outside_collaborators.does_pr_already_exist(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
-          test_equal(result, false)
-        end
+        context "call does_pr_already_exist" do
+          it "when no pull request exists" do
+            result = @outside_collaborators.does_pr_already_exist(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
+            test_equal(result, false)
+          end
 
-        it "call does_pr_already_exist when pull request exists but pull request title doesn't match" do
-          @outside_collaborators.add_new_pull_request("some-title", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_FILE])
-          result = @outside_collaborators.does_pr_already_exist(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
-          test_equal(result, false)
-        end
+          it "when pull request exists but pull request title doesn't match" do
+            @outside_collaborators.add_new_pull_request("some-title", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_FILE])
+            result = @outside_collaborators.does_pr_already_exist(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
+            test_equal(result, false)
+          end
 
-        it "call does_pr_already_exist when pull request exists but pull request files doesn't match" do
-          @outside_collaborators.add_new_pull_request("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_FILE])
-          result = @outside_collaborators.does_pr_already_exist(TEST_REPO_NAME2, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
-          test_equal(result, false)
-        end
+          it "when pull request exists but pull request files doesn't match" do
+            @outside_collaborators.add_new_pull_request("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_FILE])
+            result = @outside_collaborators.does_pr_already_exist(TEST_REPO_NAME2, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
+            test_equal(result, false)
+          end
 
-        it "call does_pr_already_exist when pull request exists and find a match" do
-          @outside_collaborators.add_new_pull_request("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_FILE])
-          result = @outside_collaborators.does_pr_already_exist(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
-          test_equal(result, true)
+          it "when pull request exists and find a match" do
+            @outside_collaborators.add_new_pull_request("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_FILE])
+            result = @outside_collaborators.does_pr_already_exist(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
+            test_equal(result, true)
+          end
         end
 
         it "call has_review_date_expired" do
@@ -121,92 +123,98 @@ class GithubCollaborators
           test_equal(expire_soon_collaborators, [expired_collaborator])
         end
 
-        it "call extend_date when no collaborators" do
-          extended_collaborators = @outside_collaborators.extend_date([])
-          test_equal(extended_collaborators.length, 0)
+        context "call extend_date" do
+          it "when no collaborators" do
+            extended_collaborators = @outside_collaborators.extend_date([])
+            test_equal(extended_collaborators.length, 0)
+          end
+
+          it "when pull request exists" do
+            allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(true)
+            allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}").and_return(true)
+            extended_collaborators = @outside_collaborators.extend_date([collaborator1, collaborator_expires_soon, collaborator2])
+            test_equal(extended_collaborators.length, 0)
+          end
+
+          it "when pull request doesn't exist" do
+            allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(false)
+            allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}").and_return(false)
+            expect(terraform_files).to receive(:extend_date_in_file).with(REPOSITORY_NAME, TEST_COLLABORATOR_LOGIN).at_least(2).times
+            expect(terraform_files).to receive(:extend_date_in_file).with(REPOSITORY_NAME, TEST_USER_2).at_least(1).times
+            allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{UPDATE_REVIEW_DATE_BRANCH_NAME}#{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", TEST_COLLABORATOR_LOGIN, TYPE_EXTEND)
+            allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{UPDATE_REVIEW_DATE_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH], "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_EXTEND)
+            expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
+            expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH])
+            extended_collaborators = @outside_collaborators.extend_date([collaborator1, collaborator_expires_soon, collaborator2])
+            test_equal(extended_collaborators.length, 3)
+          end
         end
 
-        it "call extend_date when pull request exists" do
-          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(true)
-          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}").and_return(true)
-          extended_collaborators = @outside_collaborators.extend_date([collaborator1, collaborator_expires_soon, collaborator2])
-          test_equal(extended_collaborators.length, 0)
+        context "call remove_collaborator" do
+          it "when no collaborators" do
+            removed_collaborators = @outside_collaborators.remove_collaborator([])
+            test_equal(removed_collaborators.length, 0)
+          end
+
+          it "when pull request exists" do
+            allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(true)
+            allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}").and_return(true)
+            removed_collaborators = @outside_collaborators.remove_collaborator([collaborator1, collaborator_expires_soon, collaborator2])
+            test_equal(removed_collaborators.length, 0)
+          end
+
+          it "when pull request doesn't exist" do
+            allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(false)
+            allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}").and_return(false)
+            expect(terraform_files).to receive(:remove_collaborator_from_file).with(REPOSITORY_NAME, TEST_COLLABORATOR_LOGIN).at_least(2).times
+            expect(terraform_files).to receive(:remove_collaborator_from_file).with(REPOSITORY_NAME, TEST_USER_2).at_least(1).times
+            allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME}#{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", TEST_COLLABORATOR_LOGIN, TYPE_REMOVE)
+            allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH], "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_REMOVE)
+            expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
+            expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH])
+            removed_collaborators = @outside_collaborators.remove_collaborator([collaborator1, collaborator_expires_soon, collaborator2])
+            test_equal(removed_collaborators.length, 3)
+          end
         end
 
-        it "call extend_date when pull request doesn't exist" do
-          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(false)
-          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}").and_return(false)
-          expect(terraform_files).to receive(:extend_date_in_file).with(REPOSITORY_NAME, TEST_COLLABORATOR_LOGIN).at_least(2).times
-          expect(terraform_files).to receive(:extend_date_in_file).with(REPOSITORY_NAME, TEST_USER_2).at_least(1).times
-          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{UPDATE_REVIEW_DATE_BRANCH_NAME}#{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", TEST_COLLABORATOR_LOGIN, TYPE_EXTEND)
-          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{UPDATE_REVIEW_DATE_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH], "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_EXTEND)
-          expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
-          expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH])
-          extended_collaborators = @outside_collaborators.extend_date([collaborator1, collaborator_expires_soon, collaborator2])
-          test_equal(extended_collaborators.length, 3)
-        end
+        context "call change_collaborator_permission" do
+          it "when no repositories passed in" do
+            @outside_collaborators.change_collaborator_permission(TEST_USER_2, [])
+            expect(terraform_files).not_to receive(:ensure_file_exists_in_memory)
+          end
 
-        it "call remove_collaborator when no collaborators" do
-          removed_collaborators = @outside_collaborators.remove_collaborator([])
-          test_equal(removed_collaborators.length, 0)
-        end
+          it "when pull request doesn't exist" do
+            repositories = [
+              {permission: "push", repository_name: REPOSITORY_NAME},
+              {permission: "admin", repository_name: REPOSITORY_NAME},
+              {permission: "pull", repository_name: REPOSITORY_NAME}
+            ]
+            allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(false)
+            expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(REPOSITORY_NAME).at_least(3).times
+            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "push")
+            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "admin")
+            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "pull")
+            allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{MODIFY_COLLABORATORS_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_PERMISSION)
+            expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
+            @outside_collaborators.change_collaborator_permission(TEST_USER_2, repositories)
+          end
 
-        it "call remove_collaborator when pull request exists" do
-          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(true)
-          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}").and_return(true)
-          removed_collaborators = @outside_collaborators.remove_collaborator([collaborator1, collaborator_expires_soon, collaborator2])
-          test_equal(removed_collaborators.length, 0)
-        end
-
-        it "call remove_collaborator when pull request doesn't exist" do
-          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(false)
-          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}").and_return(false)
-          expect(terraform_files).to receive(:remove_collaborator_from_file).with(REPOSITORY_NAME, TEST_COLLABORATOR_LOGIN).at_least(2).times
-          expect(terraform_files).to receive(:remove_collaborator_from_file).with(REPOSITORY_NAME, TEST_USER_2).at_least(1).times
-          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME}#{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", TEST_COLLABORATOR_LOGIN, TYPE_REMOVE)
-          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH], "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_REMOVE)
-          expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
-          expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH])
-          removed_collaborators = @outside_collaborators.remove_collaborator([collaborator1, collaborator_expires_soon, collaborator2])
-          test_equal(removed_collaborators.length, 3)
-        end
-
-        it "call change_collaborator_permission when no repositories passed in" do
-          @outside_collaborators.change_collaborator_permission(TEST_USER_2, [])
-          expect(terraform_files).not_to receive(:ensure_file_exists_in_memory)
-        end
-
-        it "call change_collaborator_permission when pull request doesn't exist" do
-          repositories = [
-            {permission: "push", repository_name: REPOSITORY_NAME},
-            {permission: "admin", repository_name: REPOSITORY_NAME},
-            {permission: "pull", repository_name: REPOSITORY_NAME}
-          ]
-          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(false)
-          expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(REPOSITORY_NAME).at_least(3).times
-          expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "push")
-          expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "admin")
-          expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "pull")
-          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{MODIFY_COLLABORATORS_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_PERMISSION)
-          expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
-          @outside_collaborators.change_collaborator_permission(TEST_USER_2, repositories)
-        end
-
-        it "call change_collaborator_permission when a pull request does exist" do
-          repositories = [
-            {permission: "push", repository_name: REPOSITORY_NAME},
-            {permission: "admin", repository_name: TEST_REPO_NAME},
-            {permission: "pull", repository_name: REPOSITORY_NAME}
-          ]
-          expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(false)
-          expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(true)
-          expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(false)
-          expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(REPOSITORY_NAME).at_least(2).times
-          expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "push")
-          expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "pull")
-          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{MODIFY_COLLABORATORS_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_PERMISSION)
-          expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
-          @outside_collaborators.change_collaborator_permission(TEST_USER_2, repositories)
+          it "when a pull request does exist" do
+            repositories = [
+              {permission: "push", repository_name: REPOSITORY_NAME},
+              {permission: "admin", repository_name: TEST_REPO_NAME},
+              {permission: "pull", repository_name: REPOSITORY_NAME}
+            ]
+            expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(false)
+            expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(true)
+            expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(false)
+            expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(REPOSITORY_NAME).at_least(2).times
+            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "push")
+            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "pull")
+            allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{MODIFY_COLLABORATORS_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_PERMISSION)
+            expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
+            @outside_collaborators.change_collaborator_permission(TEST_USER_2, repositories)
+          end
         end
 
         context "call add_collaborator" do

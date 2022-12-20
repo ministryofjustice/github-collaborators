@@ -36,7 +36,7 @@ module TestConstants
   HREF = "#{GH_ORG_URL}/github-collaborators/blob/main/terraform/#{REPOSITORY_NAME}.tf|terraform file"
   COLLABORATOR_EXISTS = "when collaborator does exist"
   COLLABORATOR_DOESNT_EXIST = "when collaborator doesn't exist"
-  TEST_CREATE_PULL_REQUEST = "test create_pull_request"
+  CALL_CREATE_PULL_REQUEST = "call create_pull_request"
   WHEN_COLLABORATORS_EXISTS = "when collaborators exist"
   WHEN_NO_COLLABORATORS_EXISTS = "when collaborators don't exist"
   WHEN_NO_COLLABORATORS_PASSED_IN = "when no collaborator is passed in"

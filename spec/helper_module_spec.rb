@@ -11,18 +11,18 @@ describe HelperModule do
   collaborator2 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
   collaborators = [collaborator1, collaborator2]
 
-  context "test get_issues_from_github" do
+  context "call get_issues_from_github" do
     before do
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
     end
 
-    it "return an issue" do
+    it "and return an issue" do
       response = %([{"assignee": { "login":#{TEST_USER}}, "title": #{COLLABORATOR_EXPIRES_SOON}, "assignees": [{"login":#{TEST_USER} }]}])
       expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
       test_equal(helper_module.get_issues_from_github(REPOSITORY_NAME), response)
     end
 
-    it "return empty array if no issues" do
+    it "and return empty array if no issues" do
       response = []
       expect(http_client).to receive(:fetch_json).with(URL).and_return(response.to_json)
       test_equal(helper_module.get_issues_from_github(REPOSITORY_NAME), [])
@@ -35,7 +35,7 @@ describe HelperModule do
     end
   end
 
-  context "test delete_expired_invite" do
+  context "call delete_expired_invite" do
     it "call function" do
       url = "#{GH_API_URL}/#{REPOSITORY_NAME}/invitations/#{TEST_USER}"
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
@@ -44,7 +44,7 @@ describe HelperModule do
     end
   end
 
-  context "test get_repository_invites" do
+  context "call get_repository_invites" do
     let(:json) { File.read("spec/fixtures/invites.json") }
     before do
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
@@ -65,7 +65,7 @@ describe HelperModule do
     end
   end
 
-  context "test does_issue_already_exist" do
+  context "call does_issue_already_exist" do
     issues_json = File.read("spec/fixtures/issues.json")
     before do
       expect(helper_module).to receive(:remove_issue).with(REPOSITORY_NAME, 159)
@@ -84,7 +84,7 @@ describe HelperModule do
     end
   end
 
-  context "test get_all_org_members_team_repositories" do
+  context "call get_all_org_members_team_repositories" do
     url = "https://api.github.com/orgs/#{ORG}/teams/all-org-members/repos?per_page=100"
     before do
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
@@ -104,7 +104,7 @@ describe HelperModule do
     end
   end
 
-  context "test does_collaborator_already_exist" do
+  context "call does_collaborator_already_exist" do
     it COLLABORATOR_EXISTS do
       test_equal(helper_module.does_collaborator_already_exist(TEST_USER_1, collaborators), true)
     end
@@ -114,7 +114,7 @@ describe HelperModule do
     end
   end
 
-  context "test get_name" do
+  context "call get_name" do
     it COLLABORATOR_EXISTS do
       test_equal(helper_module.get_name(TEST_USER_1, collaborators), TEST_COLLABORATOR_NAME)
     end
@@ -124,7 +124,7 @@ describe HelperModule do
     end
   end
 
-  context "test get_email" do
+  context "call get_email" do
     it COLLABORATOR_EXISTS do
       test_equal(helper_module.get_email(TEST_USER_1, collaborators), TEST_COLLABORATOR_EMAIL)
     end
@@ -134,7 +134,7 @@ describe HelperModule do
     end
   end
 
-  context "test get_org" do
+  context "call get_org" do
     it COLLABORATOR_EXISTS do
       test_equal(helper_module.get_org(TEST_USER_1, collaborators), TEST_COLLABORATOR_ORG)
     end
@@ -144,7 +144,7 @@ describe HelperModule do
     end
   end
 
-  context "test get_org_outside_collaborators" do
+  context "call get_org_outside_collaborators" do
     url = "https://api.github.com/orgs/#{ORG}/outside_collaborators?per_page=100"
     before do
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
@@ -164,7 +164,7 @@ describe HelperModule do
     end
   end
 
-  context "test create_branch_and_pull_request" do
+  context "call create_branch_and_pull_request" do
     pull_request_title = "sometitle"
     filenames = ["file1", "file2", "file3"]
     branch_name = BRANCH_NAME
@@ -230,7 +230,7 @@ describe HelperModule do
 
   pull_request_url = "#{GH_API_URL}/github-collaborators/pulls"
 
-  context TEST_CREATE_PULL_REQUEST do
+  context CALL_CREATE_PULL_REQUEST do
     before do
       ENV.delete("REALLY_POST_TO_GH")
     end
@@ -241,7 +241,7 @@ describe HelperModule do
     end
   end
 
-  context TEST_CREATE_PULL_REQUEST do
+  context CALL_CREATE_PULL_REQUEST do
     before do
       ENV["REALLY_POST_TO_GH"] = "0"
     end
@@ -256,7 +256,7 @@ describe HelperModule do
     end
   end
 
-  context TEST_CREATE_PULL_REQUEST do
+  context CALL_CREATE_PULL_REQUEST do
     before do
       ENV["REALLY_POST_TO_GH"] = "1"
       ENV["OPS_BOT_TOKEN"] = "1"
@@ -274,7 +274,7 @@ describe HelperModule do
     end
   end
 
-  context TEST_CREATE_PULL_REQUEST do
+  context CALL_CREATE_PULL_REQUEST do
     before do
       ENV["REALLY_POST_TO_GH"] = "1"
       ENV["OPS_BOT_TOKEN"] = "0"
@@ -292,7 +292,7 @@ describe HelperModule do
     end
   end
 
-  context "test extend_date_hash" do
+  context "" do
     login = TEST_USER
     branch_name = BRANCH_NAME
     hash_body = {
@@ -317,7 +317,7 @@ describe HelperModule do
     end
   end
 
-  context "test delete_archive_file_hash" do
+  context "" do
     branch_name = BRANCH_NAME
     hash_body = {
       title: ARCHIVED_REPOSITORY_PR_TITLE,
@@ -340,7 +340,7 @@ describe HelperModule do
     end
   end
 
-  context "test delete_empty_files_hash" do
+  context "" do
     branch_name = BRANCH_NAME
     hash_body = {
       title: EMPTY_FILES_PR_TITLE,
@@ -361,7 +361,7 @@ describe HelperModule do
     end
   end
 
-  context "test add_collaborator_hash" do
+  context "" do
     login = TEST_USER
     branch_name = BRANCH_NAME
     hash_body = {
@@ -389,7 +389,7 @@ describe HelperModule do
     end
   end
 
-  context "test remove_collaborator_hash" do
+  context "" do
     login = TEST_USER
     branch_name = BRANCH_NAME
     hash_body = {
@@ -412,7 +412,7 @@ describe HelperModule do
     end
   end
 
-  context "test modify_collaborator_permission_hash" do
+  context "" do
     login = TEST_USER
     branch_name = BRANCH_NAME
     hash_body = {
@@ -442,7 +442,7 @@ describe HelperModule do
     end
   end
 
-  context "test get_active_repositories" do
+  context "call get_active_repositories" do
     return_data = File.read("spec/fixtures/repositories.json")
 
     json_query_public_repo = %[
@@ -572,7 +572,7 @@ describe HelperModule do
     end
   end
 
-  context "test get_archived_repositories" do
+  context "call get_archived_repositories" do
     return_data = File.read("spec/fixtures/archived_repositories.json")
     json_query_public =
       %[
@@ -685,7 +685,7 @@ describe HelperModule do
     end
   end
 
-  context "test fetch_all_collaborators" do
+  context "call fetch_all_collaborators" do
     return_data = File.read("spec/fixtures/repository-collaborators.json")
     json_query =
       %[
@@ -755,7 +755,7 @@ describe HelperModule do
     end
   end
 
-  context "test find_unknown_collaborators" do
+  context "call find_unknown_collaborators" do
     it "when no collaborator in terraform file" do
       unknown_collaborators = helper_module.find_unknown_collaborators([], [TEST_USER_2], TEST_REPO_NAME2)
       test_equal(unknown_collaborators.length, 1)

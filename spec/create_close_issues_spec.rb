@@ -1,8 +1,6 @@
 TITLE_1 = COLLABORATOR_EXPIRES_SOON + " " + TEST_USER
 describe HelperModule do
-  # extended class
   let(:helper_module) { Class.new { extend HelperModule } }
-
   let(:http_client) { double(GithubCollaborators::HttpClient) }
 
   let(:json1) {
@@ -19,12 +17,12 @@ describe HelperModule do
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
     end
 
-    it "call github api in create unknown collaborator issue" do
+    it "call create_unknown_collaborator_issue" do
       expect(http_client).to receive(:post_json).with(URL, json1)
       helper_module.create_unknown_collaborator_issue(TEST_USER, REPOSITORY_NAME)
     end
 
-    it "call github api in create review date expires soon issue" do
+    it "call create_review_date_expires_soon_issue" do
       expect(http_client).to receive(:post_json).with(URL, json2)
       helper_module.create_review_date_expires_soon_issue(TEST_USER, REPOSITORY_NAME)
     end
@@ -41,11 +39,11 @@ describe HelperModule do
       expect(http_client).not_to receive(:delete)
     end
 
-    it "dont call github api in create unknown collaborator issue" do
+    it "call create unknown collaborator issue and don't call github api" do
       helper_module.create_unknown_collaborator_issue(TEST_USER, REPOSITORY_NAME)
     end
 
-    it "dont call github api in create review date expires soon issue" do
+    it "call create_review_date_expires_soon_issue and don't call github api" do
       helper_module.create_review_date_expires_soon_issue(TEST_USER, REPOSITORY_NAME)
     end
 
@@ -61,11 +59,11 @@ describe HelperModule do
       expect(http_client).not_to receive(:delete)
     end
 
-    it "dont call github api in create unknown collaborator issue" do
+    it "call create_unknown_collaborator_issue and don't call github api" do
       helper_module.create_unknown_collaborator_issue(TEST_USER, REPOSITORY_NAME)
     end
 
-    it "dont call github api in create review date expires soon issue" do
+    it "call create_review_date_expires_soon_issue and don't call github api" do
       helper_module.create_review_date_expires_soon_issue(TEST_USER, REPOSITORY_NAME)
     end
   end

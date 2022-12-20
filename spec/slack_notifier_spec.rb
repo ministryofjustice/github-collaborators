@@ -1,6 +1,5 @@
 class GithubCollaborators
   TEST_TITLE = "call post_slack_message when have a collaborator"
-
   describe SlackNotifier do
     context "test SlackNotifier" do
       before do
@@ -46,7 +45,7 @@ class GithubCollaborators
           end
         end
 
-        context "test SlackNotifier when env var and slack env var exist" do
+        context "when env var and slack env var exist" do
           before {
             ENV["REALLY_POST_TO_SLACK"] = "1"
             ENV["SLACK_WEBHOOK_URL"] = "someurl"

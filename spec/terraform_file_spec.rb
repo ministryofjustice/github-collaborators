@@ -79,6 +79,7 @@ class GithubCollaborators
             before do
               @terraform_file.add_org_member_collaborator(collaborator2, TEST_COLLABORATOR_PERMISSION)
             end
+
             it "call add_org_member_collaborator" do
               terraform_blocks = @terraform_file.get_terraform_blocks
               test_equal(terraform_blocks.length, 2)

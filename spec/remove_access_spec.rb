@@ -7,7 +7,7 @@ describe HelperModule do
       ENV["REALLY_POST_TO_GH"] = "1"
     end
 
-    it "call github api" do
+    it "call remove_access and call github api" do
       url = "#{GH_API_URL}/#{REPOSITORY_NAME}/collaborators/#{TEST_USER}"
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
       expect(http_client).to receive(:delete).with(url)
@@ -19,7 +19,7 @@ describe HelperModule do
     end
   end
 
-  context "" do
+  context "call remove_access" do
     before do
       expect(GithubCollaborators::HttpClient).not_to receive(:new)
       expect(http_client).not_to receive(:delete)
@@ -30,7 +30,7 @@ describe HelperModule do
         ENV["REALLY_POST_TO_GH"] = "0"
       end
 
-      it "dont call github api" do
+      it "and don't call github api" do
         helper_module.remove_access(REPOSITORY_NAME, TEST_USER)
       end
 
@@ -40,7 +40,7 @@ describe HelperModule do
     end
 
     context "when env var is missing" do
-      it "dont call github api" do
+      it "and don't call github api" do
         helper_module.remove_access(REPOSITORY_NAME, TEST_USER)
       end
     end

@@ -29,30 +29,52 @@ class GithubCollaborators
 
         context "" do
           before do
+            allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
+            @organization = GithubCollaborators::Organization.new
+          end
+
+          it "call add_full_org_member" do
+            @organization.add_full_org_member(TEST_USER_1)
+            test_equal(@organization.full_org_members.length, 1)
+          end
+
+          it "call is_collaborator_an_org_member when no collaborators" do
+            test_equal(@organization.is_collaborator_an_org_member(TEST_USER_6), false)
+          end
+        end
+
+        context "call is_collaborator_an_org_member" do
+          before do
             allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2])
             @organization = GithubCollaborators::Organization.new
           end
 
-          it "call is_collaborator_an_org_member when collaborator is not an org member" do
+          it "when collaborator is not an org member" do
             test_equal(@organization.is_collaborator_an_org_member(TEST_USER_6), false)
           end
 
-          it "call is_collaborator_an_org_member when collaborator is an org member" do
+          it "when collaborator is an org member" do
             test_equal(@organization.is_collaborator_an_org_member(TEST_USER_2), true)
           end
         end
 
-        context "" do
+        context "call is_collaborator_a_full_org_member" do
           before do
             allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
             @organization = GithubCollaborators::Organization.new
           end
 
-          it "call is_collaborator_a_full_org_member when array is empty" do
+          it "when array is empty" do
             test_equal(@organization.is_collaborator_a_full_org_member(TEST_USER_2), false)
           end
 
-          it "call is_collaborator_a_full_org_member when array has collaborators " do
+          it "when array has collaborators but no match" do
+            @organization.add_full_org_member(TEST_USER_1)
+            @organization.add_full_org_member(TEST_USER_2)
+            test_equal(@organization.is_collaborator_a_full_org_member(TEST_USER_3), false)
+          end
+
+          it "when array has collaborators and a match" do
             @organization.add_full_org_member(TEST_USER_1)
             @organization.add_full_org_member(TEST_USER_2)
             test_equal(@organization.is_collaborator_a_full_org_member(TEST_USER_2), true)
@@ -98,24 +120,26 @@ class GithubCollaborators
             it "call get_odd_full_org_members when no full org members" do
               test_equal(@organization.get_odd_full_org_members, [])
             end
-            
+
             it "call get_full_org_members_attached_to_archived_repositories when no full org members" do
               test_equal(@organization.get_full_org_members_attached_to_archived_repositories(nil), [])
             end
           end
 
-          it "call create_full_org_members when collaborators are org members and names are the same" do
-            allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1])
-            organization = GithubCollaborators::Organization.new
-            organization.create_full_org_members([collaborator1, collaborator1, collaborator1])
-            test_equal(organization.full_org_members.length, 1)
-          end
+          context "call create_full_org_members" do
+            it "when collaborators are org members and names are the same" do
+              allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1])
+              organization = GithubCollaborators::Organization.new
+              organization.create_full_org_members([collaborator1, collaborator1, collaborator1])
+              test_equal(organization.full_org_members.length, 1)
+            end
 
-          it "call create_full_org_members when collaborators are org members and names are different" do
-            allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2, TEST_USER_3])
-            organization = GithubCollaborators::Organization.new
-            organization.create_full_org_members([collaborator1, collaborator2, collaborator3])
-            test_equal(organization.full_org_members.length, 3)
+            it "when collaborators are org members and names are different" do
+              allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2, TEST_USER_3])
+              organization = GithubCollaborators::Organization.new
+              organization.create_full_org_members([collaborator1, collaborator2, collaborator3])
+              test_equal(organization.full_org_members.length, 3)
+            end
           end
 
           context "" do
@@ -136,7 +160,7 @@ class GithubCollaborators
                 allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:check_repository_permissions_match).and_return(true)
                 result = @organization.get_full_org_members_with_repository_permission_mismatches(nil)
                 test_equal(result.length, 3)
-                expected_collaborators = [{login:TEST_USER_1, mismatches:[]}, {login:TEST_USER_2, mismatches:[]}, {login:TEST_USER_3, mismatches:[]}]
+                expected_collaborators = [{login: TEST_USER_1, mismatches: []}, {login: TEST_USER_2, mismatches: []}, {login: TEST_USER_3, mismatches: []}]
                 test_equal(result, expected_collaborators)
               end
             end
@@ -191,12 +215,13 @@ class GithubCollaborators
                 expect(terraform_files).to receive(:does_file_exist).and_return(true).at_least(6).times
                 result = @organization.get_full_org_members_attached_to_archived_repositories(terraform_files)
                 expected_result = [
-                  {:login=>TEST_USER_1, :repository=>TEST_REPO_NAME1},
-                  {:login=>TEST_USER_1, :repository=>TEST_REPO_NAME2},
-                  {:login=>TEST_USER_2, :repository=>TEST_REPO_NAME1},
-                  {:login=>TEST_USER_2, :repository=>TEST_REPO_NAME2},
-                  {:login=>TEST_USER_3, :repository=>TEST_REPO_NAME1},
-                  {:login=>TEST_USER_3, :repository=>TEST_REPO_NAME2}]
+                  {login: TEST_USER_1, repository: TEST_REPO_NAME1},
+                  {login: TEST_USER_1, repository: TEST_REPO_NAME2},
+                  {login: TEST_USER_2, repository: TEST_REPO_NAME1},
+                  {login: TEST_USER_2, repository: TEST_REPO_NAME2},
+                  {login: TEST_USER_3, repository: TEST_REPO_NAME1},
+                  {login: TEST_USER_3, repository: TEST_REPO_NAME2}
+                ]
                 test_equal(result, expected_result)
               end
             end

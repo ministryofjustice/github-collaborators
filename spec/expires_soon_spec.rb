@@ -1,34 +1,36 @@
 class GithubCollaborators
   describe ExpiresSoon do
-    context "call" do
+    context "test ExpiresSoon" do
       subject(:expires_soon) { described_class.new }
 
-      it "create line when collaborator expires today" do
-        terraform_block = create_terraform_block_review_date_today
-        collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-        line = expires_soon.create_line(collaborator)
-        test_equal(line, "- #{TEST_USER} in <#{REPO_URL}> see <#{HREF}> (today)")
-      end
+      context "call create_line" do
+        it "when collaborator expires today" do
+          terraform_block = create_terraform_block_review_date_today
+          collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          line = expires_soon.create_line(collaborator)
+          test_equal(line, "- #{TEST_USER} in <#{REPO_URL}> see <#{HREF}> (today)")
+        end
 
-      it "create line when collaborator expires tomorrow" do
-        terraform_block = create_terraform_block_review_date_tomorrow
-        collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-        line = expires_soon.create_line(collaborator)
-        test_equal(line, "- #{TEST_USER} in <#{REPO_URL}> see <#{HREF}> (tomorrow)")
-      end
+        it "when collaborator expires tomorrow" do
+          terraform_block = create_terraform_block_review_date_tomorrow
+          collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          line = expires_soon.create_line(collaborator)
+          test_equal(line, "- #{TEST_USER} in <#{REPO_URL}> see <#{HREF}> (tomorrow)")
+        end
 
-      it "create line when collaborator in two days" do
-        terraform_block = create_terraform_block_review_date_in_two_days
-        collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-        line = expires_soon.create_line(collaborator)
-        test_equal(line, "- #{TEST_USER} in <#{REPO_URL}> see <#{HREF}> (in 2 days)")
-      end
+        it "when collaborator in two days" do
+          terraform_block = create_terraform_block_review_date_in_two_days
+          collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          line = expires_soon.create_line(collaborator)
+          test_equal(line, "- #{TEST_USER} in <#{REPO_URL}> see <#{HREF}> (in 2 days)")
+        end
 
-      it "create line when collaborator expired no date provided" do
-        terraform_block = create_terraform_block_review_date_empty
-        collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-        line = expires_soon.create_line(collaborator)
-        test_equal(line, "- #{TEST_USER} in <#{REPO_URL}> see <#{HREF}> (today)")
+        it "when collaborator expired no date provided" do
+          terraform_block = create_terraform_block_review_date_empty
+          collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          line = expires_soon.create_line(collaborator)
+          test_equal(line, "- #{TEST_USER} in <#{REPO_URL}> see <#{HREF}> (today)")
+        end
       end
 
       it "singular message" do

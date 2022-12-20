@@ -17,16 +17,16 @@ class GithubCollaborators
         test_equal(@terraform_block.review_after, "")
       end
 
-      it "create terraform block" do
+      it "call check_terraform_block_empty" do
         check_terraform_block_empty(@terraform_block)
       end
 
-      it "create terraform block with empty data" do
+      it "call check_terraform_block_empty with empty data" do
         @terraform_block.add_terraform_file_collaborator_data({})
         check_terraform_block_empty(@terraform_block)
       end
 
-      it "create terraform block with test data" do
+      it "call add_terraform_file_collaborator_data" do
         review_date = Date.today.strftime(DATE_FORMAT)
         collaborator_data = create_collaborator_data(review_date)
         @terraform_block.add_terraform_file_collaborator_data(collaborator_data)
