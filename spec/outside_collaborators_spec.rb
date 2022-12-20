@@ -10,6 +10,8 @@ class GithubCollaborators
     let(:unkown_collaborators_slack_message) { double(GithubCollaborators::UnknownCollaborators) }
     let(:removed_collaborators_slack_message) { double(GithubCollaborators::Removed) }
 
+    WHEN_PULL_REQUEST_DOESNT_EXIST = "when pull request doesn't exist"
+
     # The tests below are nested. This is to reduce code duplication.
     # This is because it take alot of object to create the object under test.
     # The before do blocks contain expectations that are common within
@@ -136,7 +138,7 @@ class GithubCollaborators
             test_equal(extended_collaborators.length, 0)
           end
 
-          it "when pull request doesn't exist" do
+          it WHEN_PULL_REQUEST_DOESNT_EXIST do
             allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(false)
             allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}").and_return(false)
             expect(terraform_files).to receive(:extend_date_in_file).with(REPOSITORY_NAME, TEST_COLLABORATOR_LOGIN).at_least(2).times
@@ -163,7 +165,7 @@ class GithubCollaborators
             test_equal(removed_collaborators.length, 0)
           end
 
-          it "when pull request doesn't exist" do
+          it WHEN_PULL_REQUEST_DOESNT_EXIST do
             allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(false)
             allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}").and_return(false)
             expect(terraform_files).to receive(:remove_collaborator_from_file).with(REPOSITORY_NAME, TEST_COLLABORATOR_LOGIN).at_least(2).times
@@ -183,7 +185,7 @@ class GithubCollaborators
             expect(terraform_files).not_to receive(:ensure_file_exists_in_memory)
           end
 
-          it "when pull request doesn't exist" do
+          it WHEN_PULL_REQUEST_DOESNT_EXIST do
             repositories = [
               {permission: "push", repository_name: REPOSITORY_NAME},
               {permission: "admin", repository_name: REPOSITORY_NAME},
