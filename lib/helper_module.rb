@@ -22,7 +22,7 @@ module HelperModule
     JSON.parse(response, {symbolize_names: true})
   end
 
-  # Remove a collaborator from a repository on GitHub
+  # Remove specific collaborator from GitHub repository
   #
   # @param repository [String] name of repository
   # @param github_user [String] name of collaborator
@@ -41,7 +41,7 @@ module HelperModule
     end
   end
 
-  # Delete a collaborator invite from a repository on GitHub
+  # Delete a collaborator invite on a GitHub repository
   #
   # @param repository_name [String] name of repository
   # @param invite_login [String] name of collaborator
@@ -57,7 +57,7 @@ module HelperModule
     sleep 1
   end
 
-  # Get the collaborator invites from a repository on GitHub
+  # Get the collaborator invites to a specific GitHub repository
   #
   # @param repository_name [String] name of repository
   # @return [Hash{login => String, expired => Bool, invite_id => Numeric}] the required fields from the issue
@@ -76,7 +76,7 @@ module HelperModule
     repository_invites
   end
 
-  # Close invites that have expired for a repository on GitHub
+  # Close invites that have expired on a GitHub repository
   #
   # @param repository_name [String] name of repository
   def close_expired_issues(repository_name)
@@ -103,7 +103,7 @@ module HelperModule
     end
   end
 
-  # Remove issue from a repository on GitHub
+  # Remove specific issue from a GitHub repository
   #
   # @param repository_name [String] name of repository
   # @param repository_name [Numeric] issue id number
@@ -125,7 +125,7 @@ module HelperModule
     sleep 2
   end
 
-  # Create new issue on a repository on GitHub for collaborator
+  # Create a new issue on a GitHub repository for a specific collaborator
   #
   # @param user_name [String] name of collaborator
   # @param repository_name [String] name of repository
@@ -169,7 +169,7 @@ module HelperModule
     }
   end
 
-  # Create new issue for a repository on GitHub
+  # Create a new issue on a GitHub repository
   #
   # @param user_name [String] name of collaborator
   # @param repository_name [String] name of repository
