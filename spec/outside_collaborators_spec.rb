@@ -56,6 +56,33 @@ class GithubCollaborators
           @outside_collaborators.start
         end
 
+        it "call add_new_pull_request" do
+          @outside_collaborators.add_new_pull_request("some-title", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_FILE])
+        end
+
+        it "call does_pr_already_exist when no pull request exists" do
+          result = @outside_collaborators.does_pr_already_exist(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
+          test_equal(result, false)
+        end
+
+        it "call does_pr_already_exist when pull request exists but pull request title doesn't match" do
+          @outside_collaborators.add_new_pull_request("some-title", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_FILE])
+          result = @outside_collaborators.does_pr_already_exist(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
+          test_equal(result, false)
+        end
+
+        it "call does_pr_already_exist when pull request exists but pull request files doesn't match" do
+          @outside_collaborators.add_new_pull_request("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_FILE])
+          result = @outside_collaborators.does_pr_already_exist(TEST_REPO_NAME2, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
+          test_equal(result, false)
+        end
+
+        it "call does_pr_already_exist when pull request exists and find a match" do
+          @outside_collaborators.add_new_pull_request("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_FILE])
+          result = @outside_collaborators.does_pr_already_exist(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}")
+          test_equal(result, true)
+        end
+
         it "call has_review_date_expired" do
           expect(@outside_collaborators).to receive(:find_collaborators_who_have_expired).with([collaborator1]).and_return([collaborator1])
           expect(@outside_collaborators).to receive(:remove_expired_collaborators).with([collaborator1])
