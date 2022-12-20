@@ -1,3 +1,4 @@
+# Logging functionality that app classes can use
 module Logging
   def logger
     @logger ||= Logging.logger_for(self.class.name)

@@ -1,7 +1,7 @@
 include Constants
 
+# Strings used within the tests
 module TestConstants
-  # Test strings
   TEST_COLLABORATOR_NAME = "some user"
   TEST_COLLABORATOR_LOGIN = "someuser"
   TEST_COLLABORATOR_EMAIL = "someuser@some-email.com"

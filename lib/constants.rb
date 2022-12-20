@@ -1,3 +1,4 @@
+# String constants used in app and tests
 module Constants
   DATE_FORMAT = "%Y-%m-%d"
   TERRAFORM_DIR = "terraform"

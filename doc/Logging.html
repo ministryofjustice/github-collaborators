@@ -88,7 +88,18 @@
   
 </div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Logging functionality that app classes can use</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -246,15 +257,15 @@
       <pre class="lines">
 
 
-30
 31
 32
 33
 34
-35</pre>
+35
+36</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/logging.rb', line 30</span>
+      <pre class="code"><span class="info file"># File 'lib/logging.rb', line 31</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_configure_logger_for'>configure_logger_for</span><span class='lparen'>(</span><span class='id identifier rubyid_classname'>classname</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_logger'>logger</span> <span class='op'>=</span> <span class='const'>Logger</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='gvar'>$stdout</span><span class='comma'>,</span> <span class='label'>datetime_format:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%Y-%m-%d %H:%M:%S</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -282,7 +293,6 @@
       <pre class="lines">
 
 
-18
 19
 20
 21
@@ -292,10 +302,11 @@
 25
 26
 27
-28</pre>
+28
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/logging.rb', line 18</span>
+      <pre class="code"><span class="info file"># File 'lib/logging.rb', line 19</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_logger_level'>get_logger_level</span>
   <span class='id identifier rubyid_logger_levels'>logger_levels</span> <span class='op'>=</span> <span class='lbrace'>{</span>
@@ -328,12 +339,12 @@
       <pre class="lines">
 
 
-14
 15
-16</pre>
+16
+17</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/logging.rb', line 14</span>
+      <pre class="code"><span class="info file"># File 'lib/logging.rb', line 15</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_logger_for'>logger_for</span><span class='lparen'>(</span><span class='id identifier rubyid_classname'>classname</span><span class='rparen'>)</span>
   <span class='ivar'>@loggers</span><span class='lbracket'>[</span><span class='id identifier rubyid_classname'>classname</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='id identifier rubyid_configure_logger_for'>configure_logger_for</span><span class='lparen'>(</span><span class='id identifier rubyid_classname'>classname</span><span class='rparen'>)</span>
@@ -364,12 +375,12 @@
       <pre class="lines">
 
 
-2
 3
-4</pre>
+4
+5</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/logging.rb', line 2</span>
+      <pre class="code"><span class="info file"># File 'lib/logging.rb', line 3</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_logger'>logger</span>
   <span class='ivar'>@logger</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="" title="Logging (module)">Logging</a></span></span><span class='period'>.</span><span class='id identifier rubyid_logger_for'><span class='object_link'><a href="#logger_for-class_method" title="Logging.logger_for (method)">logger_for</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
@@ -394,12 +405,12 @@
       <pre class="lines">
 
 
-6
 7
-8</pre>
+8
+9</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/logging.rb', line 6</span>
+      <pre class="code"><span class="info file"># File 'lib/logging.rb', line 7</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_module_logger'>module_logger</span>
   <span class='ivar'>@logger</span> <span class='op'>||=</span> <span class='const'><span class='object_link'><a href="" title="Logging (module)">Logging</a></span></span><span class='period'>.</span><span class='id identifier rubyid_logger_for'><span class='object_link'><a href="#logger_for-class_method" title="Logging.logger_for (method)">logger_for</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>HelperModule</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -414,7 +425,7 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Dec 20 15:43:33 2022 by
+  Generated on Tue Dec 20 16:45:57 2022 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.1.0).
 </div>

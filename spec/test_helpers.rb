@@ -1,3 +1,4 @@
+# Functions to help testing
 module Helpers
   include Constants
   include TestConstants

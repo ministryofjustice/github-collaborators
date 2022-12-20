@@ -1,11 +1,20 @@
+# Functions used by the app
 module HelperModule
   include Logging
   include Constants
 
+  # Changes a . to a - within the string
+  #
+  # @param string [String] a string object
+  # @return [String] the object converted into the expected format
   def tf_safe(string)
     string.tr(".", "-")
   end
 
+  # Collect the issues from a repository on GitHub
+  #
+  # @param repository [String] name of repository
+  # @return [JSON] the issues in json format
   def get_issues_from_github(repository)
     module_logger.debug "get_issues_from_github"
     url = "#{GH_API_URL}/#{repository.downcase}/issues"
@@ -13,6 +22,10 @@ module HelperModule
     JSON.parse(response, {symbolize_names: true})
   end
 
+  # Remove a collaborator from a repository on GitHub
+  #
+  # @param repository [String] name of repository
+  # @param github_user [String] name of collaborator
   def remove_access(repository, github_user)
     module_logger.debug "remove_access"
 
@@ -20,7 +33,7 @@ module HelperModule
     username = github_user.downcase
 
     if ENV.fetch("REALLY_POST_TO_GH", "0") == "1"
-      url = "#{GH_API_URL}/#{repository}/collaborators/#{github_user}"
+      url = "#{GH_API_URL}/#{repository}/collaborators/#{username}"
       GithubCollaborators::HttpClient.new.delete(url)
       sleep 2
     else
@@ -28,7 +41,10 @@ module HelperModule
     end
   end
 
-  # Called when an invite has expired
+  # Delete a collaborator invite from a repository on GitHub
+  #
+  # @param repository_name [String] name of repository
+  # @param invite_login [String] name of collaborator
   def delete_expired_invite(repository_name, invite_login)
     module_logger.debug "delete_expired_invite"
 
@@ -41,8 +57,10 @@ module HelperModule
     sleep 1
   end
 
-  # Get the collaborator invites for the repository and store the data as
-  # a hash like this { :login => "name", :expired => "true/false", :invite_id => "number" }
+  # Get the collaborator invites from a repository on GitHub
+  #
+  # @param repository_name [String] name of repository
+  # @return [Hash{login => String, expired => Bool, invite_id => Numeric}] the required fields from the issue
   def get_repository_invites(repository_name)
     module_logger.debug "get_repository_invites"
 
@@ -58,6 +76,9 @@ module HelperModule
     repository_invites
   end
 
+  # Close invites that have expired for a repository on GitHub
+  #
+  # @param repository_name [String] name of repository
   def close_expired_issues(repository_name)
     module_logger.debug "close_expired_issues"
     allowed_days = 45
@@ -82,6 +103,10 @@ module HelperModule
     end
   end
 
+  # Remove issue from a repository on GitHub
+  #
+  # @param repository_name [String] name of repository
+  # @param repository_name [Numeric] issue id number
   def remove_issue(repository_name, issue_id)
     module_logger.debug "remove_issue"
 
@@ -100,6 +125,10 @@ module HelperModule
     sleep 2
   end
 
+  # Create new issue on a repository on GitHub for collaborator
+  #
+  # @param user_name [String] name of collaborator
+  # @param repository_name [String] name of repository
   def create_unknown_collaborator_issue(user_name, repository_name)
     module_logger.debug "create_unknown_collaborator_issue"
 
@@ -115,6 +144,10 @@ module HelperModule
     end
   end
 
+  # Composes a GitHub issue structured message 
+  #
+  # @param user_name [String] name of collaborator
+  # @return [Hash{title => String, assignees => [Array<String>], body => String}] the message to send to GitHub
   def unknown_collaborator_hash(user_name)
     module_logger.debug "unknown_collaborator_hash"
     user_name = user_name.downcase
@@ -136,6 +169,10 @@ module HelperModule
     }
   end
 
+  # Create new issue for a repository on GitHub
+  #
+  # @param user_name [String] name of collaborator
+  # @param repository_name [String] name of repository
   def create_review_date_expires_soon_issue(user_name, repository_name)
     module_logger.debug "create_review_date_expires_soon_issue"
     repository_name = repository_name.downcase
@@ -150,6 +187,10 @@ module HelperModule
     end
   end
 
+  # Composes a GitHub issue structured message 
+  #
+  # @param user_name [String] name of collaborator
+  # @return [Hash{title => String, assignees => [Array<String>], body => String}] the message to send to GitHub
   def review_date_expires_soon_hash(user_name)
     module_logger.debug "review_date_expires_soon_hash"
     user_name = user_name.downcase
@@ -171,8 +212,13 @@ module HelperModule
     }
   end
 
-  # Checks if a specific issue within the repository issues
-  # is already open for the collaborator
+  # Checks if a specific issue on a GitHub repository is already open for the collaborator
+  #
+  # @param issues [Hash{login => String, title => String, assignees => [Array<String>], number => Numeric}] issue data from GitHub repository
+  # @param issue_title [String] the name of the issue
+  # @param repository_name [String] the name of the repository
+  # @param user_name [String] the name of the collaborator
+  # @return [Bool] true when the specific issue exists on repository 
   def does_issue_already_exist(issues, issue_title, repository_name, user_name)
     module_logger.debug "does_issue_already_exist"
     repository_name = repository_name.downcase
@@ -204,6 +250,9 @@ module HelperModule
     found_issues
   end
 
+  # Get full list of Organization user login names
+  #
+  # @return [Array<String>] the user login names
   def get_all_organisation_members
     module_logger.debug "get_all_organisation_members"
     org_members = []
@@ -412,6 +461,11 @@ module HelperModule
       ]
   end
 
+  # Composes a GitHub branch structured message
+  #
+  # @param login [String] name of collaborator
+  # @param branch_name [String] name of new branch
+  # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
   def extend_date_hash(login, branch_name)
     module_logger.debug "extend_date_hash"
     {
@@ -432,6 +486,10 @@ module HelperModule
     }
   end
 
+  # Composes a GitHub branch structured message
+  #
+  # @param branch_name [String] name of branch to delete
+  # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
   def delete_archive_file_hash(branch_name)
     module_logger.debug "delete_archive_file_hash"
     {
@@ -451,6 +509,10 @@ module HelperModule
     }
   end
 
+  # Composes a GitHub branch structured message
+  #
+  # @param branch_name [String] name of new branch
+  # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
   def delete_empty_files_hash(branch_name)
     module_logger.debug "delete_empty_files_hash"
     {
@@ -468,6 +530,11 @@ module HelperModule
     }
   end
 
+  # Composes a GitHub branch structured message
+  #
+  # @param login [String] name of collaborator
+  # @param branch_name [String] name of new branch
+  # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
   def add_collaborator_hash(login, branch_name)
     module_logger.debug "add_collaborator_hash"
     {
@@ -491,6 +558,11 @@ module HelperModule
     }
   end
 
+  # Composes a GitHub branch structured message
+  #
+  # @param login [String] name of collaborator
+  # @param branch_name [String] name of new branch
+  # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
   def remove_collaborator_hash(login, branch_name)
     module_logger.debug "remove_collaborator_hash"
     {
@@ -509,6 +581,11 @@ module HelperModule
     }
   end
 
+  # Composes a GitHub branch structured message
+  #
+  # @param login [String] name of collaborator
+  # @param branch_name [String] name of new branch
+  # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
   def modify_collaborator_permission_hash(login, branch_name)
     module_logger.debug "modify_collaborator_permission_hash"
     {
