@@ -104,12 +104,17 @@ class GithubCollaborators
           # Store which archived repositories the collaborator is attached to
           # as will raise Slack alerts for this later on
           if @github_archived_repositories.include?(repository_name)
-            @attached_archived_repositories.push(repository_name)
-            @attached_archived_repositories.sort!
-            @attached_archived_repositories.uniq!
+            add_attached_archived_repository(repository_name)
           end
         end
       end
+    end
+
+    def add_attached_archived_repository(repository_name)
+      logger.debug ""
+      @attached_archived_repositories.push(repository_name)
+      @attached_archived_repositories.sort!
+      @attached_archived_repositories.uniq!
     end
 
     def do_repositories_match

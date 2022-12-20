@@ -98,6 +98,10 @@ class GithubCollaborators
             it "call get_odd_full_org_members when no full org members" do
               test_equal(@organization.get_odd_full_org_members, [])
             end
+            
+            it "call get_full_org_members_attached_to_archived_repositories when no full org members" do
+              test_equal(@organization.get_full_org_members_attached_to_archived_repositories(nil), [])
+            end
           end
 
           it "call create_full_org_members when collaborators are org members and names are the same" do
@@ -159,6 +163,41 @@ class GithubCollaborators
                 allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:odd_full_org_member_check).and_return(true)
                 result = @organization.get_odd_full_org_members
                 test_equal(result, [TEST_USER_1, TEST_USER_2, TEST_USER_3])
+              end
+            end
+
+            context "call get_full_org_members_attached_to_archived_repositories" do
+              let(:terraform_files) { double(GithubCollaborators::TerraformFiles) }
+
+              it "when full org member has no archived repositories" do
+                test_equal(@organization.get_full_org_members_attached_to_archived_repositories(nil), [])
+              end
+
+              it "when full org member has archived repositories but the file doesn't exist" do
+                @organization.full_org_members.each do |full_org_member|
+                  full_org_member.add_attached_archived_repository(TEST_REPO_NAME1)
+                  full_org_member.add_attached_archived_repository(TEST_REPO_NAME2)
+                end
+                expect(terraform_files).to receive(:does_file_exist).and_return(false).at_least(6).times
+                result = @organization.get_full_org_members_attached_to_archived_repositories(terraform_files)
+                test_equal(result, [])
+              end
+
+              it "when full org member has archived repositories and the file does exist" do
+                @organization.full_org_members.each do |full_org_member|
+                  full_org_member.add_attached_archived_repository(TEST_REPO_NAME1)
+                  full_org_member.add_attached_archived_repository(TEST_REPO_NAME2)
+                end
+                expect(terraform_files).to receive(:does_file_exist).and_return(true).at_least(6).times
+                result = @organization.get_full_org_members_attached_to_archived_repositories(terraform_files)
+                expected_result = [
+                  {:login=>TEST_USER_1, :repository=>TEST_REPO_NAME1},
+                  {:login=>TEST_USER_1, :repository=>TEST_REPO_NAME2},
+                  {:login=>TEST_USER_2, :repository=>TEST_REPO_NAME1},
+                  {:login=>TEST_USER_2, :repository=>TEST_REPO_NAME2},
+                  {:login=>TEST_USER_3, :repository=>TEST_REPO_NAME1},
+                  {:login=>TEST_USER_3, :repository=>TEST_REPO_NAME2}]
+                test_equal(result, expected_result)
               end
             end
           end
