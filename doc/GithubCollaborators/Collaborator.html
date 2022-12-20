@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: GithubCollaborators::Collaborator
+  
+    &mdash; Documentation by YARD 0.9.28
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "GithubCollaborators::Collaborator";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (C)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../GithubCollaborators.html" title="GithubCollaborators (class)">GithubCollaborators</a></span></span>
+     &raquo; 
+    <span class="title">Collaborator</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: GithubCollaborators::Collaborator
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">GithubCollaborators::Collaborator</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd><span class='object_link'><a href="../Constants.html" title="Constants (module)">Constants</a></span>, <span class='object_link'><a href="../Logging.html" title="Logging (module)">Logging</a></span></dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/github_collaborators/collaborator.rb</dd>
+  </dl>
+  
+</div>
+
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="YEAR-constant" class="">YEAR =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>365</span></pre></dd>
+      
+        <dt id="MONTH-constant" class="">MONTH =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>31</span></pre></dd>
+      
+        <dt id="WEEK-constant" class="">WEEK =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>7</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+  
+  
+  <h3 class="inherited">Constants included
+     from <span class='object_link'><a href="../Constants.html" title="Constants (module)">Constants</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Constants.html#ADDED_BY_EMAIL-constant" title="Constants::ADDED_BY_EMAIL (constant)">Constants::ADDED_BY_EMAIL</a></span>, <span class='object_link'><a href="../Constants.html#ADDED_BY_MISSING-constant" title="Constants::ADDED_BY_MISSING (constant)">Constants::ADDED_BY_MISSING</a></span>, <span class='object_link'><a href="../Constants.html#ADD_COLLABORATOR_BRANCH_NAME-constant" title="Constants::ADD_COLLABORATOR_BRANCH_NAME (constant)">Constants::ADD_COLLABORATOR_BRANCH_NAME</a></span>, <span class='object_link'><a href="../Constants.html#ADD_FULL_ORG_MEMBER_PR_TITLE-constant" title="Constants::ADD_FULL_ORG_MEMBER_PR_TITLE (constant)">Constants::ADD_FULL_ORG_MEMBER_PR_TITLE</a></span>, <span class='object_link'><a href="../Constants.html#ARCHIVED_REPOSITORY_PR_TITLE-constant" title="Constants::ARCHIVED_REPOSITORY_PR_TITLE (constant)">Constants::ARCHIVED_REPOSITORY_PR_TITLE</a></span>, <span class='object_link'><a href="../Constants.html#CHANGE_PERMISSION_PR_TITLE-constant" title="Constants::CHANGE_PERMISSION_PR_TITLE (constant)">Constants::CHANGE_PERMISSION_PR_TITLE</a></span>, <span class='object_link'><a href="../Constants.html#COLLABORATOR_EXPIRES_SOON-constant" title="Constants::COLLABORATOR_EXPIRES_SOON (constant)">Constants::COLLABORATOR_EXPIRES_SOON</a></span>, <span class='object_link'><a href="../Constants.html#COLLABORATOR_EXPIRY_UPCOMING-constant" title="Constants::COLLABORATOR_EXPIRY_UPCOMING (constant)">Constants::COLLABORATOR_EXPIRY_UPCOMING</a></span>, <span class='object_link'><a href="../Constants.html#COLLABORATOR_MISSING-constant" title="Constants::COLLABORATOR_MISSING (constant)">Constants::COLLABORATOR_MISSING</a></span>, <span class='object_link'><a href="../Constants.html#DATE_FORMAT-constant" title="Constants::DATE_FORMAT (constant)">Constants::DATE_FORMAT</a></span>, <span class='object_link'><a href="../Constants.html#DEFINE_COLLABORATOR_IN_CODE-constant" title="Constants::DEFINE_COLLABORATOR_IN_CODE (constant)">Constants::DEFINE_COLLABORATOR_IN_CODE</a></span>, <span class='object_link'><a href="../Constants.html#DELETE_ARCHIVE_FILE_BRANCH_NAME-constant" title="Constants::DELETE_ARCHIVE_FILE_BRANCH_NAME (constant)">Constants::DELETE_ARCHIVE_FILE_BRANCH_NAME</a></span>, <span class='object_link'><a href="../Constants.html#DELETE_EMPTY_FILE_BRANCH_NAME-constant" title="Constants::DELETE_EMPTY_FILE_BRANCH_NAME (constant)">Constants::DELETE_EMPTY_FILE_BRANCH_NAME</a></span>, <span class='object_link'><a href="../Constants.html#EMAIL_MISSING-constant" title="Constants::EMAIL_MISSING (constant)">Constants::EMAIL_MISSING</a></span>, <span class='object_link'><a href="../Constants.html#EMPTY_FILES_PR_TITLE-constant" title="Constants::EMPTY_FILES_PR_TITLE (constant)">Constants::EMPTY_FILES_PR_TITLE</a></span>, <span class='object_link'><a href="../Constants.html#EXCLUDE_FILES-constant" title="Constants::EXCLUDE_FILES (constant)">Constants::EXCLUDE_FILES</a></span>, <span class='object_link'><a href="../Constants.html#EXTEND_REVIEW_DATE_PR_TITLE-constant" title="Constants::EXTEND_REVIEW_DATE_PR_TITLE (constant)">Constants::EXTEND_REVIEW_DATE_PR_TITLE</a></span>, <span class='object_link'><a href="../Constants.html#GH_API_URL-constant" title="Constants::GH_API_URL (constant)">Constants::GH_API_URL</a></span>, <span class='object_link'><a href="../Constants.html#GH_ORG_URL-constant" title="Constants::GH_ORG_URL (constant)">Constants::GH_ORG_URL</a></span>, <span class='object_link'><a href="../Constants.html#GRAPHQL_URI-constant" title="Constants::GRAPHQL_URI (constant)">Constants::GRAPHQL_URI</a></span>, <span class='object_link'><a href="../Constants.html#MISSING-constant" title="Constants::MISSING (constant)">Constants::MISSING</a></span>, <span class='object_link'><a href="../Constants.html#MODIFY_COLLABORATORS_BRANCH_NAME-constant" title="Constants::MODIFY_COLLABORATORS_BRANCH_NAME (constant)">Constants::MODIFY_COLLABORATORS_BRANCH_NAME</a></span>, <span class='object_link'><a href="../Constants.html#NAME_MISSING-constant" title="Constants::NAME_MISSING (constant)">Constants::NAME_MISSING</a></span>, <span class='object_link'><a href="../Constants.html#ORG-constant" title="Constants::ORG (constant)">Constants::ORG</a></span>, <span class='object_link'><a href="../Constants.html#ORGANISATION_MISSING-constant" title="Constants::ORGANISATION_MISSING (constant)">Constants::ORGANISATION_MISSING</a></span>, <span class='object_link'><a href="../Constants.html#PERMISSION_MISSING-constant" title="Constants::PERMISSION_MISSING (constant)">Constants::PERMISSION_MISSING</a></span>, <span class='object_link'><a href="../Constants.html#RATE_LIMITED-constant" title="Constants::RATE_LIMITED (constant)">Constants::RATE_LIMITED</a></span>, <span class='object_link'><a href="../Constants.html#REASON1-constant" title="Constants::REASON1 (constant)">Constants::REASON1</a></span>, <span class='object_link'><a href="../Constants.html#REASON2-constant" title="Constants::REASON2 (constant)">Constants::REASON2</a></span>, <span class='object_link'><a href="../Constants.html#REASON_MISSING-constant" title="Constants::REASON_MISSING (constant)">Constants::REASON_MISSING</a></span>, <span class='object_link'><a href="../Constants.html#REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME-constant" title="Constants::REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME (constant)">Constants::REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME</a></span>, <span class='object_link'><a href="../Constants.html#REMOVE_EXPIRED_COLLABORATOR_PR_TITLE-constant" title="Constants::REMOVE_EXPIRED_COLLABORATOR_PR_TITLE (constant)">Constants::REMOVE_EXPIRED_COLLABORATOR_PR_TITLE</a></span>, <span class='object_link'><a href="../Constants.html#REVIEW_DATE_EXPIRES_SOON-constant" title="Constants::REVIEW_DATE_EXPIRES_SOON (constant)">Constants::REVIEW_DATE_EXPIRES_SOON</a></span>, <span class='object_link'><a href="../Constants.html#REVIEW_DATE_MISSING-constant" title="Constants::REVIEW_DATE_MISSING (constant)">Constants::REVIEW_DATE_MISSING</a></span>, <span class='object_link'><a href="../Constants.html#REVIEW_DATE_PASSED-constant" title="Constants::REVIEW_DATE_PASSED (constant)">Constants::REVIEW_DATE_PASSED</a></span>, <span class='object_link'><a href="../Constants.html#REVIEW_DATE_TO_LONG-constant" title="Constants::REVIEW_DATE_TO_LONG (constant)">Constants::REVIEW_DATE_TO_LONG</a></span>, <span class='object_link'><a href="../Constants.html#REVIEW_DATE_WITHIN_MONTH-constant" title="Constants::REVIEW_DATE_WITHIN_MONTH (constant)">Constants::REVIEW_DATE_WITHIN_MONTH</a></span>, <span class='object_link'><a href="../Constants.html#TERRAFORM_DIR-constant" title="Constants::TERRAFORM_DIR (constant)">Constants::TERRAFORM_DIR</a></span>, <span class='object_link'><a href="../Constants.html#TERRAFORM_FILES-constant" title="Constants::TERRAFORM_FILES (constant)">Constants::TERRAFORM_FILES</a></span>, <span class='object_link'><a href="../Constants.html#TYPE_ADD-constant" title="Constants::TYPE_ADD (constant)">Constants::TYPE_ADD</a></span>, <span class='object_link'><a href="../Constants.html#TYPE_DELETE-constant" title="Constants::TYPE_DELETE (constant)">Constants::TYPE_DELETE</a></span>, <span class='object_link'><a href="../Constants.html#TYPE_DELETE_ARCHIVE-constant" title="Constants::TYPE_DELETE_ARCHIVE (constant)">Constants::TYPE_DELETE_ARCHIVE</a></span>, <span class='object_link'><a href="../Constants.html#TYPE_EXTEND-constant" title="Constants::TYPE_EXTEND (constant)">Constants::TYPE_EXTEND</a></span>, <span class='object_link'><a href="../Constants.html#TYPE_PERMISSION-constant" title="Constants::TYPE_PERMISSION (constant)">Constants::TYPE_PERMISSION</a></span>, <span class='object_link'><a href="../Constants.html#TYPE_REMOVE-constant" title="Constants::TYPE_REMOVE (constant)">Constants::TYPE_REMOVE</a></span>, <span class='object_link'><a href="../Constants.html#UPDATE_REVIEW_DATE_BRANCH_NAME-constant" title="Constants::UPDATE_REVIEW_DATE_BRANCH_NAME (constant)">Constants::UPDATE_REVIEW_DATE_BRANCH_NAME</a></span>, <span class='object_link'><a href="../Constants.html#USERNAME_MISSING-constant" title="Constants::USERNAME_MISSING (constant)">Constants::USERNAME_MISSING</a></span>, <span class='object_link'><a href="../Constants.html#USE_TEAM_ACCESS-constant" title="Constants::USE_TEAM_ACCESS (constant)">Constants::USE_TEAM_ACCESS</a></span></p>
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#added_by-instance_method" title="#added_by (instance method)">#<strong>added_by</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute added_by.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#defined_in_terraform-instance_method" title="#defined_in_terraform (instance method)">#<strong>defined_in_terraform</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute defined_in_terraform.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#email-instance_method" title="#email (instance method)">#<strong>email</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute email.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#href-instance_method" title="#href (instance method)">#<strong>href</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute href.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#issues-instance_method" title="#issues (instance method)">#<strong>issues</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute issues.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#login-instance_method" title="#login (instance method)">#<strong>login</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute login.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#name-instance_method" title="#name (instance method)">#<strong>name</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute name.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#org-instance_method" title="#org (instance method)">#<strong>org</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute org.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#permission-instance_method" title="#permission (instance method)">#<strong>permission</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute permission.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#reason-instance_method" title="#reason (instance method)">#<strong>reason</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute reason.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#repo_url-instance_method" title="#repo_url (instance method)">#<strong>repo_url</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute repo_url.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#repository-instance_method" title="#repository (instance method)">#<strong>repository</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute repository.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#review_after_date-instance_method" title="#review_after_date (instance method)">#<strong>review_after_date</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute review_after_date.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_issue-instance_method" title="#add_issue (instance method)">#<strong>add_issue</strong>(reason)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#check_for_issues-instance_method" title="#check_for_issues (instance method)">#<strong>check_for_issues</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(collaborator, repository_name)  &#x21d2; Collaborator </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>collaborator: TerraformBlock object.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../Logging.html" title="Logging (module)">Logging</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../Logging.html#configure_logger_for-class_method" title="Logging.configure_logger_for (method)">configure_logger_for</a></span>, <span class='object_link'><a href="../Logging.html#get_logger_level-class_method" title="Logging.get_logger_level (method)">get_logger_level</a></span>, <span class='object_link'><a href="../Logging.html#logger-instance_method" title="Logging#logger (method)">#logger</a></span>, <span class='object_link'><a href="../Logging.html#logger_for-class_method" title="Logging.logger_for (method)">logger_for</a></span>, <span class='object_link'><a href="../Logging.html#module_logger-instance_method" title="Logging#module_logger (method)">#module_logger</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(collaborator, repository_name)  &#x21d2; <tt><span class='object_link'><a href="" title="GithubCollaborators::Collaborator (class)">Collaborator</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>collaborator: TerraformBlock object</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 8</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_collaborator'>collaborator</span><span class='comma'>,</span> <span class='id identifier rubyid_repository_name'>repository_name</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>initialize</span><span class='tstring_end'>&quot;</span></span>
+
+  <span class='id identifier rubyid_repository_name'>repository_name</span> <span class='op'>=</span> <span class='id identifier rubyid_repository_name'>repository_name</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
+  <span class='ivar'>@login</span> <span class='op'>=</span> <span class='id identifier rubyid_collaborator'>collaborator</span><span class='period'>.</span><span class='id identifier rubyid_username'>username</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
+  <span class='ivar'>@permission</span> <span class='op'>=</span> <span class='id identifier rubyid_collaborator'>collaborator</span><span class='period'>.</span><span class='id identifier rubyid_permission'>permission</span>
+  <span class='ivar'>@email</span> <span class='op'>=</span> <span class='id identifier rubyid_collaborator'>collaborator</span><span class='period'>.</span><span class='id identifier rubyid_email'>email</span>
+  <span class='ivar'>@name</span> <span class='op'>=</span> <span class='id identifier rubyid_collaborator'>collaborator</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
+  <span class='ivar'>@org</span> <span class='op'>=</span> <span class='id identifier rubyid_collaborator'>collaborator</span><span class='period'>.</span><span class='id identifier rubyid_org'>org</span>
+  <span class='ivar'>@reason</span> <span class='op'>=</span> <span class='id identifier rubyid_collaborator'>collaborator</span><span class='period'>.</span><span class='id identifier rubyid_reason'>reason</span>
+  <span class='ivar'>@added_by</span> <span class='op'>=</span> <span class='id identifier rubyid_collaborator'>collaborator</span><span class='period'>.</span><span class='id identifier rubyid_added_by'>added_by</span>
+  <span class='ivar'>@issues</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='ivar'>@href</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="../Constants.html#GH_ORG_URL-constant" title="Constants::GH_ORG_URL (constant)">GH_ORG_URL</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>/github-collaborators/blob/main/terraform/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_repository_name'>repository_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>.tf</span><span class='tstring_end'>&quot;</span></span>
+  <span class='ivar'>@repo_url</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'><span class='object_link'><a href="../Constants.html#GH_ORG_URL-constant" title="Constants::GH_ORG_URL (constant)">GH_ORG_URL</a></span></span><span class='embexpr_end'>}</span><span class='tstring_content'>/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_repository_name'>repository_name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='ivar'>@repository</span> <span class='op'>=</span> <span class='id identifier rubyid_repository_name'>repository_name</span>
+  <span class='ivar'>@defined_in_terraform</span> <span class='op'>=</span> <span class='kw'>true</span>
+
+  <span class='ivar'>@review_after_date</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_collaborator'>collaborator</span><span class='period'>.</span><span class='id identifier rubyid_review_after'>review_after</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>else</span>
+    <span class='const'>Date</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='id identifier rubyid_collaborator'>collaborator</span><span class='period'>.</span><span class='id identifier rubyid_review_after'>review_after</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="added_by-instance_method">
+  
+    #<strong>added_by</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute added_by.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_added_by'>added_by</span>
+  <span class='ivar'>@added_by</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="defined_in_terraform-instance_method">
+  
+    #<strong>defined_in_terraform</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute defined_in_terraform.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_defined_in_terraform'>defined_in_terraform</span>
+  <span class='ivar'>@defined_in_terraform</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="email-instance_method">
+  
+    #<strong>email</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute email.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_email'>email</span>
+  <span class='ivar'>@email</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="href-instance_method">
+  
+    #<strong>href</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute href.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_href'>href</span>
+  <span class='ivar'>@href</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="issues-instance_method">
+  
+    #<strong>issues</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute issues.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_issues'>issues</span>
+  <span class='ivar'>@issues</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="login-instance_method">
+  
+    #<strong>login</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute login.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_login'>login</span>
+  <span class='ivar'>@login</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="name-instance_method">
+  
+    #<strong>name</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute name.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_name'>name</span>
+  <span class='ivar'>@name</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="org-instance_method">
+  
+    #<strong>org</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute org.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_org'>org</span>
+  <span class='ivar'>@org</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="permission-instance_method">
+  
+    #<strong>permission</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute permission.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_permission'>permission</span>
+  <span class='ivar'>@permission</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="reason-instance_method">
+  
+    #<strong>reason</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute reason.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_reason'>reason</span>
+  <span class='ivar'>@reason</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="repo_url-instance_method">
+  
+    #<strong>repo_url</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute repo_url.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_repo_url'>repo_url</span>
+  <span class='ivar'>@repo_url</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="repository-instance_method">
+  
+    #<strong>repository</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute repository.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_repository'>repository</span>
+  <span class='ivar'>@repository</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="review_after_date-instance_method">
+  
+    #<strong>review_after_date</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute review_after_date.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_review_after_date'>review_after_date</span>
+  <span class='ivar'>@review_after_date</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="add_issue-instance_method">
+  
+    #<strong>add_issue</strong>(reason)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+81
+82
+83
+84
+85
+86
+87</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 81</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_add_issue'>add_issue</span><span class='lparen'>(</span><span class='id identifier rubyid_reason'>reason</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_reason'>reason</span> <span class='op'>==</span> <span class='const'><span class='object_link'><a href="../Constants.html#MISSING-constant" title="Constants::MISSING (constant)">MISSING</a></span></span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#COLLABORATOR_MISSING-constant" title="Constants::COLLABORATOR_MISSING (constant)">COLLABORATOR_MISSING</a></span></span><span class='rparen'>)</span>
+    <span class='ivar'>@defined_in_terraform</span> <span class='op'>=</span> <span class='kw'>false</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="check_for_issues-instance_method">
+  
+    #<strong>check_for_issues</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/github_collaborators/collaborator.rb', line 36</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_check_for_issues'>check_for_issues</span>
+  <span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>check_for_issues</span><span class='tstring_end'>&quot;</span></span>
+
+  <span class='kw'>if</span> <span class='ivar'>@login</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#USERNAME_MISSING-constant" title="Constants::USERNAME_MISSING (constant)">USERNAME_MISSING</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='ivar'>@permission</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#PERMISSION_MISSING-constant" title="Constants::PERMISSION_MISSING (constant)">PERMISSION_MISSING</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='ivar'>@email</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#EMAIL_MISSING-constant" title="Constants::EMAIL_MISSING (constant)">EMAIL_MISSING</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='ivar'>@name</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#NAME_MISSING-constant" title="Constants::NAME_MISSING (constant)">NAME_MISSING</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='ivar'>@org</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#ORGANISATION_MISSING-constant" title="Constants::ORGANISATION_MISSING (constant)">ORGANISATION_MISSING</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='ivar'>@reason</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#REASON_MISSING-constant" title="Constants::REASON_MISSING (constant)">REASON_MISSING</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='ivar'>@added_by</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#ADDED_BY_MISSING-constant" title="Constants::ADDED_BY_MISSING (constant)">ADDED_BY_MISSING</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='ivar'>@review_after_date</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#REVIEW_DATE_MISSING-constant" title="Constants::REVIEW_DATE_MISSING (constant)">REVIEW_DATE_MISSING</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>elsif</span> <span class='ivar'>@review_after_date</span> <span class='op'>&lt;</span> <span class='const'>Date</span><span class='period'>.</span><span class='id identifier rubyid_today'>today</span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#REVIEW_DATE_PASSED-constant" title="Constants::REVIEW_DATE_PASSED (constant)">REVIEW_DATE_PASSED</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>elsif</span> <span class='ivar'>@review_after_date</span> <span class='op'>&gt;</span> <span class='lparen'>(</span><span class='const'>Date</span><span class='period'>.</span><span class='id identifier rubyid_today'>today</span> <span class='op'>+</span> <span class='const'><span class='object_link'><a href="#YEAR-constant" title="GithubCollaborators::Collaborator::YEAR (constant)">YEAR</a></span></span><span class='rparen'>)</span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#REVIEW_DATE_TO_LONG-constant" title="Constants::REVIEW_DATE_TO_LONG (constant)">REVIEW_DATE_TO_LONG</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>elsif</span> <span class='lparen'>(</span><span class='const'>Date</span><span class='period'>.</span><span class='id identifier rubyid_today'>today</span> <span class='op'>+</span> <span class='const'><span class='object_link'><a href="#WEEK-constant" title="GithubCollaborators::Collaborator::WEEK (constant)">WEEK</a></span></span><span class='rparen'>)</span> <span class='op'>&gt;</span> <span class='ivar'>@review_after_date</span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#REVIEW_DATE_EXPIRES_SOON-constant" title="Constants::REVIEW_DATE_EXPIRES_SOON (constant)">REVIEW_DATE_EXPIRES_SOON</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>elsif</span> <span class='lparen'>(</span><span class='const'>Date</span><span class='period'>.</span><span class='id identifier rubyid_today'>today</span> <span class='op'>+</span> <span class='const'><span class='object_link'><a href="#MONTH-constant" title="GithubCollaborators::Collaborator::MONTH (constant)">MONTH</a></span></span><span class='rparen'>)</span> <span class='op'>&gt;</span> <span class='ivar'>@review_after_date</span>
+    <span class='ivar'>@issues</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../Constants.html#REVIEW_DATE_WITHIN_MONTH-constant" title="Constants::REVIEW_DATE_WITHIN_MONTH (constant)">REVIEW_DATE_WITHIN_MONTH</a></span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='ivar'>@issues</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Tue Dec 20 15:43:33 2022 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.28 (ruby-3.1.0).
+</div>
+
+    </div>
+  </body>
+</html>
