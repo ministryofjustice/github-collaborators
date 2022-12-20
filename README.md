@@ -142,6 +142,15 @@ The script checks collaborators in Terraform against collaborators in GitHub rep
 
 Output the names of all current (i.e. excluding deleted/archived/locked) MoJ GitHub repositories.
 
+## Documentation
+
+Yard is used for documentation. It creates a html report within the `doc` folder:
+
+``` 
+gem install yard
+yardoc 'lib/**/*.rb'
+```
+
 ## Development
 
 Make sure you have `bundler` installed (`gem install bundler` if not). Run `bundle install` to set up locally.
