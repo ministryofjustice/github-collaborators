@@ -16,3 +16,5 @@ bin/extensions
 bin/gems
 bin/plugins
 bin/specifications
+doc
+.yardoc
