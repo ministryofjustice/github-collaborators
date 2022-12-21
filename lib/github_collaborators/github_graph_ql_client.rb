@@ -5,6 +5,8 @@ class GithubCollaborators
     include Logging
     include Constants
 
+    # Get data from Github using the GraphQL API
+
     def initialize
       logger.debug "initialize"
       # Keep here so abort when object is created if the token is missing
