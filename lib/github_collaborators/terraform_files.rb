@@ -304,7 +304,7 @@ class GithubCollaborators
     NAME = 2
     EMAIL = 3
     ORG = 4
-    REASON1 = 5
+    REASON = 5
     ADDED_BY = 6
     REVIEW_AFTER = 7
 
@@ -322,7 +322,7 @@ class GithubCollaborators
         name: collaborator_data[NAME],
         email: collaborator_data[EMAIL],
         org: collaborator_data[ORG],
-        reason: collaborator_data[REASON1],
+        reason: collaborator_data[REASON],
         added_by: collaborator_data[ADDED_BY],
         review_after: collaborator_data[REVIEW_AFTER]
       }
