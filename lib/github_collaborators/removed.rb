@@ -13,7 +13,7 @@ class GithubCollaborators
       "- #{collaborator.login.downcase} from #{collaborator.repository.downcase}"
     end
 
-    # Creates the first line to be used within a Slack message when a single 
+    # Creates the first line to be used within a Slack message when a single
     # collaborator is reported by the Slack message
     #
     # @return [string] the formatted string
@@ -21,7 +21,7 @@ class GithubCollaborators
       "I've removed an unknown collaborator from Github"
     end
 
-    # Creates the first line to be used within a Slack message when a multiple 
+    # Creates the first line to be used within a Slack message when a multiple
     # collaborators are reported by the Slack message
     #
     # @param collaborators [Numeric] the number of collaborators in the message

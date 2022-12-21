@@ -144,7 +144,7 @@ module HelperModule
     end
   end
 
-  # Composes a GitHub issue structured message 
+  # Composes a GitHub issue structured message
   #
   # @param user_name [String] login name of the collaborator
   # @return [Hash{title => String, assignees => [Array<String>], body => String}] the message to send to GitHub
@@ -187,7 +187,7 @@ module HelperModule
     end
   end
 
-  # Composes a GitHub issue structured message 
+  # Composes a GitHub issue structured message
   #
   # @param user_name [String] login name of the collaborator
   # @return [Hash{title => String, assignees => [Array<String>], body => String}] the message to send to GitHub
@@ -218,7 +218,7 @@ module HelperModule
   # @param issue_title [String] the name of the issue
   # @param repository_name [String] the name of the repository
   # @param user_name [String] the login name of the collaborator
-  # @return [Bool] true when the specific issue exists on repository 
+  # @return [Bool] true when the specific issue exists on repository
   def does_issue_already_exist(issues, issue_title, repository_name, user_name)
     module_logger.debug "does_issue_already_exist"
     repository_name = repository_name.downcase
@@ -460,7 +460,7 @@ module HelperModule
 
   # Create a pull request on the github-collaborators repository
   #
-  # @param hash_body [String] a GitHub branch structured message 
+  # @param hash_body [String] a GitHub branch structured message
   def create_pull_request(hash_body)
     module_logger.debug "create_pull_request"
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
@@ -781,7 +781,7 @@ module HelperModule
     ]
   end
 
-  # Get the outside collaborators login names for a specific repository 
+  # Get the outside collaborators login names for a specific repository
   #
   # @param repository [String] the name of the repository
   # @return [Array<String>] list of collaborator login names
@@ -807,7 +807,7 @@ module HelperModule
     outside_collaborators.sort!
   end
 
-  # Create a GraphQL query that returns the outside collaborators login names for a specific repository 
+  # Create a GraphQL query that returns the outside collaborators login names for a specific repository
   #
   # @param end_cursor [String] id of next page in search results
   # @param repository [String] the name of the repository

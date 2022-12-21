@@ -28,7 +28,7 @@ class GithubCollaborators
       "- #{collaborator.login.downcase} in <#{collaborator.repo_url.downcase}|#{collaborator.repository.downcase}> see <#{collaborator.href}|terraform file> (#{expires_when})"
     end
 
-    # Creates the first line to be used within a Slack message when a single 
+    # Creates the first line to be used within a Slack message when a single
     # collaborator is reported by the Slack message
     #
     # @return [string] the formatted string
@@ -36,7 +36,7 @@ class GithubCollaborators
       "I've found a collaborator whose review date will expire shortly, a pull request has been created to extend the date for this collaborator"
     end
 
-    # Creates the first line to be used within a Slack message when a multiple 
+    # Creates the first line to be used within a Slack message when a multiple
     # collaborators are reported by the Slack message
     #
     # @param collaborators [Numeric] the number of collaborators in the message

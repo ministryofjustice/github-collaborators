@@ -1,7 +1,6 @@
 # The Logging functionality which is used by classes within the app
 module Logging
-
-  # Return a logger object 
+  # Return a logger object
   #
   # @return [Logging] the logging object
   def logger
@@ -20,7 +19,6 @@ module Logging
 
   # The logging class
   class << self
-
     # Store the name of the class or module that is logging
     #
     # @param classname [String] the name of the class that is logging
