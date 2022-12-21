@@ -106,7 +106,7 @@ module HelperModule
   # Remove specific issue from a GitHub repository
   #
   # @param repository_name [String] name of the repository
-  # @param repository_name [Numeric] issue id number
+  # @param issue_id [Numeric] issue id number
   def remove_issue(repository_name, issue_id)
     module_logger.debug "remove_issue"
 
