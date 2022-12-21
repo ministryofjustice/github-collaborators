@@ -9,11 +9,13 @@ class GithubCollaborators
     def initialize
       logger.debug "initialize"
 
-      # Grab the Terraform files and collaborators
+      # Collects the Terraform files and collaborators
       @terraform_files = GithubCollaborators::TerraformFiles.new
 
-      # Create Terraform file collaborators as Collaborator objects
+      # Array[<GithubCollaborators::Collaborator>]
       @collaborators = []
+
+      # Create Collaborator objects based on the collaborators within the Terraform files
       terraform_files = @terraform_files.get_terraform_files
       terraform_files.each do |terraform_file|
         terraform_blocks = terraform_file.get_terraform_blocks
@@ -24,19 +26,21 @@ class GithubCollaborators
         end
       end
 
-      # Grab the GitHub-Collaborator repository open pull requests
+      # Get the github-collaborator repository open pull requests
+      # [Array<[Hash{title => String, files => [Array<String>]}]>]
       @repo_pull_requests = get_pull_requests
 
-      # Create a Organization object, which Contains the Org repositories, full
-      # Org members, Org outside collaborators and each repository collaborators.
+      # Create a Organization object, which contains the Organization repositories,
+      # full Org members, Org outside collaborators and each repository collaborators
       @organization = GithubCollaborators::Organization.new
       @organization.create_full_org_members(@collaborators)
 
       # An array to store collaborators login names that are defined in Terraform but are not on GitHub
+      # Array[Hash{login => String, repository => String}]
       @unknown_collaborators_on_github = []
     end
 
-    # Entry point from Ruby script, keep the order as-is
+    # The entry point from Ruby bin/script, keep the order as-is
     def start
       remove_empty_files
       archived_repository_check
@@ -70,19 +74,24 @@ class GithubCollaborators
           end
         end
 
-        # No collaborators skip to next iteration
         if collaborators_on_github.length == 0 && collaborators_in_file.length == 0
+          # When no collaborators skip to next iteration
           next
         else
           collaborators_on_github.sort!
           collaborators_in_file.sort!
 
           if collaborators_in_file != collaborators_on_github
+            # When collaborators arrays do not match
+            
             print_comparison(collaborators_in_file, collaborators_on_github, repository_name)
+            
+            # Find any unknown collaborators
             unknown_collaborators = find_unknown_collaborators(collaborators_in_file, collaborators_on_github, repository_name)
             if unknown_collaborators.length > 0
               create_unknown_collaborators(unknown_collaborators, repository_name)
             end
+
             check_repository_invites(collaborators_in_file, repository_name)
           end
         end
@@ -94,10 +103,15 @@ class GithubCollaborators
       end
     end
 
+    # Per repository with unknown collaborators: create new 
+    # Collaborator objects and add them to the collaborators array.
+    # Create the Collaborator object with missing issue type.
+    #
+    # @param unknown_collaborators [Array<String>] the list of collaborator login names
+    # @param repository_name [String] the name of the repository
     def create_unknown_collaborators(unknown_collaborators, repository_name)
       logger.debug "create_unknown_collaborators"
       unknown_collaborators.each do |collaborator_name|
-        # Create a Collaborator object with an issue
         terraform_block = GithubCollaborators::TerraformBlock.new
         terraform_block.add_unknown_collaborator_data(collaborator_name)
         collaborator = GithubCollaborators::Collaborator.new(terraform_block, repository_name.downcase)
@@ -106,6 +120,7 @@ class GithubCollaborators
       end
     end
 
+    # Do the checks on the collaborators who are not also full Organization members
     def collaborator_checks
       logger.debug "collaborator_checks"
 
@@ -120,18 +135,18 @@ class GithubCollaborators
 
       get_repository_issues_from_github(repositories)
 
-      # Raise GitHub issues
+      # Raise GitHub issues if collaborator has these issues
       is_review_date_within_a_week(collaborators_with_issues)
       is_renewal_within_one_month(collaborators_with_issues)
 
       # Remove unknown collaborators from GitHub
       remove_unknown_collaborators(collaborators_with_issues)
 
-      # Extend date or remove collaborator from Terraform file/s
+      # Either extend the date or remove the collaborator from Terraform file/s
       has_review_date_expired(collaborators_with_issues)
     end
 
-    # Find if full org members / collaborators are members of repositories but not defined in Terraform
+    # Do the checks on collaborators who are also full Organization members
     def full_org_members_check
       logger.debug "full_org_members_check"
 
@@ -156,27 +171,30 @@ class GithubCollaborators
       end
     end
 
+    # Raise GitHub issue for collaborator objects whose review date have an expiry within one month
+    # @params collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
     def is_renewal_within_one_month(collaborators)
       logger.debug "is_renewal_within_one_month"
-      # Check all collaborators
       collaborators.each do |collaborator|
         repository_name = collaborator.repository.downcase
         collaborator_login = collaborator.login.downcase
+        
         issues = read_repository_issues(repository_name)
         issue_exist = does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, repository_name, collaborator_login)
+
         if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH) && issue_exist == false
-          # Create an issue on the repository
           create_review_date_expires_soon_issue(collaborator_login, repository_name)
         end
       end
     end
 
-    # Remove collaborators who have expired
-    def remove_expired_collaborators(all_collaborators)
+    # Remove collaborator objects whose review date has expired
+    # @params collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    def remove_expired_collaborators(collaborators)
       logger.debug "remove_expired_collaborators"
 
       # Filter out full org collaborators
-      expired_collaborators = all_collaborators.select { |collaborator| !@organization.is_collaborator_an_org_member(collaborator.login.downcase) }
+      expired_collaborators = collaborators.select { |collaborator| !@organization.is_collaborator_an_org_member(collaborator.login.downcase) }
 
       if expired_collaborators.length > 0
         # Remove collaborators from the files and raise PRs
@@ -189,14 +207,16 @@ class GithubCollaborators
       end
     end
 
-    def remove_expired_full_org_members(all_collaborators)
+    # Remove collaborator objects that are full Organization members whose review date has expired
+    # @params collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    def remove_expired_full_org_members(collaborators)
       logger.debug "remove_expired_full_org_members"
 
       # Find the collaborators that have full org membership
-      full_org_collaborators = all_collaborators.select { |collaborator| @organization.is_collaborator_an_org_member(collaborator.login.downcase) }
+      full_org_collaborators = collaborators.select { |collaborator| @organization.is_collaborator_an_org_member(collaborator.login.downcase) }
 
       if full_org_collaborators.length > 0
-        # Remove full org member from the files and raise PRs
+        # Remove the full org member from the files and raise PRs
         removed_collaborators = remove_collaborator(full_org_collaborators)
 
         if removed_collaborators.length > 0
@@ -225,6 +245,8 @@ class GithubCollaborators
 
     # This function will remove collaborators whose review date has expired or
     # update the review date for collaborators who are full org members
+    # Either extend the date or remove the collaborator from Terraform file/s
+    # Array[<GithubCollaborators::Collaborator>]
     def has_review_date_expired(collaborators)
       logger.debug "has_review_date_expired"
       all_collaborators = find_collaborators_who_have_expired(collaborators)
@@ -232,6 +254,8 @@ class GithubCollaborators
       remove_expired_full_org_members(all_collaborators)
     end
 
+    # Raise GitHub issues if collaborator has these issues
+    # Array[<GithubCollaborators::Collaborator>]
     def is_review_date_within_a_week(collaborators)
       logger.debug "is_review_date_within_a_week"
       collaborators_who_expire_soon = find_collaborators_who_expire_soon(collaborators)
@@ -440,6 +464,8 @@ class GithubCollaborators
       collaborators_for_slack_message
     end
 
+    # collaborator_name [String]
+    # repositories [Array[Hash{ permission => String, repository_name => String }]]
     def change_collaborator_permission(collaborator_name, repositories)
       logger.debug "change_collaborator_permission"
 
@@ -466,6 +492,7 @@ class GithubCollaborators
     end
 
     # Add collaborators to Terraform file/s
+    # GithubCollaborators::FullOrgMember
     def add_collaborator(collaborator)
       logger.debug "add_collaborator"
 
@@ -588,6 +615,8 @@ class GithubCollaborators
       repository_issues
     end
 
+    # Remove unknown collaborators from GitHub
+    # Array[<GithubCollaborators::Collaborator>]
     def remove_unknown_collaborators(collaborators)
       module_logger.debug "remove_unknown_collaborators"
       removed_outside_collaborators = []
