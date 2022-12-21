@@ -32,13 +32,13 @@ class GithubCollaborators
         it "call add" do
           allow_any_instance_of(Git::Base).to receive(:add)
           branch_creator = GithubCollaborators::BranchCreator.new
-          branch_creator.add(["file1", "file2"])
+          branch_creator.add("file1")
         end
 
         context "" do
           before {
-            allow_any_instance_of(Git).to receive(:config).with("user.name", "Operations Engineering Bot")
-            allow_any_instance_of(Git).to receive(:config).with("user.email", "github-actions[bot]@users.noreply.github.com")
+            allow_any_instance_of(Git).to receive(:config).with("user.name", OPS_ENG_BOT_NAME)
+            allow_any_instance_of(Git).to receive(:config).with("user.email", GITHUB_BOT_EMAIL)
             allow_any_instance_of(Git::Base).to receive(:checkout).with("branch", new_branch: true, start_point: "main")
             @branch_creator = GithubCollaborators::BranchCreator.new
           }

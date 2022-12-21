@@ -6,6 +6,12 @@ module Constants
   # Operations Engineering Bot account email address
   ADDED_BY_EMAIL = "opseng-bot@digital.justice.gov.uk"
 
+  # GitHub Bot account email address
+  GITHUB_BOT_EMAIL = "github-actions[bot]@users.noreply.github.com"
+
+  # Operations Engineering Bot name
+  OPS_ENG_BOT_NAME = "Operations Engineering Bot"
+
   # The reason why a full organisation collaborator is missing from a Terraform file
   REASON1 = "Full Org member / collaborator missing from Terraform file"
 
