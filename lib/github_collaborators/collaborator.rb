@@ -31,7 +31,7 @@ class GithubCollaborators
       end
     end
 
-    # Check if any Terraform file fields are missing and if the review date has an issue 
+    # Check if any Terraform file fields are missing and if the review date has an issue
     #
     # @return [Array<String>] a list of found issues
     def check_for_issues

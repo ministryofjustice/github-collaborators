@@ -152,10 +152,10 @@ module Constants
 
   # Days in a year
   YEAR = 365
-  
+
   # Days in a month
   MONTH = 31
-  
+
   # Days in a week
   WEEK = 7
 end

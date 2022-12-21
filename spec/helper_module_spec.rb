@@ -449,7 +449,6 @@ describe HelperModule do
     end
 
     it "when repositories exist" do
-
       repo1 = GithubCollaborators::Repository.new(TEST_REPO_NAME1, 1)
       repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 2)
       repo3 = GithubCollaborators::Repository.new(TEST_REPO_NAME3, 0)
