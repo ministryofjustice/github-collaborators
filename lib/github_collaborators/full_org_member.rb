@@ -17,31 +17,39 @@ class GithubCollaborators
 
       # Store the repositories the collaborator is associated within this array
       # This is updated by a query directly on the collaborator
+      # Array<String>
       @github_repositories = []
 
       # Store the Terraform files related repositories the collaborator is associated within this array
       # This is updated by reading each Terraform file
+      # Array<String>
       @terraform_repositories = []
 
       # This array will store the repositories where the collaborator is not defined in Terraform files
+      # Array<String>
       @missing_from_repositories = []
 
       # This array stores the all-org-members team repositories
+      # Array<String>
       @all_org_members_team_repositories = []
 
       # This array stores which repositories have a permission mismatch, meaning the team has different permissions
+      # Array[Hash{ permission => String, repository_name => String }]
       @repository_permission_mismatches = []
 
       # This array stores which repositories the full org member has been newly added to a Terraform file,
       # because they were missing from that Terraform file. The reason for this array is because the Terraform
       # file may not exist until a pull request has been created and merged in.
+      # Array<String>
       @ignore_repositories = []
 
       # This array stores the Organization repositories that have been archived. This array of repositories is
       # used to check if the collaborator has access to archived repositories.
+      # Array<String>
       @github_archived_repositories = []
 
       # This array stores which Organization repositories the collaborator has access to.
+      # Array<String>
       @attached_archived_repositories = []
 
       @login = login.downcase

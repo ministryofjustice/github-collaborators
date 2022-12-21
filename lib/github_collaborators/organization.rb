@@ -10,32 +10,47 @@ class GithubCollaborators
       logger.debug "initialize"
 
       # This is a list of collaborator login names
+      # Array<String>
       @outside_collaborators = get_org_outside_collaborators
 
       # This is a list of Organization member login names
+      # Array<String>
       @organization_members = get_all_organisation_members
 
       # This is a list of Organization archived repository names
+      # Array<String>
       @archived_repositories = get_archived_repositories
 
       # This is a list of Organization repository objects (that are not disabled or archived)
+      # Array<GithubCollaborators::Repository>
       @repositories = get_active_repositories
 
       # This is the number of Organization outside collaborators
       @github_collaborators = @outside_collaborators.length
 
-      # This is an list of the collaborator names who have full Org membership
+      # This is an list of the FullOrgMember objects who are collaborators
+      # that have full Org membership
+      # Array<GithubCollaborators::FullOrgMember>
       @full_org_members = []
 
-      # This is a list of the all-org members-members team repositories
+      # This is a list of the all-org-members team repositories
+      # Array<String>
       @all_org_members_team_repositories = get_all_org_members_team_repositories
     end
 
+    # Get the Organization archived repository name
+    #
+    # @return [Array<String>] true if no issue were found in the reply
     def get_org_archived_repositories
       logger.debug "get_org_archived_repositories"
       @archived_repositories
     end
 
+    # See if a specific collaborator is an outside collaborator that
+    # also has full Organization membership
+    #
+    # @param collaborator_name [String] the name of the collaborator
+    # @return [Bool] true if find collaborator who is a full Organization member
     def is_collaborator_a_full_org_member(collaborator_name)
       logger.debug "is_collaborator_a_full_org_member"
       user_exists = false
@@ -47,29 +62,42 @@ class GithubCollaborators
       user_exists
     end
 
+    # See if a specific login name is a Organization member
+    #
+    # @param login [String] the login name to check
+    # @return [Bool] true if find Organization member with same login name
     def is_collaborator_an_org_member(login)
       logger.debug "is_collaborator_an_org_member"
       # Loop through all the org members
+      login = login.downcase
       @organization_members.each do |org_member|
         # See if collaborator name is in the org members list
-        if org_member.downcase == login.downcase
-          add_new_collaborator_and_org_member(login.downcase)
+        if org_member.downcase == login
+          add_new_full_org_member(login)
           return true
         end
       end
       false
     end
 
+    # Create a FullOrgMember object and add it to the full_org_members array
+    #
+    # @param login [String] the login name of FullOrgMember
     def add_full_org_member(login)
       logger.debug "add_full_org_member"
       full_org_member = GithubCollaborators::FullOrgMember.new(login.downcase)
       @full_org_members.push(full_org_member)
     end
 
+    # Create all the Organization FullOrgMember objects and populate those objects.
+    # The Terraform file collaborators are used as the base to find out which
+    # collaborators are FullOrgMembers and thus be turned into FullOrgMember objects.
+    #
+    # @param terraform_collaborators [Array<GithubCollaborators::Collaborator>] the Terraform file collaborators
     def create_full_org_members(terraform_collaborators)
       logger.debug "create_full_org_members"
 
-      # A list of FullOrgMember objects is created in this function when a full org members is detected
+      # FullOrgMember objects are created within is_collaborator_an_org_member() when a full org member is detected
       terraform_collaborators.each { |collaborator| is_collaborator_an_org_member(collaborator.login.downcase) }
 
       # Iterate over the list of FullOrgMember objects
@@ -106,7 +134,9 @@ class GithubCollaborators
       end
     end
 
-    # Where collaborator is not defined in Terraform, add collaborator to those files
+    # Find which FullOrgMembers are not defined in a Terraform file
+    #
+    # @return [Array<GithubCollaborators::FullOrgMember>] a list of FullOrgMember objects
     def get_full_org_members_not_in_terraform_file
       logger.debug "get_full_org_members_not_in_terraform_file"
       return_list = []
@@ -119,11 +149,14 @@ class GithubCollaborators
       return_list
     end
 
-    # Find which collaborators has a difference in repository permissions
+    # Find which FullOrgMembers have a difference in repository access permissions
+    #
+    # @return [Array<Hash{login => String, mismatches => Array[Hash{ permission => String, repository_name => String }]}>] a list of hash items that have data from the the FullOrgMember objects
     def get_full_org_members_with_repository_permission_mismatches(terraform_files_obj)
       logger.debug "get_full_org_members_with_repository_permission_mismatches"
       return_list = []
       @full_org_members.each do |full_org_member|
+        # Compare the GitHub and Terraform repositories to find a permission mismatch
         if full_org_member.mismatched_repository_permissions_check(terraform_files_obj)
           return_list.push({login: full_org_member.login.downcase, mismatches: full_org_member.repository_permission_mismatches})
         end
@@ -131,7 +164,9 @@ class GithubCollaborators
       return_list
     end
 
-    # Find the collaborators that are attached to no GitHub repositories
+    # Find which FullOrgMembers are attached to no GitHub repositories
+    #
+    # @return [Array<String>] the list FullOrgMember login names
     def get_odd_full_org_members
       logger.debug "get_odd_full_org_members"
       return_list = []
@@ -143,7 +178,9 @@ class GithubCollaborators
       return_list
     end
 
-    # Find which collaborators are attached to archived repositories in the files that we track
+    # Find which FullOrgMembers are attached to archived repositories
+    #
+    # @return [Array<Hash{login => String, repository_name => String}>] a list of hash items that contain the FullOrgMember login name and archived repository
     def get_full_org_members_attached_to_archived_repositories(terraform_files_obj)
       logger.debug "get_full_org_members_attached_to_archived_repositories"
       return_list = []
@@ -159,14 +196,16 @@ class GithubCollaborators
 
     private
 
-    # Check and store collaborator that have full §org membership
-    def add_new_collaborator_and_org_member(new_collaborator_login)
-      logger.debug "add_new_collaborator_and_org_member"
+    # Adds a new full Organization member if it doesn't already exist
+    #
+    # @param collaborator_login [String] the login name of the collaborator
+    def add_new_full_org_member(collaborator_login)
+      logger.debug "add_new_full_org_member"
 
-      new_collaborator_login = new_collaborator_login.downcase
+      collaborator_login = collaborator_login.downcase
 
-      if is_collaborator_a_full_org_member(new_collaborator_login) == false
-        add_full_org_member(new_collaborator_login)
+      if is_collaborator_a_full_org_member(collaborator_login) == false
+        add_full_org_member(collaborator_login)
       end
     end
   end
