@@ -31,10 +31,9 @@ class GithubCollaborators
       end
     end
 
-    YEAR = 365
-    MONTH = 31
-    WEEK = 7
-
+    # Check if any Terraform file fields are missing and if the review date has an issue 
+    #
+    # @return [Array<String>] a list of found issues
     def check_for_issues
       logger.debug "check_for_issues"
 
@@ -80,9 +79,14 @@ class GithubCollaborators
       @issues
     end
 
+    # Add a custom issue to the collaborator
+    #
+    # @param reason [String] the type of issue
     def add_issue(reason)
       logger.debug ""
       if reason == MISSING
+        # This issue occurs when collaborator is defined on GitHub
+        # but not defined in a Terraform file
         @issues.push(COLLABORATOR_MISSING)
         @defined_in_terraform = false
       end
