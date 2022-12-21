@@ -121,7 +121,7 @@ class GithubCollaborators
 
     # See if the new branch name already exists on the
     # remote repository or not
-    # 
+    #
     # @param new_branch_name [String] the new branch name
     # @return [Bool] true if branch name is already taken
     def branch_name_exist(new_branch_name)
@@ -135,7 +135,7 @@ class GithubCollaborators
     end
 
     # Add a post fix to the branch name
-    # 
+    #
     # @param branch_name [String] the original branch name
     # @return [String] the modified branch name
     def add_post_fix_number(branch_name)
@@ -152,7 +152,7 @@ class GithubCollaborators
     end
 
     # Increment the number of a post fix already applied to a branch name
-    # 
+    #
     # @param branch_name [String] the original branch name
     # @param number_in_branch_name [Numeric] the number to start from
     # @return [String] the modified branch name
