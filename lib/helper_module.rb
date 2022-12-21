@@ -13,7 +13,7 @@ module HelperModule
 
   # Collect the issues from a repository on GitHub
   #
-  # @param repository [String] name of repository
+  # @param repository [String] name of the repository
   # @return [JSON] the issues in json format
   def get_issues_from_github(repository)
     module_logger.debug "get_issues_from_github"
@@ -24,8 +24,8 @@ module HelperModule
 
   # Remove specific collaborator from GitHub repository
   #
-  # @param repository [String] name of repository
-  # @param github_user [String] name of collaborator
+  # @param repository [String] name of the repository
+  # @param github_user [String] login name of the collaborator
   def remove_access(repository, github_user)
     module_logger.debug "remove_access"
 
@@ -43,8 +43,8 @@ module HelperModule
 
   # Delete a collaborator invite on a GitHub repository
   #
-  # @param repository_name [String] name of repository
-  # @param invite_login [String] name of collaborator
+  # @param repository_name [String] name of the repository
+  # @param invite_login [String] login name of the collaborator
   def delete_expired_invite(repository_name, invite_login)
     module_logger.debug "delete_expired_invite"
 
@@ -59,7 +59,7 @@ module HelperModule
 
   # Get the collaborator invites to a specific GitHub repository
   #
-  # @param repository_name [String] name of repository
+  # @param repository_name [String] name of the repository
   # @return [Hash{login => String, expired => Bool, invite_id => Numeric}] the required fields from the issue
   def get_repository_invites(repository_name)
     module_logger.debug "get_repository_invites"
@@ -78,7 +78,7 @@ module HelperModule
 
   # Close invites that have expired on a GitHub repository
   #
-  # @param repository_name [String] name of repository
+  # @param repository_name [String] name of the repository
   def close_expired_issues(repository_name)
     module_logger.debug "close_expired_issues"
     allowed_days = 45
@@ -105,7 +105,7 @@ module HelperModule
 
   # Remove specific issue from a GitHub repository
   #
-  # @param repository_name [String] name of repository
+  # @param repository_name [String] name of the repository
   # @param repository_name [Numeric] issue id number
   def remove_issue(repository_name, issue_id)
     module_logger.debug "remove_issue"
@@ -127,8 +127,8 @@ module HelperModule
 
   # Create a new issue on a GitHub repository for a specific collaborator
   #
-  # @param user_name [String] name of collaborator
-  # @param repository_name [String] name of repository
+  # @param user_name [String] login name of the collaborator
+  # @param repository_name [String] name of the repository
   def create_unknown_collaborator_issue(user_name, repository_name)
     module_logger.debug "create_unknown_collaborator_issue"
 
@@ -146,7 +146,7 @@ module HelperModule
 
   # Composes a GitHub issue structured message 
   #
-  # @param user_name [String] name of collaborator
+  # @param user_name [String] login name of the collaborator
   # @return [Hash{title => String, assignees => [Array<String>], body => String}] the message to send to GitHub
   def unknown_collaborator_hash(user_name)
     module_logger.debug "unknown_collaborator_hash"
@@ -171,8 +171,8 @@ module HelperModule
 
   # Create a new issue on a GitHub repository
   #
-  # @param user_name [String] name of collaborator
-  # @param repository_name [String] name of repository
+  # @param user_name [String] login name of the collaborator
+  # @param repository_name [String] name of the repository
   def create_review_date_expires_soon_issue(user_name, repository_name)
     module_logger.debug "create_review_date_expires_soon_issue"
     repository_name = repository_name.downcase
@@ -189,7 +189,7 @@ module HelperModule
 
   # Composes a GitHub issue structured message 
   #
-  # @param user_name [String] name of collaborator
+  # @param user_name [String] login name of the collaborator
   # @return [Hash{title => String, assignees => [Array<String>], body => String}] the message to send to GitHub
   def review_date_expires_soon_hash(user_name)
     module_logger.debug "review_date_expires_soon_hash"
@@ -217,7 +217,7 @@ module HelperModule
   # @param issues [Hash{login => String, title => String, assignees => [Array<String>], number => Numeric}] issue data from GitHub repository
   # @param issue_title [String] the name of the issue
   # @param repository_name [String] the name of the repository
-  # @param user_name [String] the name of the collaborator
+  # @param user_name [String] the login name of the collaborator
   # @return [Bool] true when the specific issue exists on repository 
   def does_issue_already_exist(issues, issue_title, repository_name, user_name)
     module_logger.debug "does_issue_already_exist"
@@ -274,6 +274,10 @@ module HelperModule
     org_members.sort!
   end
 
+  # Create a GraphQL query that returns the organization user login names
+  #
+  # @param end_cursor [String] id of next page in search results
+  # @return [String] the GraphQL query
   def organisation_members_query(end_cursor)
     module_logger.debug "organisation_members_query"
     after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
@@ -300,14 +304,15 @@ module HelperModule
   end
 
   # Query the all_org_members team and return its repositories
+  #
+  # @return [Array<String>] list of the repository names
   def get_all_org_members_team_repositories
     module_logger.debug "get_all_org_members_team_repositories"
-
-    team_repositories = []
 
     #  Grabs 100 repositories from the team, if team has more than 100 repositories
     # this will need to be changed to paginate through the results.
     url = "https://api.github.com/orgs/#{ORG}/teams/all-org-members/repos?per_page=100"
+    team_repositories = []
     json = GithubCollaborators::HttpClient.new.fetch_json(url)
     JSON.parse(json)
       .find_all { |repository| repository["name"].downcase }
@@ -316,6 +321,11 @@ module HelperModule
     team_repositories
   end
 
+  # Check a list of collaborator objects for a specific login name
+  #
+  # @param login [String] login name of the collaborator to find
+  # @param collaborators [Array<GithubCollaborators::Collaborator>] list of collaborator objects
+  # @return [Bool] true if the collaborator login name is found
   def does_collaborator_already_exist(login, collaborators)
     module_logger.debug "does_collaborator_already_exist"
     exists = false
@@ -328,6 +338,11 @@ module HelperModule
     exists
   end
 
+  # Return the name of a specific collaborator from a list of collaborator objects
+  #
+  # @param login [String] login name of the collaborator to find
+  # @param collaborators [Array<GithubCollaborators::Collaborator>] list of collaborator objects
+  # @return [String] name of collaborator if collaborator exists in list, else return an empty string
   def get_name(login, collaborators)
     module_logger.debug "get_name"
     collaborators.each do |collaborator|
@@ -338,6 +353,11 @@ module HelperModule
     ""
   end
 
+  # Return the email address of a specific collaborator from a list of collaborator objects
+  #
+  # @param login [String] login name of the collaborator to find
+  # @param collaborators [Array<GithubCollaborators::Collaborator>] list of collaborator objects
+  # @return [String] the email address of the collaborator if collaborator exists in list, else return an empty string
   def get_email(login, collaborators)
     module_logger.debug "get_email"
     collaborators.each do |collaborator|
@@ -348,6 +368,11 @@ module HelperModule
     ""
   end
 
+  # Return the organisation of a specific collaborator from a list of collaborator objects
+  #
+  # @param login [String] login name of the collaborator to find
+  # @param collaborators [Array<GithubCollaborators::Collaborator>] list of collaborator objects
+  # @return [String] the organisation of the collaborator if collaborator exists in list, else return an empty string
   def get_org(login, collaborators)
     module_logger.debug "get_org"
     collaborators.each do |collaborator|
@@ -358,11 +383,13 @@ module HelperModule
     ""
   end
 
+  # Return the organisation outside collaborator login names
+  #
+  # @return [String] a list of collaborator login names
   def get_org_outside_collaborators
     module_logger.debug "get_org_outside_collaborators"
-    # Grab the Org outside collaborators
-    # This has a hard limit return of 100 collaborators
     outside_collaborators = []
+    # This has a hard limit of 100 collaborators, if this value is exceeded, pagination will be needed here
     url = "https://api.github.com/orgs/#{ORG}/outside_collaborators?per_page=100"
     json = GithubCollaborators::HttpClient.new.fetch_json(url)
     JSON.parse(json)
@@ -371,6 +398,9 @@ module HelperModule
     outside_collaborators
   end
 
+  # Get the github-collaborators repository pull requests
+  #
+  # @return [Array<[Hash{title => String, files => [Array<String>]}]>] a list of hash values containing the pull request title and related files
   def get_pull_requests
     module_logger.debug "get_pull_requests"
     pull_requests = []
@@ -384,13 +414,19 @@ module HelperModule
       data.fetch("nodes").each do |pull_request_data|
         title = pull_request_data.fetch("title")
         files = pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
-        # Use a hash value like { :title => "", :files => list_of_file }
         pull_requests.push({title: title.to_s, files: files})
       end
     end
     pull_requests
   end
 
+  # Create a Git branch, create a valid branch name and raise a specific pull request
+  #
+  # @param branch_name [String] the original branch name to be used
+  # @param edited_files [Array<String>] a list of file paths
+  # @param pull_request_title [String] the pull request title
+  # @param collaborator_name [Array<string>] the collaborator login name
+  # @param type [Array<string>] the type of pull request to create
   def create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
     module_logger.debug "create_branch_and_pull_request"
 
@@ -422,12 +458,15 @@ module HelperModule
     end
   end
 
-  # Create pull request
+  # Create a pull request on the github-collaborators repository
+  #
+  # @param hash_body [String] a GitHub branch structured message 
   def create_pull_request(hash_body)
     module_logger.debug "create_pull_request"
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
       url = "#{GH_API_URL}/github-collaborators/pulls"
       if ENV.fetch("OPS_BOT_TOKEN", 0) == "1"
+        # Use a different pull request GitHub token so A.B. can authorise automated pull requests
         GithubCollaborators::HttpClient.new.post_pull_request_json(url, hash_body.to_json)
       else
         GithubCollaborators::HttpClient.new.post_json(url, hash_body.to_json)
@@ -438,6 +477,9 @@ module HelperModule
     end
   end
 
+  # Create a GraphQL query that returns the github-collaborators repository pull requests
+  #
+  # @return [String] the GraphQL query
   def pull_request_query
     %[
       {
@@ -463,8 +505,8 @@ module HelperModule
 
   # Composes a GitHub branch structured message
   #
-  # @param login [String] name of collaborator
-  # @param branch_name [String] name of new branch
+  # @param login [String] the login name of the collaborator
+  # @param branch_name [String] the name of the branch
   # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
   def extend_date_hash(login, branch_name)
     module_logger.debug "extend_date_hash"
@@ -488,7 +530,7 @@ module HelperModule
 
   # Composes a GitHub branch structured message
   #
-  # @param branch_name [String] name of branch to delete
+  # @param branch_name [String] the name of the branch to delete
   # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
   def delete_archive_file_hash(branch_name)
     module_logger.debug "delete_archive_file_hash"
@@ -511,7 +553,7 @@ module HelperModule
 
   # Composes a GitHub branch structured message
   #
-  # @param branch_name [String] name of new branch
+  # @param branch_name [String] the name of the branch
   # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
   def delete_empty_files_hash(branch_name)
     module_logger.debug "delete_empty_files_hash"
@@ -532,8 +574,8 @@ module HelperModule
 
   # Composes a GitHub branch structured message
   #
-  # @param login [String] name of collaborator
-  # @param branch_name [String] name of new branch
+  # @param login [String] the login name of the collaborator
+  # @param branch_name [String] the name of the branch
   # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
   def add_collaborator_hash(login, branch_name)
     module_logger.debug "add_collaborator_hash"
@@ -611,6 +653,11 @@ module HelperModule
     }
   end
 
+  # Get the Organization repositories and the number of outside collaborators
+  # per repository to create a list of Repository objects for the ones that are
+  # not disabled or archived
+  #
+  # @return [Array<GithubCollaborators::Repository>] list of Repository objects
   def get_active_repositories
     module_logger.debug "get_active_repositories"
     graphql = GithubCollaborators::GithubGraphQlClient.new
@@ -640,6 +687,9 @@ module HelperModule
     active_repositories.sort_by { |repo| repo.name }
   end
 
+  # Get the names of the Organization repositories that are archived
+  #
+  # @return [Array<String>] list of repository names
   def get_archived_repositories
     module_logger.debug "get_archived_repositories"
     graphql = GithubCollaborators::GithubGraphQlClient.new
@@ -652,7 +702,6 @@ module HelperModule
         if !json_data.dig("data", "search", "repos").nil?
           repositories = json_data.dig("data", "search", "repos")
           repositories.each do |repo|
-            # Get the archived repository name
             archived_repositories.push(repo.dig("repo", "name"))
           end
         end
@@ -663,6 +712,11 @@ module HelperModule
     archived_repositories.sort!
   end
 
+  # Create a GraphQL query that returns the Organisation repositories that are archived
+  #
+  # @param end_cursor [String] id of next page in search results
+  # @param type [String] repository type (public, private, internal)
+  # @return [String] the GraphQL query
   def get_archived_repositories_query(end_cursor, type)
     module_logger.debug "get_archived_repositories_query"
     after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
@@ -690,6 +744,11 @@ module HelperModule
     ]
   end
 
+  # Create a GraphQL query that returns the Organisation repositories
+  #
+  # @param end_cursor [String] id of next page in search results
+  # @param type [String] repository type (public, private, internal)
+  # @return [String] the GraphQL query
   def repositories_query(end_cursor, type)
     module_logger.debug "repositories_query"
     after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
@@ -722,6 +781,10 @@ module HelperModule
     ]
   end
 
+  # Get the outside collaborators login names for a specific repository 
+  #
+  # @param repository [String] the name of the repository
+  # @return [Array<String>] list of collaborator login names
   def fetch_all_collaborators(repository)
     module_logger.debug "fetch_all_collaborators"
     end_cursor = nil
@@ -744,6 +807,11 @@ module HelperModule
     outside_collaborators.sort!
   end
 
+  # Create a GraphQL query that returns the outside collaborators login names for a specific repository 
+  #
+  # @param end_cursor [String] id of next page in search results
+  # @param repository [String] the name of the repository
+  # @return [String] the GraphQL query
   def outside_collaborators_query(end_cursor, repository)
     module_logger.debug "outside_collaborators_query"
     after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
@@ -772,7 +840,11 @@ module HelperModule
     ]
   end
 
-  # Prints out the comparison of GitHub and Terraform collaborators when there is a mismatch
+  # Print the comparison of GitHub and Terraform collaborators for a specific repository
+  #
+  # @param collaborators_in_file [Array<String>] a list of collaborator login names
+  # @param collaborators_on_github [Array<String>] a list of collaborator login names
+  # @param repository_name [String] the name of the repository
   def print_comparison(collaborators_in_file, collaborators_on_github, repository_name)
     logger.debug "print_comparison"
     logger.warn "=" * 37
@@ -786,8 +858,13 @@ module HelperModule
     logger.warn "=" * 37
   end
 
-  # Compare each collaborator name on a Github repo against the
-  # Terraform file collaborator names to find unknown collaborators
+  # Compare each collaborator login name against the collaborator login names within a
+  # Terraform file to find any unknown collaborators attached to a specific repository
+  #
+  # @param collaborators_in_file [Array<String>] a list of collaborator login names
+  # @param collaborators_on_github [Array<String>] a list of collaborator login names
+  # @param repository_name [String] the name of the repository
+  # @return [Array<String>] a list of unknown collaborator login names
   def find_unknown_collaborators(collaborators_in_file, collaborators_on_github, repository_name)
     logger.debug "find_unknown_collaborators"
 
