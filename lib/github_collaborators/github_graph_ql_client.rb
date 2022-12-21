@@ -7,9 +7,14 @@ class GithubCollaborators
 
     def initialize
       logger.debug "initialize"
+      # Keep here so abort when object is created if the token is missing
       @github_token = ENV.fetch("ADMIN_GITHUB_TOKEN")
     end
 
+    # Checks the header and body content replied from a GitHub query is correct
+    #
+    # @param response [Net::HTTPResponse] the response object
+    # @return [Bool] true if no issue were found in the reply
     def is_response_okay(response)
       logger.debug "is_response_okay"
 
@@ -31,6 +36,10 @@ class GithubCollaborators
       true
     end
 
+    # Run a GraphQL GitHub query
+    #
+    # @param query [string] the query to send to GitHub
+    # @return [string] the returned data from GitHub
     def run_query(query)
       logger.debug "run_query"
       got_data = false
@@ -50,6 +59,10 @@ class GithubCollaborators
 
     private
 
+    # Form and call the GraphQL GitHub query
+    #
+    # @param body [string] the query data to send to GitHub
+    # @return [Net::HTTPResponse] the reply data from GitHub
     def query_github_api(body)
       logger.debug "query_github_api"
       json = {query: body}.to_json
