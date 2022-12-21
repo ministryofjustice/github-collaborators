@@ -121,7 +121,7 @@ class GithubCollaborators
       return_list = []
       @full_org_members.each do |full_org_member|
         # Compare the GitHub and Terraform repositories
-        if full_org_member.do_repositories_match == false
+        if full_org_member.missing_from_terraform_files
           return_list.push(full_org_member)
         end
       end
@@ -133,7 +133,7 @@ class GithubCollaborators
       logger.debug "get_full_org_members_with_repository_permission_mismatches"
       return_list = []
       @full_org_members.each do |full_org_member|
-        if full_org_member.check_repository_permissions_match(terraform_files_obj)
+        if full_org_member.mismatched_repository_permissions_check(terraform_files_obj)
           return_list.push({login: full_org_member.login.downcase, mismatches: full_org_member.repository_permission_mismatches})
         end
       end

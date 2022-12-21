@@ -60,7 +60,7 @@ class GithubCollaborators
 
       it "call add_all_org_members_team_repositories" do
         @full_org_member.add_all_org_members_team_repositories([TEST_REPO_NAME1, TEST_REPO_NAME2])
-        test_equal(@full_org_member.org_members_team_repositories.length, 2)
+        test_equal(@full_org_member.all_org_members_team_repositories.length, 2)
       end
 
       it "call add_attached_archived_repository" do
@@ -83,7 +83,7 @@ class GithubCollaborators
 
         it "when don't add to array because repo is an archived all org team repo" do
           @full_org_member.add_all_org_members_team_repositories([TEST_REPO_NAME1])
-          test_equal(@full_org_member.org_members_team_repositories.length, 1)
+          test_equal(@full_org_member.all_org_members_team_repositories.length, 1)
           @full_org_member.add_archived_repositories([TEST_REPO_NAME1])
           test_equal(@full_org_member.github_archived_repositories.length, 1)
           @full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
@@ -92,7 +92,7 @@ class GithubCollaborators
 
         it "when don't add to array because repo is an all org team repo" do
           @full_org_member.add_all_org_members_team_repositories([TEST_REPO_NAME1])
-          test_equal(@full_org_member.org_members_team_repositories.length, 1)
+          test_equal(@full_org_member.all_org_members_team_repositories.length, 1)
           @full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
           test_equal(@full_org_member.terraform_repositories.length, 0)
         end
@@ -149,7 +149,7 @@ class GithubCollaborators
 
         it "when org team array greater than 0" do
           @full_org_member.add_all_org_members_team_repositories([TEST_REPO_NAME])
-          test_equal(@full_org_member.org_members_team_repositories.length, 1)
+          test_equal(@full_org_member.all_org_members_team_repositories.length, 1)
           test_equal(@full_org_member.odd_full_org_member_check, false)
         end
 
@@ -224,15 +224,15 @@ class GithubCollaborators
         end
       end
 
-      context "call do_repositories_match" do
+      context "call missing_from_terraform_files" do
         it "when added no repositories" do
-          test_equal(@full_org_member.do_repositories_match, true)
+          test_equal(@full_org_member.missing_from_terraform_files, false)
         end
 
         it "when add only terraform repositories" do
           @full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
           test_equal(@full_org_member.terraform_repositories.length, 1)
-          test_equal(@full_org_member.do_repositories_match, false)
+          test_equal(@full_org_member.missing_from_terraform_files, true)
         end
       end
 
@@ -242,11 +242,11 @@ class GithubCollaborators
           expect(graphql_client).to receive(:run_query).with(query).and_return(collaborator_repositories_json)
         end
 
-        context "call do_repositories_match" do
+        context "call missing_from_terraform_files" do
           it "when add only github repositories" do
             @full_org_member.get_full_org_member_repositories
             test_equal(@full_org_member.github_repositories.length, 3)
-            test_equal(@full_org_member.do_repositories_match, false)
+            test_equal(@full_org_member.missing_from_terraform_files, true)
           end
 
           it "when github and terraform repositories do not match but a repo is an all org team repo" do
@@ -255,7 +255,7 @@ class GithubCollaborators
             @full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
             test_equal(@full_org_member.github_repositories.length, 2)
             test_equal(@full_org_member.terraform_repositories.length, 0)
-            test_equal(@full_org_member.do_repositories_match, false)
+            test_equal(@full_org_member.missing_from_terraform_files, true)
           end
 
           it "when github and terraform repositories do not match" do
@@ -263,7 +263,7 @@ class GithubCollaborators
             @full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
             test_equal(@full_org_member.github_repositories.length, 3)
             test_equal(@full_org_member.terraform_repositories.length, 1)
-            test_equal(@full_org_member.do_repositories_match, false)
+            test_equal(@full_org_member.missing_from_terraform_files, true)
           end
 
           it "when github and terraform repositories do match" do
@@ -271,7 +271,7 @@ class GithubCollaborators
             @full_org_member.add_terraform_repositories([TEST_REPO_NAME2, TEST_REPO_NAME1, TEST_REPO_NAME3])
             test_equal(@full_org_member.github_repositories.length, 3)
             test_equal(@full_org_member.terraform_repositories.length, 3)
-            test_equal(@full_org_member.do_repositories_match, true)
+            test_equal(@full_org_member.missing_from_terraform_files, false)
           end
 
           it "when github and terraform repositories do match but a repo is an all org team repo" do
@@ -280,16 +280,16 @@ class GithubCollaborators
             @full_org_member.add_terraform_repositories([TEST_REPO_NAME2, TEST_REPO_NAME1, TEST_REPO_NAME3])
             test_equal(@full_org_member.github_repositories.length, 2)
             test_equal(@full_org_member.terraform_repositories.length, 2)
-            test_equal(@full_org_member.do_repositories_match, true)
+            test_equal(@full_org_member.missing_from_terraform_files, false)
           end
         end
 
-        context "call check_repository_permissions_match" do
+        context "call mismatched_repository_permissions_check" do
           it "when github_repositories has repositories" do
             @full_org_member.get_full_org_member_repositories
             test_equal(@full_org_member.github_repositories.length, 3)
             expect(terraform_files).to receive(:get_terraform_files).and_return([]).at_least(3).times
-            test_equal(@full_org_member.check_repository_permissions_match(terraform_files), false)
+            test_equal(@full_org_member.mismatched_repository_permissions_check(terraform_files), false)
           end
 
           it "when github_repositories and terraform_files have repositories" do
@@ -297,7 +297,7 @@ class GithubCollaborators
             test_equal(@full_org_member.github_repositories.length, 3)
             file = create_empty_terraform_file
             expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(3).times
-            test_equal(@full_org_member.check_repository_permissions_match(terraform_files), false)
+            test_equal(@full_org_member.mismatched_repository_permissions_check(terraform_files), false)
           end
 
           it "when github_repositories and terraform_files have repositories and permissions do not match" do
@@ -307,7 +307,7 @@ class GithubCollaborators
             expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
             expect(@full_org_member).to receive(:get_repository_permission).with(TEST_REPO_NAME1).and_return("push")
             expect(file).to receive(:get_collaborator_permission).with(TEST_USER_1).and_return("admin")
-            test_equal(@full_org_member.check_repository_permissions_match(terraform_files), true)
+            test_equal(@full_org_member.mismatched_repository_permissions_check(terraform_files), true)
           end
 
           it "when github_repositories and terraform_files have repositories and permissions do match" do
@@ -317,7 +317,7 @@ class GithubCollaborators
             expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
             expect(@full_org_member).to receive(:get_repository_permission).with(TEST_REPO_NAME1).and_return("push")
             expect(file).to receive(:get_collaborator_permission).with(TEST_USER_1).and_return("push")
-            test_equal(@full_org_member.check_repository_permissions_match(terraform_files), false)
+            test_equal(@full_org_member.mismatched_repository_permissions_check(terraform_files), false)
           end
 
           it "when github_repositories and terraform_files have repositories but repository is in the ignore list" do
@@ -326,7 +326,7 @@ class GithubCollaborators
             test_equal(@full_org_member.github_repositories.length, 3)
             file = create_terraform_file_with_name(TEST_REPO_NAME1)
             expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
-            test_equal(@full_org_member.check_repository_permissions_match(terraform_files), false)
+            test_equal(@full_org_member.mismatched_repository_permissions_check(terraform_files), false)
           end
         end
       end

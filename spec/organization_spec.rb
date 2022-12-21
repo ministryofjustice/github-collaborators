@@ -152,12 +152,12 @@ class GithubCollaborators
 
             context "call get_full_org_members_with_repository_permission_mismatches" do
               it "when collaborator permissions do not match" do
-                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:check_repository_permissions_match).and_return(false)
+                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:mismatched_repository_permissions_check).and_return(false)
                 test_equal(@organization.get_full_org_members_with_repository_permission_mismatches(nil), [])
               end
 
               it "when collaborator permissions do match" do
-                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:check_repository_permissions_match).and_return(true)
+                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:mismatched_repository_permissions_check).and_return(true)
                 result = @organization.get_full_org_members_with_repository_permission_mismatches(nil)
                 test_equal(result.length, 3)
                 expected_collaborators = [{login: TEST_USER_1, mismatches: []}, {login: TEST_USER_2, mismatches: []}, {login: TEST_USER_3, mismatches: []}]
@@ -167,12 +167,12 @@ class GithubCollaborators
 
             context "call get_full_org_members_not_in_terraform_file" do
               it "when collaborators are defined in terraform file" do
-                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:do_repositories_match).and_return(true)
+                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:missing_from_terraform_files).and_return(false)
                 test_equal(@organization.get_full_org_members_not_in_terraform_file, [])
               end
 
               it "when collaborators are not defined in terraform file" do
-                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:do_repositories_match).and_return(false)
+                allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:missing_from_terraform_files).and_return(true)
                 test_equal(@organization.get_full_org_members_not_in_terraform_file.length, 3)
               end
             end

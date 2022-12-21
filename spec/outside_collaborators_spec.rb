@@ -225,7 +225,7 @@ class GithubCollaborators
           end
 
           it "when have no mismatch in collaborator repositories" do
-            test_equal(@full_org_member.do_repositories_match, true)
+            test_equal(@full_org_member.missing_from_terraform_files, false)
             expect(terraform_files).not_to receive(:ensure_file_exists_in_memory)
             @outside_collaborators.add_collaborator(@full_org_member)
           end
@@ -234,7 +234,7 @@ class GithubCollaborators
             before do
               @full_org_member.add_terraform_repositories([TEST_REPO_NAME])
               test_equal(@full_org_member.terraform_repositories.length, 1)
-              test_equal(@full_org_member.do_repositories_match, false)
+              test_equal(@full_org_member.missing_from_terraform_files, true)
             end
 
             it "when have a mismatch in collaborator repositories and pull request does not exist" do
