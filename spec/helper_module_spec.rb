@@ -443,6 +443,35 @@ describe HelperModule do
   end
 
   context "call get_active_repositories" do
+    it "when repositories exist" do
+      expect(helper_module).to receive(:get_active_repositories_from_github).and_return([])
+      test_equal(helper_module.get_active_repositories.length, 0)
+    end
+
+    it "when repositories exist" do
+
+      repo1 = GithubCollaborators::Repository.new(TEST_REPO_NAME1, 1)
+      repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 2)
+      repo3 = GithubCollaborators::Repository.new(TEST_REPO_NAME3, 0)
+
+      active_repo1 = {repository_name: TEST_REPO_NAME1, outside_collaborators_count: 1}
+      active_repo2 = {repository_name: TEST_REPO_NAME2, outside_collaborators_count: 2}
+      active_repo3 = {repository_name: TEST_REPO_NAME3, outside_collaborators_count: 0}
+      active_repositories = [active_repo1, active_repo2, active_repo3]
+
+      expect(helper_module).to receive(:get_active_repositories_from_github).and_return(active_repositories)
+      expect(GithubCollaborators::Repository).to receive(:new).with(TEST_REPO_NAME1, 1).and_return(repo1)
+      expect(GithubCollaborators::Repository).to receive(:new).with(TEST_REPO_NAME2, 2).and_return(repo2)
+      expect(GithubCollaborators::Repository).to receive(:new).with(TEST_REPO_NAME3, 0).and_return(repo3)
+      expect(helper_module).to receive(:fetch_all_collaborators).with(TEST_REPO_NAME1).and_return([TEST_USER_1])
+      expect(helper_module).to receive(:fetch_all_collaborators).with(TEST_REPO_NAME2).and_return([TEST_USER_1, TEST_USER_2])
+      expect(helper_module).not_to receive(:fetch_all_collaborators).with(TEST_REPO_NAME3)
+
+      test_equal(helper_module.get_active_repositories.length, 3)
+    end
+  end
+
+  context "call get_active_repositories_from_github" do
     return_data = File.read("spec/fixtures/repositories.json")
 
     json_query_public_repo = %[
@@ -534,19 +563,13 @@ describe HelperModule do
     end
 
     it "when repositories exist" do
-      # FUT has a loop with tree iterations. Each loop produces these objects.
-      repo1 = GithubCollaborators::Repository.new(TEST_REPO_NAME1, 1)
-      repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME3, 5)
-      repo3 = GithubCollaborators::Repository.new(TEST_REPO_NAME5, 0)
+      # The return_data returns three repositories in each query
       expect(graphql_client).to receive(:run_query).with(json_query_public_repo).and_return(return_data)
       expect(graphql_client).to receive(:run_query).with(json_query_private_repo).and_return(return_data)
       expect(graphql_client).to receive(:run_query).with(json_query_internal_repo).and_return(return_data)
-      # Thus expect these objects to created three times
-      expect(GithubCollaborators::Repository).to receive(:new).with(TEST_REPO_NAME1, 1).and_return(repo1).at_least(3).times
-      expect(GithubCollaborators::Repository).to receive(:new).with(TEST_REPO_NAME3, 5).and_return(repo2).at_least(3).times
-      expect(GithubCollaborators::Repository).to receive(:new).with(TEST_REPO_NAME5, 0).and_return(repo3).at_least(3).times
-      # Thus expects the three iterations to create three objects each to make nine objects in total
-      test_equal(helper_module.get_active_repositories.length, 9)
+
+      # so nine objects in total
+      test_equal(helper_module.get_active_repositories_from_github.length, 9)
     end
 
     return_data_no_repositories =
@@ -568,7 +591,7 @@ describe HelperModule do
       expect(graphql_client).to receive(:run_query).with(json_query_public_repo).and_return(return_data_no_repositories)
       expect(graphql_client).to receive(:run_query).with(json_query_private_repo).and_return(return_data_no_repositories)
       expect(graphql_client).to receive(:run_query).with(json_query_internal_repo).and_return(return_data_no_repositories)
-      test_equal(helper_module.get_active_repositories.length, 0)
+      test_equal(helper_module.get_active_repositories_from_github.length, 0)
     end
   end
 

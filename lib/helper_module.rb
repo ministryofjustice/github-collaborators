@@ -250,9 +250,9 @@ module HelperModule
     found_issues
   end
 
-  # Get full list of Organization user login names
+  # Get full list of Organization member login names
   #
-  # @return [Array<String>] the user login names
+  # @return [Array<String>] the Organization member login names
   def get_all_organisation_members
     module_logger.debug "get_all_organisation_members"
     org_members = []
@@ -274,7 +274,7 @@ module HelperModule
     org_members.sort!
   end
 
-  # Create a GraphQL query that returns the organization user login names
+  # Create a GraphQL query that returns the Organization member login names
   #
   # @param end_cursor [String] id of next page in search results
   # @return [String] the GraphQL query
@@ -653,13 +653,35 @@ module HelperModule
     }
   end
 
-  # Get the Organization repositories and the number of outside collaborators
-  # per repository to create a list of Repository objects for the ones that are
-  # not disabled or archived
+  # Create a list of Repository objects which are not disabled or archived
   #
   # @return [Array<GithubCollaborators::Repository>] list of Repository objects
   def get_active_repositories
     module_logger.debug "get_active_repositories"
+
+    repositories = []
+
+    temp = get_active_repositories_from_github
+    temp.each do |active_repository|
+      repository_name = active_repository[:repository_name]
+      outside_collaborators_count = active_repository[:outside_collaborators_count]
+      repository = GithubCollaborators::Repository.new(repository_name, outside_collaborators_count)
+      if outside_collaborators_count > 0
+        repository_collaborators = fetch_all_collaborators(repository_name)
+        repository.store_collaborators_names(repository_collaborators)
+      end
+      repositories.push(repository)
+    end
+
+    repositories.sort_by { |repository| repository.name }
+  end
+
+  # Get the Organization repositories and the number of outside collaborators
+  # from GitHub
+  #
+  # @return [Array<Hash{repository_name => String, outside_collaborators_count => String}>] list of hash items with the required data
+  def get_active_repositories_from_github
+    module_logger.debug "get_active_repositories_from_github"
     graphql = GithubCollaborators::GithubGraphQlClient.new
     active_repositories = []
     ["public", "private", "internal"].each do |type|
@@ -677,14 +699,14 @@ module HelperModule
             if outside_collaborators_count.nil?
               outside_collaborators_count = 0
             end
-            active_repositories.push(GithubCollaborators::Repository.new(repository_name, outside_collaborators_count))
+            active_repositories.push({repository_name: repository_name, outside_collaborators_count: outside_collaborators_count})
           end
         end
         end_cursor = json_data.dig("data", "search", "pageInfo", "endCursor")
         break unless json_data.dig("data", "search", "pageInfo", "hasNextPage")
       end
     end
-    active_repositories.sort_by { |repo| repo.name }
+    active_repositories
   end
 
   # Get the names of the Organization repositories that are archived

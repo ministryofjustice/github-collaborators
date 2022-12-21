@@ -9,34 +9,25 @@ class GithubCollaborators
     def initialize
       logger.debug "initialize"
 
+      # This is a list of collaborator login names
       @outside_collaborators = get_org_outside_collaborators
 
-      # Grab the Org members
+      # This is a list of Organization member login names
       @organization_members = get_all_organisation_members
 
-      # Grab the Org archived repositories
+      # This is a list of Organization archived repository names
       @archived_repositories = get_archived_repositories
 
-      # Grab the Org repositories
+      # This is a list of Organization repository objects (that are not disabled or archived)
       @repositories = get_active_repositories
 
-      # Get all the outside collaborators from GitHub per repo that has an outside collaborator
-      @repositories.each do |repository|
-        if repository.outside_collaborators_count > 0
-          # Get all of the repository outside collaborators login names
-          repository_collaborators = fetch_all_collaborators(repository.name)
-          # Add collaborators login names to the repository object
-          repository.store_collaborators_names(repository_collaborators)
-        end
-      end
-
-      # Record the number of collaborators found on GitHub
+      # This is the number of Organization outside collaborators
       @github_collaborators = @outside_collaborators.length
 
-      # There are some collaborators who have full Org membership
+      # This is an list of the collaborator names who have full Org membership
       @full_org_members = []
 
-      # Get the all-org members-members team repositories
+      # This is a list of the all-org members-members team repositories
       @all_org_members_team_repositories = get_all_org_members_team_repositories
     end
 

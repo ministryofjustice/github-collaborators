@@ -9,7 +9,6 @@ class GithubCollaborators
         repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 5)
         repo3 = GithubCollaborators::Repository.new(TEST_REPO_NAME3, 0)
         allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
-        allow_any_instance_of(HelperModule).to receive(:fetch_all_collaborators).and_return([TEST_USER_1, TEST_USER_2, TEST_USER_3])
         allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo2, repo3])
         allow_any_instance_of(HelperModule).to receive(:get_archived_repositories).and_return([TEST_REPO_NAME1, TEST_REPO_NAME2])
         allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])

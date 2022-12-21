@@ -478,7 +478,6 @@ class GithubCollaborators
         before do
           expect(terraform_files).to receive(:get_terraform_files).and_return([])
           allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
-          allow_any_instance_of(HelperModule).to receive(:fetch_all_collaborators).and_return([])
           allow_any_instance_of(HelperModule).to receive(:get_archived_repositories).and_return([])
           allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])
           allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([])
@@ -633,7 +632,6 @@ class GithubCollaborators
       context "" do
         before do
           allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
-          allow_any_instance_of(HelperModule).to receive(:fetch_all_collaborators).and_return([])
           allow_any_instance_of(HelperModule).to receive(:get_archived_repositories).and_return([])
           allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])
         end
@@ -775,13 +773,12 @@ class GithubCollaborators
 
       it "call compare_terraform_and_github when repository collaborator lengths are different" do
         repo1 = GithubCollaborators::Repository.new(TEST_REPO_NAME1, 2)
+        repo1.store_collaborators_names([TEST_USER_3, TEST_USER_3])
         repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 0)
         allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
         allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
         allow_any_instance_of(HelperModule).to receive(:get_archived_repositories).and_return([])
         allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
-        allow_any_instance_of(HelperModule).to receive(:fetch_all_collaborators).with(TEST_REPO_NAME1).and_return([TEST_USER_3, TEST_USER_3])
-        allow_any_instance_of(HelperModule).to receive(:fetch_all_collaborators).with(TEST_REPO_NAME2).and_return([])
         allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])
         organization = GithubCollaborators::Organization.new
 
