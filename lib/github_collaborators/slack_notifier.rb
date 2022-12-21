@@ -1,4 +1,6 @@
+# The GithubCollaborators class namespace
 class GithubCollaborators
+  # The SlackNotifier class
   class SlackNotifier
     include Logging
 

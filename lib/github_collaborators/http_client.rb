@@ -1,4 +1,6 @@
+# The GithubCollaborators class namespace
 class GithubCollaborators
+  # The HttpClient class
   class HttpClient
     include Logging
 

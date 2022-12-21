@@ -1,4 +1,6 @@
+# The GithubCollaborators class namespace
 class GithubCollaborators
+  # The GithubGraphQlClient class
   class GithubGraphQlClient
     include Logging
     include Constants

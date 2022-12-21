@@ -1,4 +1,6 @@
+# The GithubCollaborators class namespace
 class GithubCollaborators
+  # The Collaborator class
   class Collaborator
     include Logging
     include Constants

@@ -1,4 +1,6 @@
+# The GithubCollaborators class namespace
 class GithubCollaborators
+  # The Repository class
   class Repository
     include Logging
     attr_reader :name, :outside_collaborators_names, :outside_collaborators_count, :issues

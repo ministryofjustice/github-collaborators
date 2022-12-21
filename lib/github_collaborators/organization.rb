@@ -1,4 +1,6 @@
+# The GithubCollaborators class namespace
 class GithubCollaborators
+  # The Organization class
   class Organization
     include Logging
     include HelperModule

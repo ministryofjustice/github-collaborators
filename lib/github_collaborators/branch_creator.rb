@@ -1,4 +1,6 @@
+# The GithubCollaborators class namespace
 class GithubCollaborators
+  # The BranchCreator class
   class BranchCreator
     include Logging
 

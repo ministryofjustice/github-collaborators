@@ -1,4 +1,6 @@
+# The GithubCollaborators class namespace
 class GithubCollaborators
+  # The TerraformBlock class
   class TerraformBlock
     include Logging
     include HelperModule
@@ -113,6 +115,7 @@ class GithubCollaborators
     end
   end
 
+  # The TerraformFile class
   class TerraformFile
     include Logging
     include HelperModule
@@ -380,6 +383,7 @@ class GithubCollaborators
     end
   end
 
+  # The TerraformFiles class
   class TerraformFiles
     include Logging
     include HelperModule

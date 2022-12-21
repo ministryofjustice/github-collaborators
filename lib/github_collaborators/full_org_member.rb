@@ -1,4 +1,6 @@
+# The GithubCollaborators class namespace
 class GithubCollaborators
+  # The FullOrgMember class
   class FullOrgMember
     include Logging
     include HelperModule
