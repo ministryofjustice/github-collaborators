@@ -1,12 +1,11 @@
-require "test_helper_module"
-require_relative "../lib/github_collaborators"
-
 require "simplecov"
-require "webmock/rspec"
-
 SimpleCov.start do
   add_filter "/spec/"
 end
+
+require "test_helper_module"
+require_relative "../lib/github_collaborators"
+require "webmock/rspec"
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
