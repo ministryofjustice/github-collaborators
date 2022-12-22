@@ -72,5 +72,15 @@ module "yjaf-datateam" {
       added_by     = "Jon Dent jon.dent@justice.gov.uk"
       review_after = "2023-06-07"
     },
+    {
+      github_user  = "craig-ashford-nec"
+      permission   = "admin"
+      name         = "Craig Ashford"
+      email        = "craig.ashford@necsws.com"
+      org          = "NEC SWS"
+      reason       = "New front end developer on YJAF team"
+      added_by     = "Tony Bishop antony.bishop@digital.justice.gov.uk"
+      review_after = "2023-02-07"
+    },
   ]
 }
