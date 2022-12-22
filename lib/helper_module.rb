@@ -14,7 +14,7 @@ module HelperModule
   # Collect the issues from a repository on GitHub
   #
   # @param repository [String] name of the repository
-  # @return [JSON] the issues in json format
+  # @return [Array<Hash{login => String, title => String, assignees => [Array<String>], number => Numeric}>] the issues in json format
   def get_issues_from_github(repository)
     module_logger.debug "get_issues_from_github"
     url = "#{GH_API_URL}/#{repository.downcase}/issues"
