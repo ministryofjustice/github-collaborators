@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require_relative "../lib/github_collaborators"
-include HelperModule
 
 puts "Start"
 
