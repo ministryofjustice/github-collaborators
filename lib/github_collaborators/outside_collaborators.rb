@@ -12,7 +12,7 @@ class GithubCollaborators
       # Collects the Terraform files and collaborators
       @terraform_files = GithubCollaborators::TerraformFiles.new
 
-      # Array[<GithubCollaborators::Collaborator>]
+      # [Array<GithubCollaborators::Collaborator>]
       @collaborators = []
 
       # Create Collaborator objects based on the collaborators within the Terraform files
@@ -36,7 +36,7 @@ class GithubCollaborators
       @organization.create_full_org_members(@collaborators)
 
       # An array to store collaborators login names that are defined in Terraform but are not on GitHub
-      # Array[Hash{login => String, repository => String}]
+      # [Array<Hash{login => String, repository => String}>]
       @unknown_collaborators_on_github = []
     end
 
@@ -173,7 +173,7 @@ class GithubCollaborators
 
     # Call the function to raise a GitHub issue for collaborator whose review date have
     # an expiry within one month
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
     def is_renewal_within_one_month(collaborators)
       logger.debug "is_renewal_within_one_month"
       collaborators.each do |collaborator|
@@ -192,7 +192,7 @@ class GithubCollaborators
     # Call the functions to remove collaborators from Terraform file/s whose review date have
     # expired and then call the function to raise a Slack message with the collaborators that
     # were modified
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
     def remove_expired_collaborators(collaborators)
       logger.debug "remove_expired_collaborators"
 
@@ -211,7 +211,7 @@ class GithubCollaborators
     # Call the functions to remove collaborators from Terraform file/s who are full Organization
     # members whose review date has expired then call the function to raise a Slack message
     # with the collaborators that were modified
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
     def remove_expired_full_org_members(collaborators)
       logger.debug "remove_expired_full_org_members"
 
@@ -229,7 +229,7 @@ class GithubCollaborators
     # Call the functions to extend the review date for collaborators who are also full
     # Organization members in the Terraform file/s then call the function to raise a
     # Slack message with the collaborators that were modified
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
     def extend_full_org_member_review_date(collaborators)
       logger.debug "extend_full_org_member_review_date"
 
@@ -246,7 +246,7 @@ class GithubCollaborators
 
     # Find the collaborators whose review date has expired then call
     # the functions to remove the collaborator from the Terraform file/s
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
     def has_review_date_expired(collaborators)
       logger.debug "has_review_date_expired"
       all_collaborators = find_collaborators_who_have_expired(collaborators)
@@ -256,7 +256,7 @@ class GithubCollaborators
 
     # Find the collaborators whose review date expires within the week
     # then call the functions that extend the date in the Terraform file/s
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
     def is_review_date_within_a_week(collaborators)
       logger.debug "is_review_date_within_a_week"
       collaborators_who_expire_soon = find_collaborators_who_expire_soon(collaborators)
@@ -266,7 +266,7 @@ class GithubCollaborators
 
     # Call the functions to extend the review date in Terraform file/s for collaborators then call
     # the function to raise a Slack message with collaborators that were modified
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
     def extend_collaborators_review_date(collaborators)
       logger.debug "extend_collaborators_review_date"
 
@@ -282,8 +282,8 @@ class GithubCollaborators
     end
 
     # Find and return a list of collaborators whose review date expires within a week
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
-    # @return Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @return [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
     def find_collaborators_who_expire_soon(collaborators)
       logger.debug "find_collaborators_who_expire_soon"
       collaborators_who_expire_soon = []
@@ -301,8 +301,8 @@ class GithubCollaborators
     end
 
     # Find and return a list of collaborators whose review date has passed
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
-    # @return Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @return [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
     def find_collaborators_who_have_expired(collaborators)
       logger.debug "find_collaborators_who_have_expired"
       collaborators_who_have_expired = []
@@ -321,8 +321,8 @@ class GithubCollaborators
 
     # Call the functions to extend the review date in Terraform file/s for collaborators
     # then call the functions to create a new pull request on GitHub
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
-    # @return Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects that were extended
+    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @return [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects that were extended
     def extend_date(collaborators)
       logger.debug "extend_date"
       collaborators_for_slack_message = []
@@ -441,8 +441,8 @@ class GithubCollaborators
 
     # Call the functions to remove a collaborator from Terraform file/s
     # then call the functions to create a new pull request on GitHub
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects
-    # @return Array[<GithubCollaborators::Collaborator>] a list of Collaborator objects that were removed
+    # @param expired_collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
+    # @return [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects that were removed
     def remove_collaborator(expired_collaborators)
       logger.debug "remove_collaborator"
 
@@ -484,7 +484,7 @@ class GithubCollaborators
     # Call the functions to modify the access permission to a repository within the
     # Terraform file/s then call the functions to create a new pull request on GitHub
     # @param collaborator_name [String] the login name of the collaborator
-    # @param repositories [Array[Hash{ permission => String, repository_name => String }]] A list of hash objects containing the repositories and the permission to be used
+    # @param repositories [Array<Hash{ permission => String, repository_name => String }>] A list of hash objects containing the repositories and the permission to be used
     def change_collaborator_permission(collaborator_name, repositories)
       logger.debug "change_collaborator_permission"
 
@@ -621,7 +621,7 @@ class GithubCollaborators
     # Call the functions to create an issue on a repository that has an
     # unknown collaborator then remove that collaborator from the repository
     # after raise a Slack message with the collaborators that were removed
-    # @param collaborators Array[<GithubCollaborators::Collaborator>] a list of collaborator objects
+    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of collaborator objects
     def remove_unknown_collaborators(collaborators)
       logger.debug "remove_unknown_collaborators"
       removed_outside_collaborators = []

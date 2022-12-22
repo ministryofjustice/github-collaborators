@@ -211,7 +211,7 @@ class GithubCollaborators
 
     # Returns the issues from a specific repository object
     # @param repository_name [String] the repository name
-    # @return issues [Array<Hash{login => String, title => String, assignees => [Array<String>], number => Numeric}>] the issues
+    # @return [Array<Hash{login => String, title => String, assignees => [Array<String>], number => Numeric}>] the issues
     def read_repository_issues(repository_name)
       logger.debug "read_repository_issues"
       @repositories.each do |repository|
