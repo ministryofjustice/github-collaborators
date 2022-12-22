@@ -105,15 +105,15 @@ class GithubCollaborators
           end
 
           it "call change_collaborator_permission_in_file" do
-            @terraform_files.change_collaborator_permission_in_file(TEST_USER_1, TEST_REPO_NAME, "pull")
+            @terraform_files.change_collaborator_permission_in_file(TEST_REPO_NAME, TEST_USER_1, "pull")
             modified_file = File.read(TEST_FILE)
             test_not_equal(modified_file, original_file)
           end
 
-          it "call add_collaborator_to_file" do
+          it "call add_full_org_collaborator_to_file" do
             terraform_block = create_terraform_block_review_date_today
             collaborator = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
-            @terraform_files.add_collaborator_to_file(collaborator, TEST_REPO_NAME, "pull")
+            @terraform_files.add_full_org_collaborator_to_file(TEST_REPO_NAME, collaborator, "pull")
             terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
             terraform_file.create_terraform_collaborator_blocks
             collaborators_in_file = []

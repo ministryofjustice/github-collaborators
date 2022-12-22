@@ -158,4 +158,40 @@ module Constants
 
   # Days in a week
   WEEK = 7
+
+  # A map of the expected items of a TerraformBlock within a Terraform file
+  REQUIRED_ATTRIBUTES = {
+    "github_user" => "Collaborator username is missing", # USERNAME_MISSING
+    "permission" => "Collaborator permission is missing", # PERMISSION_MISSING
+    "name" => "Collaborator name is missing", # NAME_MISSING
+    "email" => "Collaborator email is missing", # EMAIL_MISSING
+    "org" => "Collaborator organisation is missing", # ORGANISATION_MISSING
+    "reason" => "Collaborator reason is missing", # REASON_MISSING
+    "added_by" => "Person who added this collaborator is missing", # ADDED_BY_MISSING
+    "review_after" => "Collaboration review date is missing" # REVIEW_DATE_MISSING
+  }
+
+  # Line offset number
+  USERNAME = 0
+
+  # Line offset number
+  PERMISSION = 1
+
+  # Line offset number
+  NAME = 2
+
+  # Line offset number
+  EMAIL = 3
+
+  # Line offset number
+  ORG_LINE = 4
+
+  # Line offset number
+  REASON = 5
+
+  # Line offset number
+  ADDED_BY = 6
+
+  # Line offset number
+  REVIEW_AFTER = 7
 end

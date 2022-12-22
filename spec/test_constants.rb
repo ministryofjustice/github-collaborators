@@ -42,6 +42,7 @@ module TestConstants
   WHEN_NO_COLLABORATORS_PASSED_IN = "when no collaborator is passed in"
   WHEN_COLLABORATOR_FULL_ORG_MEMBER = "when collaborator is a full org collaborator"
   WHEN_COLLABORATOR_NOT_FULL_ORG_MEMBER = "when collaborator is not a full org collaborator"
+  WHEN_PULL_REQUEST_DOESNT_EXIST = "when pull request doesn't exist"
   GRACE_PERIOD_OKAY = (Date.today - 45).strftime(DATE_FORMAT)
   GRACE_PERIOD_EXPIRED = (Date.today - 46).strftime(DATE_FORMAT)
   OPEN = "open"

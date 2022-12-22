@@ -498,7 +498,7 @@ class GithubCollaborators
         # No pull request exists, modify the file/s
         repository_name = repository[:repository_name].downcase
         @terraform_files.ensure_file_exists_in_memory(repository_name)
-        @terraform_files.change_collaborator_permission_in_file(collaborator_name, repository_name, repository[:permission])
+        @terraform_files.change_collaborator_permission_in_file(repository_name, collaborator_name, repository[:permission])
         edited_files.push("terraform/#{repository_name}.tf")
       end
 
@@ -530,7 +530,7 @@ class GithubCollaborators
         @terraform_files.ensure_file_exists_in_memory(repository_name)
         # Get the github permission for that repository
         repository_permission = collaborator.get_repository_permission(repository_name)
-        @terraform_files.add_collaborator_to_file(collaborator, repository_name, repository_permission)
+        @terraform_files.add_full_org_collaborator_to_file(repository_name, collaborator, repository_permission)
         edited_files.push("terraform/#{repository_name}.tf")
 
         # Add repository name to this array because related Terraform file is not on the main

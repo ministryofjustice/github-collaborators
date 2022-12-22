@@ -10,8 +10,6 @@ class GithubCollaborators
     let(:unkown_collaborators_slack_message) { double(GithubCollaborators::UnknownCollaborators) }
     let(:removed_collaborators_slack_message) { double(GithubCollaborators::Removed) }
 
-    WHEN_PULL_REQUEST_DOESNT_EXIST = "when pull request doesn't exist"
-
     # The tests below are nested. This is to reduce code duplication.
     # This is because it take alot of object to create the object under test.
     # The before do blocks contain expectations that are common within
@@ -193,9 +191,9 @@ class GithubCollaborators
             ]
             allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(false)
             expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(REPOSITORY_NAME).at_least(3).times
-            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "push")
-            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "admin")
-            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "pull")
+            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(REPOSITORY_NAME, TEST_USER_2, "push")
+            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(REPOSITORY_NAME, TEST_USER_2, "admin")
+            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(REPOSITORY_NAME, TEST_USER_2, "pull")
             allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{MODIFY_COLLABORATORS_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_PERMISSION)
             expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
             @outside_collaborators.change_collaborator_permission(TEST_USER_2, repositories)
@@ -211,8 +209,8 @@ class GithubCollaborators
             expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(true)
             expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}").and_return(false)
             expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(REPOSITORY_NAME).at_least(2).times
-            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "push")
-            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(TEST_USER_2, REPOSITORY_NAME, "pull")
+            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(REPOSITORY_NAME, TEST_USER_2, "push")
+            expect(terraform_files).to receive(:change_collaborator_permission_in_file).with(REPOSITORY_NAME, TEST_USER_2, "pull")
             allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{MODIFY_COLLABORATORS_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH], "#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_PERMISSION)
             expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{CHANGE_PERMISSION_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
             @outside_collaborators.change_collaborator_permission(TEST_USER_2, repositories)
@@ -241,7 +239,7 @@ class GithubCollaborators
               expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}").and_return(false)
               expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(TEST_REPO_NAME)
               expect(@full_org_member).to receive(:get_repository_permission).with(TEST_REPO_NAME).and_return("triage")
-              expect(terraform_files).to receive(:add_collaborator_to_file).with(@full_org_member, TEST_REPO_NAME, "triage")
+              expect(terraform_files).to receive(:add_full_org_collaborator_to_file).with(TEST_REPO_NAME, @full_org_member, "triage")
               expect(@full_org_member).to receive(:add_ignore_repository).with(TEST_REPO_NAME)
               allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{ADD_COLLABORATOR_BRANCH_NAME}#{TEST_USER_1}", [TEST_FILE], "#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}", TEST_USER_1, TYPE_ADD)
               expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}", [TEST_FILE])

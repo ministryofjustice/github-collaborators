@@ -78,7 +78,7 @@ class GithubCollaborators
         test_equal(@terraform_block.review_after, @review_date)
       end
 
-      it "call copy_block" do
+      it "call revert_block" do
         @terraform_block.add_terraform_file_collaborator_data({})
         check_terraform_block_empty(@terraform_block)
         terraform_block2 = GithubCollaborators::TerraformBlock.new
@@ -91,7 +91,7 @@ class GithubCollaborators
         test_equal(terraform_block2.reason, REASON2)
         test_equal(terraform_block2.added_by, ADDED_BY_EMAIL)
         test_equal(terraform_block2.review_after, @review_date)
-        terraform_block2.copy_block(@terraform_block)
+        terraform_block2.revert_block(@terraform_block)
         check_terraform_block_empty(terraform_block2)
       end
     end
