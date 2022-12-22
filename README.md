@@ -146,7 +146,7 @@ Output the names of all current (i.e. excluding deleted/archived/locked) MoJ Git
 
 Yard is used for documentation. It creates a html report within the `doc` folder:
 
-``` 
+```
 gem install yard
 yardoc 'lib/**/*.rb'
 ```
@@ -155,7 +155,7 @@ yardoc 'lib/**/*.rb'
 
 Install `bundler` (`gem install bundler`) then run `bundle install` to install the dependencies.
 
-To run the unit tests use `bundle exec rspec` or `rspec`. 
+To run the unit tests use `bundle exec rspec` or `rspec`.
 
 `rspec` will generate a code coverage report using simplecov and create a `coverage` folder. Open the report using `open coverage/index.html`
 
