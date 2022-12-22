@@ -443,7 +443,7 @@ describe HelperModule do
   end
 
   context "call get_active_repositories" do
-    it "when repositories exist" do
+    it "when no repositories exist" do
       expect(helper_module).to receive(:get_active_repositories_from_github).and_return([])
       test_equal(helper_module.get_active_repositories.length, 0)
     end
