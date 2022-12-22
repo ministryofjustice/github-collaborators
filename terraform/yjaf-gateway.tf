@@ -54,7 +54,7 @@ module "yjaf-gateway" {
     },
     {
       github_user  = "craig-ashford-nec"
-      permission   = "maintain"
+      permission   = "admin"
       name         = "Craig Ashford"
       email        = "craig.ashford@necsws.com"
       org          = "NEC SWS"
