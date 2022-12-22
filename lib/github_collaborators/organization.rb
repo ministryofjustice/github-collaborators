@@ -194,6 +194,34 @@ class GithubCollaborators
       return_list
     end
 
+    # Call the function to get the issues for a repository from
+    # GitHub and add them to the repository object
+    # @param repositories [Array<String>] the repository names
+    def get_repository_issues_from_github(repositories)
+      logger.debug "get_repository_issues_from_github"
+      repositories.each do |repository_name|
+        @repositories.each do |org_repository|
+          if org_repository.name == repository_name
+            issues = get_issues_from_github(repository_name)
+            org_repository.add_issues(issues)
+          end
+        end
+      end
+    end
+
+    # Returns the issues from a specific repository object
+    # @param repository_name [String] the repository name
+    # @return issues [Array<Hash{login => String, title => String, assignees => [Array<String>], number => Numeric}>] the issues
+    def read_repository_issues(repository_name)
+      logger.debug "read_repository_issues"
+      @repositories.each do |repository|
+        if repository.name == repository_name
+          return repository.issues
+        end
+      end
+      []
+    end
+
     private
 
     # Adds a new full Organization member if it doesn't already exist

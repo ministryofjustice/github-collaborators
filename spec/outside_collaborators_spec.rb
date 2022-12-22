@@ -372,7 +372,7 @@ class GithubCollaborators
         it "when collaborator array is empty" do
           expect(terraform_files).to receive(:get_terraform_files).and_return([])
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-          expect(outside_collaborators).to receive(:get_repository_issues_from_github).with([])
+          expect(organization).to receive(:get_repository_issues_from_github).with([])
           expect(outside_collaborators).to receive(:is_review_date_within_a_week).with([])
           expect(outside_collaborators).to receive(:is_renewal_within_one_month).with([])
           expect(outside_collaborators).to receive(:remove_unknown_collaborators).with([])
@@ -391,7 +391,7 @@ class GithubCollaborators
           expect(file).to receive(:get_terraform_blocks).and_return([block1])
 
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-          expect(outside_collaborators).to receive(:get_repository_issues_from_github).with([TEST_REPO_NAME_EXPIRED_USER])
+          expect(organization).to receive(:get_repository_issues_from_github).with([TEST_REPO_NAME_EXPIRED_USER])
           expect(outside_collaborators).to receive(:is_review_date_within_a_week).with([instance_of(GithubCollaborators::Collaborator)])
           expect(outside_collaborators).to receive(:is_renewal_within_one_month).with([instance_of(GithubCollaborators::Collaborator)])
           expect(outside_collaborators).to receive(:remove_unknown_collaborators).with([instance_of(GithubCollaborators::Collaborator)])
@@ -598,7 +598,7 @@ class GithubCollaborators
         before do
           expect(terraform_files).to receive(:get_terraform_files).and_return([])
           @outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-          expect(@outside_collaborators).to receive(:read_repository_issues).with(REPOSITORY_NAME).and_return([])
+          expect(organization).to receive(:read_repository_issues).with(REPOSITORY_NAME).and_return([])
         end
 
         it "when collaborator issue is not renewal within a month" do
@@ -649,93 +649,6 @@ class GithubCollaborators
 
         repo1 = GithubCollaborators::Repository.new(TEST_REPO_NAME1, 0)
         repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 0)
-
-        context "call get_repository_issues_from_github" do
-          before do
-            allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
-            expect(terraform_files).to receive(:get_terraform_files).and_return([])
-          end
-
-          context "" do
-            before do
-              allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([])
-              organization = GithubCollaborators::Organization.new
-              expect(GithubCollaborators::Organization).to receive(:new).and_return(organization)
-              @outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-            end
-
-            it "when no repositories are passed in" do
-              @outside_collaborators.get_repository_issues_from_github([])
-            end
-
-            it "when repositories are passed in but no org repositories exist" do
-              @outside_collaborators.get_repository_issues_from_github([TEST_REPO_NAME1, TEST_REPO_NAME2])
-            end
-          end
-
-          context "" do
-            before do
-              allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
-              organization = GithubCollaborators::Organization.new
-              expect(GithubCollaborators::Organization).to receive(:new).and_return(organization)
-              @outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-            end
-
-            it "when org repositories and repositories passed in exist but do not match" do
-              @outside_collaborators.get_repository_issues_from_github([TEST_REPO_NAME3, TEST_REPO_NAME4])
-            end
-
-            it "when org repositories and repositories passed in exist and match" do
-              allow_any_instance_of(HelperModule).to receive(:get_issues_from_github).with(TEST_REPO_NAME1).and_return([])
-              @outside_collaborators.get_repository_issues_from_github([TEST_REPO_NAME3, TEST_REPO_NAME1])
-            end
-          end
-        end
-
-        context "call read_repository_issues" do
-          before do
-            allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
-            expect(terraform_files).to receive(:get_terraform_files).and_return([])
-          end
-
-          it "when no org repositories exist" do
-            allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([])
-            organization = GithubCollaborators::Organization.new
-            expect(GithubCollaborators::Organization).to receive(:new).and_return(organization)
-            outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-            issues = outside_collaborators.read_repository_issues([TEST_REPO_NAME1])
-            test_equal(issues, [])
-          end
-
-          context "" do
-            before do
-              allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
-              @organization = GithubCollaborators::Organization.new
-              expect(GithubCollaborators::Organization).to receive(:new).and_return(@organization)
-              @outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-            end
-
-            it "when org repositories exist but does not match function parameter" do
-              issues = @outside_collaborators.read_repository_issues(TEST_REPO_NAME3)
-              test_equal(issues, [])
-            end
-
-            it "when org repositories exist and match function parameter but no issues exist" do
-              allow_any_instance_of(HelperModule).to receive(:get_issues_from_github).with(TEST_REPO_NAME1).and_return([])
-              @outside_collaborators.get_repository_issues_from_github([])
-              issues = @outside_collaborators.read_repository_issues(TEST_REPO_NAME1)
-              test_equal(issues, [])
-            end
-
-            it "when org repositories exist and match function parameter but no issues exist" do
-              issue = %([{"assignee": { "login":#{TEST_USER}}, "title": #{COLLABORATOR_EXPIRES_SOON}, "assignees": [{"login":#{TEST_USER} }]}])
-              allow_any_instance_of(HelperModule).to receive(:get_issues_from_github).with(TEST_REPO_NAME1).and_return([issue])
-              @outside_collaborators.get_repository_issues_from_github([TEST_REPO_NAME3, TEST_REPO_NAME1])
-              issues = @outside_collaborators.read_repository_issues(TEST_REPO_NAME1)
-              test_equal(issues, [issue])
-            end
-          end
-        end
 
         context "call compare_terraform_and_github with a repo that has no collaborators" do
           it "when no collaborators exist" do
