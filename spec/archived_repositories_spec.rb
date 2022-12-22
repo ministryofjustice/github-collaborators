@@ -1,4 +1,6 @@
 class GithubCollaborators
+  include TestConstants
+
   describe ArchivedRepositories do
     context "test ArchivedRepositories" do
       subject(:archived_repositories) { described_class.new }

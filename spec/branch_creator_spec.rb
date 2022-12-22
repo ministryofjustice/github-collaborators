@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   class Branch
     attr_reader :name
     def initialize(branch_name)

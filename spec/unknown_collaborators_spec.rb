@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe UnknownCollaborators do
     context "test UnknownCollaborators" do
       subject(:unknown_collaborator) { described_class.new }

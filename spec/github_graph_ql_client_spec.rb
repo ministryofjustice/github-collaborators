@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe GithubGraphQlClient do
     before {
       allow_any_instance_of(GithubCollaborators::GithubGraphQlClient).to receive(:sleep)

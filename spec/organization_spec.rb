@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe Organization do
     context "test organization" do
       before do
@@ -160,16 +163,15 @@ class GithubCollaborators
           end
         end
 
-        terraform_block = create_collaborator_with_login(TEST_USER_1)
-        collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
-        terraform_block = create_collaborator_with_login(TEST_USER_2)
-        collaborator2 = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
-        terraform_block = create_collaborator_with_login(TEST_USER_3)
-        collaborator3 = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
-
         context "" do
           before do
             allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:get_full_org_member_repositories)
+            terraform_block = create_collaborator_with_login(TEST_USER_1)
+            @collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
+            terraform_block = create_collaborator_with_login(TEST_USER_2)
+            @collaborator2 = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
+            terraform_block = create_collaborator_with_login(TEST_USER_3)
+            @collaborator3 = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
           end
 
           context "" do
@@ -180,7 +182,7 @@ class GithubCollaborators
             end
 
             it "call create_full_org_members when collaborators are not org members" do
-              @organization.create_full_org_members([collaborator1, collaborator2, collaborator3])
+              @organization.create_full_org_members([@collaborator1, @collaborator2, @collaborator3])
               test_equal(@organization.full_org_members.length, 0)
             end
 
@@ -209,14 +211,14 @@ class GithubCollaborators
             it "when collaborators are org members and names are the same" do
               allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1])
               organization = GithubCollaborators::Organization.new
-              organization.create_full_org_members([collaborator1, collaborator1, collaborator1])
+              organization.create_full_org_members([@collaborator1, @collaborator1, @collaborator1])
               test_equal(organization.full_org_members.length, 1)
             end
 
             it "when collaborators are org members and names are different" do
               allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2, TEST_USER_3])
               organization = GithubCollaborators::Organization.new
-              organization.create_full_org_members([collaborator1, collaborator2, collaborator3])
+              organization.create_full_org_members([@collaborator1, @collaborator2, @collaborator3])
               test_equal(organization.full_org_members.length, 3)
             end
           end
@@ -225,7 +227,7 @@ class GithubCollaborators
             before do
               allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([TEST_USER_1, TEST_USER_2, TEST_USER_3])
               @organization = GithubCollaborators::Organization.new
-              @organization.create_full_org_members([collaborator1, collaborator2, collaborator3])
+              @organization.create_full_org_members([@collaborator1, @collaborator2, @collaborator3])
               test_equal(@organization.full_org_members.length, 3)
             end
 

@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   TEST_TITLE = "call post_slack_message when have a collaborator"
   describe SlackNotifier do
     context "test SlackNotifier" do

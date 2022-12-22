@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe HttpClient do
     context "test HttpClient" do
       subject(:hc) { described_class.new }

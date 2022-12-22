@@ -1,7 +1,9 @@
-include Constants
+require "date"
+require_relative "../lib/constants"
 
 # Strings used within the tests
 module TestConstants
+  include Constants
   TEST_COLLABORATOR_NAME = "some user"
   TEST_COLLABORATOR_LOGIN = "someuser"
   TEST_COLLABORATOR_EMAIL = "someuser@some-email.com"

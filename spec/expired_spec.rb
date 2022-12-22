@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe Expired do
     context "test Expired" do
       subject(:expired) { described_class.new }

@@ -1,18 +1,12 @@
+require "test_helper_module"
+require_relative "../lib/github_collaborators"
+
 require "simplecov"
+require "webmock/rspec"
+
 SimpleCov.start do
   add_filter "/spec/"
 end
-
-require "webmock/rspec"
-require_relative "../lib/github_collaborators"
-require_relative "../lib/constants"
-require_relative "./test_constants"
-require_relative "./test_helpers"
-
-include HelperModule
-include Constants
-include TestConstants
-include Helpers
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
@@ -96,4 +90,6 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
+
+  config.include TestHelpers
 end

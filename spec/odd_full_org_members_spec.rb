@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe OddFullOrgMembers do
     context "test OddFullOrgMembers" do
       subject(:odd_collaborator) { described_class.new }

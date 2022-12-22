@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe TerraformFile do
     context "test TerraformFile" do
       original_file = File.read("spec/fixtures/test-repo.tf")

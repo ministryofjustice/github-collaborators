@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe TerraformBlock do
     context "test TerraformBlock" do
       before do

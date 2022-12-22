@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe Repository do
     context "test repository" do
       subject(:repository) { described_class.new(REPOSITORY_NAME, 4) }

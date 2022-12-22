@@ -3,6 +3,7 @@ class GithubCollaborators
   # The BranchCreator class
   class BranchCreator
     include Logging
+    include Constants
 
     def initialize
       logger.debug "initialize"

@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe OutsideCollaborators do
     let(:terraform_files) { double(GithubCollaborators::TerraformFiles) }
     let(:odd_full_org_slack_message) { double(GithubCollaborators::OddFullOrgMembers) }
@@ -16,25 +19,6 @@ class GithubCollaborators
     # the nested context block. Therefore consider the top level and
     # nested context block when reading the test code.
 
-    terraform_block = create_terraform_block_review_date_yesterday
-    expired_collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-    expired_collaborator.check_for_issues
-
-    terraform_block = create_terraform_block_review_date_less_than_week
-    collaborator_expires_this_week = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-    collaborator_expires_this_week.check_for_issues
-
-    terraform_block = create_terraform_block_review_date_less_than_month
-    collaborator_expires_soon = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-    collaborator_expires_soon.check_for_issues
-
-    terraform_block = create_terraform_block_review_date_more_than_month
-    collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-    collaborator1.check_for_issues
-
-    terraform_block = create_collaborator_with_login(TEST_USER_2)
-    collaborator2 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-
     context "test outside_collaborators" do
       let(:organization) { double(GithubCollaborators::Organization) }
       before do
@@ -42,6 +26,24 @@ class GithubCollaborators
         expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
         expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
         expect(organization).to receive(:create_full_org_members)
+        terraform_block = create_terraform_block_review_date_yesterday
+        @expired_collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+        @expired_collaborator.check_for_issues
+
+        terraform_block = create_terraform_block_review_date_less_than_week
+        @collaborator_expires_this_week = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+        @collaborator_expires_this_week.check_for_issues
+
+        terraform_block = create_terraform_block_review_date_less_than_month
+        @collaborator_expires_soon = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+        @collaborator_expires_soon.check_for_issues
+
+        terraform_block = create_terraform_block_review_date_more_than_month
+        @collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+        @collaborator1.check_for_issues
+
+        terraform_block = create_collaborator_with_login(TEST_USER_2)
+        @collaborator2 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
       end
 
       context "" do
@@ -90,37 +92,37 @@ class GithubCollaborators
         end
 
         it "call has_review_date_expired" do
-          expect(@outside_collaborators).to receive(:find_collaborators_who_have_expired).with([collaborator1]).and_return([collaborator1])
-          expect(@outside_collaborators).to receive(:remove_expired_collaborators).with([collaborator1])
-          expect(@outside_collaborators).to receive(:remove_expired_full_org_members).with([collaborator1])
-          @outside_collaborators.has_review_date_expired([collaborator1])
+          expect(@outside_collaborators).to receive(:find_collaborators_who_have_expired).with([@collaborator1]).and_return([@collaborator1])
+          expect(@outside_collaborators).to receive(:remove_expired_collaborators).with([@collaborator1])
+          expect(@outside_collaborators).to receive(:remove_expired_full_org_members).with([@collaborator1])
+          @outside_collaborators.has_review_date_expired([@collaborator1])
         end
 
         it "call is_review_date_within_a_week" do
-          expect(@outside_collaborators).to receive(:find_collaborators_who_expire_soon).with([collaborator1]).and_return([collaborator1])
-          expect(@outside_collaborators).to receive(:extend_collaborators_review_date).with([collaborator1])
-          expect(@outside_collaborators).to receive(:extend_full_org_member_review_date).with([collaborator1])
-          @outside_collaborators.is_review_date_within_a_week([collaborator1])
+          expect(@outside_collaborators).to receive(:find_collaborators_who_expire_soon).with([@collaborator1]).and_return([@collaborator1])
+          expect(@outside_collaborators).to receive(:extend_collaborators_review_date).with([@collaborator1])
+          expect(@outside_collaborators).to receive(:extend_full_org_member_review_date).with([@collaborator1])
+          @outside_collaborators.is_review_date_within_a_week([@collaborator1])
         end
 
         it "call find_collaborators_who_expire_soon when collaborator doesn't have the issue" do
-          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_expire_soon([collaborator1])
+          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_expire_soon([@collaborator1])
           test_equal(expire_soon_collaborators.length, 0)
         end
 
         it "call find_collaborators_who_expire_soon when collaborator has the issue" do
-          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_expire_soon([collaborator_expires_this_week])
-          test_equal(expire_soon_collaborators, [collaborator_expires_this_week])
+          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_expire_soon([@collaborator_expires_this_week])
+          test_equal(expire_soon_collaborators, [@collaborator_expires_this_week])
         end
 
         it "call find_collaborators_who_have_expired when collaborator doesn't have the issue" do
-          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_have_expired([collaborator1])
+          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_have_expired([@collaborator1])
           test_equal(expire_soon_collaborators.length, 0)
         end
 
         it "call find_collaborators_who_have_expired when collaborator has the issue" do
-          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_have_expired([expired_collaborator])
-          test_equal(expire_soon_collaborators, [expired_collaborator])
+          expire_soon_collaborators = @outside_collaborators.find_collaborators_who_have_expired([@expired_collaborator])
+          test_equal(expire_soon_collaborators, [@expired_collaborator])
         end
 
         context "call extend_date" do
@@ -132,7 +134,7 @@ class GithubCollaborators
           it "when pull request exists" do
             allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(true)
             allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}").and_return(true)
-            extended_collaborators = @outside_collaborators.extend_date([collaborator1, collaborator_expires_soon, collaborator2])
+            extended_collaborators = @outside_collaborators.extend_date([@collaborator1, @collaborator_expires_soon, @collaborator2])
             test_equal(extended_collaborators.length, 0)
           end
 
@@ -145,7 +147,7 @@ class GithubCollaborators
             allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{UPDATE_REVIEW_DATE_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH], "#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_EXTEND)
             expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
             expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{EXTEND_REVIEW_DATE_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH])
-            extended_collaborators = @outside_collaborators.extend_date([collaborator1, collaborator_expires_soon, collaborator2])
+            extended_collaborators = @outside_collaborators.extend_date([@collaborator1, @collaborator_expires_soon, @collaborator2])
             test_equal(extended_collaborators.length, 3)
           end
         end
@@ -159,7 +161,7 @@ class GithubCollaborators
           it "when pull request exists" do
             allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}").and_return(true)
             allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_TERRAFORM_FILE, "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}").and_return(true)
-            removed_collaborators = @outside_collaborators.remove_collaborator([collaborator1, collaborator_expires_soon, collaborator2])
+            removed_collaborators = @outside_collaborators.remove_collaborator([@collaborator1, @collaborator_expires_soon, @collaborator2])
             test_equal(removed_collaborators.length, 0)
           end
 
@@ -172,7 +174,7 @@ class GithubCollaborators
             allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME}#{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH], "#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}", TEST_USER_2, TYPE_REMOVE)
             expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH, TEST_TERRAFORM_FILE_FULL_PATH])
             expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{REMOVE_EXPIRED_COLLABORATOR_PR_TITLE} #{TEST_USER_2}", [TEST_TERRAFORM_FILE_FULL_PATH])
-            removed_collaborators = @outside_collaborators.remove_collaborator([collaborator1, collaborator_expires_soon, collaborator2])
+            removed_collaborators = @outside_collaborators.remove_collaborator([@collaborator1, @collaborator_expires_soon, @collaborator2])
             test_equal(removed_collaborators.length, 3)
           end
         end
@@ -405,12 +407,12 @@ class GithubCollaborators
 
         it "when full org member not in terraform file" do
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-          expect(organization).to receive(:get_full_org_members_not_in_terraform_file).and_return([collaborator1])
+          expect(organization).to receive(:get_full_org_members_not_in_terraform_file).and_return([@collaborator1])
           expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([])
           expect(organization).to receive(:get_odd_full_org_members).and_return([])
           expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([])
 
-          expect(outside_collaborators).to receive(:add_collaborator).with(collaborator1)
+          expect(outside_collaborators).to receive(:add_collaborator).with(@collaborator1)
           expect(outside_collaborators).not_to receive(:change_collaborator_permission)
           expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
           outside_collaborators.full_org_members_check
@@ -494,16 +496,16 @@ class GithubCollaborators
 
           it "when collaborator is defined in terraform" do
             expect(slack_notififer).not_to receive(:post_slack_message)
-            @outside_collaborators.remove_unknown_collaborators([collaborator1])
+            @outside_collaborators.remove_unknown_collaborators([@collaborator1])
           end
 
           it "when collaborator is not defined in terraform" do
-            collaborator1.add_issue(MISSING)
+            @collaborator1.add_issue(MISSING)
             allow_any_instance_of(HelperModule).to receive(:create_unknown_collaborator_issue).with(TEST_COLLABORATOR_LOGIN, REPOSITORY_NAME)
             allow_any_instance_of(HelperModule).to receive(:remove_access).with(REPOSITORY_NAME, TEST_COLLABORATOR_LOGIN)
-            expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::Removed), [collaborator1]).and_return(removed_collaborators_slack_message)
+            expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::Removed), [@collaborator1]).and_return(removed_collaborators_slack_message)
             expect(removed_collaborators_slack_message).to receive(:post_slack_message)
-            @outside_collaborators.remove_unknown_collaborators([collaborator1])
+            @outside_collaborators.remove_unknown_collaborators([@collaborator1])
           end
         end
 
@@ -514,17 +516,17 @@ class GithubCollaborators
           end
 
           it WHEN_COLLABORATOR_FULL_ORG_MEMBER do
-            expect(@organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(true)
+            expect(@organization).to receive(:is_collaborator_an_org_member).with(@collaborator1.login).and_return(true)
             expect(@outside_collaborators).not_to receive(:extend_date)
-            @outside_collaborators.extend_collaborators_review_date([collaborator1])
+            @outside_collaborators.extend_collaborators_review_date([@collaborator1])
           end
 
           it WHEN_COLLABORATOR_NOT_FULL_ORG_MEMBER do
-            expect(@organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(false)
-            expect(@outside_collaborators).to receive(:extend_date).with([collaborator1]).and_return([collaborator1])
-            expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::ExpiresSoon), [collaborator1]).and_return(expires_soon_slack_message)
+            expect(@organization).to receive(:is_collaborator_an_org_member).with(@collaborator1.login).and_return(false)
+            expect(@outside_collaborators).to receive(:extend_date).with([@collaborator1]).and_return([@collaborator1])
+            expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::ExpiresSoon), [@collaborator1]).and_return(expires_soon_slack_message)
             expect(expires_soon_slack_message).to receive(:post_slack_message)
-            @outside_collaborators.extend_collaborators_review_date([collaborator1])
+            @outside_collaborators.extend_collaborators_review_date([@collaborator1])
           end
         end
 
@@ -535,17 +537,17 @@ class GithubCollaborators
           end
 
           it WHEN_COLLABORATOR_NOT_FULL_ORG_MEMBER do
-            expect(@organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(false)
+            expect(@organization).to receive(:is_collaborator_an_org_member).with(@collaborator1.login).and_return(false)
             expect(@outside_collaborators).not_to receive(:extend_date)
-            @outside_collaborators.extend_full_org_member_review_date([collaborator1])
+            @outside_collaborators.extend_full_org_member_review_date([@collaborator1])
           end
 
           it WHEN_COLLABORATOR_FULL_ORG_MEMBER do
-            expect(@organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(true)
-            expect(@outside_collaborators).to receive(:extend_date).with([collaborator1]).and_return([collaborator1])
-            expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::FullOrgMemberExpiresSoon), [collaborator1]).and_return(full_org_expires_soon_slack_message)
+            expect(@organization).to receive(:is_collaborator_an_org_member).with(@collaborator1.login).and_return(true)
+            expect(@outside_collaborators).to receive(:extend_date).with([@collaborator1]).and_return([@collaborator1])
+            expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::FullOrgMemberExpiresSoon), [@collaborator1]).and_return(full_org_expires_soon_slack_message)
             expect(full_org_expires_soon_slack_message).to receive(:post_slack_message)
-            @outside_collaborators.extend_full_org_member_review_date([collaborator1])
+            @outside_collaborators.extend_full_org_member_review_date([@collaborator1])
           end
         end
 
@@ -556,17 +558,17 @@ class GithubCollaborators
           end
 
           it WHEN_COLLABORATOR_NOT_FULL_ORG_MEMBER do
-            expect(@organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(false)
+            expect(@organization).to receive(:is_collaborator_an_org_member).with(@collaborator1.login).and_return(false)
             expect(@outside_collaborators).not_to receive(:remove_collaborator)
-            @outside_collaborators.remove_expired_full_org_members([collaborator1])
+            @outside_collaborators.remove_expired_full_org_members([@collaborator1])
           end
 
           it WHEN_COLLABORATOR_FULL_ORG_MEMBER do
-            expect(@organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(true)
-            expect(@outside_collaborators).to receive(:remove_collaborator).with([collaborator1]).and_return([collaborator1])
-            expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::FullOrgMemberExpired), [collaborator1]).and_return(full_org_expired_slack_message)
+            expect(@organization).to receive(:is_collaborator_an_org_member).with(@collaborator1.login).and_return(true)
+            expect(@outside_collaborators).to receive(:remove_collaborator).with([@collaborator1]).and_return([@collaborator1])
+            expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::FullOrgMemberExpired), [@collaborator1]).and_return(full_org_expired_slack_message)
             expect(full_org_expired_slack_message).to receive(:post_slack_message)
-            @outside_collaborators.remove_expired_full_org_members([collaborator1])
+            @outside_collaborators.remove_expired_full_org_members([@collaborator1])
           end
         end
 
@@ -577,17 +579,17 @@ class GithubCollaborators
           end
 
           it WHEN_COLLABORATOR_FULL_ORG_MEMBER do
-            expect(@organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(true)
+            expect(@organization).to receive(:is_collaborator_an_org_member).with(@collaborator1.login).and_return(true)
             expect(@outside_collaborators).not_to receive(:remove_collaborator)
-            @outside_collaborators.remove_expired_collaborators([collaborator1])
+            @outside_collaborators.remove_expired_collaborators([@collaborator1])
           end
 
           it WHEN_COLLABORATOR_NOT_FULL_ORG_MEMBER do
-            expect(@organization).to receive(:is_collaborator_an_org_member).with(collaborator1.login).and_return(false)
-            expect(@outside_collaborators).to receive(:remove_collaborator).with([collaborator1]).and_return([collaborator1])
-            expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::Expired), [collaborator1]).and_return(expired_slack_message)
+            expect(@organization).to receive(:is_collaborator_an_org_member).with(@collaborator1.login).and_return(false)
+            expect(@outside_collaborators).to receive(:remove_collaborator).with([@collaborator1]).and_return([@collaborator1])
+            expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::Expired), [@collaborator1]).and_return(expired_slack_message)
             expect(expired_slack_message).to receive(:post_slack_message)
-            @outside_collaborators.remove_expired_collaborators([collaborator1])
+            @outside_collaborators.remove_expired_collaborators([@collaborator1])
           end
         end
       end
@@ -601,22 +603,22 @@ class GithubCollaborators
 
         it "when collaborator issue is not renewal within a month" do
           terraform_block = create_terraform_block_review_date_more_than_month
-          collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
-          collaborator1.check_for_issues
+          collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          collaborator.check_for_issues
           expect(@outside_collaborators).not_to receive(:create_review_date_expires_soon_issue)
-          @outside_collaborators.is_renewal_within_one_month([collaborator1])
+          @outside_collaborators.is_renewal_within_one_month([collaborator])
         end
 
         it "when collaborator issue is renewal within a month and no issue already exists" do
           allow_any_instance_of(HelperModule).to receive(:does_issue_already_exist).and_return(false)
           expect(@outside_collaborators).to receive(:create_review_date_expires_soon_issue).with(TEST_USER, REPOSITORY_NAME)
-          @outside_collaborators.is_renewal_within_one_month([collaborator_expires_soon])
+          @outside_collaborators.is_renewal_within_one_month([@collaborator_expires_soon])
         end
 
         it "when collaborator issue is renewal within a month but issue already exists" do
           allow_any_instance_of(HelperModule).to receive(:does_issue_already_exist).and_return(true)
           expect(@outside_collaborators).not_to receive(:create_review_date_expires_soon_issue)
-          @outside_collaborators.is_renewal_within_one_month([collaborator1])
+          @outside_collaborators.is_renewal_within_one_month([@collaborator1])
         end
       end
     end

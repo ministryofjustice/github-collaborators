@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe Removed do
     context "test Removed" do
       subject(:removed) { described_class.new }

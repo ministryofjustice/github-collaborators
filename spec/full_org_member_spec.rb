@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe FullOrgMember do
     context "test FullOrgMember" do
       before {

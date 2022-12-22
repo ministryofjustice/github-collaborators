@@ -3,6 +3,7 @@ class GithubCollaborators
   # The HttpClient class
   class HttpClient
     include Logging
+    include Constants
 
     # Send and get data from Github using the REST API
 
