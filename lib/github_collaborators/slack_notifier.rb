@@ -10,6 +10,8 @@ class GithubCollaborators
       @collaborators = collaborators
     end
 
+    # Call the function to create a message payload then post a message
+    # to Slack
     def post_slack_message
       logger.debug "post_slack_message"
 
@@ -28,6 +30,9 @@ class GithubCollaborators
       end
     end
 
+    # Create a message payload using the object passed to the initialize function, 
+    # then print the message contents for debugging
+    # @param Hash{username => String, icon_emoji => String>, text => String, mrkdwn => Bool, channel => String} the message
     def message_payload
       logger.debug "message_payload"
       # Use the class singular or multiple message based on number of collaborators in list
