@@ -10,7 +10,7 @@ module "hmpps-vcms-app-cp" {
       org          = "Civica"
       reason       = "Civica developer for Victims Case Management System"
       added_by     = "Probation WebOps team, probation-webops@digital.justice.gov.uk"
-      review_after = "2022-12-27"
+      review_after = "2023-06-25"
     },
     {
       github_user  = "sim-barnes"
