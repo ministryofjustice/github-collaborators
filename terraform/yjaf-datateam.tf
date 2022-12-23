@@ -13,16 +13,6 @@ module "yjaf-datateam" {
       review_after = "2022-12-19"
     },
     {
-      github_user  = "anntallis"
-      permission   = "push"
-      name         = "Ann Meads-Tallis"
-      email        = "ann.meads-tallis@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "For YJAF data team to store their scripts into the new yjaf data team repo"
-      added_by     = "antony.bishop@digital.justice.gov.uk"
-      review_after = "2022-12-19"
-    },
-    {
       github_user  = "oliviergaubert"
       permission   = "admin"
       name         = "Olivier Gaubert"
