@@ -44,10 +44,10 @@ class GithubCollaborators
 
       context "call delete_expired_invite" do
         it "call function" do
-          url = "#{GH_API_URL}/#{REPOSITORY_NAME}/invitations/#{TEST_USER}"
+          url = "#{GH_API_URL}/#{REPOSITORY_NAME}/invitations/1"
           expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
           expect(http_client).to receive(:delete).with(url)
-          helper_module.delete_expired_invite(REPOSITORY_NAME, TEST_USER)
+          helper_module.delete_expired_invite(REPOSITORY_NAME, TEST_USER, 1)
         end
       end
 

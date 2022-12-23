@@ -56,7 +56,8 @@ class GithubCollaborators
       http, uri = create_http_client(url)
       request = Net::HTTP::Post.new(uri.request_uri, headers)
       request.body = json
-      http.request(request)
+      result = http.request(request)
+      result
     end
 
     # Send a pull request to GitHub REST API using the Ops Eng Team Bot token
@@ -118,7 +119,7 @@ class GithubCollaborators
       [http, uri]
     end
 
-    APPLICATION_JSON = "application/json"
+    APPLICATION_JSON = "application/vnd.github+json"
 
     # Create a header structured message
     #
@@ -127,7 +128,7 @@ class GithubCollaborators
       {
         "Accept" => APPLICATION_JSON,
         "Content-Type" => APPLICATION_JSON,
-        "Authorization" => "token #{@github_token}"
+        "Authorization" => "bearer #{@github_token}"
       }
     end
 

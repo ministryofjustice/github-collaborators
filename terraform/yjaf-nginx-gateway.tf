@@ -3,16 +3,6 @@ module "yjaf-nginx-gateway" {
   repository = "yjaf-nginx-gateway"
   collaborators = [
     {
-      github_user  = "gregi2n"
-      permission   = "admin"
-      name         = "Greg Whiting"
-      email        = "greg.whiting@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2022-12-13"
-    },
-    {
       github_user  = "ttipler"
       permission   = "admin"
       name         = "Thomas Tipler"

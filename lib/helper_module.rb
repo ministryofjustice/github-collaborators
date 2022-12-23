@@ -45,14 +45,15 @@ module HelperModule
   #
   # @param repository_name [String] name of the repository
   # @param invite_login [String] login name of the collaborator
-  def delete_expired_invite(repository_name, invite_login)
+  # @param invite_id [Numeric] id of issue to delete
+  def delete_expired_invite(repository_name, invite_login, invite_id)
     module_logger.debug "delete_expired_invite"
 
     repository_name = repository_name.downcase
     invite_login = invite_login.downcase
 
     module_logger.warn "The invite for #{invite_login} on #{repository_name} has expired. Deleting the invite."
-    url = "#{GH_API_URL}/#{repository_name}/invitations/#{invite_login}"
+    url = "#{GH_API_URL}/#{repository_name}/invitations/#{invite_id}"
     GithubCollaborators::HttpClient.new.delete(url)
     sleep 1
   end

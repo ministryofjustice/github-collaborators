@@ -577,7 +577,7 @@ class GithubCollaborators
         end
 
         if invite_expired
-          delete_expired_invite(repository_name, invite_login)
+          delete_expired_invite(repository_name, invite_login, invite[:invite_id])
         end
       end
     end
