@@ -9,7 +9,7 @@ module "yjaf-transitions" {
       email        = "javaid.arshad@necsws.com"
       org          = "NEC SWS"
       reason       = "Working on transition project"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-03-07"
     },
     {
@@ -19,7 +19,7 @@ module "yjaf-transitions" {
       email        = "thomas.tipler@necsws.com"
       org          = "NEC SWS"
       reason       = "Working on pipeline for deployment of microservice"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-07-21"
     },
     {
@@ -29,7 +29,7 @@ module "yjaf-transitions" {
       email        = "greg.whiting@necsws.com"
       org          = "NEC SWS"
       reason       = "Working on pipeline for deployment of microservice"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-03-24"
     },
     {
@@ -37,9 +37,9 @@ module "yjaf-transitions" {
       permission   = "admin"
       name         = "Andrew Richards"
       email        = "a.t.richards@btopenworld.com"
-      org          = "NEC"
+      org          = "NEC Software Solutions"
       reason       = "New starter (well returning Dev) working on all YJAF projects etc"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-05-26"
     },
     {
@@ -47,9 +47,9 @@ module "yjaf-transitions" {
       permission   = "admin"
       name         = "Vikas Omar"
       email        = "vikas.omar@necsws.com"
-      org          = "NEC"
+      org          = "NEC Software Solutions"
       reason       = "YJAF (new developer)"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-06-07"
     },
     {
@@ -57,18 +57,18 @@ module "yjaf-transitions" {
       permission   = "admin"
       name         = "Angela Site"
       email        = "angela.site@necsws.com"
-      org          = "NEC"
+      org          = "NEC Software Solutions"
       reason       = "YJAF (new developer)"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-09-01"
     },
     {
       github_user  = "vasildimitrov22"
       permission   = "admin"
       name         = "Vasil Dimitrov"
-      email        = "vasil.dimitrov@northgateps.com"
-      org          = "NPS (northgate)"
-      reason       = "Part of the Northgate supplier team for the YJB YJAF system"
+      email        = "vasil.dimitrov@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Part of the NEC supplier team for the YJB YJAF system"
       added_by     = "Antony Bishop <antony.bishop@digital.justice.gov.uk> Operations Engineering"
       review_after = "2023-10-01"
     },

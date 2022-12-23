@@ -9,7 +9,7 @@ module "yjaf-infra-aws-mgmt" {
       email        = "thomas.tipler@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "Greg Whiting - greg.whiting@northgateps.com"
+      added_by     = "Greg Whiting - greg.whiting@necsws.com"
       review_after = "2023-02-24"
     },
     {
@@ -17,9 +17,9 @@ module "yjaf-infra-aws-mgmt" {
       permission   = "admin"
       name         = "Olivier Gaubert"
       email        = "olivier.gaubert@necsws.com"
-      org          = "NEC"
-      reason       = "Part of the Northgate supplier team who are now NEC for the YJB YJAF system"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      org          = "NEC Software Solutions"
+      reason       = "Part of the NEC supplier team for the YJB YJAF system"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2022-12-31"
     },
     {
@@ -27,9 +27,9 @@ module "yjaf-infra-aws-mgmt" {
       permission   = "admin"
       name         = "Andrew Richards"
       email        = "a.t.richards@btopenworld.com"
-      org          = "NEC"
+      org          = "NEC Software Solutions"
       reason       = "New starter (well returning Dev) working on all YJAF projects etc"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-05-26"
     },
   ]
