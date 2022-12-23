@@ -3,6 +3,7 @@ SimpleCov.start do
   add_filter "/spec/"
 end
 
+require "test_helper_module"
 require_relative "../lib/github_collaborators"
 require "webmock/rspec"
 
@@ -88,4 +89,6 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
+
+  config.include TestHelpers
 end

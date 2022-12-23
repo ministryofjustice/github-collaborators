@@ -1,0 +1,91 @@
+[
+  {
+    "id": 1,
+    "number": 123,
+    "title": "Collaborator review date expires soon for user assigneduser1",
+    "user": {
+      "login": "someuser1",
+      "id": 1
+    },
+    "labels": [],
+    "state": "open",
+    "locked": false,
+    "assignee": [
+      {
+        "login": "assigneduser1"
+      }
+    ],
+    "assignees": [
+      {
+        "login": "assigneduser1"
+      }
+    ],
+    "created_at": "2021-12-16T12:23:46Z",
+    "updated_at": "2021-12-16T12:23:46Z",
+    "body": ""
+  },
+  {
+    "id": 2,
+    "number": 456,
+    "title": "Collaborator review date expires soon for user assigneduser2",
+    "user": {
+      "login": "someuser2"
+    },
+    "labels": [],
+    "state": "open",
+    "locked": false,
+    "assignee": [
+      {
+        "login": "assigneduser2"
+      }
+    ],
+    "assignees": [
+      {
+        "login": "assigneduser2"
+      }
+    ],
+    "created_at": "2021-12-16T12:23:46Z",
+    "updated_at": "2021-12-16T12:23:46Z",
+    "body": ""
+  },
+  {
+    "id": 3,
+    "number": 789,
+    "title": "Collaborator review date expires soon for user assigneduser3",
+    "user": {
+      "login": "someuser3"
+    },
+    "labels": [],
+    "state": "closed",
+    "locked": false,
+    "assignee": [
+      {
+        "login": "assigneduser3"
+      }
+    ],
+    "assignees": [
+      {
+        "login": "assigneduser3"
+      }
+    ],
+    "created_at": "2021-12-16T12:23:46Z",
+    "updated_at": "2021-12-16T12:23:46Z",
+    "body": ""
+  },
+  {
+    "id": 4,
+    "number": 159,
+    "title": "Collaborator review date expires soon for user assigneduser4",
+    "user": {
+      "login": "someuser4"
+    },
+    "labels": [],
+    "state": "closed",
+    "locked": false,
+    "assignee": null,
+    "assignees": [],
+    "created_at": "2021-12-16T12:23:46Z",
+    "updated_at": "2021-12-16T12:23:46Z",
+    "body": ""
+  }
+]

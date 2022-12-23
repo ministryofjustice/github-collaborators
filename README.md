@@ -87,13 +87,13 @@ An example, please do not add the comments to the file:
 ```
   collaborators = [
     {
-      github_user  = "digitalronin"
+      github_user  = "someuser"
       permission   = "admin"
-      name         = "David Salgado"
-      email        = "david@acme.com"
+      name         = "Real Name"
+      email        = "name@acme.com"
       org          = "Acme. Corp."
       reason       = "Acme are building some stuff for us"
-      added_by     = "Awesome Team <awesome.team@digital.justice.gov.uk>"
+      added_by     = "Team Name <team-name@digital.justice.gov.uk>"
       review_after = "2021-11-26"
     },
   ]
@@ -142,13 +142,24 @@ The script checks collaborators in Terraform against collaborators in GitHub rep
 
 Output the names of all current (i.e. excluding deleted/archived/locked) MoJ GitHub repositories.
 
+## Documentation
+
+Yard is used for documentation. It creates a html report within the `doc` folder:
+
+```
+gem install yard
+yardoc 'lib/**/*.rb'
+```
+
 ## Development
 
-Make sure you have `bundler` installed (`gem install bundler` if not). Run `bundle install` to set up locally.
+Install `bundler` (`gem install bundler`) then run `bundle install` to install the dependencies.
 
-Run the tests with `bundle exec rspec` or `rspec`. This will generate a coverage report using simplecov. You can see it by running `open coverage/index.html`
+To run the unit tests use `bundle exec rspec` or `rspec`.
 
-Install rspec locally and ruby-debug-ide:
+`rspec` will generate a code coverage report using simplecov and create a `coverage` folder. Open the report using `open coverage/index.html`
+
+Install `rspec` and `ruby-debug-ide` (locally for VS-Code to debug the tests):
 
 ```
 gem install rspec --install-dir ./bin
@@ -180,6 +191,7 @@ To debug in VS Code use the below launch configrations within `.vscode/launch.js
         "ADMIN_GITHUB_TOKEN": "add-token",
         "REALLY_POST_TO_SLACK": "0",
         "REALLY_POST_TO_GH": "0",
+        "OPS_BOT_TOKEN": "0",
         "LOG_LEVEL": "debug",
         "SLACK_WEBHOOK_URL": "add-slack-link",
       }

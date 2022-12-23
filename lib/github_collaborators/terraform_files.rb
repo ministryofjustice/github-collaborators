@@ -1,6 +1,11 @@
+# The GithubCollaborators class namespace
 class GithubCollaborators
+  # The TerraformBlock class
   class TerraformBlock
     include Logging
+    include HelperModule
+    include Constants
+
     attr_reader :username, :permission, :reason, :added_by, :review_after, :email, :name, :org
     attr_writer :review_after, :permission
 
@@ -17,7 +22,12 @@ class GithubCollaborators
       @defined_in_terraform = true
     end
 
-    # This is called when a full org member / collaborator is missing from a Terraform file
+    # Add collaborator details to the TerraformBlock. This
+    # is called when the collaborator who is also a full
+    # Organization member is missing from a Terraform file
+    #
+    # @param collaborator [GithubCollaborators::Collaborator] a collaborator object
+    # @param repository_permission [String] the access permission to the repository
     def add_org_member_collaborator_data(collaborator, repository_permission)
       logger.debug "add_org_member_collaborator_data"
       @username = collaborator.login.downcase
@@ -25,32 +35,41 @@ class GithubCollaborators
       @email = collaborator.email
       @name = collaborator.name
       @org = collaborator.org
-      @reason = "Full Org member / collaborator missing from Terraform file"
-      @added_by = "opseng-bot@digital.justice.gov.uk"
+      @reason = REASON1
+      @added_by = ADDED_BY_EMAIL
       review_date = (Date.today + 90).strftime(DATE_FORMAT)
       @review_after = review_date.to_s
     end
 
-    # This is not used, keeping it, in case create PR's for unknown GitHub collaborators
-    # at the moment they are removed automatically and the add_unknown_collaborator_data
-    # is used instead.
+    # Add collaborator name to the TerraformBlock. This is not used, keeping it,
+    # in case create PR's for unknown GitHub collaborators at the moment they are
+    # removed automatically and the add_unknown_collaborator_data is used instead.
+    #
+    # @param collaborator_name [String] the name of the collaborator
     def add_missing_collaborator_data(collaborator_name)
       logger.debug "add_missing_collaborator_data"
       @username = collaborator_name.to_s.downcase
-      @reason = "Collaborator missing from Terraform file"
-      @added_by = "opseng-bot@digital.justice.gov.uk"
+      @reason = REASON2
+      @added_by = ADDED_BY_EMAIL
       review_date = (Date.today + 90).strftime(DATE_FORMAT)
       @review_after = review_date.to_s
       @defined_in_terraform = false
     end
 
-    # This is called when a collaborator is found on GitHub but not defined in a Terraform file
+    # Add collaborator name to the TerraformBlock. This is called when a
+    # collaborator is found on GitHub but not defined in a Terraform file.
+    #
+    # @param collaborator_name [String] the name of the collaborator
     def add_unknown_collaborator_data(collaborator_name)
       logger.debug "add_unknown_collaborator_data"
       @username = collaborator_name.downcase
       @defined_in_terraform = false
     end
 
+    # Add collaborator details to the TerraformBlock. This is called to
+    # create TerraformBlocks for the collaborators found in Terraform files.
+    #
+    # @param collaborator [GithubCollaborators::Collaborator] a collaborator object
     def add_terraform_file_collaborator_data(collaborator)
       logger.debug "add_terraform_file_collaborator_data"
       @username = collaborator.fetch(:login, "").downcase
@@ -63,42 +82,46 @@ class GithubCollaborators
       @review_after = collaborator.fetch(:review_after, "").to_s
     end
 
-    # This functions takes the body generated from a GitHub ticket created from /.github/ISSUE_TEMPLATE/create-pr-from-issue.yaml
-    def add_collector_from_issue_data(issue_data)
-      logger.debug "add_collector_from_issue_data"
-      # Creates a hash of arrays with field: [0] value
-      # From a GitHub issues reponse created from an issue template
-      # Example:
-      # username: Array (1 element)
-      #   [0]: 'al-ben
-      # repositories: Array (4 elements)
-      #   [0]: 'repo1'
-      #   [1]: 'repo2'
-      the_data = issue_data
-        # Fetch the body var and split on field seperator
-        .fetch("body").split("###")
-        # Remove empty lines
-        .map { |line| line.strip }.map { |str| str.gsub(/^$\n/, "") }
-        # Split on \n characters to have field name and field value in seperator hash
-        .map { |line| line.split("\n") }
-        # Drop first hash element as not needed
-        .drop(1)
-        # Map values into array
-        .map { |field| [field[0], field.drop(1)] }.to_h
+    # # This functions takes the body generated from a GitHub ticket created from /.github/ISSUE_TEMPLATE/create-pr-from-issue.yaml
+    # def add_collector_from_issue_data(issue_data)
+    #   logger.debug "add_collector_from_issue_data"
+    #   # Creates a hash of arrays with field: [0] value
+    #   # From a GitHub issues reponse created from an issue template
+    #   # Example:
+    #   # username: Array (1 element)
+    #   #   [0]: 'al-ben
+    #   # repositories: Array (4 elements)
+    #   #   [0]: 'repo1'
+    #   #   [1]: 'repo2'
+    #   the_data = issue_data
+    #     # Fetch the body var and split on field seperator
+    #     .fetch("body").split("###")
+    #     # Remove empty lines
+    #     .map { |line| line.strip }.map { |str| str.gsub(/^$\n/, "") }
+    #     # Split on \n characters to have field name and field value in seperator hash
+    #     .map { |line| line.split("\n") }
+    #     # Drop first hash element as not needed
+    #     .drop(1)
+    #     # Map values into array
+    #     .map { |field| [field[0], field.drop(1)] }.to_h
 
-      @username = the_data["username"][0].downcase
-      @permission = the_data["permission"][0]
-      @email = the_data["email"][0]
-      @name = the_data["name"][0]
-      @org = the_data["org"][0]
-      @reason = the_data["reason"][0]
-      @added_by = the_data["added_by"][0]
-      @review_after = the_data["review_after"][0]
-      @repositories = the_data["repositories"]
-    end
+    #   @username = the_data["username"][0].downcase
+    #   @permission = the_data["permission"][0]
+    #   @email = the_data["email"][0]
+    #   @name = the_data["name"][0]
+    #   @org = the_data["org"][0]
+    #   @reason = the_data["reason"][0]
+    #   @added_by = the_data["added_by"][0]
+    #   @review_after = the_data["review_after"][0]
+    #   @repositories = the_data["repositories"]
+    # end
 
-    def copy_block(block)
-      logger.debug "copy_block"
+    # Overwrite the TerraformBlock with new values. This is called to
+    # to revert a modified TerraformBlock back to its original state.
+    #
+    # @param block [GithubCollaborators::TerraformBlock] a TerraformBlock object
+    def revert_block(block)
+      logger.debug "revert_block"
       @username = block.username.downcase
       @permission = block.permission
       @reason = block.reason
@@ -110,43 +133,67 @@ class GithubCollaborators
     end
   end
 
+  # The TerraformFile class
   class TerraformFile
     include Logging
-    attr_reader :terraform_blocks, :filename
+    include HelperModule
 
-    def initialize(repository_name)
+    attr_reader :filename
+
+    def initialize(repository_name, folder)
       logger.debug "initialize"
       @filename = repository_name.downcase
-      @real_repository_name = ""
-      @file_path = "terraform/#{GithubCollaborators.tf_safe(@filename)}.tf"
+      @real_repository_name = repository_name.downcase
+      @file_path = "#{folder}/#{tf_safe(@filename)}.tf"
+
+      # A list of TerraformBlock objects that represent
+      # the collaborators within the TerraformFile
       @terraform_blocks = []
-      @terraform_file_data = []
+
+      # A temporary list of the TerraformBlock objects
+      # that have been modified by the App, these objects
+      # need to be reverted back to their original state
+      # after the App has finished modifying the Terraform
+      # file object
       @terraform_modified_blocks = []
+
+      # A temporary list of the TerraformBlock objects
+      # that have been added or removed by the App, these
+      # objects need to removed or added back in after the
+      # App has finished modifying the Terraform file object
       @add_removed_terraform_blocks = []
+
+      # The contents of the Terraform file stored as an array
+      @terraform_file_data = []
     end
 
+    # Get the TerraformBlock objects for this file
+    #
+    # @return [Array<GithubCollaborators::TerraformBlock>] a list of TerraformBlock objects
+    def get_terraform_blocks
+      logger.debug "get_terraform_blocks"
+      @terraform_blocks
+    end
+
+    # Revert any modified TerraformBlocks back to their original state
     def revert_terraform_blocks
       logger.debug "revert_terraform_blocks"
-      # Revert matching Terraform blocks with the original values
       @terraform_modified_blocks.each do |original_block|
         @terraform_blocks.each do |terraform_block|
           if terraform_block.username.downcase == original_block.username.downcase
-            terraform_block.copy_block(original_block)
+            terraform_block.revert_block(original_block)
           end
         end
       end
       @terraform_modified_blocks.clear
     end
 
-    # This is not used, keeping it, in case
-    def add_collaborator(collaborator)
-      logger.debug "add_collaborator"
-      block = GithubCollaborators::TerraformBlock.new
-      block.add_collaborator_data(collaborator)
-      @terraform_blocks.push(block)
-      @add_removed_terraform_blocks.push({added: true, removed: false, block: terraform_block.clone, index: @terraform_blocks.index(block)})
-    end
-
+    # Add a collaborator who is also a full Organization member
+    # information to a TerraformBlock. This is called when the
+    # collaborator is missing from a Terraform file
+    #
+    # @param collaborator [GithubCollaborators::Collaborator] a collaborator object
+    # @param permission [String] the access permission to the repository
     def add_org_member_collaborator(collaborator, permission)
       logger.debug "add_org_member_collaborator"
       block = GithubCollaborators::TerraformBlock.new
@@ -155,15 +202,23 @@ class GithubCollaborators
       @add_removed_terraform_blocks.push({added: true, removed: false, block: block.clone, index: @terraform_blocks.index(block)})
     end
 
-    def add_collaborators_from_issue(collaborator_data)
-      logger.debug "add_collaborators_from_issue"
-      block = GithubCollaborators::TerraformBlock.new
-      block.add_collector_from_issue_data(collaborator_data)
-      @terraform_blocks.push(block)
-      @add_removed_terraform_blocks.push({added: true, removed: false, block: block.clone, index: @terraform_blocks.index(block)})
-    end
+    # Add a collaborator from an GitHub issue to a
+    # TerraformBlock. This is called outside of the
+    # App, called by a script in the bin folder.
+    #
+    # @param collaborator_data [?] a collaborator data
+    # def add_collaborators_from_issue(collaborator_data)
+    #   logger.debug "add_collaborators_from_issue"
+    #   block = GithubCollaborators::TerraformBlock.new
+    #   block.add_collector_from_issue_data(collaborator_data)
+    #   @terraform_blocks.push(block)
+    #   @add_removed_terraform_blocks.push({added: true, removed: false, block: block.clone, index: @terraform_blocks.index(block)})
+    # end
 
-    # Extend the review date for a collaborator within a Terraform file
+    # Temporarily extend the review date for a specific
+    # collaborator within a TerraformBlock object
+    #
+    # @param collaborator_name [String] the collaborator login name
     def extend_review_date(collaborator_name)
       logger.debug "extend_review_date"
       @terraform_blocks.each do |terraform_block|
@@ -174,7 +229,9 @@ class GithubCollaborators
       end
     end
 
-    # Remove collaborator from a Terraform file
+    # Temporarily remove a TerraformBlock object for a specific collaborator
+    #
+    # @param collaborator_name [String] the collaborator login name
     def remove_collaborator(collaborator_name)
       logger.debug "remove_collaborator"
       @terraform_blocks.each do |terraform_block|
@@ -186,7 +243,9 @@ class GithubCollaborators
       end
     end
 
-    # Restore Terraform blocks to original state
+    # Restore TerraformBlock objects within the Terraform file
+    # back to their original state. Either remove added objects
+    # or add object back to the Terraform file object
     def restore_terraform_blocks
       logger.debug "restore_terraform_blocks"
       @add_removed_terraform_blocks.each do |original_block|
@@ -199,17 +258,27 @@ class GithubCollaborators
       @add_removed_terraform_blocks.clear
     end
 
-    # Write Terraform block/s to a single Terraform file
+    # Write the TerraformBlock objects to a Terraform file
     def write_to_file
       logger.debug "write_to_file"
       File.write(@file_path, create_file_template)
     end
 
+    # Read the contents of a Terraform file
     def read_file
       logger.debug "read_file"
-      @terraform_file_data = File.read(@file_path).split("\n")
+      if File.exist?(@file_path)
+        @terraform_file_data = File.read(@file_path).split("\n")
+      else
+        logger.error("Read file #{@file_path} does not exist")
+      end
     end
 
+    # Return the repository access permission from a
+    # TerraformBlock object for a specific collaborator
+    #
+    # @param collaborator_name [String] the collaborator login name
+    # @return [String] the repository access permission
     def get_collaborator_permission(collaborator_name)
       logger.debug "get_collaborator_permission"
       @terraform_blocks.each do |terraform_block|
@@ -220,6 +289,11 @@ class GithubCollaborators
       ""
     end
 
+    # Temporarily overwrite the repository access permission within
+    # a TerraformBlock object for a specific collaborator
+    #
+    # @param collaborator_name [String] the collaborator login name
+    # @param permission [String] the repository access permission
     def change_collaborator_permission(collaborator_name, permission)
       logger.debug "get_collaborator_permission"
       @terraform_blocks.each do |terraform_block|
@@ -230,29 +304,48 @@ class GithubCollaborators
       end
     end
 
+    # Return the repository name from the Terraform file
+    #
+    # @return [String] the repository name
     def get_repository_name
       logger.debug "get_repository_name"
       # In the file find the "repository" line
       line_number = 0
+      initialize_read_file
       name = get_attribute("repository", line_number)
       @real_repository_name = name.downcase
     end
 
+    # For each collaborator in the Terraform file
+    # create a TerraformBlock object
     def create_terraform_collaborator_blocks
       logger.debug "create_terraform_collaborator_blocks"
-      # In the file find the "github_user" lines
+      # In the file find each "github_user" line
       get_github_user_line_numbers.each do |line_number|
-        # Create a Terraform block for each "github_user"
         @terraform_blocks.push(get_collaborator_from_file(line_number))
       end
     end
 
     private
 
-    # Search each line for "github_user" and return the line number
+    # Wrapper function to call the function read_file
+    # if the Terraform file hasn't been read yet.
+    def initialize_read_file
+      logger.debug "initialize_read_file"
+      if @terraform_file_data.length == 0
+        read_file
+      end
+    end
+
+    # Return each "github_user" line number within the
+    # Terraform file.
+    #
+    # @return [Array<Numeric>] a list of the line numbers
     def get_github_user_line_numbers
       logger.debug "get_github_user_line_numbers"
       github_user_line_numbers = []
+
+      initialize_read_file
 
       # Find the strings that contain "github_user"
       github_users = @terraform_file_data.find_all { |line| line =~ /\s{4}github_user/ }
@@ -273,28 +366,11 @@ class GithubCollaborators
       github_user_line_numbers
     end
 
-    REQUIRED_ATTRIBUTES = {
-      "github_user" => "Collaborator username is missing",
-      "permission" => "Collaborator permission is missing",
-      "name" => "Collaborator name is missing",
-      "email" => "Collaborator email is missing",
-      "org" => "Collaborator organisation is missing",
-      "reason" => "Collaborator reason is missing",
-      "added_by" => "Person who added this collaborator is missing",
-      "review_after" => "Collaboration review date is missing"
-    }
-
-    USERNAME = 0
-    PERMISSION = 1
-    NAME = 2
-    EMAIL = 3
-    ORG = 4
-    REASON = 5
-    ADDED_BY = 6
-    REVIEW_AFTER = 7
-
-    # Retrieves the Terraform data for a single collaborator based on the
-    # line number and returns an equivalent TerraformBlock object
+    # Maps the collaborator fields within a Terraform file
+    # into an equivalent TerraformBlock object
+    #
+    # @param line_number [Numeric] the line number of the collaborator in the Terraform file
+    # @return [GithubCollaborators::TerraformBlock] a TerraformBlock object
     def get_collaborator_from_file(line_number)
       logger.debug "get_collaborator_from_file"
 
@@ -306,7 +382,7 @@ class GithubCollaborators
         permission: collaborator_data[PERMISSION],
         name: collaborator_data[NAME],
         email: collaborator_data[EMAIL],
-        org: collaborator_data[ORG],
+        org: collaborator_data[ORG_LINE],
         reason: collaborator_data[REASON],
         added_by: collaborator_data[ADDED_BY],
         review_after: collaborator_data[REVIEW_AFTER]
@@ -317,11 +393,18 @@ class GithubCollaborators
       terraform_block
     end
 
-    # Search for the val parameter within a block of data that starts from
-    # the line_number start position. This checks both the attribute and
-    # value exists within the file
+    # Search for the val parameter within a Terraform file that is stored an an array.
+    # Use line_number as the start position to find the val value. This checks both
+    # the attribute and value exists within the file correctly.
+    #
+    # @param val [String] the field within the Terraform file to find
+    # @param line_number [Numeric] the line number within the Terraform file to start reading from
+    # @return [String] the value of the field if it is found, else return an empty string
     def get_attribute(val, line_number)
       logger.debug "get_attribute"
+
+      initialize_read_file
+
       # Extract the "github_user" to "review_after" lines
       collaborator_block = @terraform_file_data[line_number, (REVIEW_AFTER + 1)]
       collaborator_block.grep(/#{val}\s+=/).each do |line|
@@ -330,14 +413,19 @@ class GithubCollaborators
         end
       end
       logger.warn "The attribute #{val} is missing within #{@filename}.tf"
-      nil
+      ""
     end
 
+    # Creates a Terraform file layout. It will dynamically add
+    # the collaborators, the module name and the repository name
+    #
+    # @return [String] a formatted version of the Terraform file
     def create_file_template
       logger.debug "create_file_template"
+      module_name = tf_safe(@filename)
 
       template = <<~EOF
-        module "<%= @filename %>" {
+        module "<%= module_name %>" {
           source     = "./modules/repository-collaborators"
           repository = "<%= @real_repository_name %>"
           collaborators = [
@@ -361,100 +449,130 @@ class GithubCollaborators
     end
   end
 
+  # The TerraformFiles class
   class TerraformFiles
     include Logging
-    attr_reader :terraform_files
+    include HelperModule
 
     def initialize
       logger.debug "initialize"
 
-      # Array Terraform files
+      # Array of Terraform file objects
+      # [Array<GithubCollaborators::TerraformFile>]
       @terraform_files = []
-      exclude_files = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
 
-      # Go through all the Terraform files
+      # Get then iterator over the Terraform folder Terraform files
       fetch_terraform_files.each do |terraform_file_path|
         terraform_file_name = File.basename(terraform_file_path)
-        # Ignore the above named files
-        if !exclude_files.include?(terraform_file_name.downcase)
-          # Strip away prefix and file type
+        # Ignore the excluded files
+        if !EXCLUDE_FILES.include?(terraform_file_name.downcase)
+          # Strip away the prefix and file type
           repository_name = File.basename(terraform_file_path, ".tf")
-          terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase)
-          # Read the file
+          terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase, TERRAFORM_DIR)
+          # Read the Terraform file
           terraform_file.read_file
-          # Read real repository name from file
+          # Read the real repository name from Terraform file
           terraform_file.get_repository_name
-          # Make Terraform blocks for each collaborator
+          # Make TerraformBlock objects for each collaborator within the Terraform file
           terraform_file.create_terraform_collaborator_blocks
-          # Store Terraform file
+
           @terraform_files.push(terraform_file)
         end
       end
     end
 
-    def create_new_file(repository_name)
-      logger.debug "create_new_file"
-      terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase)
-      # Store Terraform file
+    # Temporarily create a new TerraformFile object in memory.
+    # There is no actual Terraform file in the Terraform folder
+    # at this point. This is to add collaborators to the object
+    # later on.
+    #
+    # @param repository_name [String] the repository name
+    def create_new_file_in_memory(repository_name)
+      logger.debug "create_new_file_in_memory"
+      terraform_file = GithubCollaborators::TerraformFile.new(repository_name.downcase, TERRAFORM_DIR)
       @terraform_files.push(terraform_file)
     end
 
+    # Delete a Terraform file in the Terraform folder
+    # and delete the matching TerraformFile object
+    #
+    # @param file_name [String] the Terraform file name in the Terraform folder
     def remove_file(file_name)
       logger.debug "remove_file"
-      path_to_file = "terraform/#{file_name.downcase}.tf"
+      path_to_file = "#{TERRAFORM_DIR}/#{file_name.downcase}.tf"
       if File.exist?(path_to_file)
         File.delete(path_to_file)
         @terraform_files.delete_if { |terraform_file| terraform_file.filename.downcase == file_name.downcase }
       end
     end
 
-    def extend_date_in_file(repository_name, login)
+    # Call the functions to extend the review data for a specific collaborator
+    # within a TerraformFile object, then write that Terraform file in the
+    # Terraform folder and revert the TerraformFile object back to its original
+    # state.
+    #
+    # @param repository_name [String] the name of the repository to modify
+    # @param collaborator_name [String] the collaborator login name
+    def extend_date_in_file(repository_name, collaborator_name)
       logger.debug "extend_date_in_file"
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
-          terraform_file.extend_review_date(login.downcase)
+        if terraform_file.filename.downcase == tf_safe(repository_name.downcase)
+          terraform_file.extend_review_date(collaborator_name.downcase)
           terraform_file.write_to_file
           terraform_file.revert_terraform_blocks
         end
       end
     end
 
-    def remove_collaborator_from_file(repository_name, login)
+    # Call the functions to remove a specific collaborator from a within
+    # a TerraformFile object, then write that Terraform file in the Terraform
+    # folder and revert the TerraformFile object back to its original
+    # state.
+    #
+    # @param repository_name [String] the name of the repository to modify
+    # @param collaborator_name [String] the collaborator login name
+    def remove_collaborator_from_file(repository_name, collaborator_name)
       logger.debug "remove_collaborator_from_file"
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
-          terraform_file.remove_collaborator(login.downcase)
+        if terraform_file.filename.downcase == tf_safe(repository_name.downcase)
+          terraform_file.remove_collaborator(collaborator_name.downcase)
           terraform_file.write_to_file
           terraform_file.restore_terraform_blocks
         end
       end
     end
 
-    def remove_archieved_repository_file(repository_name)
-      logger.debug "remove_archieved_repository_file"
-      @terraform_files.each do |terraform_file|
-        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
-          index = @terraform_files.index(terraform_file)
-          @terraform_files.delete_at(index)
-        end
-      end
-    end
-
-    def change_collaborator_permission_in_file(collaborator_name, repository_name, permission)
+    # Call the functions to change the repository access permission for a specific
+    # collaborator a within a TerraformFile object, then write that Terraform
+    # file in the Terraform folder and revert the TerraformFile object
+    # back to its original state.
+    #
+    # @param repository_name [String] the name of the repository to modify
+    # @param collaborator_name [String] the collaborator login name
+    # @param repository_permission [String] the repository access permission
+    def change_collaborator_permission_in_file(repository_name, collaborator_name, repository_permission)
       logger.debug "change_collaborator_permission_in_file"
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
-          terraform_file.change_collaborator_permission(collaborator_name.downcase, permission)
+        if terraform_file.filename.downcase == tf_safe(repository_name.downcase)
+          terraform_file.change_collaborator_permission(collaborator_name.downcase, repository_permission)
           terraform_file.write_to_file
           terraform_file.revert_terraform_blocks
         end
       end
     end
 
-    def add_collaborator_to_file(collaborator, repository_name, repository_permission)
-      logger.debug "add_collaborator_to_file"
+    # Call the functions to change the add a collaborator who also has
+    # full Organization membership to a TerraformFile object,then write
+    # that Terraform file in the Terraform folder and revert the
+    # TerraformFile object back to its original state.
+    #
+    # @param repository_name [String] the name of the repository to modify
+    # @param collaborator [GithubCollaborators::Collaborator] a collaborator object
+    # @param repository_permission [String] the repository access permission
+    def add_full_org_collaborator_to_file(repository_name, collaborator, repository_permission)
+      logger.debug "add_full_org_collaborator_to_file"
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
+        if terraform_file.filename.downcase == tf_safe(repository_name.downcase)
           terraform_file.add_org_member_collaborator(collaborator, repository_permission)
           terraform_file.write_to_file
           terraform_file.restore_terraform_blocks
@@ -462,44 +580,59 @@ class GithubCollaborators
       end
     end
 
+    # Find which Terraform files have zero TerraformBlock objects
+    #
+    # @return [Array<String>] the name of the empty Terraform files
     def get_empty_files
       logger.debug "get_empty_files"
       empty_files = []
       @terraform_files.each do |terraform_file|
-        if terraform_file.terraform_blocks.length == 0
+        terraform_blocks = terraform_file.get_terraform_blocks
+        if terraform_blocks.length == 0
           empty_files.push(terraform_file.filename.downcase)
         end
       end
       empty_files
     end
 
-    # Create a file if it doesn't exist
-    def ensure_file_exists(repository_name)
-      logger.debug "ensure_file_exists"
+    # Calls the functions to check if a TerraformFile exists for
+    # a specific repository then creates a new TerraformFile object
+    # if the object doesn't exist already
+    #
+    # @param repository_name [String] the name of the repository
+    def ensure_file_exists_in_memory(repository_name)
+      logger.debug "ensure_file_exists_in_memory"
       if does_file_exist(repository_name.downcase) == false
-        create_new_file(repository_name.downcase)
+        create_new_file_in_memory(repository_name.downcase)
       end
     end
 
-    # Check a file exists
+    # Check if a TerraformFile exists for a specific repository
+    #
+    # @param repository_name [String] the name of the repository
+    # @return [Bool] true if TerraformFile object exists
     def does_file_exist(repository_name)
       logger.debug "does_file_exist"
-      file_exists = false
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
-          file_exists = true
-          break
+        if terraform_file.filename.downcase == tf_safe(repository_name.downcase)
+          return true
         end
       end
-      file_exists
+      false
     end
 
+    # Returns the collaborator login names of the
+    # collaborators within a TerraformFile object
+    #
+    # @param repository_name [String] the name of the repository
+    # @return [Array<String>] the collaborator login names
     def get_collaborators_in_file(repository_name)
       logger.debug "get_collaborators_in_file"
       collaborators_in_file = []
       @terraform_files.each do |terraform_file|
-        if terraform_file.filename.downcase == GithubCollaborators.tf_safe(repository_name.downcase)
-          terraform_file.terraform_blocks.each do |block|
+        if terraform_file.filename.downcase == tf_safe(repository_name.downcase)
+          terraform_blocks = terraform_file.get_terraform_blocks
+          terraform_blocks.each do |block|
             collaborators_in_file.push(block.username.downcase)
           end
         end
@@ -507,12 +640,21 @@ class GithubCollaborators
       collaborators_in_file
     end
 
-    private
+    # Returns a list of TerraformFile objects that represent
+    # the Terraform files in the Terraform folder
+    #
+    # @return [Array<GithubCollaborators::::TerraformFile>] the TerraformFile objects
+    def get_terraform_files
+      logger.debug "get_terraform_files"
+      @terraform_files
+    end
 
     # Return absolute paths for the Terraform files in the Terraform directory
+    #
+    # @return [Array<String>] a list of file paths to Terraform files
     def fetch_terraform_files
       logger.debug "fetch_terraform_files"
-      Dir["terraform/*.tf"]
+      Dir[TERRAFORM_FILES]
     end
   end
 end

@@ -1,64 +1,62 @@
 class GithubCollaborators
-  describe PullRequests do
-    # TODO: Remove after re-write test
-    before { skip }
+  include TestConstants
+  include Constants
 
-    let(:json) { File.read("spec/fixtures/pull-request.json") }
+  describe HelperModule do
+    let(:helper_module) { Class.new { extend HelperModule } }
+    let(:pull_requests_json) { File.read("spec/fixtures/pull-requests.json") }
+    let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
 
-    subject(:pullrequest) { described_class.new(JSON.parse(json)) }
-
-    specify { expect(pullrequest.number).to eq(290) }
-    specify { expect(pullrequest.title).to eq("This is a test PR") }
-    specify { expect(pullrequest.file).to eq("terraform/myfile.tf") }
-  end
-
-  describe PullRequests do
-    # TODO: Remove after re-write test
-    before { skip }
-
-    let(:params) {
+    query = %(
       {
-        repository: "somerepo",
-        hash_body: {title: "Remove myfile as repository being deleted", head: "mybranch", base: "main", body: "Hi there\n\nThe repository that is maintained by the file myfile has been deleted/archived\n\nPlease merge this pull request to delete the file.\n\nIf you have any questions, please post in #ask-operations-engineering on Slack.\n"}
+        organization(login: "#{ORG}") {
+          repository(name: "github-collaborators") {
+            pullRequests(states: OPEN, last: 100) {
+              nodes {
+                title
+                files(first: 100) {
+                  edges {
+                    node {
+                      path
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
-    }
+      )
 
-    subject(:ic) { described_class.new(params) }
-
-    let(:http_client) { double(HttpClient) }
-
-    let(:json) {
-      %({"title":"Remove myfile as repository being deleted","head":"mybranch","base":"main","body":"Hi there\\n\\nThe repository that is maintained by the file myfile has been deleted/archived\\n\\nPlease merge this pull request to delete the file.\\n\\nIf you have any questions, please post in #ask-operations-engineering on Slack.\\n"})
-    }
-
-    it "calls github api" do
-      url = "https://api.github.com/repos/ministryofjustice/somerepo/pulls"
-      expect(HttpClient).to receive(:new).and_return(http_client)
-      expect(http_client).to receive(:post_json).with(url, json)
-      ic.create_pull_request
-    end
-  end
-
-  describe PullRequests do
-    # TODO: Remove after re-write test
-    before { skip }
-
-    let(:params) {
+    no_pull_requests_json = %(
       {
-        graphql: graphql
+        "data": {
+          "organization": {
+            "repository": {
+              "pullRequests": {
+                "nodes": []
+              }
+            }
+          }
+        }
       }
-    }
+    )
 
-    let(:json) { File.read("spec/fixtures/pull-requests.json") }
+    context "call get_pull_requests" do
+      before do
+        expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
+      end
 
-    let(:graphql) { GithubCollaborators::GithubGraphQlClient.new(github_token: "fake") }
+      it "when pull requests exist" do
+        expect(graphql_client).to receive(:run_query).with(query).and_return(pull_requests_json)
+        response = [{title: "Pull request 1", files: ["somefile1", "somefile2", "somefile3"]}, {title: "Pull request 2", files: ["somefile4", "somefile5", "somefile6"]}]
+        test_equal(helper_module.get_pull_requests, response)
+      end
 
-    subject(:pullrequests) { described_class.new(params) }
-
-    before do
-      allow(graphql).to receive(:run_query).and_return(json)
+      it "when no pull requests exist" do
+        expect(graphql_client).to receive(:run_query).with(query).and_return(no_pull_requests_json)
+        test_equal(helper_module.get_pull_requests, [])
+      end
     end
-
-    specify { expect(pullrequests.get_pull_requests.size).to eq(10) }
   end
 end

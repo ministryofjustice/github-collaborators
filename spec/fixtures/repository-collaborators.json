@@ -5,24 +5,18 @@
         "collaborators": {
           "edges": [
             {
-              "permission": "ADMIN",
               "node": {
-                "login": "digitalronin",
-                "url": "https://github.com/digitalronin"
+                "login": "someuser1"
               }
             },
             {
-              "permission": "ADMIN",
               "node": {
-                "login": "damacus",
-                "url": "https://github.com/damacus"
+                "login": "someuser2"
               }
             },
             {
-              "permission": "WRITE",
               "node": {
-                "login": "DangerDawson",
-                "url": "https://github.com/DangerDawson"
+                "login": "someuser3"
               }
             }
           ],

@@ -1,16 +1,34 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe Repository do
-    # TODO: Remove after re-write test
-    before { skip }
+    context "test repository" do
+      subject(:repository) { described_class.new(REPOSITORY_NAME, 4) }
 
-    let(:json) { File.read("spec/fixtures/repository.json") }
+      before do
+        test_equal(repository.outside_collaborators_count, 4)
+        test_equal(repository.name, REPOSITORY_NAME)
+      end
 
-    subject(:repo) { described_class.new(JSON.parse(json)) }
+      it "create repository object" do
+        test_equal(repository.outside_collaborators_names.length, 0)
+        test_equal(repository.issues.length, 0)
+      end
 
-    specify { expect(repo.name).to eq("courtfinder") }
-    specify { expect(repo.url).to eq("https://github.com/ministryofjustice/courtfinder") }
-    specify { expect(repo).to_not be_locked }
-    specify { expect(repo).to be_archived }
-    specify { expect(repo).to_not be_disabled }
+      it "call add_issues" do
+        repository.add_issues(["issue1", "issue2"])
+        test_equal(repository.outside_collaborators_names.length, 0)
+        test_equal(repository.issues.length, 2)
+        test_equal(repository.issues, ["issue1", "issue2"])
+      end
+
+      it "call store_collaborators_names" do
+        repository.store_collaborators_names([TEST_USER, TEST_USER_1])
+        test_equal(repository.outside_collaborators_names.length, 2)
+        test_equal(repository.outside_collaborators_names, [TEST_USER, TEST_USER_1])
+        test_equal(repository.issues.length, 0)
+      end
+    end
   end
 end

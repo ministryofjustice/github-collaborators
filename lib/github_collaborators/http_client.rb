@@ -1,7 +1,22 @@
+# The GithubCollaborators class namespace
 class GithubCollaborators
+  # The HttpClient class
   class HttpClient
     include Logging
+    include Constants
 
+    # Send and get data from Github using the REST API
+
+    def initialize
+      logger.debug "initialize"
+      @github_token = ENV.fetch("ADMIN_GITHUB_TOKEN")
+      @ops_bot_token = ENV.fetch("OPS_BOT_TOKEN")
+    end
+
+    # Get data from GitHub REST API
+    #
+    # @param url [String] the REST API URL
+    # @return [Bool] the returned data from GitHub
     def fetch_json(url)
       logger.debug "fetch_json"
       got_data = false
@@ -13,10 +28,10 @@ class GithubCollaborators
         response = http_get(url)
         if response.code != "200"
           if response.body.include?("errors")
-            if response.body.include?("RATE_LIMITED")
+            if response.body.include?(RATE_LIMITED)
               sleep 300
             else
-              logger.fatal "GH GraphQL query contains errors"
+              logger.fatal "HTTP Client REST API query contains errors"
               abort(response.body)
             end
           end
@@ -24,7 +39,7 @@ class GithubCollaborators
           got_data = true
         end
         if count > 5
-          logger.fatal "GH GraphQL query error"
+          logger.fatal "HTTP Client REST API query error"
           abort
         end
       end
@@ -32,6 +47,10 @@ class GithubCollaborators
       response.body
     end
 
+    # Send data to GitHub REST API
+    #
+    # @param url [String] the REST API URL
+    # @param json [String] the data to send to GitHub
     def post_json(url, json)
       logger.debug "post_json"
       http, uri = create_http_client(url)
@@ -40,6 +59,10 @@ class GithubCollaborators
       http.request(request)
     end
 
+    # Send a pull request to GitHub REST API using the Ops Eng Team Bot token
+    #
+    # @param url [String] the REST API URL
+    # @param json [String] the data to send to GitHub
     def post_pull_request_json(url, json)
       logger.debug "post_pull_request_json"
       http, uri = create_http_client(url)
@@ -48,6 +71,10 @@ class GithubCollaborators
       http.request(request)
     end
 
+    # Send data to GitHub REST API
+    #
+    # @param url [String] the REST API URL
+    # @param json [String] the data to send to GitHub
     def patch_json(url, json)
       logger.debug "patch_json"
       http, uri = create_http_client(url)
@@ -56,6 +83,9 @@ class GithubCollaborators
       http.request(request)
     end
 
+    # Send a delete query to GitHub REST API
+    #
+    # @param url [String] the REST API URL
     def delete(url)
       logger.debug "delete"
       http, uri = create_http_client(url)
@@ -65,6 +95,10 @@ class GithubCollaborators
 
     private
 
+    # Send a get query to GitHub REST API
+    #
+    # @param url [String] the REST API URL
+    # @return [Net::HTTPResponse] the returned data from GitHub
     def http_get(url)
       logger.debug "http_get"
       http, uri = create_http_client(url)
@@ -72,6 +106,10 @@ class GithubCollaborators
       http.request(request)
     end
 
+    # Create a client to do the GitHub REST API query
+    #
+    # @param url [String] the REST API URL
+    # @return [Array<Net::HTTP, URI>] the client object and URI
     def create_http_client(url)
       logger.debug "create_http_client"
       uri = URI.parse(url)
@@ -82,19 +120,25 @@ class GithubCollaborators
 
     APPLICATION_JSON = "application/json"
 
+    # Create a header structured message
+    #
+    # @return [Hash{Accept => String, Content-Type => String, Authorization => String}] the header structured message
     def headers
       {
         "Accept" => APPLICATION_JSON,
         "Content-Type" => APPLICATION_JSON,
-        "Authorization" => "token #{ENV.fetch("ADMIN_GITHUB_TOKEN")}"
+        "Authorization" => "token #{@github_token}"
       }
     end
 
+    # Create a header structured message for pull requests
+    #
+    # @return [Hash{Accept => String, Content-Type => String, Authorization => String}] the header structured message
     def pull_request_headers
       {
         "Accept" => APPLICATION_JSON,
         "Content-Type" => APPLICATION_JSON,
-        "Authorization" => "token #{ENV.fetch("OPS_BOT_TOKEN")}"
+        "Authorization" => "token #{@ops_bot_token}"
       }
     end
   end

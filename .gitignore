@@ -8,3 +8,13 @@ env/
 *.code-workspace
 *.sha256
 terraform.tfstate
+bin/bin
+bin/build_info
+bin/cache
+bin/doc
+bin/extensions
+bin/gems
+bin/plugins
+bin/specifications
+doc
+.yardoc

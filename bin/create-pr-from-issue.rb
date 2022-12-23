@@ -1,6 +1,7 @@
 # #!/usr/bin/env ruby
 
 # require_relative "../lib/github_collaborators"
+# include HelperModule
 
 # puts "Start"
 
@@ -31,14 +32,9 @@
 # bc.add("terraform/*")
 # bc.commit_and_push("Pull request to add new outside collaborator")
 
-# params = {
-#   repository: "github-collaborators",
-#   hash_body: create_hash(branch_name)
-# }
-
 # sleep 5
 
 # # Open PR
-# GithubCollaborators::PullRequestCreator.new(params).create_pull_request
+# create_pull_request(create_hash(branch_name))
 
 # puts "Finished"
