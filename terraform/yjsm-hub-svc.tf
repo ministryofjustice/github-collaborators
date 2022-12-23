@@ -7,29 +7,29 @@ module "yjsm-hub-svc" {
       permission   = "admin"
       name         = "Olivier Gaubert"
       email        = "olivier.gaubert@necsws.com"
-      org          = "NEC"
-      reason       = "Part of the Northgate supplier team who are now NEC for the YJB YJAF system"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      org          = "NEC Software Solutions"
+      reason       = "Part of the NEC supplier team for the YJB YJAF system"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2022-12-31"
     },
     {
       github_user  = "gregi2n"
       permission   = "admin"
       name         = "Greg Whiting"
-      email        = "greg.whiting@northgateps.com"
-      org          = "Northgate"
+      email        = "greg.whiting@necsws.com"
+      org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "<gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2022-12-13"
     },
     {
       github_user  = "henrycarteruk"
       permission   = "admin"
       name         = "Henry Carter"
-      email        = "henry.carter@northgateps.com"
-      org          = "NPS (northgate)"
+      email        = "henry.carter@necsws.com"
+      org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Greg Whiting <greg.whiting@northgateps.com> Devops for northgate"
+      added_by     = "Greg Whiting <greg.whiting@necsws.com> Devops for NEC Software Solutions"
       review_after = "2022-12-13"
     },
     {
@@ -39,7 +39,7 @@ module "yjsm-hub-svc" {
       email        = "thomas.tipler@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "Greg Whiting - greg.whiting@northgateps.com"
+      added_by     = "Greg Whiting - greg.whiting@necsws.com"
       review_after = "2023-07-21"
     },
     {
@@ -59,7 +59,7 @@ module "yjsm-hub-svc" {
       email        = "craig.ashford@necsws.com"
       org          = "NEC SWS"
       reason       = "New front end developer on YJAF team"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-02-07"
     },
     {
@@ -77,9 +77,9 @@ module "yjsm-hub-svc" {
       permission   = "admin"
       name         = "Andrew Richards"
       email        = "a.t.richards@btopenworld.com"
-      org          = "NEC"
+      org          = "NEC Software Solutions"
       reason       = "New starter (well returning Dev) working on all YJAF projects etc"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-05-26"
     },
     {
@@ -87,9 +87,9 @@ module "yjsm-hub-svc" {
       permission   = "admin"
       name         = "Vikas Omar"
       email        = "vikas.omar@necsws.com"
-      org          = "NEC"
+      org          = "NEC Software Solutions"
       reason       = "New starter working on YJAF projects"
-      added_by     = "Jon Dent jon.dent@justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-01-27"
     },
   ]
