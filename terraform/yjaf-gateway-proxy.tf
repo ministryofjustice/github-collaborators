@@ -10,7 +10,7 @@ module "yjaf-gateway-proxy" {
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
       added_by     = "Thomas Tipler - thomas.tipler@necsws.com"
-      review_after = "2022-12-25"
+      review_after = "2023-06-23"
     },
     {
       github_user  = "ttipler"
