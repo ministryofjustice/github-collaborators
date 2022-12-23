@@ -266,7 +266,7 @@ class GithubCollaborators
       context CALL_CREATE_PULL_REQUEST do
         before do
           ENV["REALLY_POST_TO_GH"] = "1"
-          ENV["OPS_BOT_TOKEN"] = "1"
+          ENV["OPS_BOT_TOKEN_ENABLED"] = "1"
         end
 
         it "when post to github and ops eng bot env variables are set" do
@@ -277,14 +277,14 @@ class GithubCollaborators
 
         after do
           ENV.delete("REALLY_POST_TO_GH")
-          ENV.delete("OPS_BOT_TOKEN")
+          ENV.delete("OPS_BOT_TOKEN_ENABLED")
         end
       end
 
       context CALL_CREATE_PULL_REQUEST do
         before do
           ENV["REALLY_POST_TO_GH"] = "1"
-          ENV["OPS_BOT_TOKEN"] = "0"
+          ENV["OPS_BOT_TOKEN_ENABLED"] = "0"
         end
 
         it "when post to github env variable is set and ops eng bot env variables isn't set" do
@@ -295,7 +295,7 @@ class GithubCollaborators
 
         after do
           ENV.delete("REALLY_POST_TO_GH")
-          ENV.delete("OPS_BOT_TOKEN")
+          ENV.delete("OPS_BOT_TOKEN_ENABLED")
         end
       end
 
