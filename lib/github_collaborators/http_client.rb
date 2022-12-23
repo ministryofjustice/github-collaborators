@@ -56,8 +56,7 @@ class GithubCollaborators
       http, uri = create_http_client(url)
       request = Net::HTTP::Post.new(uri.request_uri, headers)
       request.body = json
-      result = http.request(request)
-      result
+      http.request(request)
     end
 
     # Send a pull request to GitHub REST API using the Ops Eng Team Bot token
