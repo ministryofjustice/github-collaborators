@@ -351,7 +351,7 @@ class GithubCollaborators
           @outside_collaborators.check_repository_invites([], TEST_REPO_NAME2)
         end
 
-        it "call check_repository_invites when invites exist and passed in array has values" do
+        it "when invites exist and passed in array has values" do
           invite2 = {login: TEST_USER_2, expired: false, invite_id: 7924}
           invites = [invite1, invite2]
           allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return(invites)
@@ -359,11 +359,11 @@ class GithubCollaborators
           @outside_collaborators.check_repository_invites([TEST_USER_1], TEST_REPO_NAME2)
         end
 
-        it "call check_repository_invites when invites exist but has expired" do
+        it "when invites exist but has expired" do
           invite1 = {login: TEST_USER_1, expired: true, invite_id: 2344}
           invites = [invite1, invite2]
           allow_any_instance_of(HelperModule).to receive(:get_repository_invites).with(TEST_REPO_NAME2).and_return(invites)
-          allow_any_instance_of(HelperModule).to receive(:delete_expired_invite).with(TEST_REPO_NAME2, TEST_USER_1)
+          allow_any_instance_of(HelperModule).to receive(:delete_expired_invite).with(TEST_REPO_NAME2, TEST_USER_1, 2344)
           @outside_collaborators.check_repository_invites([TEST_USER_1], TEST_REPO_NAME2)
         end
       end

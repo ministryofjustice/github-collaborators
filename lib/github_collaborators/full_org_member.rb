@@ -168,7 +168,7 @@ class GithubCollaborators
     #
     # @param repository_name [String] the repository name
     def add_attached_archived_repository(repository_name)
-      logger.debug ""
+      logger.debug "add_attached_archived_repository"
       @attached_archived_repositories.push(repository_name)
       @attached_archived_repositories.sort!
       @attached_archived_repositories.uniq!
