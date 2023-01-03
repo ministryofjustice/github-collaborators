@@ -30,7 +30,7 @@ module "yjaf-utilities" {
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2022-12-12"
+      review_after = "2023-12-12"
     },
     {
       github_user  = "craig-ashford-nec"
