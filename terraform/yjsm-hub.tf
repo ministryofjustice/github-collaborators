@@ -10,7 +10,7 @@ module "yjsm-hub" {
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2022-12-31"
+      review_after = "2023-12-18"
     },
     {
       github_user  = "gregi2n"
