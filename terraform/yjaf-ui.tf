@@ -39,7 +39,7 @@ module "yjaf-ui" {
       email        = "vasil.dimitrov@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Greg Whiting <greg.whiting@necsws.com> Devops for NEC Software Solutions"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-12-18"
     },
     {
@@ -49,7 +49,7 @@ module "yjaf-ui" {
       email        = "thomas.tipler@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "Greg Whiting - greg.whiting@necsws.com"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-02-24"
     },
     {
@@ -59,7 +59,7 @@ module "yjaf-ui" {
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
-      added_by     = "Jo Harvey joanna.harvey@necsws.com"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-12-23"
     },
     {
@@ -109,7 +109,7 @@ module "yjaf-ui" {
       email        = "olusegun.odunukan@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF"
-      added_by     = "Tony Bishop antony.bishop@digital.justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-11-22"
     },
   ]

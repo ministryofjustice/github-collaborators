@@ -69,7 +69,7 @@ module "yjaf-transitions" {
       email        = "vasil.dimitrov@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Antony Bishop <antony.bishop@digital.justice.gov.uk> Operations Engineering"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-12-18"
     },
     {
@@ -79,7 +79,7 @@ module "yjaf-transitions" {
       email        = "craig.ashford@necsws.com"
       org          = "NEC SWS"
       reason       = "New front end developer on YJAF team"
-      added_by     = "Tony Bishop antony.bishop@digital.justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-02-07"
     },
   ]

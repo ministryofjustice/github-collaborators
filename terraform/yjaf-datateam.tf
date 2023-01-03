@@ -9,7 +9,7 @@ module "yjaf-datateam" {
       email        = "sam.mohammed@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "For YJAF data team to store their scripts into the new yjaf data team repo"
-      added_by     = "antony.bishop@digital.justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-12-19"
     },
     {
@@ -19,7 +19,7 @@ module "yjaf-datateam" {
       email        = "ann.meads-tallis@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "For YJAF data team to store their scripts into the new yjaf data team repo"
-      added_by     = "antony.bishop@digital.justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2022-12-19"
     },
     {
@@ -79,7 +79,7 @@ module "yjaf-datateam" {
       email        = "craig.ashford@necsws.com"
       org          = "NEC SWS"
       reason       = "New front end developer on YJAF team"
-      added_by     = "Tony Bishop antony.bishop@digital.justice.gov.uk"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-02-07"
     },
   ]

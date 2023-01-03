@@ -39,7 +39,7 @@ module "yjaf-devops-infrastructure" {
       email        = "vasil.dimitrov@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Greg Whiting <greg.whiting@necsws.com> Devops for NEC Software Solutions"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-12-18"
     },
     {
@@ -49,7 +49,7 @@ module "yjaf-devops-infrastructure" {
       email        = "thomas.tipler@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "Greg Whiting - greg.whiting@necsws.com"
+      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-02-24"
     },
     {
