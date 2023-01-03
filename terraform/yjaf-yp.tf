@@ -30,7 +30,7 @@ module "yjaf-yp" {
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
       added_by     = "Greg Whiting <greg.whiting@necsws.com> Devops for NEC Software Solutions"
-      review_after = "2022-12-18"
+      review_after = "2023-12-18"
     },
     {
       github_user  = "ttipler"

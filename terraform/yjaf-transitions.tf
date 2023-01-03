@@ -70,7 +70,7 @@ module "yjaf-transitions" {
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
       added_by     = "Antony Bishop <antony.bishop@digital.justice.gov.uk> Operations Engineering"
-      review_after = "2023-10-01"
+      review_after = "2023-12-18"
     },
     {
       github_user  = "craig-ashford-nec"
