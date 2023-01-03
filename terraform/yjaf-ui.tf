@@ -100,7 +100,7 @@ module "yjaf-ui" {
       org          = "NEC Software Solutions"
       reason       = "YJAF"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2022-12-28"
+      review_after = "2023-06-26"
     },
     {
       github_user  = "olusegunonec"
