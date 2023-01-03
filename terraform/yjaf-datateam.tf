@@ -10,7 +10,7 @@ module "yjaf-datateam" {
       org          = "NEC Software Solutions"
       reason       = "For YJAF data team to store their scripts into the new yjaf data team repo"
       added_by     = "antony.bishop@digital.justice.gov.uk"
-      review_after = "2022-12-19"
+      review_after = "2023-12-19"
     },
     {
       github_user  = "anntallis"
