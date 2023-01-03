@@ -50,7 +50,7 @@ module "yjaf-documents" {
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
       added_by     = "Jo Harvey joanna.harvey@necsws.com"
-      review_after = "2022-12-12"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "craig-ashford-nec"

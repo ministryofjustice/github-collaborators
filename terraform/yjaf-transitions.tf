@@ -10,7 +10,7 @@ module "yjaf-transitions" {
       org          = "NEC SWS"
       reason       = "Working on transition project"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2023-03-07"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "ttipler"
