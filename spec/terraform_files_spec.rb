@@ -40,11 +40,6 @@ class GithubCollaborators
           test_equal(@terraform_files.does_file_exist(TEST_REPO_NAME), false)
         end
 
-        it "call get_empty_files when no empty files exist" do
-          result = @terraform_files.get_empty_files
-          test_equal(result.length, 0)
-        end
-
         it "call ensure_file_exists_in_memory" do
           files = Dir[TERRAFORM_FILES].length - EXCLUDE_FILES.length
           the_terraform_files = @terraform_files.get_terraform_files
@@ -56,16 +51,26 @@ class GithubCollaborators
         end
       end
 
-      it "call get_empty_files when file exists" do
-        empty_file = File.read("spec/fixtures/empty-file.tf")
-        File.write("terraform/empty-file.tf", empty_file)
-        files = Dir[TERRAFORM_FILES].length - EXCLUDE_FILES.length
-        terraform_files = GithubCollaborators::TerraformFiles.new
-        the_terraform_files = terraform_files.get_terraform_files
-        test_equal(the_terraform_files.length, files)
-        result = terraform_files.get_empty_files
-        test_equal(result.length, 1)
-        File.delete("terraform/empty-file.tf")
+      context "call get_empty_files" do
+        it "when no empty files exist" do
+          stub_const("GithubCollaborators::TerraformFiles::TERRAFORM_FILES", "spec/tmp/*.tf")
+          terraform_files = GithubCollaborators::TerraformFiles.new
+          result = terraform_files.get_empty_files
+          test_equal(result.length, 0)
+        end
+
+        it "when file exists" do
+          stub_const("GithubCollaborators::TerraformFiles::TERRAFORM_FILES", "spec/tmp/*.tf")
+          empty_file = File.read("spec/fixtures/empty-file.tf")
+          File.write("spec/tmp/empty-file.tf", empty_file)
+          files = Dir["spec/tmp"].length
+          terraform_files = GithubCollaborators::TerraformFiles.new
+          the_terraform_files = terraform_files.get_terraform_files
+          test_equal(the_terraform_files.length, files)
+          result = terraform_files.get_empty_files
+          test_equal(result.length, 1)
+          File.delete("spec/tmp/empty-file.tf")
+        end
       end
 
       context "" do
