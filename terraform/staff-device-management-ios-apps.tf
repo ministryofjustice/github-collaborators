@@ -10,7 +10,7 @@ module "staff-device-management-ios-apps" {
       org          = "MadeTech"
       reason       = "VICTOR product development"
       added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2022-12-31"
+      review_after = "2023-03-30"
     },
     {
       github_user  = "bingliumt"
@@ -20,7 +20,7 @@ module "staff-device-management-ios-apps" {
       org          = "MadeTech"
       reason       = "VICTOR product development"
       added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2022-12-31"
-    },
+      review_after = "2023-03-30"
+    }
   ]
 }
