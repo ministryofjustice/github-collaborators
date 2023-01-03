@@ -118,7 +118,7 @@ class GithubCollaborators
       [http, uri]
     end
 
-    APPLICATION_JSON = "application/json"
+    APPLICATION_JSON = "application/vnd.github+json"
 
     # Create a header structured message
     #
@@ -138,7 +138,7 @@ class GithubCollaborators
       {
         "Accept" => APPLICATION_JSON,
         "Content-Type" => APPLICATION_JSON,
-        "Authorization" => "token #{@ops_bot_token}"
+        "Authorization" => "bearer #{@ops_bot_token}"
       }
     end
   end
