@@ -50,7 +50,7 @@ module "yjaf-datateam" {
       org          = "NEC SWS"
       reason       = "Requesting access so I can perhaps start sharing DB workload with Andrew"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2023-08-31"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "vikasnecsws"

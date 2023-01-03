@@ -50,7 +50,7 @@ module "yjaf-gateway-proxy" {
       org          = "YJB"
       reason       = "For work on the gateway-proxy project"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2023-03-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "andrewtrichards"

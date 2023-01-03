@@ -50,7 +50,7 @@ module "yjaf-conversions" {
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
       added_by     = "Antony Bishop antony.bishop@digital.justice.gov.uk"
-      review_after = "2022-12-31"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "craig-ashford-nec"
