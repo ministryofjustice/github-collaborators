@@ -10,7 +10,7 @@ module "yjaf-serious-incidents" {
       org          = "NEC Software Solutions"
       reason       = "Access is needed for development of a new feature for yjaf"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2023-05-25"
+      review_after = "2023-12-13"
     },
     {
       github_user  = "javaidarshadnec"

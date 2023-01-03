@@ -30,7 +30,7 @@ module "yjaf-transitions" {
       org          = "NEC SWS"
       reason       = "Working on pipeline for deployment of microservice"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2023-03-24"
+      review_after = "2023-12-13"
     },
     {
       github_user  = "andrewtrichards"
