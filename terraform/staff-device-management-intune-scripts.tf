@@ -10,7 +10,7 @@ module "staff-device-management-intune-scripts" {
       org          = "MadeTech"
       reason       = "VICTOR product development"
       added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2022-12-31"
+      review_after = "2023-03-30"
     },
     {
       github_user  = "bingliumt"
@@ -20,7 +20,7 @@ module "staff-device-management-intune-scripts" {
       org          = "MadeTech"
       reason       = "VICTOR product development"
       added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2022-12-31"
+      review_after = "2023-03-30"
     },
     {
       github_user  = "emileswarts"
@@ -31,6 +31,6 @@ module "staff-device-management-intune-scripts" {
       reason       = "Full Org member / collaborator missing from Terraform file"
       added_by     = "opseng-bot@digital.justice.gov.uk"
       review_after = "2023-02-20"
-    },
+    }
   ]
 }
