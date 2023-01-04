@@ -10,7 +10,7 @@ module "dso-infra-azure-ad" {
       org          = "Kainos"
       reason       = "Approved by DSO team to add new users into Azure"
       added_by     = "Jake Mulley <jake.mulley@digital.justice.gov.uk>"
-      review_after = "2023-06-31"
+      review_after = "2023-06-26"
     },
   ]
 }
