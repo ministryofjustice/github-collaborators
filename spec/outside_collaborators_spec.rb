@@ -12,7 +12,9 @@ class GithubCollaborators
     let(:expired_slack_message) { double(GithubCollaborators::Expired) }
     let(:unkown_collaborators_slack_message) { double(GithubCollaborators::UnknownCollaborators) }
     let(:removed_collaborators_slack_message) { double(GithubCollaborators::Removed) }
-
+    let(:http_client) { double(GithubCollaborators::HttpClient) }
+    let(:organization) { double(GithubCollaborators::Organization) }
+    
     # The tests below are nested. This is to reduce code duplication.
     # This is because it take alot of object to create the object under test.
     # The before do blocks contain expectations that are common within
@@ -20,7 +22,6 @@ class GithubCollaborators
     # nested context block when reading the test code.
 
     context "test outside_collaborators" do
-      let(:organization) { double(GithubCollaborators::Organization) }
       before do
         allow_any_instance_of(HelperModule).to receive(:get_pull_requests).and_return([])
         expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
@@ -296,7 +297,6 @@ class GithubCollaborators
 
         it "when no terraform files exist" do
           expect(terraform_files).to receive(:get_terraform_files).and_return([]).at_least(2).times
-          expect(terraform_files).not_to receive(:remove_file)
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
           outside_collaborators.archived_repository_check
         end
@@ -647,6 +647,92 @@ class GithubCollaborators
           allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
           allow_any_instance_of(HelperModule).to receive(:get_archived_repositories).and_return([])
           allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])
+        end
+
+        context "call deleted_repository_check" do
+
+          repo1 = GithubCollaborators::Repository.new(TEST_REPO_NAME1, 0)
+          repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 0)
+
+          context "when no terraform files exist" do 
+            before do
+              allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
+              expect(terraform_files).to receive(:get_terraform_files).and_return([]).at_least(2).times
+              expect(terraform_files).not_to receive(:remove_file)
+              allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{ARCHIVED_REPOSITORY_PR_TITLE}").and_return(false)
+            end
+
+            it "and github repositories exist so do not delete a file" do
+              allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([])
+              outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+              outside_collaborators.deleted_repository_check
+            end
+
+            it "and github repositories do exist so do not delete a file" do
+              allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
+              outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+              outside_collaborators.deleted_repository_check
+            end
+          end
+          
+          context "when terraform files does exist and github repositories exist" do
+            before do
+              expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+              file = create_terraform_file
+              expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
+              allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
+              allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
+              @outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+            end
+  
+            it "but get a 404 code and PR already exists" do
+              allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{DELETE_REPOSITORY_PR_TITLE}").and_return(true)
+              url = "#{GH_API_URL}/#{TEST_REPO_NAME}"
+              expect(http_client).to receive(:fetch_code).with(url).and_return("404")
+              expect(terraform_files).not_to receive(:remove_file)
+              @outside_collaborators.deleted_repository_check
+            end
+
+            context "when a PR doesn't already exist" do
+              before do
+                allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{DELETE_REPOSITORY_PR_TITLE}").and_return(false)
+                @url = "#{GH_API_URL}/#{TEST_REPO_NAME}"
+              end
+
+              it "and get a 301 code so do not delete a file" do
+                expect(http_client).to receive(:fetch_code).with(@url).and_return("301")
+                expect(terraform_files).not_to receive(:remove_file)
+                @outside_collaborators.deleted_repository_check
+              end
+
+              it "and get a 200 code so do not delete a file" do
+                expect(http_client).to receive(:fetch_code).with(@url).and_return("200")
+                expect(terraform_files).not_to receive(:remove_file)
+                @outside_collaborators.deleted_repository_check
+              end
+
+              it "and a full org member is attached to the so do not delete a file" do
+                expect(http_client).to receive(:fetch_code).with(@url).and_return("404")
+                allow_any_instance_of(Organization).to receive(:is_full_org_member_attached_to_repository).with(TEST_REPO_NAME).and_return(true)
+                expect(terraform_files).not_to receive(:remove_file)
+                @outside_collaborators.deleted_repository_check
+              end
+ 
+              it "and get a 404 code so do delete a file" do
+                expect(http_client).to receive(:fetch_code).with(@url).and_return("404")
+                expect(terraform_files).to receive(:remove_file).with(TEST_REPO_NAME)
+                allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with(DELETE_FILE_BRANCH_NAME, [TEST_FILE], DELETE_REPOSITORY_PR_TITLE, "", TYPE_DELETE_FILE)
+                expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{DELETE_REPOSITORY_PR_TITLE}", [TEST_FILE])
+                @outside_collaborators.deleted_repository_check
+              end
+    
+            end
+            # it "when pull request exists" do
+            #   allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{ARCHIVED_REPOSITORY_PR_TITLE}").and_return(true)
+            #   expect(terraform_files).not_to receive(:remove_file)
+            #   @outside_collaborators.deleted_repository_check
+            # end
+          end
         end
 
         it "call print_full_org_member_collaborators" do

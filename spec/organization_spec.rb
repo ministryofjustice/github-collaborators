@@ -32,6 +32,15 @@ class GithubCollaborators
           allow_any_instance_of(HelperModule).to receive(:get_all_org_members_team_repositories).and_return([])
         end
 
+        context "call is_full_org_member_attached_to_repository" do
+          it "when there is no full org member" do
+            allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([])
+            organization = GithubCollaborators::Organization.new
+            result = organization.is_full_org_member_attached_to_repository(TEST_REPO_NAME)
+            test_equal(result, false)
+          end
+        end
+
         context "call get_repository_issues_from_github" do
           context "" do
             before do
@@ -229,6 +238,24 @@ class GithubCollaborators
               @organization = GithubCollaborators::Organization.new
               @organization.create_full_org_members([@collaborator1, @collaborator2, @collaborator3])
               test_equal(@organization.full_org_members.length, 3)
+            end
+
+            context "call is_full_org_member_attached_to_repository" do
+              before do
+                @organization.full_org_members.each do |org_member|
+                  org_member.add_github_repository(TEST_REPO_NAME)
+                end
+              end
+
+              it "when there is full org member who is not attached to the repo" do
+                result = @organization.is_full_org_member_attached_to_repository(TEST_REPO_NAME4)
+                test_equal(result, false)
+              end
+    
+              it "when there is full org memberwho is attached to the repo" do
+                result = @organization.is_full_org_member_attached_to_repository(TEST_REPO_NAME)
+                test_equal(result, true)
+              end
             end
 
             context "call get_full_org_members_with_repository_permission_mismatches" do

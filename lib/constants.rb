@@ -130,6 +130,9 @@ module Constants
   DELETE_ARCHIVE_FILE_BRANCH_NAME = "delete-archived-repository-file"
 
   # Branch name
+  DELETE_FILE_BRANCH_NAME = "delete-repository-file"
+
+  # Branch name
   UPDATE_REVIEW_DATE_BRANCH_NAME = "update-review-date-"
 
   # Branch name

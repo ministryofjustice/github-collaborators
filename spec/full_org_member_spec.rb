@@ -48,6 +48,11 @@ class GithubCollaborators
         }
       ]
 
+      it "call add_github_repository" do
+        @full_org_member.add_github_repository(TEST_USER_1)
+        test_equal(@full_org_member.github_repositories.length, 1)
+      end
+      
       it "call add_info_from_file" do
         @full_org_member.add_info_from_file(TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_NAME, TEST_COLLABORATOR_ORG)
         test_equal(@full_org_member.login, TEST_USER_1)

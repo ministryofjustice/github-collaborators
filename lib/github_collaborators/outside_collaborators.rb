@@ -386,8 +386,8 @@ class GithubCollaborators
 
       repo_delta.each do |repository_name|
         http_code = GithubCollaborators::HttpClient.new.fetch_code("#{GH_API_URL}/#{repository_name}")
-        if http_code == "301" || http_code != "404"
-          index = @repo_delta.index(repository_name)
+        if http_code == "301" || http_code != "404" || @organization.is_full_org_member_attached_to_repository(repository_name) == true
+          index = repo_delta.index(repository_name)
           repo_delta.delete_at(index)
         end
       end
