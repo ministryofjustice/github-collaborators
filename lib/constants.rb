@@ -94,7 +94,7 @@ module Constants
   ARCHIVED_REPOSITORY_PR_TITLE = "Delete archived repository Terraform file/s"
 
   # Pull request title
-  DELETE_REPOSITORY_PR_TITLE  = "Delete repository Terraform file/s"
+  DELETE_REPOSITORY_PR_TITLE = "Delete repository Terraform file/s"
 
   # Collaborator data issue
   USERNAME_MISSING = "Collaborator username is missing"

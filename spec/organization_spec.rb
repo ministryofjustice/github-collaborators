@@ -251,7 +251,7 @@ class GithubCollaborators
                 result = @organization.is_full_org_member_attached_to_repository(TEST_REPO_NAME4)
                 test_equal(result, false)
               end
-    
+
               it "when there is full org memberwho is attached to the repo" do
                 result = @organization.is_full_org_member_attached_to_repository(TEST_REPO_NAME)
                 test_equal(result, true)
