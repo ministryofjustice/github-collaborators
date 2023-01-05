@@ -24,6 +24,7 @@ jobs:
         env:
           ISSUE: ${{ toJson(github.event.issue) }}
           ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPS_BOT_TOKEN: ${{ secrets.OPS_BOT_TOKEN }}
           LOG_LEVEL: "info"
       - name: Report failure to Slack
         if: always()
