@@ -1,14 +1,14 @@
-name: Close open issues
+name: Close expired issues
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 23 * * 2,5"
 
 env:
   RUBY_VERSION: 3.1.0
 
 jobs:
-  close-open-issues:
+  close-expired-issues:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,7 +17,7 @@ jobs:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
       - run: bundle install
-      - run: bin/close-issues.rb
+      - run: bin/close-expired-issues.rb
         env:
           ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
           OPS_BOT_TOKEN: ${{ secrets.OPS_BOT_TOKEN }}
