@@ -55,6 +55,7 @@ class GithubCollaborators
         it "call start" do
           expect(@outside_collaborators).to receive(:remove_empty_files)
           expect(@outside_collaborators).to receive(:archived_repository_check)
+          expect(@outside_collaborators).to receive(:deleted_repository_check)
           expect(@outside_collaborators).to receive(:compare_terraform_and_github)
           expect(@outside_collaborators).to receive(:collaborator_checks)
           expect(@outside_collaborators).to receive(:full_org_members_check)
@@ -276,7 +277,7 @@ class GithubCollaborators
 
         it "when empty file exists" do
           expect(terraform_files).to receive(:remove_file).with(EMPTY_REPOSITORY_NAME)
-          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with(DELETE_EMPTY_FILE_BRANCH_NAME, ["terraform/empty-file.tf"], EMPTY_FILES_PR_TITLE, "", TYPE_DELETE)
+          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with(DELETE_EMPTY_FILE_BRANCH_NAME, ["terraform/empty-file.tf"], EMPTY_FILES_PR_TITLE, "", TYPE_DELETE_EMPTY_FILE)
           @outside_collaborators.remove_empty_files
         end
 

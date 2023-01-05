@@ -31,7 +31,7 @@ module Constants
   RATE_LIMITED = "RATE_LIMITED"
 
   # Pull request type
-  TYPE_DELETE = "delete"
+  TYPE_DELETE_EMPTY_FILE = "delete_empty_file"
 
   # Pull request type
   TYPE_EXTEND = "extend"
@@ -47,6 +47,9 @@ module Constants
 
   # Pull request type
   TYPE_DELETE_ARCHIVE = "delete_archive_file"
+
+  # Pull request type
+  TYPE_DELETE_FILE = "delete_file"
 
   # Github issue title
   COLLABORATOR_EXPIRES_SOON = "Collaborator review date expires soon for user"
@@ -89,6 +92,9 @@ module Constants
 
   # Pull request title
   ARCHIVED_REPOSITORY_PR_TITLE = "Delete archived repository Terraform file/s"
+
+  # Pull request title
+  DELETE_REPOSITORY_PR_TITLE  = "Delete repository Terraform file/s"
 
   # Collaborator data issue
   USERNAME_MISSING = "Collaborator username is missing"
