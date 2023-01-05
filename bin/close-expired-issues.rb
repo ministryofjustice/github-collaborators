@@ -2,11 +2,11 @@
 
 require_relative "../lib/github_collaborators"
 
-class CloseIssues
+class CloseExpiredIssues
   include Logging
   include HelperModule
 
-  def close_issues
+  def start
     repositories ||= get_active_repositories
 
     repositories.each do |repository|
@@ -16,5 +16,5 @@ class CloseIssues
 end
 
 puts "Start"
-CloseIssues.new.close_issues
+CloseExpiredIssues.new.start
 puts "Finished"
