@@ -19,7 +19,6 @@ class GithubCollaborators
     # @return [String] the HTTP response code
     def fetch_code(url)
       logger.debug "fetch_code"
-      response = nil
       response = http_get(url)
       response.code
     end

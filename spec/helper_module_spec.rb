@@ -353,6 +353,29 @@ class GithubCollaborators
       context "" do
         branch_name = BRANCH_NAME
         hash_body = {
+          title: DELETE_REPOSITORY_PR_TITLE,
+          head: branch_name.downcase,
+          base: "main",
+          body: <<~EOF
+            Hi there
+            
+            This is the GitHub-Collaborator repository bot.
+            
+            The repositories in this pull request have been deleted from GitHub.
+            
+            This pull request is to remove those Terraform files.
+    
+          EOF
+        }
+
+        it "call delete_file_hash" do
+          test_equal(helper_module.delete_file_hash(branch_name), hash_body)
+        end
+      end
+
+      context "" do
+        branch_name = BRANCH_NAME
+        hash_body = {
           title: EMPTY_FILES_PR_TITLE,
           head: branch_name.downcase,
           base: "main",

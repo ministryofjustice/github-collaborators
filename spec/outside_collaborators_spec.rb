@@ -309,14 +309,26 @@ class GithubCollaborators
         end
       end
 
-      it "call archived_repository_check when terraform files exist and is an archived file" do
-        file = create_terraform_file
-        expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
-        expect(organization).to receive(:get_org_archived_repositories).and_return([TEST_REPO_NAME])
-        expect(terraform_files).to receive(:remove_file).with(TEST_REPO_NAME)
-        allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with(DELETE_ARCHIVE_FILE_BRANCH_NAME, [TEST_FILE], ARCHIVED_REPOSITORY_PR_TITLE, "", TYPE_DELETE_ARCHIVE)
-        outside_collaborators = GithubCollaborators::OutsideCollaborators.new
-        outside_collaborators.archived_repository_check
+      context "call archived_repository_check" do
+        before do
+          file = create_terraform_file
+          expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(2).times
+          expect(organization).to receive(:get_org_archived_repositories).and_return([TEST_REPO_NAME])
+          @outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+        end
+
+        it "when terraform files exist and is an archived file" do
+          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{ARCHIVED_REPOSITORY_PR_TITLE}").and_return(false)
+          expect(terraform_files).to receive(:remove_file).with(TEST_REPO_NAME)
+          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with(DELETE_ARCHIVE_FILE_BRANCH_NAME, [TEST_FILE], ARCHIVED_REPOSITORY_PR_TITLE, "", TYPE_DELETE_ARCHIVE)
+          @outside_collaborators.archived_repository_check
+        end
+
+        it "when pull request exists" do
+          allow_any_instance_of(OutsideCollaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{ARCHIVED_REPOSITORY_PR_TITLE}").and_return(true)
+          expect(terraform_files).not_to receive(:remove_file)
+          @outside_collaborators.archived_repository_check
+        end
       end
 
       it "call create_unknown_collaborators" do
