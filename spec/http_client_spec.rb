@@ -21,6 +21,10 @@ class GithubCollaborators
           expect { GithubCollaborators::HttpClient.new }.to raise_error(KeyError)
         end
 
+        it "catch error on fetch_code" do
+          expect { hc.fetch_code(TEST_URL) }.to raise_error(KeyError)
+        end
+
         it "catch error on fetch_json" do
           expect { hc.fetch_json(TEST_URL) }.to raise_error(KeyError)
         end
@@ -74,6 +78,32 @@ class GithubCollaborators
           stub_request(:post, TEST_URL).to_return(body: BODY, status: 200)
           reply = hc.post_pull_request_json(TEST_URL, nil)
           expect(reply).to be_instance_of(Net::HTTPOK)
+        end
+
+        context "call fetch_code" do
+          it "when errors and return response code" do
+            stub_request(:any, TEST_URL).to_return(body: "errors", status: 401)
+            reply = hc.fetch_code(TEST_URL)
+            test_equal(reply, "401")
+          end
+
+          it "when rate limited error in response return response code" do
+            stub_request(:any, TEST_URL).to_return(body: "errors RATE_LIMITED", status: 401)
+            reply = hc.fetch_code(TEST_URL)
+            test_equal(reply, "401")
+          end
+
+          it "and return response code when body empty" do
+            stub_request(:get, TEST_URL).to_return(body: "", status: 200)
+            reply = hc.fetch_code(TEST_URL)
+            test_equal(reply, "200")
+          end
+
+          it "and return response code when have body" do
+            stub_request(:get, TEST_URL).to_return(body: BODY, status: 200)
+            reply = hc.fetch_code(TEST_URL)
+            test_equal(reply, "200")
+          end
         end
 
         context "call fetch_json" do

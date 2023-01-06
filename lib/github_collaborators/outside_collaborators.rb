@@ -44,6 +44,7 @@ class GithubCollaborators
     def start
       remove_empty_files
       archived_repository_check
+      deleted_repository_check
       compare_terraform_and_github
       collaborator_checks
       full_org_members_check
@@ -362,6 +363,69 @@ class GithubCollaborators
     end
 
     # Find which repositories in the Terraform files the App tracks that have been
+    # delete on GitHub, delete those file/s then call the functions to create a new
+    # pull request on GitHub
+    def deleted_repository_check
+      logger.debug "deleted_repository_check"
+
+      terraform_repositories = []
+      terraform_files = @terraform_files.get_terraform_files
+      terraform_files.each do |terraform_file|
+        terraform_repositories.append(terraform_file.filename.downcase)
+      end
+
+      github_repositories = []
+      @organization.repositories.each do |repository|
+        github_repositories.append(repository.name.downcase)
+      end
+
+      terraform_repositories.sort!
+      github_repositories.sort!
+
+      repo_delta = (terraform_repositories - github_repositories)
+
+      repo_delta.each do |repository_name|
+        http_code = GithubCollaborators::HttpClient.new.fetch_code("#{GH_API_URL}/#{repository_name}")
+        if http_code == "301" || http_code != "404" || @organization.is_full_org_member_attached_to_repository(repository_name) == true
+          index = repo_delta.index(repository_name)
+          repo_delta.delete_at(index)
+        end
+      end
+
+      # Remove any files which are in an open pull request already
+      repo_delta.delete_if { |repository_name| does_pr_already_exist("#{repository_name.downcase}.tf", DELETE_REPOSITORY_PR_TITLE) }
+
+      # Delete matching Terrafom file
+      edited_files = []
+      repo_delta.each do |repository_name|
+        @terraform_files.remove_file(repository_name.downcase)
+        file_name = "terraform/#{repository_name.downcase}.tf"
+        edited_files.push(file_name)
+      end
+
+      if edited_files.length > 0
+        branch_name = DELETE_FILE_BRANCH_NAME
+        type = TYPE_DELETE_FILE
+        pull_request_title = DELETE_REPOSITORY_PR_TITLE
+        collaborator_name = ""
+        create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
+        add_new_pull_request(pull_request_title, edited_files)
+
+        # Remove the deleted file from any Collaborator objects
+        edited_files.each do |deleted_repository_name|
+          # Strip away prefix and file type
+          repository_name = File.basename(deleted_repository_name, ".tf")
+          @collaborators.each do |collaborator|
+            if collaborator.repository.downcase == repository_name.downcase
+              index = @collaborators.index(collaborator)
+              @collaborators.delete_at(index)
+            end
+          end
+        end
+      end
+    end
+
+    # Find which repositories in the Terraform files the App tracks that have been
     # archived, delete those file/s then call the functions to create a new pull
     # request on GitHub
     def archived_repository_check
@@ -380,6 +444,9 @@ class GithubCollaborators
 
       archived_repositories.sort!
       archived_repositories.uniq!
+
+      # Remove any files which are in an open pull request already
+      archived_repositories.delete_if { |archived_repository_name| does_pr_already_exist("#{archived_repository_name.downcase}.tf", ARCHIVED_REPOSITORY_PR_TITLE) }
 
       # Delete the archived repository matching Terrafom file
       edited_files = []
@@ -431,7 +498,7 @@ class GithubCollaborators
 
       if edited_files.length > 0
         branch_name = DELETE_EMPTY_FILE_BRANCH_NAME
-        type = TYPE_DELETE
+        type = TYPE_DELETE_EMPTY_FILE
         pull_request_title = EMPTY_FILES_PR_TITLE
         collaborator_name = ""
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)

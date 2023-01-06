@@ -444,7 +444,7 @@ module HelperModule
     edited_files.each { |file_name| branch_creator.add(file_name) }
     branch_creator.commit_and_push(pull_request_title)
 
-    if type == TYPE_DELETE
+    if type == TYPE_DELETE_EMPTY_FILE
       create_pull_request(delete_empty_files_hash(branch_name))
     elsif type == TYPE_EXTEND
       create_pull_request(extend_date_hash(collaborator_name, branch_name))
@@ -456,6 +456,8 @@ module HelperModule
       create_pull_request(add_collaborator_hash(collaborator_name, branch_name))
     elsif type == TYPE_DELETE_ARCHIVE
       create_pull_request(delete_archive_file_hash(branch_name))
+    elsif type == TYPE_DELETE_FILE
+      create_pull_request(delete_file_hash(branch_name))
     end
   end
 
@@ -531,7 +533,30 @@ module HelperModule
 
   # Composes a GitHub branch structured message
   #
-  # @param branch_name [String] the name of the branch to delete
+  # @param branch_name [String] the name of the branch
+  # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
+  def delete_file_hash(branch_name)
+    module_logger.debug "delete_file_hash"
+    {
+      title: DELETE_REPOSITORY_PR_TITLE,
+      head: branch_name.downcase,
+      base: "main",
+      body: <<~EOF
+        Hi there
+        
+        This is the GitHub-Collaborator repository bot.
+        
+        The repositories in this pull request have been deleted from GitHub.
+        
+        This pull request is to remove those Terraform files.
+
+      EOF
+    }
+  end
+
+  # Composes a GitHub branch structured message
+  #
+  # @param branch_name [String] the name of the branch
   # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
   def delete_archive_file_hash(branch_name)
     module_logger.debug "delete_archive_file_hash"

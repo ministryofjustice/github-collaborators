@@ -13,6 +13,16 @@ class GithubCollaborators
       @ops_bot_token = ENV.fetch("OPS_BOT_TOKEN")
     end
 
+    # Get the HTTP code from a GitHub REST API request
+    #
+    # @param url [String] the REST API URL
+    # @return [String] the HTTP response code
+    def fetch_code(url)
+      logger.debug "fetch_code"
+      response = http_get(url)
+      response.code
+    end
+
     # Get data from GitHub REST API
     #
     # @param url [String] the REST API URL

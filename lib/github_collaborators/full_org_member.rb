@@ -90,6 +90,16 @@ class GithubCollaborators
       @all_org_members_team_repositories.uniq!
     end
 
+    # Add repository name to the github repositories array
+    #
+    # @param repositories [String] the repository name
+    def add_github_repository(repository_name)
+      logger.debug "add_github_repository"
+      @github_repositories.append(repository_name)
+      @github_repositories.sort!
+      @github_repositories.uniq!
+    end
+
     # Add repository names to the archived repositories array
     #
     # @param repositories [Array<String>] the repository names
@@ -152,7 +162,7 @@ class GithubCollaborators
           # Filter out repositories from the all-org-members team and archived repositories
           if !is_repo_already_known(repository_name)
             # Store new repository
-            @github_repositories.push(repository_name)
+            add_github_repository(repository_name)
           end
 
           # Store which archived repositories the collaborator is attached to

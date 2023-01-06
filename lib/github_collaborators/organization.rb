@@ -222,6 +222,19 @@ class GithubCollaborators
       []
     end
 
+    # Check if a full Organization member is attached to a repository
+    # @param repository_name [String] the repository name
+    # @return [Bool] true if attached to the repository
+    def is_full_org_member_attached_to_repository(repository_name)
+      logger.debug "is_full_org_member_attached_to_repository"
+      @full_org_members.each do |full_org_member|
+        if full_org_member.github_repositories.include?(repository_name)
+          return true
+        end
+      end
+      false
+    end
+
     private
 
     # Adds a new full Organization member if it doesn't already exist
