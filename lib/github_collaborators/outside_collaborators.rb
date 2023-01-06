@@ -384,11 +384,10 @@ class GithubCollaborators
 
       repo_delta = (terraform_repositories - github_repositories)
 
-      repo_delta.each do |repository_name|
+      repo_delta.delete_if do |repository_name|
         http_code = GithubCollaborators::HttpClient.new.fetch_code("#{GH_API_URL}/#{repository_name}")
-        if http_code == "301" || http_code != "404" || @organization.is_full_org_member_attached_to_repository(repository_name) == true
-          index = repo_delta.index(repository_name)
-          repo_delta.delete_at(index)
+        if @organization.is_full_org_member_attached_to_repository(repository_name) == true || http_code == "301" || http_code != "404"
+          true
         end
       end
 
@@ -415,10 +414,9 @@ class GithubCollaborators
         edited_files.each do |deleted_repository_name|
           # Strip away prefix and file type
           repository_name = File.basename(deleted_repository_name, ".tf")
-          @collaborators.each do |collaborator|
+          @collaborators.delete_if do |collaborator|
             if collaborator.repository.downcase == repository_name.downcase
-              index = @collaborators.index(collaborator)
-              @collaborators.delete_at(index)
+              true
             end
           end
         end
@@ -468,10 +466,9 @@ class GithubCollaborators
         edited_files.each do |archived_repository_name|
           # Strip away prefix and file type
           repository_name = File.basename(archived_repository_name, ".tf")
-          @collaborators.each do |collaborator|
+          @collaborators.delete_if do |collaborator|
             if collaborator.repository.downcase == repository_name.downcase
-              index = @collaborators.index(collaborator)
-              @collaborators.delete_at(index)
+              true
             end
           end
         end

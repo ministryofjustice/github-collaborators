@@ -5,8 +5,8 @@ class GithubCollaborators
   describe TerraformFile do
     context "test TerraformFile" do
       original_file = File.read("spec/fixtures/test-repo.tf")
-      collaborator1 = GithubCollaborators::FullOrgMember.new(TEST_COLLABORATOR_LOGIN)
-      collaborator2 = GithubCollaborators::FullOrgMember.new(TEST_COLLABORATOR_LOGIN)
+      collaborator1 = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
+      collaborator2 = GithubCollaborators::FullOrgMember.new(TEST_USER_2)
       collaborator1.add_info_from_file(TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_NAME, TEST_COLLABORATOR_ORG)
       collaborator2.add_info_from_file(TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_NAME, TEST_COLLABORATOR_ORG)
       review_date = (Date.today + 90).strftime(DATE_FORMAT)
@@ -18,7 +18,7 @@ class GithubCollaborators
         end
 
         it "call get_collaborator_permission when no collaborator exists" do
-          test_equal(@terraform_file.get_collaborator_permission(TEST_COLLABORATOR_LOGIN), "")
+          test_equal(@terraform_file.get_collaborator_permission(TEST_USER_1), "")
         end
 
         context "" do
@@ -31,7 +31,7 @@ class GithubCollaborators
             terraform_blocks.each do |terraform_block|
               test_equal(terraform_block.review_after, review_date)
             end
-            @terraform_file.extend_review_date(TEST_COLLABORATOR_LOGIN)
+            @terraform_file.extend_review_date(TEST_USER_1)
             terraform_blocks = @terraform_file.get_terraform_blocks
             terraform_blocks.each do |terraform_block|
               test_equal(terraform_block.review_after, new_review_date)
@@ -44,7 +44,7 @@ class GithubCollaborators
           end
 
           it "call get_collaborator_permission when collaborator exists" do
-            test_equal(@terraform_file.get_collaborator_permission(TEST_COLLABORATOR_LOGIN), TEST_COLLABORATOR_PERMISSION)
+            test_equal(@terraform_file.get_collaborator_permission(TEST_USER_1), TEST_COLLABORATOR_PERMISSION)
           end
 
           it "call change_collaborator_permission and revert_terraform_blocks" do
@@ -52,7 +52,7 @@ class GithubCollaborators
             terraform_blocks.each do |terraform_block|
               test_equal(terraform_block.permission, TEST_COLLABORATOR_PERMISSION)
             end
-            @terraform_file.change_collaborator_permission(TEST_COLLABORATOR_LOGIN, "push")
+            @terraform_file.change_collaborator_permission(TEST_USER_1, "push")
             terraform_blocks = @terraform_file.get_terraform_blocks
             terraform_blocks.each do |terraform_block|
               test_equal(terraform_block.permission, "push")
@@ -91,7 +91,7 @@ class GithubCollaborators
             it "call remove_collaborator" do
               terraform_blocks = @terraform_file.get_terraform_blocks
               test_equal(terraform_blocks.length, 2)
-              @terraform_file.remove_collaborator(TEST_COLLABORATOR_LOGIN)
+              @terraform_file.remove_collaborator(TEST_USER_1)
               terraform_blocks = @terraform_file.get_terraform_blocks
               test_equal(terraform_blocks.length, 1)
             end
@@ -99,7 +99,7 @@ class GithubCollaborators
             it "call remove_collaborator and restore_terraform_blocks" do
               terraform_blocks = @terraform_file.get_terraform_blocks
               test_equal(terraform_blocks.length, 2)
-              @terraform_file.remove_collaborator(TEST_COLLABORATOR_LOGIN)
+              @terraform_file.remove_collaborator(TEST_USER_1)
               @terraform_file.restore_terraform_blocks
               terraform_blocks = @terraform_file.get_terraform_blocks
               test_equal(terraform_blocks.length, 1)
@@ -136,7 +136,7 @@ class GithubCollaborators
             repository = "test-repo"
             collaborators = [
               {
-                github_user  = "someuser"
+                github_user  = "someuser1"
                 permission   = "maintain"
                 name         = "some user"
                 email        = "someuser@some-email.com"
