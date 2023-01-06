@@ -12,5 +12,15 @@ module "staff-device-shared-services-infrastructure" {
       added_by     = "opseng-bot@digital.justice.gov.uk"
       review_after = "2023-02-20"
     },
+    {
+      github_user  = "c-gyorfi"
+      permission   = "admin"
+      name         = "csaba gyorfi"
+      email        = "csaba@madetech.com"
+      org          = "madetech"
+      reason       = "Full Org member / collaborator missing from Terraform file"
+      added_by     = "opseng-bot@digital.justice.gov.uk"
+      review_after = "2023-04-06"
+    },
   ]
 }
