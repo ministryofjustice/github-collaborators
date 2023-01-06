@@ -234,11 +234,11 @@ class GithubCollaborators
     # @param collaborator_name [String] the collaborator login name
     def remove_collaborator(collaborator_name)
       logger.debug "remove_collaborator"
-      @terraform_blocks.each do |terraform_block|
+      @terraform_blocks.delete_if do |terraform_block|
         if terraform_block.username.downcase == collaborator_name.downcase
           index = @terraform_blocks.index(terraform_block)
           @add_removed_terraform_blocks.push({added: false, removed: true, block: terraform_block.clone, index: index})
-          @terraform_blocks.delete_at(index)
+          true
         end
       end
     end

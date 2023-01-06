@@ -226,23 +226,26 @@ module HelperModule
     user_name = user_name.downcase
     found_issues = false
 
+    # Look to see if the collaborator has unassigned themself
+    # from the issue, if so close the unassigned issue
+    issues.delete_if do |issue|
+      if issue[:title].include?(issue_title)
+        if issue[:assignees].length == 0
+          remove_issue(repository_name, issue[:number])
+          true
+        end
+      end
+    end
+
     # Find the specific issue assigned to the collaborator
     issues.each do |issue|
       # Match the issue title
       if issue[:title].include?(issue_title)
-        # Look to see if the collaborator has unassigned themself
-        # from the issue, if so close the unassigned issue
-        if issue[:assignees].length == 0
-          remove_issue(repository_name, issue[:number])
-          index = issues.index(issue)
-          issues.delete_at(index)
-        else
-          # Match issue assignee to collaborator
-          issue[:assignees].each do |assignee|
-            if assignee[:login].downcase == user_name
-              # Found matching issue
-              found_issues = true
-            end
+        # Match issue assignee to collaborator
+        issue[:assignees].each do |assignee|
+          if assignee[:login].downcase == user_name
+            # Found matching issue
+            found_issues = true
           end
         end
       end
