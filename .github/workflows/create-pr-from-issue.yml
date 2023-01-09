@@ -19,13 +19,13 @@ jobs:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler-cache: true
       - run: bundle install
-      - name: Check if pull request in a fork
+      - name: Create a PR from an issue
         run: ruby bin/create-pr-from-issue.rb
         env:
           ISSUE: ${{ toJson(github.event.issue) }}
           ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPS_BOT_TOKEN: ${{ secrets.OPS_BOT_TOKEN }}
-          LOG_LEVEL: "info"
+          LOG_LEVEL: "debug"
       - name: Report failure to Slack
         if: always()
         uses: ravsamhq/notify-slack-action@v2
