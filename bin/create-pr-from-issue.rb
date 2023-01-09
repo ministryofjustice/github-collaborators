@@ -22,6 +22,7 @@ class CreatePrFromIssue
     # repositories: Array (4 elements)
     #   [0]: 'repo1'
     #   [1]: 'repo2'
+
     the_data = JSON.parse(ENV.fetch("ISSUE"))
       # Fetch the body var and split on field seperator
       .fetch("body").split("###")
@@ -43,6 +44,22 @@ class CreatePrFromIssue
     added_by = the_data["added_by"][0]
     review_after = the_data["review_after"][0]
     repositories = the_data["repositories"]
+
+    repositories = []
+    the_data["repositories"].each do |repository|
+      # Remove any spaces, new lines, tabs, etc
+      repositories.push(repository.delete(" \t\r\n"))
+    end
+
+    # Remove any spaces, new lines, tabs, etc
+    username = username.delete(" \t\r\n")
+    permission = permission.delete(" \t\r\n")
+    email = email.delete(" \t\r\n")
+    name = name.delete("\t\r\n")
+    org = org.delete("\t\r\n")
+    reason = reason.delete("\t\r\n")
+    added_by = added_by.delete("\t\r\n")
+    review_after = review_after.delete("\t\r\n")
 
     collaborator = {
       login: username.downcase,
