@@ -47,7 +47,7 @@ body:
     attributes:
       label: added_by
       description: >-
-        Who is requesting access for this user? Please use format Name <email>
+        The MoJ user and email address that is requesting GitHub access on behalf of the user? Please use format Name <email>
         e.g. "Ben Ashton <ben.ashton@digital.justice.gov.uk>"
     validations:
       required: true
@@ -76,6 +76,6 @@ body:
     id: repositories
     attributes:
       label: repositories
-      description: "Please add the repos you wish to add this user to, one per line"
+      description: "Please add the repos you wish to add this user to, one per line, not a url or full path, just the name of the repository please"
     validations:
       required: true
