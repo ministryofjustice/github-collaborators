@@ -64,13 +64,12 @@ class CreatePrFromIssue
     edited_files = []
     terraform_files = @terraform_files.get_terraform_files
     repositories.each do |repository_name|
-      if @terraform_files.ensure_file_exists_in_memory(repository_name)
-        terraform_files.each do |terraform_file|
-          if terraform_file == repository_name
-            terraform_file.add_collaborator_from_issue(collaborator)
-            terraform_file.write_to_file
-            edited_files.push("terraform/#{repository_name}.tf")
-          end
+      @terraform_files.ensure_file_exists_in_memory(repository_name)
+      terraform_files.each do |terraform_file|
+        if terraform_file.filename == repository_name
+          terraform_file.add_collaborator_from_issue(collaborator)
+          terraform_file.write_to_file
+          edited_files.push("terraform/#{repository_name}.tf")
         end
       end
     end
