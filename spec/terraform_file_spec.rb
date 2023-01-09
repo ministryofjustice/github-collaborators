@@ -21,6 +21,16 @@ class GithubCollaborators
           test_equal(@terraform_file.get_collaborator_permission(TEST_USER_1), "")
         end
 
+        it "call add_collaborator_from_issue" do
+          collaborator_data = create_collaborator_data("")
+          terraform_blocks = @terraform_file.get_terraform_blocks
+          test_equal(terraform_blocks.length, 0)
+          @terraform_file.add_collaborator_from_issue(collaborator_data)
+          terraform_blocks = @terraform_file.get_terraform_blocks
+          test_equal(terraform_blocks.length, 1)
+          @terraform_file.remove_collaborator(TEST_COLLABORATOR_LOGIN)
+        end
+
         context "" do
           before do
             @terraform_file.add_org_member_collaborator(collaborator1, TEST_COLLABORATOR_PERMISSION)
@@ -64,7 +74,7 @@ class GithubCollaborators
             end
           end
 
-          it "call add_org_member_collaborator and restore_terraform_blocks" do
+          it "call restore_terraform_blocks" do
             terraform_blocks = @terraform_file.get_terraform_blocks
             test_equal(terraform_blocks.length, 1)
             @terraform_file.restore_terraform_blocks

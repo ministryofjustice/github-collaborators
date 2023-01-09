@@ -2,8 +2,8 @@ name: Create a PR from an issue - Outside Collaborators
 
 on:
   workflow_dispatch:
-#   issues:
-#     types: [opened]
+  issues:
+    types: [opened]
 
 env:
   RUBY_VERSION: 3.1.0

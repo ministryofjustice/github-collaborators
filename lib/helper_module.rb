@@ -461,6 +461,8 @@ module HelperModule
       create_pull_request(delete_archive_file_hash(branch_name))
     elsif type == TYPE_DELETE_FILE
       create_pull_request(delete_file_hash(branch_name))
+    elsif type == TYPE_ADD_FROM_ISSUE
+      create_pull_request(add_collaborator_from_issue_hash(collaborator_name, branch_name))
     end
   end
 
@@ -596,6 +598,30 @@ module HelperModule
         This is the GitHub-Collaborator repository bot.
         
         The Terraform files in this pull request are empty and serve no purpose, please remove them.
+        
+      EOF
+    }
+  end
+
+  # Composes a GitHub branch structured message
+  #
+  # @param login [String] the login name of the collaborator
+  # @param branch_name [String] the name of the branch
+  # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
+  def add_collaborator_from_issue_hash(login, branch_name)
+    module_logger.debug "add_collaborator_from_issue_hash"
+    {
+      title: ADD_COLLAB_FROM_ISSUE + " " + login.downcase,
+      head: branch_name.downcase,
+      base: "main",
+      body: <<~EOF
+        Hi there
+        
+        This is the GitHub-Collaborator repository bot.
+
+        Please merge this pull request to add the outside collaborator to the Terraform files / GitHub.
+
+        If you have any questions, please post in #ask-operations-engineering on Slack.
         
       EOF
     }

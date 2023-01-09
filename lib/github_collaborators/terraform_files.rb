@@ -82,40 +82,6 @@ class GithubCollaborators
       @review_after = collaborator.fetch(:review_after, "").to_s
     end
 
-    # # This functions takes the body generated from a GitHub ticket created from /.github/ISSUE_TEMPLATE/create-pr-from-issue.yaml
-    # def add_collector_from_issue_data(issue_data)
-    #   logger.debug "add_collector_from_issue_data"
-    #   # Creates a hash of arrays with field: [0] value
-    #   # From a GitHub issues reponse created from an issue template
-    #   # Example:
-    #   # username: Array (1 element)
-    #   #   [0]: 'al-ben
-    #   # repositories: Array (4 elements)
-    #   #   [0]: 'repo1'
-    #   #   [1]: 'repo2'
-    #   the_data = issue_data
-    #     # Fetch the body var and split on field seperator
-    #     .fetch("body").split("###")
-    #     # Remove empty lines
-    #     .map { |line| line.strip }.map { |str| str.gsub(/^$\n/, "") }
-    #     # Split on \n characters to have field name and field value in seperator hash
-    #     .map { |line| line.split("\n") }
-    #     # Drop first hash element as not needed
-    #     .drop(1)
-    #     # Map values into array
-    #     .map { |field| [field[0], field.drop(1)] }.to_h
-
-    #   @username = the_data["username"][0].downcase
-    #   @permission = the_data["permission"][0]
-    #   @email = the_data["email"][0]
-    #   @name = the_data["name"][0]
-    #   @org = the_data["org"][0]
-    #   @reason = the_data["reason"][0]
-    #   @added_by = the_data["added_by"][0]
-    #   @review_after = the_data["review_after"][0]
-    #   @repositories = the_data["repositories"]
-    # end
-
     # Overwrite the TerraformBlock with new values. This is called to
     # to revert a modified TerraformBlock back to its original state.
     #
@@ -206,14 +172,13 @@ class GithubCollaborators
     # TerraformBlock. This is called outside of the
     # App, called by a script in the bin folder.
     #
-    # @param collaborator_data [?] a collaborator data
-    # def add_collaborators_from_issue(collaborator_data)
-    #   logger.debug "add_collaborators_from_issue"
-    #   block = GithubCollaborators::TerraformBlock.new
-    #   block.add_collector_from_issue_data(collaborator_data)
-    #   @terraform_blocks.push(block)
-    #   @add_removed_terraform_blocks.push({added: true, removed: false, block: block.clone, index: @terraform_blocks.index(block)})
-    # end
+    # @param collaborator_data [Hash{ login => String, permission => String, name => String, email => String, org => String, reason => String, added_by => String, review_after => String }] the collaborator data
+    def add_collaborator_from_issue(collaborator_data)
+      logger.debug "add_collaborator_from_issue"
+      block = GithubCollaborators::TerraformBlock.new
+      block.add_terraform_file_collaborator_data(collaborator_data)
+      @terraform_blocks.push(block)
+    end
 
     # Temporarily extend the review date for a specific
     # collaborator within a TerraformBlock object
