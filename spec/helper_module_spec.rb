@@ -176,7 +176,7 @@ class GithubCollaborators
         filenames = ["file1", "file2", "file3"]
         branch_name = BRANCH_NAME
         collaborator_name = TEST_USER
-        types = [TYPE_DELETE_EMPTY_FILE, TYPE_EXTEND, TYPE_REMOVE, TYPE_PERMISSION, TYPE_ADD, TYPE_DELETE_ARCHIVE, TYPE_DELETE_FILE]
+        types = [TYPE_DELETE_EMPTY_FILE, TYPE_EXTEND, TYPE_REMOVE, TYPE_PERMISSION, TYPE_ADD, TYPE_DELETE_ARCHIVE, TYPE_DELETE_FILE, TYPE_ADD_FROM_ISSUE]
 
         it "when branch name valid and unknown type" do
           expect(GithubCollaborators::BranchCreator).to receive(:new).and_return(branch_creator)
@@ -232,6 +232,9 @@ class GithubCollaborators
             elsif type == TYPE_DELETE_FILE
               expect(helper_module).to receive(:create_pull_request)
               expect(helper_module).to receive(:delete_file_hash).with(branch_name)
+            elsif type == TYPE_ADD_FROM_ISSUE
+              expect(helper_module).to receive(:create_pull_request)
+              expect(helper_module).to receive(:add_collaborator_from_issue_hash).with(collaborator_name, branch_name)
             end
             helper_module.create_branch_and_pull_request(branch_name, filenames, pull_request_title, collaborator_name, type)
           end
@@ -419,6 +422,30 @@ class GithubCollaborators
 
         it "call add_collaborator_hash" do
           test_equal(helper_module.add_collaborator_hash(login, branch_name), hash_body)
+        end
+      end
+
+      context "" do
+        login = TEST_USER
+        branch_name = BRANCH_NAME
+        hash_body = {
+          title: ADD_COLLAB_FROM_ISSUE + " " + login.downcase,
+          head: branch_name.downcase,
+          base: "main",
+          body: <<~EOF
+            Hi there
+            
+            This is the GitHub-Collaborator repository bot.
+    
+            Please merge this pull request to add the outside collaborator to the Terraform files / GitHub.
+    
+            If you have any questions, please post in #ask-operations-engineering on Slack.
+            
+          EOF
+        }
+
+        it "call add_collaborator_from_issue_hash" do
+          test_equal(helper_module.add_collaborator_from_issue_hash(login, branch_name), hash_body)
         end
       end
 

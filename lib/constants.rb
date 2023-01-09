@@ -46,6 +46,9 @@ module Constants
   TYPE_ADD = "add"
 
   # Pull request type
+  TYPE_ADD_FROM_ISSUE = "add_from_issue"
+
+  # Pull request type
   TYPE_DELETE_ARCHIVE = "delete_archive_file"
 
   # Pull request type
@@ -80,6 +83,9 @@ module Constants
 
   # Pull request title
   ADD_FULL_ORG_MEMBER_PR_TITLE = "Add full Org member / collaborator to Terraform file/s for"
+
+  # Pull request title
+  ADD_COLLAB_FROM_ISSUE = "Add collaborator to Terraform file/s from Issue for"
 
   # Pull request title
   EXTEND_REVIEW_DATE_PR_TITLE = "Extend review date in Terraform file/s for"
