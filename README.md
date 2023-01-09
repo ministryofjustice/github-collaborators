@@ -42,8 +42,6 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 
 To remove a specific collaborator from a repository, run this [GitHub Action](https://github.com/ministryofjustice/github-collaborators/actions/workflows/remove-collaborator.yml)
 
-![GitHub Action UI image](doc/images/github-action.png)
-
 1. Click the `Run workflow` button
 2. Enter the repository name and the username of the collaborator to remove
 3. Click `Run workflow`
@@ -59,7 +57,7 @@ The file should contain:
 ```
 module "<repository-name>" {
   source     = "./modules/repository-collaborators"
-  repository = "<repository.name>"
+  repository = "<repository-name>"
   collaborators = [
   ]
 }
