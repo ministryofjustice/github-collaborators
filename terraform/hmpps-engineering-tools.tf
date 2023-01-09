@@ -32,5 +32,15 @@ module "hmpps-engineering-tools" {
       added_by     = "Vincent Cheung <vincent.cheung@digital.justice.gov.uk>"
       review_after = "2023-12-20"
     },
+    {
+      github_user  = "nick"
+      permission   = "admin"
+      name         = "nick walters"
+      email        = "nick.walter@justice.gov.uk"
+      org          = "moj"
+      reason       = "test"
+      added_by     = "nick ben.ashton@digital.justice.gov.uk"
+      review_after = "2023-10-10"
+    },
   ]
 }
