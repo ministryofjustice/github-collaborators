@@ -12,5 +12,15 @@ module "deployment-sop-oci-access" {
       added_by     = "opseng-bot@digital.justice.gov.uk"
       review_after = "2023-02-20"
     },
+    {
+      github_user  = "nick"
+      permission   = "maintain"
+      name         = "nick walters"
+      email        = "nick.walters@justice.gov.uk"
+      org          = "moj"
+      reason       = "test"
+      added_by     = "nick"
+      review_after = "2023-10-10"
+    },
   ]
 }
