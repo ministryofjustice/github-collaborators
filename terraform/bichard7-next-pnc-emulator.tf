@@ -13,16 +13,6 @@ module "bichard7-next-pnc-emulator" {
       review_after = "2023-12-31"
     },
     {
-      github_user  = "sioldham"
-      permission   = "push"
-      name         = "Simon Oldham"
-      email        = "simon.oldham@madetech.com"
-      org          = "Madetech"
-      reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2023-12-31"
-    },
-    {
       github_user  = "emadkaramad"
       permission   = "push"
       name         = "Emad Karamad"
@@ -53,30 +43,10 @@ module "bichard7-next-pnc-emulator" {
       review_after = "2023-12-31"
     },
     {
-      github_user  = "jaskaransarkaria"
-      permission   = "admin"
-      name         = "Jazz Sarkaria"
-      email        = "jazz.sarkaria@madetech.com"
-      org          = "Madetech"
-      reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2023-12-31"
-    },
-    {
       github_user  = "c-gyorfi"
       permission   = "push"
       name         = "Csaba Gyorfi"
       email        = "csaba@madetech.com"
-      org          = "Madetech"
-      reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2023-12-31"
-    },
-    {
-      github_user  = "tomvaughan77"
-      permission   = "push"
-      name         = "Tom Vaughan"
-      email        = "tom.vaughan@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
