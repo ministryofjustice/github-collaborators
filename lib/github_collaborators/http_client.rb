@@ -66,8 +66,7 @@ class GithubCollaborators
       http, uri = create_http_client(url)
       request = Net::HTTP::Post.new(uri.request_uri, headers)
       request.body = json
-      result = http.request(request)
-      result
+      http.request(request)
     end
 
     # Send a pull request to GitHub REST API using the Ops Eng Team Bot token
@@ -79,8 +78,7 @@ class GithubCollaborators
       http, uri = create_http_client(url)
       request = Net::HTTP::Post.new(uri.request_uri, pull_request_headers)
       request.body = json
-      result = http.request(request)
-      result
+      http.request(request)
     end
 
     # Send data to GitHub REST API
@@ -92,8 +90,7 @@ class GithubCollaborators
       http, uri = create_http_client(url)
       request = Net::HTTP::Patch.new(uri.request_uri, headers)
       request.body = json
-      result = http.request(request)
-      result
+      http.request(request)
     end
 
     # Send a delete query to GitHub REST API
@@ -103,8 +100,7 @@ class GithubCollaborators
       logger.debug "delete"
       http, uri = create_http_client(url)
       request = Net::HTTP::Delete.new(uri.request_uri, headers)
-      result = http.request(request)
-      result
+      http.request(request)
     end
 
     private
