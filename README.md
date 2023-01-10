@@ -6,9 +6,9 @@ Manage MoJ GitHub Organisation outside collaborators via code.
 
 ## Adding Collaborators
 
-A Collaborator can be added to multiple repositories via the [form](https://github.com/ministryofjustice/github-collaborators/issues/new?assignees=&labels=collaborator%2Cpr-create-issue&template=create-pr-from-issue.yaml&title=Please+create+an+outside+collaborator+pull+request+) located in the `Issues -> New Issue -> Create a Outside Collaborator Pull Request -> Get Started`. This form will automatically create a pull requested with the collaborator added to the relevant Terraform files.
+A Collaborator can be added to multiple repositories via the [form](https://github.com/ministryofjustice/github-collaborators/issues/new?assignees=&labels=collaborator%2Cpr-create-issue&template=create-pr-from-issue.yaml&title=Please+create+an+outside+collaborator+pull+request+) located in `Issues -> New Issue -> Create a Outside Collaborator Pull Request -> Get Started`. This form will automatically create a pull request with the collaborator added to the relevant Terraform files.
 
-If you want to allow access to an MoJ GitHub repository for an outside collaborator,you can manually add/remove/edit the Terraform file/s, see the [Defining Collaborators](https://github.com/ministryofjustice/github-collaborators#defining-collaborators) section, followed by by a new pull request with the required changes to the corresponding `terraform/[repository-name].tf` file/s.
+If you want to allow access to an MoJ GitHub repository for an outside collaborator, you can manually add/remove/edit the Terraform file/s, see the [Defining Collaborators](https://github.com/ministryofjustice/github-collaborators#defining-collaborators) section, followed by a new pull request with the required changes to the corresponding `terraform/[repository-name].tf` file/s.
 
 If you are not confident editing Terraform file/s, you can raise an issue using this template [questionnare](https://github.com/ministryofjustice/github-collaborators/issues/new?assignees=&labels=&template=access-request.md) to request access for a collaborator, and we will make the changes for you.
 
@@ -34,13 +34,13 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 
 1. If the collaborator is defined in Terraform code
 
-- Manual: Raise and merge a PR removing the collaborator from the Terraform file for the repository.
+- Manual: Edit the Terraform file to remove the collaborator and raise a pull request to remove the collaborator from the repository.
 
-- Manual: To remove a specific collaborator from a repository, run this [GitHub Action](https://github.com/ministryofjustice/github-collaborators/actions/workflows/remove-collaborator.yml)
+- Manual: This [GitHub Action](https://github.com/ministryofjustice/github-collaborators/actions/workflows/remove-collaborator.yml) will edit and create the pull request to remove a specific collaborator from a repository: 
 
-1. Click the `Run workflow` button
-2. Enter the repository name and the username of the collaborator to remove
-3. Click `Run workflow`
+  1. Click the `Run workflow` button
+  2. Enter the repository name and the username of the collaborator to remove
+  3. Click `Run workflow`
 
 - Automatically: The collaborator will be removed from the repository and Terraform file/s once their review_date has expired.
 
