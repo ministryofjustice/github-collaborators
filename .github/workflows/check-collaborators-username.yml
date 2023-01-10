@@ -2,8 +2,6 @@ name: Check collaborators username within a PR
 
 on: 
   pull_request:
-  issues:
-    types: [opened]
 
 jobs:
   check-collaborators-username:
