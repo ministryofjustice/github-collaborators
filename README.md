@@ -4,13 +4,15 @@
 
 Manage MoJ GitHub Organisation outside collaborators via code.
 
-## Requesting collaborator access
+## Adding Collaborators
+
+A Collaborator can be added to multiple repositories via the [form](https://github.com/ministryofjustice/github-collaborators/issues/new?assignees=&labels=collaborator%2Cpr-create-issue&template=create-pr-from-issue.yaml&title=Please+create+an+outside+collaborator+pull+request+) located in the `Issues -> New Issue -> Create a Outside Collaborator Pull Request -> Get Started`. This form will automatically create a pull requested with the collaborator added to the relevant Terraform files.
+
+If you want to allow access to an MoJ GitHub repository for an outside collaborator,you can manually add/remove/edit the Terraform file/s, see the [Defining Collaborators](https://github.com/ministryofjustice/github-collaborators#defining-collaborators) section, followed by by a new pull request with the required changes to the corresponding `terraform/[repository-name].tf` file/s.
+
+If you are not confident editing Terraform file/s, you can raise an issue using this template [questionnare](https://github.com/ministryofjustice/github-collaborators/issues/new?assignees=&labels=&template=access-request.md) to request access for a collaborator, and we will make the changes for you.
 
 > PRs from forks do NOT work with the current automated process, please only create PRs from a branch.
-
-If you want to allow access to an MoJ GitHub repository for an outside collaborator, please raise a pull request making the required changes to the corresponding `terraform/[repository-name].tf` file in this repository.
-
-If you are not confident editing Terraform code, you can [raise an issue](https://github.com/ministryofjustice/github-collaborators/issues/new?labels=Access+Request&template=access-request.md) to request access for a collaborator, and we will make the changes for you.
 
 ## Background
 
@@ -28,23 +30,24 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 - Ruby code in the `bin/` and `lib/` directories (with unit tests in the `spec/` directory) queries GitHub via the REST API and GraphQL API to retrieve all the collaborator relationships which exist.
 - A GitHub action runs daily that compares the collaborators in GitHub with the Terraform source code. Any collaborators which are not fully specified in the Terraform source code are removed from found repositories.
 
-## Removing collaborators
+## Removing Collaborators
 
 1. If the collaborator is defined in Terraform code
 
-- Raise and merge a PR removing the collaborator from the list of collaborators in the Terraform source code file for the repository.
+- Manual: Raise and merge a PR removing the collaborator from the Terraform file for the repository.
 
-2. If the collaborator is not defined in Terraform code
-
-- This will be the case if access was granted by a repository administrator via the GitHub UI. The automation will automatically remove that user from the repository and raise an issue on that repository.
-
-> You should not need to do this manually - there is a GitHub action which runs daily, and removes all the collaborators who are not defined in Terraform code.
-
-To remove a specific collaborator from a repository, run this [GitHub Action](https://github.com/ministryofjustice/github-collaborators/actions/workflows/remove-collaborator.yml)
+- Manual: To remove a specific collaborator from a repository, run this [GitHub Action](https://github.com/ministryofjustice/github-collaborators/actions/workflows/remove-collaborator.yml)
 
 1. Click the `Run workflow` button
 2. Enter the repository name and the username of the collaborator to remove
 3. Click `Run workflow`
+
+- Automatically: The collaborator will be removed from the repository and Terraform file/s once their review_date has expired.
+
+2. If the collaborator is not defined in Terraform code
+
+- This will be the case if access was granted by a repository administrator via the GitHub UI. Our automation will automatically remove that user from the repository, raise an issue on that repository, and inform us that the user was added to the repository incorrectly.
+
 
 ## Defining collaborators
 

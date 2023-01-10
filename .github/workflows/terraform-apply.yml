@@ -2,10 +2,10 @@ name: Terraform apply
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
-  #   paths: "terraform/**"
+  push:
+    branches:
+      - main
+    paths: "terraform/**"
 
 env:
   TERRAFORM: terraform
