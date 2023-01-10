@@ -1,9 +1,9 @@
 name: Targeted terraform plan
 on:
   workflow_dispatch:
-  # pull_request:
-  #   types: [opened, edited, reopened, synchronize]
-  #   paths: "terraform/**"
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+    paths: "terraform/**"
 
 env:
   TERRAFORM: terraform

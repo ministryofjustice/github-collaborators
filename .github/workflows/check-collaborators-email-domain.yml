@@ -1,6 +1,9 @@
 name: Check the approving GH MoJ user has a MoJ email domain
 
-on: pull_request
+on:
+  pull_request:
+  issues:
+    types: [opened]
 
 jobs:
   check-user-email-domain:

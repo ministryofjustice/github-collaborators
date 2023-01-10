@@ -5,6 +5,8 @@ on:
     branches:
       - main
     paths: "terraform/**"
+  issues:
+    types: [opened]
 
 jobs:
   main:

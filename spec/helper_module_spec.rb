@@ -341,6 +341,8 @@ class GithubCollaborators
             
             This is the GitHub-Collaborator repository bot.
             
+            ** IMPORTANT ** Un-archive the repository before merging to main. Failure to do this will result in a Terraform apply failure. Remember to archive the repository after Terraform apply has completed.
+            
             The repositories in this pull request have been archived.
             
             This pull request is to remove those Terraform files.
