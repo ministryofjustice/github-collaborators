@@ -75,7 +75,7 @@ class CreatePrFromIssue
     url = "https://api.github.com/users/#{username}"
     http_code = GithubCollaborators::HttpClient.new.fetch_code(url)
     if http_code != "200"
-      warn("User name incorrect in Issue")
+      warn("Username is not valid in Issue")
       exit(1)
     end
 
