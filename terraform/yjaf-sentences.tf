@@ -102,5 +102,15 @@ module "yjaf-sentences" {
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
       review_after = "2023-09-01"
     },
+    {
+      github_user  = "olusegnnec"
+      permission   = "maintain"
+      name         = "Olusegun Odunukan"
+      email        = "olusegun.odunukan@necsws.com"
+      org          = "Nec Software Solutions"
+      reason       = "To update codebase"
+      added_by     = "gareth.davies@digital.justice.gov.uk"
+      review_after = "2023-07-31"
+    },
   ]
 }
