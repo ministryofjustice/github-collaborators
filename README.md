@@ -36,7 +36,7 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 
 - Manual: Edit the Terraform file to remove the collaborator and raise a pull request to remove the collaborator from the repository.
 
-- Manual: This [GitHub Action](https://github.com/ministryofjustice/github-collaborators/actions/workflows/remove-collaborator.yml) will edit and create the pull request to remove a specific collaborator from a repository: 
+- Manual: This [GitHub Action](https://github.com/ministryofjustice/github-collaborators/actions/workflows/remove-collaborator.yml) will edit and create the pull request to remove a specific collaborator from a repository:
 
   1. Click the `Run workflow` button
   2. Enter the repository name and the username of the collaborator to remove
