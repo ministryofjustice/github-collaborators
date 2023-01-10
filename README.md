@@ -48,7 +48,6 @@ Rather than manage this via "clickops" this repository enables us to manage thes
 
 - This will be the case if access was granted by a repository administrator via the GitHub UI. Our automation will automatically remove that user from the repository, raise an issue on that repository, and inform us that the user was added to the repository incorrectly.
 
-
 ## Defining collaborators
 
 To define collaborators on a repository, first add a Terraform file corresponding to the repository name (unless there already is one).
