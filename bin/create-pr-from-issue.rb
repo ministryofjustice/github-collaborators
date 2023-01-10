@@ -116,7 +116,7 @@ class CreatePrFromIssue
     end
 
     temp_review_after = review_after.delete(" \t\r\n")
-    if review_after.nil? || review_after == "" || review_after == ""
+    if review_after.nil? || review_after == "" || temp_review_after == ""
       warn("No review_after in Issue")
       exit(1)
     end
