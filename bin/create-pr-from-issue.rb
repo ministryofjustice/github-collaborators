@@ -8,7 +8,7 @@ class CreatePrFromIssue
 
   def initialize
     # Collects the Terraform files and collaborators
-    # @terraform_files = GithubCollaborators::TerraformFiles.new
+    @terraform_files = GithubCollaborators::TerraformFiles.new
   end
 
   def start
