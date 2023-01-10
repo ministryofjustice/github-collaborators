@@ -8,7 +8,7 @@ class CreatePrFromIssue
 
   def initialize
     # Collects the Terraform files and collaborators
-    @terraform_files = GithubCollaborators::TerraformFiles.new
+    # @terraform_files = GithubCollaborators::TerraformFiles.new
   end
 
   def start
@@ -53,7 +53,7 @@ class CreatePrFromIssue
 
     # Remove any spaces, new lines, tabs, etc
     username = username.delete(" \t\r\n")
-    permission = permission.delete(" \t\r\n")
+    requested_permission = permission.delete(" \t\r\n")
     email = email.delete(" \t\r\n")
     name = name.delete("\t\r\n")
     org = org.delete("\t\r\n")
@@ -63,7 +63,7 @@ class CreatePrFromIssue
 
     collaborator = {
       login: username.downcase,
-      permission: permission,
+      permission: requested_permission.downcase,
       name: name,
       email: email,
       org: org,
@@ -72,9 +72,66 @@ class CreatePrFromIssue
       review_after: review_after
     }
 
+    url = "https://api.github.com/users/#{username}"
+    http_code = GithubCollaborators::HttpClient.new.fetch_code(url)
+    if http_code != "200"
+      warn("User name incorrect in Issue")
+      exit(1)
+    end
+
+    permissions = ["admin", "pull", "push", "maintain", "triage"]
+    if permissions.include?(requested_permission.downcase) == false
+      warn("Incorrect permission used in Issue")
+      exit(1)
+    end
+
+    temp_name = name.delete(" \t\r\n")
+    if name.nil? || name == "" || temp_name == ""
+      warn("No name in Issue")
+      exit(1)
+    end
+
+    temp_email = email.delete(" \t\r\n")
+    if email.nil? || email == "" || temp_email == ""
+      warn("No email in Issue")
+      exit(1)
+    end
+
+    temp_org = org.delete(" \t\r\n")
+    if org.nil? || org == "" || temp_org == ""
+      warn("No organisation in Issue")
+      exit(1)
+    end
+
+    temp_reason = reason.delete(" \t\r\n")
+    if reason.nil? || reason == "" || temp_reason == ""
+      warn("No reason in Issue")
+      exit(1)
+    end
+
+    temp_added_by = added_by.delete(" \t\r\n")
+    if added_by.nil? || added_by == "" || temp_added_by == ""
+      warn("No added_by in Issue")
+      exit(1)
+    end
+
+    temp_review_after = review_after.delete(" \t\r\n")
+    if review_after.nil? || review_after == "" || review_after == ""
+      warn("No review_after in Issue")
+      exit(1)
+    end
+
     if repositories.nil?
       warn("No repositories in Issue")
       exit(1)
+    end
+
+    repositories.each do |repository_name|
+      http_code = GithubCollaborators::HttpClient.new.fetch_code("#{GH_API_URL}/#{repository_name}")
+      if http_code == "404"
+        warn("The repository in the Issue does not exist on GitHub")
+        exit(1)
+      end
     end
 
     # Add user to Terraform file/s
