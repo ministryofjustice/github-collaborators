@@ -3,6 +3,7 @@ name: Terraform plan
 on:
   workflow_dispatch:
   pull_request:
+    paths: "terraform/**"
 
 env:
   TERRAFORM: terraform
