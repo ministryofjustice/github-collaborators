@@ -14,7 +14,7 @@ module "aws-trusted-advisor-to-github-issues" {
     },
     {
       github_user  = "nickwalt01"
-      permission   = "admi12n"
+      permission   = "admin"
       name         = "nick"
       email        = "nick@home.com"
       org          = "nick Ltd"
