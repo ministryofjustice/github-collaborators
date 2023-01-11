@@ -7,7 +7,6 @@ class GithubCollaborators
       original_file = File.read("spec/fixtures/test-repo.tf")
 
       context "test files exist when posting to GitHub" do
-
         context "when env variable exists" do
           before do
             ENV["REALLY_POST_TO_GH"] = "1"
