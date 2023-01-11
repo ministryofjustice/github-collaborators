@@ -446,13 +446,11 @@ class GithubCollaborators
         end
       end
 
-      if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+      if ENV.fetch("REALLY_POST_TO_GH", 0) == "1" && tf_files.length == 0
         # 1. Exit the app when posting to GitHub as there should always be Terraform files.
         # 2. This allows the tests to be run.
-        if tf_files.length == 0
-          logger.error "The TerraformFiles class did not find any Terraform files!"
-          exit(1)
-        end
+        logger.error "The TerraformFiles class did not find any Terraform files!"
+        exit(1)
       end
     end
 
