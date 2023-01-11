@@ -2,6 +2,7 @@ name: Check the approving GH MoJ user has a MoJ email domain
 
 on:
   pull_request:
+    paths: "terraform/**"
 
 jobs:
   check-user-email-domain:
