@@ -3,9 +3,6 @@ class GithubCollaborators
   include Constants
 
   describe TerraformFiles do
-    TEMP_TERRAFORM_FILES = "spec/tmp/*.tf"
-    STUB_TERRAFORM_FILES = "GithubCollaborators::TerraformFiles::TERRAFORM_FILES"
-
     context "test TerraformFiles" do
       original_file = File.read("spec/fixtures/test-repo.tf")
 
