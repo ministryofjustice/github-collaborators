@@ -61,17 +61,6 @@ class CreatePrFromIssue
     added_by = added_by.delete("\t\r\n")
     review_after = review_after.delete("\t\r\n")
 
-    collaborator = {
-      login: username.downcase,
-      permission: requested_permission.downcase,
-      name: name,
-      email: email,
-      org: org,
-      reason: reason,
-      added_by: added_by,
-      review_after: review_after
-    }
-
     url = "https://api.github.com/users/#{username}"
     http_code = GithubCollaborators::HttpClient.new.fetch_code(url)
     if http_code != "200"
@@ -121,6 +110,22 @@ class CreatePrFromIssue
       exit(1)
     end
 
+    review_after_date = Date.parse(review_after)
+    one_year_from_now = Date.today + 365
+
+    if review_after_date > one_year_from_now
+      warn("The review_after date in the Issue is longer than one year")
+      exit(1)
+    end
+
+    if review_after_date < Date.today
+      warn("The review_after date in the Issue is in the past")
+      exit(1)
+    end
+
+    # Overwrite the format of the date in case user enters the date in the incorrect way.
+    review_after = review_after_date.strftime(DATE_FORMAT).to_s
+
     if repositories.nil?
       warn("No repositories in Issue")
       exit(1)
@@ -133,6 +138,17 @@ class CreatePrFromIssue
         exit(1)
       end
     end
+
+    collaborator = {
+      login: username.downcase,
+      permission: requested_permission.downcase,
+      name: name,
+      email: email,
+      org: org,
+      reason: reason,
+      added_by: added_by,
+      review_after: review_after
+    }
 
     # Add user to Terraform file/s
     edited_files = []
