@@ -52,4 +52,6 @@ module TestConstants
   CREATED_DATE = "2019-10-01"
   BODY = "abc"
   CATCH_ERROR = "catch error"
+  TEMP_TERRAFORM_FILES = "spec/tmp/*.tf"
+  STUB_TERRAFORM_FILES = "GithubCollaborators::TerraformFiles::TERRAFORM_FILES"
 end
