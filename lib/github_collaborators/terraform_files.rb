@@ -427,7 +427,8 @@ class GithubCollaborators
       @terraform_files = []
 
       # Get then iterator over the Terraform folder Terraform files
-      fetch_terraform_files.each do |terraform_file_path|
+      tf_files = fetch_terraform_files
+      tf_files.each do |terraform_file_path|
         terraform_file_name = File.basename(terraform_file_path)
         # Ignore the excluded files
         if !EXCLUDE_FILES.include?(terraform_file_name.downcase)
@@ -442,6 +443,15 @@ class GithubCollaborators
           terraform_file.create_terraform_collaborator_blocks
 
           @terraform_files.push(terraform_file)
+        end
+      end
+
+      if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+        # 1. Exit the app when posting to GitHub as there should always be Terraform files.
+        # 2. This allows the tests to be run. 
+        if tf_files.length == 0
+          logger.error "The TerraformFiles class did not find any Terraform files!"
+          exit(1)
         end
       end
     end

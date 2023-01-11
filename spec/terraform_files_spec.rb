@@ -6,6 +6,49 @@ class GithubCollaborators
     context "test TerraformFiles" do
       original_file = File.read("spec/fixtures/test-repo.tf")
 
+      context "test files exist when posting to GitHub" do
+
+        context "when env variable exists" do
+          before do
+            ENV["REALLY_POST_TO_GH"] = "1"
+          end
+
+          it "but no files exist" do
+            stub_const("GithubCollaborators::TerraformFiles::TERRAFORM_FILES", "spec/tmp/*.tf")
+            expect { GithubCollaborators::TerraformFiles.new }.to raise_error(SystemExit)
+          end
+
+          it "and files exist" do
+            terraform_files = GithubCollaborators::TerraformFiles.new
+            expect { terraform_files }.not_to raise_error(SystemExit)
+          end
+
+          after do
+            ENV.delete("REALLY_POST_TO_GH")
+          end
+        end
+
+        context "when env variable doesn't exist" do
+          before do
+            ENV["REALLY_POST_TO_GH"] = "0"
+          end
+
+          it "but no files exist" do
+            stub_const("GithubCollaborators::TerraformFiles::TERRAFORM_FILES", "spec/tmp/*.tf")
+            expect { terraform_files }.not_to raise_error(SystemExit)
+          end
+
+          it "and files exist" do
+            terraform_files = GithubCollaborators::TerraformFiles.new
+            expect { terraform_files }.not_to raise_error(SystemExit)
+          end
+
+          after do
+            ENV.delete("REALLY_POST_TO_GH")
+          end
+        end
+      end
+
       context "" do
         before do
           @terraform_files = GithubCollaborators::TerraformFiles.new
