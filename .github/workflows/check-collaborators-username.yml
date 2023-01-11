@@ -2,6 +2,7 @@ name: Check collaborators username within a PR
 
 on: 
   pull_request:
+    paths: "terraform/**"
 
 jobs:
   check-collaborators-username:
