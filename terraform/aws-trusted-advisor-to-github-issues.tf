@@ -13,8 +13,8 @@ module "aws-trusted-advisor-to-github-issues" {
       review_after = "2023-02-20"
     },
     {
-      github_user  = "fkjgnreiuthwoign32342r2r"
-      permission   = "admin"
+      github_user  = "nickwalt01"
+      permission   = "admi12n"
       name         = "nick"
       email        = "nick@home.com"
       org          = "nick Ltd"
