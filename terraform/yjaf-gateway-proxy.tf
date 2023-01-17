@@ -120,7 +120,7 @@ module "yjaf-gateway-proxy" {
       org          = "OneAdvanced"
       reason       = "3rd Party Access for network"
       added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
-      review_after = "2023-01-23"
+      review_after = "2023-07-22"
     },
     {
       github_user  = "bryanmaguireadvanced"
