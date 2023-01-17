@@ -594,6 +594,20 @@ class GithubCollaborators
       false
     end
 
+    # Check if a collaborator name is in a Terraform file for a specific repository
+    #
+    # @param repository_name [String] the name of the repository
+    # @param collaborator_name [String] the name of the collaborator
+    # @return [Bool] true if collaborator login within the Terraform file
+    def is_user_in_file(repository_name, collaborator_name)
+      logger.debug "is_user_in_file"
+      collaborators_in_file = get_collaborators_in_file(repository_name)
+      if collaborators_in_file.include?(collaborator_name)
+        return true
+      end
+      false
+    end
+
     # Returns the collaborator login names of the
     # collaborators within a TerraformFile object
     #

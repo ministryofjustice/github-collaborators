@@ -237,10 +237,10 @@ class GithubCollaborators
           test_equal(@full_org_member.missing_from_terraform_files, false)
         end
 
-        it "when add only terraform repositories" do
+        it "when user is in a Terraform file" do
           @full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
           test_equal(@full_org_member.terraform_repositories.length, 1)
-          test_equal(@full_org_member.missing_from_terraform_files, true)
+          test_equal(@full_org_member.missing_from_terraform_files, false)
         end
       end
 
