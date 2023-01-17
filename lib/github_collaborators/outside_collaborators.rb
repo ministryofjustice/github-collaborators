@@ -587,6 +587,9 @@ class GithubCollaborators
       # Remove the repository if an open pull request is already adding the full org member
       repositories.delete_if { |repository_name| does_pr_already_exist("#{repository_name.downcase}.tf", title_message) }
 
+      # Remove the repository if the full org member is already in the file
+      repositories.delete_if { |repository_name| @terraform_files.is_user_in_file(repository_name.downcase, collaborator_name) }
+
       edited_files = []
       repositories.each do |repository_name|
         repository_name = repository_name.downcase
