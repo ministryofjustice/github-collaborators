@@ -199,11 +199,9 @@ class GithubCollaborators
 
       repositories.each do |repository_name|
         repository_name = repository_name.downcase
-        # expect to find the repository name in both arrays
-        if @github_repositories.count(repository_name) == 0 ||
+        # expect to find the repository name on GitHub but not in a Terraform file
+        if @github_repositories.count(repository_name) > 0 &&
             @terraform_repositories.count(repository_name) == 0
-          # the repository name is missing from one of the arrays
-          # therefore found a missing repository
           missing_repositories.push(repository_name)
         end
       end

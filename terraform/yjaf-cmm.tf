@@ -9,7 +9,7 @@ module "yjaf-cmm" {
       email        = "greg.whiting@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-12-13"
     },
     {
@@ -19,7 +19,7 @@ module "yjaf-cmm" {
       email        = "vasil.dimitrov@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-12-18"
     },
     {
@@ -29,7 +29,7 @@ module "yjaf-cmm" {
       email        = "jeremy.griffin@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF developer. Needing access to the work on BackEnd coding tasks"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-06-02"
     },
     {
@@ -39,7 +39,7 @@ module "yjaf-cmm" {
       email        = "thomas.tipler@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-07-21"
     },
     {
@@ -49,7 +49,7 @@ module "yjaf-cmm" {
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-12-23"
     },
     {
@@ -59,7 +59,7 @@ module "yjaf-cmm" {
       email        = "craig.ashford@necsws.com"
       org          = "NEC SWS"
       reason       = "New front end developer on YJAF team"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-02-07"
     },
     {
@@ -69,7 +69,7 @@ module "yjaf-cmm" {
       email        = "olivier.gaubert@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-12-18"
     },
     {
@@ -79,7 +79,7 @@ module "yjaf-cmm" {
       email        = "a.t.richards@btopenworld.com"
       org          = "NEC Software Solutions"
       reason       = "New starter (well returning Dev) working on all YJAF projects etc"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-05-26"
     },
   ]
