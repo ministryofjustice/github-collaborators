@@ -80,7 +80,7 @@ module "yjaf-gateway-proxy" {
       org          = "Capita"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-01-23"
+      review_after = "2023-07-22"
     },
     {
       github_user  = "kieran-tanner"
