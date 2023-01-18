@@ -4,7 +4,7 @@ module "staff-infrastructure-certificate-services" {
   collaborators = [
     {
       github_user  = "emileswarts"
-      permission   = "admin"
+      permission   = "push"
       name         = "Emile Swarts"
       email        = "emile@madetech.com"
       org          = "Made Tech Ltd"
