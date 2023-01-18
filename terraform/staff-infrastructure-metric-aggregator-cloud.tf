@@ -4,7 +4,7 @@ module "staff-infrastructure-metric-aggregator-cloud" {
   collaborators = [
     {
       github_user  = "emileswarts"
-      permission   = "admin"
+      permission   = "maintain"
       name         = "Emile Swarts"
       email        = "emile@madetech.com"
       org          = "Made Tech Ltd"

@@ -188,6 +188,11 @@ class GithubCollaborators
             test_equal(@terraform_files.get_collaborators_in_file(TEST_REPO_NAME), [TEST_USER_1, TEST_USER_2])
           end
 
+          it "call is_user_in_file when file already exists" do
+            test_equal(@the_terraform_files.length, @files)
+            test_equal(@terraform_files.is_user_in_file(TEST_REPO_NAME, TEST_USER_1), true)
+          end
+
           after do
             File.delete(TEST_FILE)
           end
@@ -197,6 +202,11 @@ class GithubCollaborators
       it "call get_collaborators_in_file when file doesn't exist" do
         terraform_files = GithubCollaborators::TerraformFiles.new
         test_equal(terraform_files.get_collaborators_in_file(TEST_REPO_NAME), [])
+      end
+
+      it "call is_user_in_file when file doesn't exist" do
+        terraform_files = GithubCollaborators::TerraformFiles.new
+        test_equal(terraform_files.is_user_in_file(TEST_REPO_NAME, TEST_USER_1), false)
       end
     end
   end

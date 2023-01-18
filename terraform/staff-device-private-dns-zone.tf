@@ -4,7 +4,7 @@ module "staff-device-private-dns-zone" {
   collaborators = [
     {
       github_user  = "emileswarts"
-      permission   = "admin"
+      permission   = "maintain"
       name         = "Emile Swarts"
       email        = "emile@madetech.com"
       org          = "Made Tech Ltd"
