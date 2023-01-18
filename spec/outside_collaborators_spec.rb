@@ -234,25 +234,34 @@ class GithubCollaborators
 
           context "" do
             before do
-              @full_org_member.add_terraform_repositories([TEST_REPO_NAME])
-              test_equal(@full_org_member.terraform_repositories.length, 1)
+              @full_org_member.add_github_repository(TEST_REPO_NAME)
+              test_equal(@full_org_member.terraform_repositories.length, 0)
+              test_equal(@full_org_member.github_repositories.length, 1)
               test_equal(@full_org_member.missing_from_terraform_files, true)
             end
 
-            it "when have a mismatch in collaborator repositories and pull request does not exist" do
+            it "when a pull request already exists" do
+              expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}").and_return(true)
+              expect(terraform_files).not_to receive(:ensure_file_exists_in_memory)
+              @outside_collaborators.add_collaborator(@full_org_member)
+            end
+
+            it "when collaborator is on the GitHub repository and already in the Terraform file and a pull request does not exist" do
               expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}").and_return(false)
+              expect(terraform_files).to receive(:is_user_in_file).with(TEST_REPO_NAME, TEST_USER_1).and_return(true)
+              expect(terraform_files).not_to receive(:ensure_file_exists_in_memory)
+              @outside_collaborators.add_collaborator(@full_org_member)
+            end
+
+            it "when collaborator is on the GitHub repository but not in the Terraform file and collaborator isn't in the Terraform file and a pull request does not exist" do
+              expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}").and_return(false)
+              expect(terraform_files).to receive(:is_user_in_file).with(TEST_REPO_NAME, TEST_USER_1).and_return(false)
               expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(TEST_REPO_NAME)
               expect(@full_org_member).to receive(:get_repository_permission).with(TEST_REPO_NAME).and_return("triage")
               expect(terraform_files).to receive(:add_full_org_collaborator_to_file).with(TEST_REPO_NAME, @full_org_member, "triage")
               expect(@full_org_member).to receive(:add_ignore_repository).with(TEST_REPO_NAME)
               allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("#{ADD_COLLABORATOR_BRANCH_NAME}#{TEST_USER_1}", [TEST_FILE], "#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}", TEST_USER_1, TYPE_ADD)
               expect(@outside_collaborators).to receive(:add_new_pull_request).with("#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}", [TEST_FILE])
-              @outside_collaborators.add_collaborator(@full_org_member)
-            end
-
-            it "when have a mismatch in collaborator repositories and pull request does not exist" do
-              expect(@outside_collaborators).to receive(:does_pr_already_exist).with(TEST_REPO_NAME_TERRAFORM_FILE, "#{ADD_FULL_ORG_MEMBER_PR_TITLE} #{TEST_USER_1}").and_return(true)
-              expect(terraform_files).not_to receive(:ensure_file_exists_in_memory)
               @outside_collaborators.add_collaborator(@full_org_member)
             end
           end
