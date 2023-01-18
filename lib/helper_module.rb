@@ -387,22 +387,22 @@ module HelperModule
 
     # No team exists on the repo with the required permission. Create
     # a new team with required permission and add the user to that team.
-    new_team_name = tf_safe(repository_name) + "-" + required_permission + "-team"
+    team_name = tf_safe(repository_name) + "-" + required_permission + "-team"
 
     # Check if the team already exists
-    team_url = "#{GH_ORG_API_URL}/teams/#{new_team_name}"
-    http_code = GithubCollaborators::HttpClient.new.fetch_code(team_url)
+    url = "#{GH_ORG_API_URL}/teams/#{team_name}"
+    http_code = GithubCollaborators::HttpClient.new.fetch_code(url)
 
     # When team doesn't exist then create the team
     if http_code == "404"
-      create_team(repository_name, new_team_name)
+      create_team(repository_name, team_name)
     end
 
     # Ensure team exists
-    http_code = GithubCollaborators::HttpClient.new.fetch_code(team_url)
+    http_code = GithubCollaborators::HttpClient.new.fetch_code(url)
     if http_code == "200"
-      add_team_to_repository(repository_name, new_team_name, required_permission)
-      add_collaborator_to_team(new_team_name, collaborator_name)
+      add_team_to_repository(repository_name, team_name, required_permission)
+      add_collaborator_to_team(team_name, collaborator_name)
     end
   end
 

@@ -232,14 +232,48 @@ class GithubCollaborators
         expect(http_client).to receive(:post_json).with(url)
         helper_module.add_collaborator_to_team(TEST_TEAM, TEST_USER_1)
       end
-      
-      # before do
-        # expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
-      # end
-      # expected_json = %({"role":"member"})
-      # url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/memberships/#{TEST_USER_1}"
-      # expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
-      # expect(http_client).to receive(:post_json).with(url, expected_json)
+
+      context "call add_collaborator_to_repository_team" do
+        before do
+          expect(GithubCollaborators::HttpClient).to receive(:new).at_least(2).times.and_return(http_client)
+        end
+        
+        team_name = "#{REPOSITORY_NAME}-admin-team"
+        url = "#{GH_ORG_API_URL}/teams/#{team_name}"
+
+        it "when first http_code is 404 and second http code is 404" do
+          expect(http_client).to receive(:fetch_code).with(url).and_return("404")
+          expect(http_client).to receive(:fetch_code).with(url).and_return("404")
+          expect(helper_module).to receive(:create_team).with(REPOSITORY_NAME, team_name)
+          expect(helper_module).not_to receive(:add_team_to_repository)
+          helper_module.add_collaborator_to_repository_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+        end
+
+        it "when first http_code is 200 and second http code is 404" do
+          expect(http_client).to receive(:fetch_code).with(url).and_return("200")
+          expect(http_client).to receive(:fetch_code).with(url).and_return("404")
+          expect(helper_module).not_to receive(:create_team)
+          expect(helper_module).not_to receive(:add_team_to_repository)
+          helper_module.add_collaborator_to_repository_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+        end
+
+        it "when first http_code is 200 and second http code is 200" do
+          expect(http_client).to receive(:fetch_code).with(url).at_least(2).times.and_return("200")
+          expect(helper_module).not_to receive(:create_team)
+          expect(helper_module).to receive(:add_team_to_repository).with(REPOSITORY_NAME, team_name, "admin")
+          expect(helper_module).to receive(:add_collaborator_to_team).with(team_name, TEST_USER_1)
+          helper_module.add_collaborator_to_repository_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+        end
+
+        it "when first http_code is 404 and second http code is 200" do
+          expect(http_client).to receive(:fetch_code).with(url).and_return("404")
+          expect(http_client).to receive(:fetch_code).with(url).and_return("200")
+          expect(helper_module).to receive(:create_team).with(REPOSITORY_NAME, team_name)
+          expect(helper_module).to receive(:add_team_to_repository).with(REPOSITORY_NAME, team_name, "admin")
+          expect(helper_module).to receive(:add_collaborator_to_team).with(team_name, TEST_USER_1)
+          helper_module.add_collaborator_to_repository_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+        end
+      end
 
       context "call get_org_outside_collaborators" do
         url = "#{GH_ORG_API_URL}/outside_collaborators?per_page=100"
