@@ -9,7 +9,7 @@ module "yjaf-serious-incidents" {
       email        = "greg.whiting@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Access is needed for development of a new feature for yjaf"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-12-13"
     },
     {
@@ -19,7 +19,7 @@ module "yjaf-serious-incidents" {
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Access is needed for development of a new feature for yjaf"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-12-23"
     },
     {
@@ -29,7 +29,7 @@ module "yjaf-serious-incidents" {
       email        = "vasil.dimitrov@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Access is needed for development of a new feature for yjaf"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-12-18"
     },
     {
@@ -39,7 +39,7 @@ module "yjaf-serious-incidents" {
       email        = "thomas.tipler@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Access is needed for development of a new feature for yjaf"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-07-21"
     },
     {
@@ -49,7 +49,7 @@ module "yjaf-serious-incidents" {
       email        = "craig.ashford@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Access is needed for development of a new feature for yjaf"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-05-25"
     },
     {
@@ -59,7 +59,7 @@ module "yjaf-serious-incidents" {
       email        = "a.t.richards@btopenworld.com"
       org          = "NEC Software Solutions"
       reason       = "New starter (well returning Dev) working on all YJAF projects etc"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-05-26"
     },
     {
@@ -69,7 +69,7 @@ module "yjaf-serious-incidents" {
       email        = "vikas.omar@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF (new developer)"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-06-07"
     },
     {
@@ -79,7 +79,7 @@ module "yjaf-serious-incidents" {
       email        = "angela.site@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF (new developer)"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-09-01"
     },
   ]

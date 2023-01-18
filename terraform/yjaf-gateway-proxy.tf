@@ -9,7 +9,7 @@ module "yjaf-gateway-proxy" {
       email        = "greg.whiting@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-12-13"
     },
     {
@@ -19,7 +19,7 @@ module "yjaf-gateway-proxy" {
       email        = "thomas.tipler@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-02-24"
     },
     {
@@ -29,7 +29,7 @@ module "yjaf-gateway-proxy" {
       email        = "stephen.hobden@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Need access to repo for coding tasks"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-02-24"
     },
     {
@@ -39,7 +39,7 @@ module "yjaf-gateway-proxy" {
       email        = "olivier.gaubert@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-12-18"
     },
     {
@@ -49,7 +49,7 @@ module "yjaf-gateway-proxy" {
       email        = "javaid.arshad@necsws.com"
       org          = "YJB"
       reason       = "For work on the gateway-proxy project"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-12-23"
     },
     {
@@ -59,7 +59,7 @@ module "yjaf-gateway-proxy" {
       email        = "a.t.richards@btopenworld.com"
       org          = "NEC Software Solutions"
       reason       = "New starter (well returning Dev) working on all YJAF projects etc"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-05-26"
     },
     {
@@ -69,7 +69,7 @@ module "yjaf-gateway-proxy" {
       email        = "Robert.gibson2@capita.com"
       org          = "Capita"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-01-23"
     },
     {
@@ -79,7 +79,7 @@ module "yjaf-gateway-proxy" {
       email        = "richard.wheatley2@capita.com"
       org          = "Capita"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-01-23"
     },
     {
@@ -89,7 +89,7 @@ module "yjaf-gateway-proxy" {
       email        = "kieran.tanner@oneadvanced.com"
       org          = "OneAdvanced"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-07-22"
     },
     {
@@ -99,7 +99,7 @@ module "yjaf-gateway-proxy" {
       email        = "paul.fitzgerald@oneadvanced.com"
       org          = "OneAdvanced"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-01-23"
     },
     {
@@ -109,7 +109,7 @@ module "yjaf-gateway-proxy" {
       email        = "tamilla.mamedova@oneadvanced.com"
       org          = "OneAdvanced"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-01-23"
     },
     {
@@ -119,7 +119,7 @@ module "yjaf-gateway-proxy" {
       email        = "Vidmantas.Kolesnikovas@oneadvanced.com"
       org          = "OneAdvanced"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-01-23"
     },
     {
@@ -129,7 +129,7 @@ module "yjaf-gateway-proxy" {
       email        = "bryan.maguire@oneadvanced.com"
       org          = "OneAdvanced"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-01-23"
     },
     {
@@ -139,7 +139,7 @@ module "yjaf-gateway-proxy" {
       email        = "ahmed.ali@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-01-23"
     },
     {
@@ -149,7 +149,7 @@ module "yjaf-gateway-proxy" {
       email        = "baldip.purewal@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-01-23"
     },
     {
@@ -159,7 +159,7 @@ module "yjaf-gateway-proxy" {
       email        = "jeremy.griffin@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-01-23"
     },
     {
@@ -169,7 +169,7 @@ module "yjaf-gateway-proxy" {
       email        = "suraj.misal@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-01-23"
     },
     {
@@ -179,7 +179,7 @@ module "yjaf-gateway-proxy" {
       email        = "howie.douglas@theaccessgroup.com"
       org          = "AccessGroup"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-01-23"
     },
     {
@@ -189,7 +189,7 @@ module "yjaf-gateway-proxy" {
       email        = "abaldwin@caci.co.uk"
       org          = "CACI"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-02-06"
     },
     {
@@ -199,7 +199,7 @@ module "yjaf-gateway-proxy" {
       email        = "schung@caci.co.uk"
       org          = "CACI"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-02-06"
     },
     {
@@ -209,7 +209,7 @@ module "yjaf-gateway-proxy" {
       email        = "adcouth@caci.co.uk"
       org          = "CACI"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-02-06"
     },
     {
@@ -219,7 +219,7 @@ module "yjaf-gateway-proxy" {
       email        = "vcurtis@caci.co.uk "
       org          = "CACI"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-02-06"
     },
     {
@@ -229,7 +229,7 @@ module "yjaf-gateway-proxy" {
       email        = "ameldrum@caci.co.uk "
       org          = "CACI"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-02-06"
     },
     {
@@ -239,7 +239,7 @@ module "yjaf-gateway-proxy" {
       email        = "ray.hayes@capita.com"
       org          = "CACI"
       reason       = "3rd Party Access for network"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-02-06"
     },
     {
@@ -249,7 +249,7 @@ module "yjaf-gateway-proxy" {
       email        = "vikas.omar@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF (new developer)"
-      added_by     = "Gareth Davies <gareth.davies@digital.justice.gov.uk> on behalf of the YJB"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-06-07"
     },
   ]
