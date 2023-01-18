@@ -156,6 +156,28 @@ class GithubCollaborators
       end
 
       @organization.get_full_org_members_with_repository_permission_mismatches(@terraform_files).each do |full_org_member|
+        # This code removes the repositories from the mismatches array in each full_org_member
+        # when the user was not added to the Terraform file by our automation. In this scenario
+        # we know what permission to the repository the collaborator should have. Therefore
+        # either create a new team with the required permissions to the repository and add
+        # the collaborator to it or add the collaborator to an existing team.
+        full_org_member[:mismatches].delete_if do |mismatch|
+          collaborator_name = full_org_member[:login].downcase
+          repository_name = mismatch[:repository_name].downcase
+          permission = mismatch[:permission]
+          automation_added_user_to_file = @terraform_files.did_automation_add_collaborator_to_file(repository_name, collaborator_name)
+          if automation_added_user_to_file == false
+            if add_collaborator_to_automation_generated_team(repository_name, collaborator_name, permission) == false
+              add_collaborator_to_repository_team(repository_name, collaborator_name, required_permission)
+            end
+            true
+          end
+        end
+
+        # If our automation added the collaborator to the Terraform file, and the collaborators
+        # permission has changed on GitHub (because the collaborator team permission has changed)
+        # then match the permission set on GitHub. We dont know what permission the collaborator
+        # should have had originally.
         change_collaborator_permission(full_org_member[:login].downcase, full_org_member[:mismatches])
       end
 

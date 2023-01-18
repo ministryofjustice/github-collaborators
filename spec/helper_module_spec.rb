@@ -91,8 +91,34 @@ class GithubCollaborators
         end
       end
 
+      context "call get_repository_teams_and_access_permissions" do
+        url = "#{GH_API_URL}/#{REPOSITORY_NAME}/teams"
+        repository_teams_json = File.read("spec/fixtures/repository-teams.json")
+        before do
+          expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+        end
+
+        it "when team has admin permission to repository" do
+          expected_teams = [
+            {
+              description: "",
+              permission: "admin",
+              team_name: "operations-engineering"
+            },
+            {
+              description: AUTOMATED_GENERATED_TEAM.to_s,
+              permission: "read",
+              team_name: "operations-engineering-read-team"
+            }
+          ]
+          expect(http_client).to receive(:fetch_json).with(url).and_return(repository_teams_json)
+          the_teams = helper_module.get_repository_teams_and_access_permissions(REPOSITORY_NAME)
+          test_equal(the_teams, expected_teams)
+        end
+      end
+
       context "call get_all_org_members_team_repositories" do
-        url = "https://api.github.com/orgs/#{ORG}/teams/all-org-members/repos?per_page=100"
+        url = "#{GH_ORG_API_URL}/teams/all-org-members/repos?per_page=100"
         before do
           expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
         end
@@ -151,8 +177,72 @@ class GithubCollaborators
         end
       end
 
+      context "call add_collaborator_to_automation_generated_team" do
+        context "" do
+          incorrect_team_data = [{
+            team_name: TEST_TEAM,
+            permission: "admin",
+            description: "some description"
+          }]
+
+          it "when a repository team exists but the permission doesn't match" do
+            expect(helper_module).to receive(:get_repository_teams_and_access_permissions).and_return(incorrect_team_data)
+            expect(helper_module).not_to receive(:add_collaborator_to_team)
+            result = helper_module.add_collaborator_to_automation_generated_team(REPOSITORY_NAME, TEST_USER_1, "pull")
+            test_equal(result, false)
+          end
+
+          it "when a repository team exists with the required permission but isn't an automation created team" do
+            expect(helper_module).to receive(:get_repository_teams_and_access_permissions).and_return(incorrect_team_data)
+            expect(helper_module).not_to receive(:add_collaborator_to_team)
+            result = helper_module.add_collaborator_to_automation_generated_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+            test_equal(result, false)
+          end
+        end
+
+        it "when a repository team exists with the required permission and is an automation created team" do
+          correct_team_data = [{team_name: TEST_TEAM, permission: "admin", description: AUTOMATED_GENERATED_TEAM}]
+          expect(helper_module).to receive(:get_repository_teams_and_access_permissions).and_return(correct_team_data)
+          expect(helper_module).to receive(:add_collaborator_to_team).with(TEST_TEAM, TEST_USER_1)
+          result = helper_module.add_collaborator_to_automation_generated_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+          test_equal(result, true)
+        end
+      end
+
+      it "call add_team_to_repository" do
+        expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+        url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/repos/#{ORG}/#{REPOSITORY_NAME}"
+        expected_json = %({"permission":"admin"})
+        expect(http_client).to receive(:post_json).with(url, expected_json)
+        helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "admin")
+      end
+
+      it "call create_team" do
+        expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+        url = "#{GH_ORG_API_URL}/teams"
+        expected_json = %({"name":"#{TEST_TEAM}","description":"#{AUTOMATED_GENERATED_TEAM}","repo_names":["#{REPOSITORY_NAME}"]})
+        expect(http_client).to receive(:post_json).with(url, expected_json)
+        helper_module.create_team(REPOSITORY_NAME, TEST_TEAM)
+      end
+
+      it "call add_collaborator_to_team" do
+        expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+        url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/memberships/#{TEST_USER_1}"
+        # expected_json = %({"role":"member"})
+        expect(http_client).to receive(:post_json).with(url)
+        helper_module.add_collaborator_to_team(TEST_TEAM, TEST_USER_1)
+      end
+      
+      # before do
+        # expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+      # end
+      # expected_json = %({"role":"member"})
+      # url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/memberships/#{TEST_USER_1}"
+      # expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+      # expect(http_client).to receive(:post_json).with(url, expected_json)
+
       context "call get_org_outside_collaborators" do
-        url = "https://api.github.com/orgs/#{ORG}/outside_collaborators?per_page=100"
+        url = "#{GH_ORG_API_URL}/outside_collaborators?per_page=100"
         before do
           expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
         end

@@ -21,6 +21,14 @@ class GithubCollaborators
           test_equal(@terraform_file.get_collaborator_permission(TEST_USER_1), "")
         end
 
+        it "call get_collaborator_reason when no collaborator exists" do
+          test_equal(@terraform_file.get_collaborator_reason(TEST_USER_1), "")
+        end
+
+        it "call get_collaborator_added_by when no collaborator exists" do
+          test_equal(@terraform_file.get_collaborator_added_by(TEST_USER_1), "")
+        end
+
         it "call add_collaborator_from_issue" do
           collaborator_data = create_collaborator_data("")
           terraform_blocks = @terraform_file.get_terraform_blocks
@@ -51,6 +59,14 @@ class GithubCollaborators
             terraform_blocks.each do |terraform_block|
               test_equal(terraform_block.review_after, review_date)
             end
+          end
+
+          it "call get_collaborator_reason when collaborator exists" do
+            test_equal(@terraform_file.get_collaborator_reason(TEST_USER_1), REASON1)
+          end
+
+          it "call get_collaborator_added_by when collaborator exists" do
+            test_equal(@terraform_file.get_collaborator_added_by(TEST_USER_1), ADDED_BY_EMAIL)
           end
 
           it "call get_collaborator_permission when collaborator exists" do

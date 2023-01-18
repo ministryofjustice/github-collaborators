@@ -134,6 +134,41 @@ class GithubCollaborators
           end
         end
 
+        context "call did_automation_add_collaborator_to_file" do
+          it "when added_by is incorrect" do
+            @the_terraform_files.each do |terraform_file|
+              if terraform_file.filename == TEST_REPO_NAME
+                collaborator_data = collaborator_with_incorrect_added_by
+                terraform_file.add_collaborator_from_issue(collaborator_data)
+              end
+            end
+            reply = @terraform_files.did_automation_add_collaborator_to_file(TEST_REPO_NAME, TEST_COLLABORATOR_LOGIN)
+            test_equal(reply, false)
+          end
+
+          it "when reason is incorrect" do
+            @the_terraform_files.each do |terraform_file|
+              if terraform_file.filename == TEST_REPO_NAME
+                collaborator_data = collaborator_with_incorrect_reason
+                terraform_file.add_collaborator_from_issue(collaborator_data)
+              end
+            end
+            reply = @terraform_files.did_automation_add_collaborator_to_file(TEST_REPO_NAME, TEST_COLLABORATOR_LOGIN)
+            test_equal(reply, false)
+          end
+
+          it "when reason and added_by are correct" do
+            @the_terraform_files.each do |terraform_file|
+              if terraform_file.filename == TEST_REPO_NAME
+                collaborator_data = collaborator_with_correct_reason_and_added_by
+                terraform_file.add_collaborator_from_issue(collaborator_data)
+              end
+            end
+            reply = @terraform_files.did_automation_add_collaborator_to_file(TEST_REPO_NAME, TEST_COLLABORATOR_LOGIN)
+            test_equal(reply, true)
+          end
+        end
+
         it "call remove_file when file exists" do
           @terraform_files.remove_file(TEST_REPO_NAME)
           new_file_length = @files - 1
@@ -201,12 +236,12 @@ class GithubCollaborators
 
       it "call get_collaborators_in_file when file doesn't exist" do
         terraform_files = GithubCollaborators::TerraformFiles.new
-        test_equal(terraform_files.get_collaborators_in_file(TEST_REPO_NAME), [])
+        test_equal(terraform_files.get_collaborators_in_file(TEST_REPO_NAME4), [])
       end
 
       it "call is_user_in_file when file doesn't exist" do
         terraform_files = GithubCollaborators::TerraformFiles.new
-        test_equal(terraform_files.is_user_in_file(TEST_REPO_NAME, TEST_USER_1), false)
+        test_equal(terraform_files.is_user_in_file(TEST_REPO_NAME5, TEST_USER_1), false)
       end
     end
   end

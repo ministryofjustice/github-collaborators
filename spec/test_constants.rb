@@ -19,6 +19,7 @@ module TestConstants
   TEST_REPO_NAME = "test-repo"
   TEST_REPO_NAME_TERRAFORM_FILE = "#{TEST_REPO_NAME}.tf"
   TEST_FILE = "terraform/#{TEST_REPO_NAME}.tf"
+  TEST_TEAM = "someteam"
   TEST_USER = "someuser"
   TEST_USER_1 = "someuser1"
   TEST_USER_2 = "someuser2"

@@ -450,6 +450,7 @@ class GithubCollaborators
             expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([])
             expect(organization).to receive(:get_odd_full_org_members).and_return([])
             expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([])
+            expect(terraform_files).not_to receive(:did_automation_add_collaborator_to_file)
             expect(@outside_collaborators).not_to receive(:add_collaborator)
             expect(@outside_collaborators).not_to receive(:change_collaborator_permission)
             expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
@@ -465,6 +466,7 @@ class GithubCollaborators
             expect(organization).to receive(:get_odd_full_org_members).and_return([])
             expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([])
             expect(@outside_collaborators).not_to receive(:add_collaborator)
+            expect(terraform_files).to receive(:did_automation_add_collaborator_to_file).and_return(false).at_least(2).times
             expect(@outside_collaborators).to receive(:change_collaborator_permission).with(TEST_USER_1, mismatches)
             expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
             @outside_collaborators.full_org_members_check
@@ -784,7 +786,7 @@ class GithubCollaborators
 
             outside_collaborators = GithubCollaborators::OutsideCollaborators.new
             expect(organization).to receive(:is_collaborator_an_org_member).and_return(TEST_USER_2).at_least(1).times
-            expect(@outside_collaborators).not_to receive(:print_comparison)
+            expect(outside_collaborators).not_to receive(:print_comparison)
             outside_collaborators.compare_terraform_and_github
           end
         end
