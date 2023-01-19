@@ -307,6 +307,23 @@ module HelperModule
     ]
   end
 
+  # Remove a user from a team
+  #
+  # @param team_name [String] name of the team
+  # @param user_name [String] name of the user
+  def remove_user_from_team(team_name, user_name)
+    logger.debug("remove_user_from_team")
+
+    url = "#{GH_ORG_API_URL}/teams/#{team_name}/memberships/#{user_name}"
+
+    if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+      GithubCollaborators::HttpClient.new.delete(url)
+      sleep 1
+    else
+      module_logger.debug "Didn't delete user #{user_name} from #{team_name}, this is a dry run"
+    end
+  end
+
   # Assign a GitHub team to a repository
   #
   # @param repository_name [String] name of the repository
@@ -315,11 +332,23 @@ module HelperModule
   def add_team_to_repository(repository_name, team_name, required_permission)
     logger.debug("add_team_to_repository")
 
-    url = "#{GH_ORG_API_URL}/teams/#{team_name}/repos/#{ORG}/#{repository_name}"
-    permission_hash = {permission: required_permission.to_s}
+    if required_permission == "read"
+      actual_permission = "pull"
+    elsif required_permission == "write"
+      actual_permission = "push"
+    else
+      actual_permission = required_permission
+    end
 
-    GithubCollaborators::HttpClient.new.post_json(url, permission_hash.to_json)
-    sleep 1
+    url = "#{GH_ORG_API_URL}/teams/#{team_name}/repos/#{ORG}/#{repository_name}"
+    permission_hash = {permission: actual_permission.to_s}
+
+    if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+      GithubCollaborators::HttpClient.new.put_json(url, permission_hash.to_json)
+      sleep 1
+    else
+      module_logger.debug "Didn't #{team_name} to #{repository_name}, this is a dry run"
+    end
   end
 
   # Create a new GitHub team
@@ -333,11 +362,16 @@ module HelperModule
     team_hash = {
       name: team_name.to_s,
       description: AUTOMATED_GENERATED_TEAM.to_s,
+      privacy: "closed",
       repo_names: [repository_name.to_s]
     }
 
-    GithubCollaborators::HttpClient.new.post_json(url, team_hash.to_json)
-    sleep 1
+    if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+      GithubCollaborators::HttpClient.new.post_json(url, team_hash.to_json)
+      sleep 1
+    else
+      module_logger.debug "Didn't create #{team_name}, this is a dry run"
+    end
   end
 
   # Add a collaborator to a team
@@ -347,12 +381,14 @@ module HelperModule
   def add_collaborator_to_team(team_name, collaborator_name)
     logger.debug("add_collaborator_to_team")
 
-    url = "#{GH_ORG_API_URL}/teams/#{team_name}/memberships/#{collaborator_name}"
-    GithubCollaborators::HttpClient.new.post_json(url)
-
-    # role_hash = {role: "member"}
-    # GithubCollaborators::HttpClient.new.post_json(url, role_hash.to_json)
-    sleep 1
+    if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+      url = "#{GH_ORG_API_URL}/teams/#{team_name}/memberships/#{collaborator_name}"
+      role_hash = {role: "member"}
+      GithubCollaborators::HttpClient.new.put_json(url, role_hash.to_json)
+      sleep 1
+    else
+      module_logger.debug "Didn't add collaborator #{collaborator_name} to #{team_name}, this is a dry run"
+    end
   end
 
   # If find a repository team that was created by automation and
@@ -375,6 +411,19 @@ module HelperModule
     false
   end
 
+  def create_team_name(repository_name, required_permission)
+    module_logger.debug "create_team_name"
+
+    if required_permission == "pull"
+      team_name_permission = "read"
+    elsif required_permission == "push"
+      team_name_permission = "write"
+    else
+      team_name_permission = required_permission
+    end
+    team_name = tf_safe(repository_name) + "-" + team_name_permission + "-team"
+  end
+
   # Create a new repository team with the required access and
   # add the collaborator to it.
   #
@@ -385,9 +434,7 @@ module HelperModule
   def add_collaborator_to_repository_team(repository_name, collaborator_name, required_permission)
     module_logger.debug "add_collaborator_to_repository_team"
 
-    # No team exists on the repo with the required permission. Create
-    # a new team with required permission and add the user to that team.
-    team_name = tf_safe(repository_name) + "-" + required_permission + "-team"
+    team_name = create_team_name(repository_name, required_permission)
 
     # Check if the team already exists
     url = "#{GH_ORG_API_URL}/teams/#{team_name}"
@@ -396,6 +443,11 @@ module HelperModule
     # When team doesn't exist then create the team
     if http_code == "404"
       create_team(repository_name, team_name)
+      # Remove Ops-Eng user that might have run this automation
+      remove_user_from_team(team_name, "nickwalt01")
+      remove_user_from_team(team_name, "ben-al")
+      remove_user_from_team(team_name, "AntonyBishop")
+      remove_user_from_team(team_name, "moj-operations-engineering-bot")
     end
 
     # Ensure team exists

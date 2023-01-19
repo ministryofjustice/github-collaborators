@@ -61,6 +61,18 @@ class GithubCollaborators
     #
     # @param url [String] the REST API URL
     # @param json [String] the data to send to GitHub
+    def put_json(url, json)
+      logger.debug "put_json"
+      http, uri = create_http_client(url)
+      request = Net::HTTP::Put.new(uri.request_uri, headers)
+      request.body = json
+      http.request(request)
+    end
+
+    # Send data to GitHub REST API
+    #
+    # @param url [String] the REST API URL
+    # @param json [String] the data to send to GitHub
     def post_json(url, json)
       logger.debug "post_json"
       http, uri = create_http_client(url)
