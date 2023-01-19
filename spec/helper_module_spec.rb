@@ -179,22 +179,22 @@ class GithubCollaborators
 
       context "call add_collaborator_to_automation_generated_team" do
         context "" do
-          incorrect_team_data = [{
-            team_name: TEST_TEAM,
-            permission: "admin",
-            description: "some description"
-          }]
-
-          it "when a repository team exists but the permission doesn't match" do
+          before do
+            incorrect_team_data = [{
+              team_name: TEST_TEAM,
+              permission: "admin",
+              description: "some description"
+            }]
             expect(helper_module).to receive(:get_repository_teams_and_access_permissions).and_return(incorrect_team_data)
             expect(helper_module).not_to receive(:add_collaborator_to_team)
+          end
+
+          it "when a repository team exists but the permission doesn't match" do
             result = helper_module.add_collaborator_to_automation_generated_team(REPOSITORY_NAME, TEST_USER_1, "pull")
             test_equal(result, false)
           end
 
           it "when a repository team exists with the required permission but isn't an automation created team" do
-            expect(helper_module).to receive(:get_repository_teams_and_access_permissions).and_return(incorrect_team_data)
-            expect(helper_module).not_to receive(:add_collaborator_to_team)
             result = helper_module.add_collaborator_to_automation_generated_team(REPOSITORY_NAME, TEST_USER_1, "admin")
             test_equal(result, false)
           end
@@ -215,29 +215,26 @@ class GithubCollaborators
         end
 
         it "so do not call remove_user_from_team" do
-          url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/memberships/#{TEST_USER_1}"
           expect(http_client).not_to receive(:delete)
           helper_module.remove_user_from_team(TEST_TEAM, TEST_USER_1)
         end
 
-        it "so do not call add_collaborator_to_team" do
-          url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/memberships/#{TEST_USER_1}"
-          expect(http_client).not_to receive(:put_json)
-          helper_module.add_collaborator_to_team(TEST_TEAM, TEST_USER_1)
-        end
+        context "" do
+          before do
+            expect(http_client).not_to receive(:put_json)
+          end
 
-        it "so do not call add_team_to_repository" do
-          url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/repos/#{ORG}/#{REPOSITORY_NAME}"
-          expected_json = %({"permission":"admin"})
-          expect(http_client).not_to receive(:put_json)
-          helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "admin")
-        end
+          it "so do not call add_collaborator_to_team" do
+            helper_module.add_collaborator_to_team(TEST_TEAM, TEST_USER_1)
+          end
 
-        it "so do not  create_team" do
-          url = "#{GH_ORG_API_URL}/teams"
-          expected_json = %({"name":"#{TEST_TEAM}","description":"#{AUTOMATED_GENERATED_TEAM}","repo_names":["#{REPOSITORY_NAME}"]})
-          expect(http_client).not_to receive(:put_json)
-          helper_module.create_team(REPOSITORY_NAME, TEST_TEAM)
+          it "so do not create_team" do
+            helper_module.create_team(REPOSITORY_NAME, TEST_TEAM)
+          end
+
+          it "so do not call add_team_to_repository" do
+            helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "admin")
+          end
         end
       end
 

@@ -421,7 +421,7 @@ module HelperModule
     else
       team_name_permission = required_permission
     end
-    team_name = tf_safe(repository_name) + "-" + team_name_permission + "-team"
+    tf_safe(repository_name) + "-" + team_name_permission + "-team"
   end
 
   # Create a new repository team with the required access and
