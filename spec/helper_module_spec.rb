@@ -237,7 +237,7 @@ class GithubCollaborators
         before do
           expect(GithubCollaborators::HttpClient).to receive(:new).at_least(2).times.and_return(http_client)
         end
-        
+
         team_name = "#{REPOSITORY_NAME}-admin-team"
         url = "#{GH_ORG_API_URL}/teams/#{team_name}"
 
