@@ -164,10 +164,10 @@ class GithubCollaborators
         full_org_member[:mismatches].delete_if do |mismatch|
           collaborator_name = full_org_member[:login].downcase
           repository_name = mismatch[:repository_name].downcase
-          permission = mismatch[:permission]
+          required_permission = mismatch[:permission]
           automation_added_user_to_file = @terraform_files.did_automation_add_collaborator_to_file(repository_name, collaborator_name)
           if automation_added_user_to_file == false
-            if add_collaborator_to_automation_generated_team(repository_name, collaborator_name, permission) == false
+            if add_collaborator_to_automation_generated_team(repository_name, collaborator_name, required_permission) == false
               add_collaborator_to_repository_team(repository_name, collaborator_name, required_permission)
             end
             true
@@ -178,7 +178,9 @@ class GithubCollaborators
         # permission has changed on GitHub (because the collaborator team permission has changed)
         # then match the permission set on GitHub. We dont know what permission the collaborator
         # should have had originally.
-        change_collaborator_permission(full_org_member[:login].downcase, full_org_member[:mismatches])
+        if full_org_member[:mismatches].length > 0
+          change_collaborator_permission(full_org_member[:login].downcase, full_org_member[:mismatches])
+        end
       end
 
       # Raise Slack message for collaborators that are attached to no Github repositories

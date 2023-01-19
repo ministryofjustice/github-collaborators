@@ -457,19 +457,41 @@ class GithubCollaborators
             @outside_collaborators.full_org_members_check
           end
 
-          it "when full org member has repository mismatches" do
-            mismatch1 = {permission: "admin", repository_name: TEST_REPO_NAME1}
-            mismatch2 = {permission: "push", repository_name: TEST_REPO_NAME2}
-            mismatches = [mismatch1, mismatch2]
-            member = {login: TEST_USER_1, mismatches: mismatches}
-            expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([member])
-            expect(organization).to receive(:get_odd_full_org_members).and_return([])
-            expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([])
-            expect(@outside_collaborators).not_to receive(:add_collaborator)
-            expect(terraform_files).to receive(:did_automation_add_collaborator_to_file).and_return(false).at_least(2).times
-            expect(@outside_collaborators).to receive(:change_collaborator_permission).with(TEST_USER_1, mismatches)
-            expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
-            @outside_collaborators.full_org_members_check
+          context "when full org member has repository permissions mismatches" do
+            before do
+              mismatch1 = {permission: "admin", repository_name: TEST_REPO_NAME1}
+              mismatch2 = {permission: "push", repository_name: TEST_REPO_NAME2}
+              @mismatches = [mismatch1, mismatch2]
+              member = {login: TEST_USER_1, mismatches: @mismatches}
+              expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([member])
+              expect(organization).to receive(:get_odd_full_org_members).and_return([])
+              expect(organization).to receive(:get_full_org_members_attached_to_archived_repositories).and_return([])
+              expect(@outside_collaborators).not_to receive(:add_collaborator)
+            end
+
+            it "and add the collaborator to an automation generated team" do
+              expect(terraform_files).to receive(:did_automation_add_collaborator_to_file).and_return(false).at_least(2).times
+              allow_any_instance_of(HelperModule).to receive(:add_collaborator_to_automation_generated_team).and_return(true)
+              expect(@outside_collaborators).not_to receive(:change_collaborator_permission)
+              expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
+              @outside_collaborators.full_org_members_check
+            end
+
+            it "and add the collaborator to a repository team" do
+              expect(terraform_files).to receive(:did_automation_add_collaborator_to_file).and_return(false).at_least(2).times
+              allow_any_instance_of(HelperModule).to receive(:add_collaborator_to_automation_generated_team).and_return(false)
+              allow_any_instance_of(HelperModule).to receive(:add_collaborator_to_repository_team)
+              expect(@outside_collaborators).not_to receive(:change_collaborator_permission)
+              expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
+              @outside_collaborators.full_org_members_check
+            end
+
+            it "and change the collaborator repository permission" do
+              expect(terraform_files).to receive(:did_automation_add_collaborator_to_file).and_return(true).at_least(2).times
+              expect(@outside_collaborators).to receive(:change_collaborator_permission).with(TEST_USER_1, @mismatches)
+              expect(GithubCollaborators::SlackNotifier).not_to receive(:new)
+              @outside_collaborators.full_org_members_check
+            end
           end
 
           it "when find a odd full org member" do
