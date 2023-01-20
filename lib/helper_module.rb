@@ -35,6 +35,7 @@ module HelperModule
     if ENV.fetch("REALLY_POST_TO_GH", "0") == "1"
       url = "#{GH_API_URL}/#{repository}/collaborators/#{username}"
       GithubCollaborators::HttpClient.new.delete(url)
+      module_logger.info "Removed #{username} from #{repository}"
       sleep 2
     else
       module_logger.debug "Didn't remove #{username} from #{repository}, this is a dry run"
@@ -139,9 +140,10 @@ module HelperModule
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
       url = "#{GH_API_URL}/#{repository_name}/issues"
       GithubCollaborators::HttpClient.new.post_json(url, unknown_collaborator_hash(user_name).to_json)
+      module_logger.info "Created unknown collaborator issue for #{user_name} on #{repository_name}"
       sleep 2
     else
-      module_logger.debug "Didn't create unknown collaborator issue for #{user_name} on , this is a dry run"
+      module_logger.debug "Didn't create unknown collaborator issue for #{user_name} on #{repository_name}, this is a dry run"
     end
   end
 
@@ -182,6 +184,7 @@ module HelperModule
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
       url = "#{GH_API_URL}/#{repository_name}/issues"
       GithubCollaborators::HttpClient.new.post_json(url, review_date_expires_soon_hash(user_name).to_json)
+      module_logger.info "Created review date expires soon issue for #{user_name} on #{repository_name}"
       sleep 2
     else
       module_logger.debug "Didn't create review date expires soon issue for #{user_name} on #{repository_name}, this is a dry run"
@@ -318,9 +321,10 @@ module HelperModule
 
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
       GithubCollaborators::HttpClient.new.delete(url)
+      module_logger.info "Removed user #{user_name} from #{team_name}"
       sleep 1
     else
-      module_logger.debug "Didn't delete user #{user_name} from #{team_name}, this is a dry run"
+      module_logger.debug "Didn't remove user #{user_name} from #{team_name}, this is a dry run"
     end
   end
 
@@ -345,6 +349,7 @@ module HelperModule
 
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
       GithubCollaborators::HttpClient.new.put_json(url, permission_hash.to_json)
+      module_logger.info "Added #{team_name} to #{repository_name}"
       sleep 1
     else
       module_logger.debug "Didn't #{team_name} to #{repository_name}, this is a dry run"
@@ -368,6 +373,7 @@ module HelperModule
 
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
       GithubCollaborators::HttpClient.new.post_json(url, team_hash.to_json)
+      module_logger.info "Create #{team_name}"
       sleep 1
     else
       module_logger.debug "Didn't create #{team_name}, this is a dry run"
@@ -385,6 +391,7 @@ module HelperModule
       url = "#{GH_ORG_API_URL}/teams/#{team_name}/memberships/#{collaborator_name}"
       role_hash = {role: "member"}
       GithubCollaborators::HttpClient.new.put_json(url, role_hash.to_json)
+      module_logger.info "Added collaborator #{collaborator_name} to #{team_name}"
       sleep 1
     else
       module_logger.debug "Didn't add collaborator #{collaborator_name} to #{team_name}, this is a dry run"

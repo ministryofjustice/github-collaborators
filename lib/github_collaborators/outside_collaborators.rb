@@ -378,6 +378,9 @@ class GithubCollaborators
         if edited_files.length > 0
           branch_name = "#{UPDATE_REVIEW_DATE_BRANCH_NAME}#{login}"
           type = TYPE_EXTEND
+          edited_files.each do |file_name|
+            logger.info "Extending review date for #{login} in #{file_name}"
+          end
           create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
           add_new_pull_request(pull_request_title, edited_files)
         end
@@ -387,8 +390,8 @@ class GithubCollaborators
     end
 
     # Find which repositories in the Terraform files the App tracks that have been
-    # delete on GitHub, delete those file/s then call the functions to create a new
-    # pull request on GitHub
+    # deleted on GitHub, delete those file/s, then call the functions to create a
+    # new pull request on GitHub
     def deleted_repository_check
       logger.debug "deleted_repository_check"
 
@@ -433,9 +436,10 @@ class GithubCollaborators
         collaborator_name = ""
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
-
+        
         # Remove the deleted file from any Collaborator objects
         edited_files.each do |deleted_repository_name|
+          logger.info "Deleting Terraform file for deleted GitHub repository #{deleted_repository_name}"
           # Strip away prefix and file type
           repository_name = File.basename(deleted_repository_name, ".tf")
           @collaborators.delete_if do |collaborator|
@@ -485,9 +489,10 @@ class GithubCollaborators
         collaborator_name = ""
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
-
+        
         # Remove the archived file from any Collaborator objects
         edited_files.each do |archived_repository_name|
+          logger.info "Deleting Terraform file for archived GitHub repository #{archived_repository_name}"
           # Strip away prefix and file type
           repository_name = File.basename(archived_repository_name, ".tf")
           @collaborators.delete_if do |collaborator|
@@ -522,6 +527,9 @@ class GithubCollaborators
         type = TYPE_DELETE_EMPTY_FILE
         pull_request_title = EMPTY_FILES_PR_TITLE
         collaborator_name = ""
+        edited_files.each do |file_name|
+          logger.info "Deleting empty Terraform file: #{file_name}"
+        end
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
       end
@@ -562,6 +570,9 @@ class GithubCollaborators
         if edited_files.length > 0
           branch_name = "#{REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME}#{login}"
           type = TYPE_REMOVE
+          edited_files.each do |file_name|
+            logger.info "Removing expired collaborator #{login} from #{file_name}"
+          end
           create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
           add_new_pull_request(pull_request_title, edited_files)
         end
@@ -593,6 +604,9 @@ class GithubCollaborators
       if edited_files.length > 0
         branch_name = "#{MODIFY_COLLABORATORS_BRANCH_NAME}#{collaborator_name}"
         type = TYPE_PERMISSION
+        edited_files.each do |file_name|
+          logger.info "Changing collaborator #{collaborator_name} permission in #{file_name}"
+        end
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
       end
@@ -633,6 +647,9 @@ class GithubCollaborators
         branch_name = "#{ADD_COLLABORATOR_BRANCH_NAME}#{collaborator_name}"
         type = TYPE_ADD
         pull_request_title = ADD_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name
+        edited_files.each do |file_name|
+          logger.info "Add full Org collaborator #{collaborator_name} to #{file_name}"
+        end
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
       end
