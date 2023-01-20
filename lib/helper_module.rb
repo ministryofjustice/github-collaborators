@@ -411,6 +411,10 @@ module HelperModule
     false
   end
 
+  # Create a team name for a GitHub team
+  #
+  # @param repository_name [String] name of the repository
+  # @param required_permission [String] access permission to repository
   def create_team_name(repository_name, required_permission)
     module_logger.debug "create_team_name"
 
