@@ -436,7 +436,7 @@ class GithubCollaborators
         collaborator_name = ""
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
-        
+
         # Remove the deleted file from any Collaborator objects
         edited_files.each do |deleted_repository_name|
           logger.info "Deleting Terraform file for deleted GitHub repository #{deleted_repository_name}"
@@ -489,7 +489,7 @@ class GithubCollaborators
         collaborator_name = ""
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
-        
+
         # Remove the archived file from any Collaborator objects
         edited_files.each do |archived_repository_name|
           logger.info "Deleting Terraform file for archived GitHub repository #{archived_repository_name}"
