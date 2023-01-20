@@ -256,61 +256,58 @@ class GithubCollaborators
       context "when post to GitHub is enabled" do
         before do
           ENV["REALLY_POST_TO_GH"] = "1"
-          expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
           @team_url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/memberships/#{TEST_USER_1}"
+          @url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/repos/#{ORG}/#{REPOSITORY_NAME}"
         end
 
-        it "call create_team" do
-          url = "#{GH_ORG_API_URL}/teams"
-          expected_json = %({"name":"#{TEST_TEAM}","description":"#{AUTOMATED_GENERATED_TEAM}","privacy":"closed","repo_names":["#{REPOSITORY_NAME}"]})
-          expect(http_client).to receive(:post_json).with(url, expected_json)
-          helper_module.create_team(REPOSITORY_NAME, TEST_TEAM)
-        end
-
-        it "call remove_user_from_team" do
-          expect(http_client).to receive(:delete).with(@team_url)
-          helper_module.remove_user_from_team(TEST_TEAM, TEST_USER_1)
-        end
-
-        it "call add_collaborator_to_team" do
-          role = {role: "member"}.to_json
-          expect(http_client).to receive(:put_json).with(@team_url, role)
-          helper_module.add_collaborator_to_team(TEST_TEAM, TEST_USER_1)
-        end
-
-        context "call add_team_to_repository" do
+        context "" do
           before do
-            @url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/repos/#{ORG}/#{REPOSITORY_NAME}"
+            expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client).at_least(5).time
           end
 
-          it "with admin permissions" do
-            expected_json = %({"permission":"admin"})
-            expect(http_client).to receive(:put_json).with(@url, expected_json)
-            helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "admin")
+          it "call add_team_to_repository with all the permissions" do
+            permissions = ["admin", "pull", "push", "maintain", "triage"]
+            permissions.each do |permission|
+              expected_json = %({"permission":"#{permission}"})
+              expect(http_client).to receive(:put_json).with(@url, expected_json)
+              helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, permission)
+            end
+          end
+        end
+
+        context "" do
+          before do
+            expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
           end
 
-          it "with write permissions" do
-            expected_json = %({"permission":"push"})
-            expect(http_client).to receive(:put_json).with(@url, expected_json)
-            helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "write")
+          it "call create_team" do
+            url = "#{GH_ORG_API_URL}/teams"
+            expected_json = %({"name":"#{TEST_TEAM}","description":"#{AUTOMATED_GENERATED_TEAM}","privacy":"closed","repo_names":["#{REPOSITORY_NAME}"]})
+            expect(http_client).to receive(:post_json).with(url, expected_json)
+            helper_module.create_team(REPOSITORY_NAME, TEST_TEAM)
           end
 
-          it "with read permissions" do
+          it "call remove_user_from_team" do
+            expect(http_client).to receive(:delete).with(@team_url)
+            helper_module.remove_user_from_team(TEST_TEAM, TEST_USER_1)
+          end
+
+          it "call add_collaborator_to_team" do
+            role = {role: "member"}.to_json
+            expect(http_client).to receive(:put_json).with(@team_url, role)
+            helper_module.add_collaborator_to_team(TEST_TEAM, TEST_USER_1)
+          end
+
+          it "call add_team_to_repository with read permissions" do
             expected_json = %({"permission":"pull"})
             expect(http_client).to receive(:put_json).with(@url, expected_json)
             helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "read")
           end
 
-          it "with pull permissions" do
-            expected_json = %({"permission":"pull"})
-            expect(http_client).to receive(:put_json).with(@url, expected_json)
-            helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "pull")
-          end
-
-          it "with push permissions" do
+          it "call add_team_to_repository with write permissions" do
             expected_json = %({"permission":"push"})
             expect(http_client).to receive(:put_json).with(@url, expected_json)
-            helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "push")
+            helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "write")
           end
         end
 
