@@ -242,12 +242,12 @@ class GithubCollaborators
         permissions = ["admin", "pull", "push", "maintain", "triage"]
         permissions.each do |permission|
           created_name = helper_module.create_team_name(TEST_TEAM, permission)
-          if permission == "pull"
-            expected_name = "#{TEST_TEAM}-read-team"
+          expected_name = if permission == "pull"
+            "#{TEST_TEAM}-read-team"
           elsif permission == "push"
-            expected_name = "#{TEST_TEAM}-write-team"
+            "#{TEST_TEAM}-write-team"
           else
-            expected_name = "#{TEST_TEAM}-#{permission}-team"
+            "#{TEST_TEAM}-#{permission}-team"
           end
           test_equal(created_name, expected_name)
         end
