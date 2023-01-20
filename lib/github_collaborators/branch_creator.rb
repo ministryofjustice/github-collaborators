@@ -22,7 +22,7 @@ class GithubCollaborators
         @branch_name = branch_name
         @g.config("user.name", OPS_ENG_BOT_NAME)
         @g.config("user.email", GITHUB_BOT_EMAIL)
-        @g.checkout(branch_name, new_branch: true, start_point: "main")
+        @g.checkout(branch_name, new_branch: true, start_point: GITHUB_BRANCH)
       else
         logger.debug "Didn't create git branch #{branch_name}, this is a dry run"
       end
@@ -51,7 +51,7 @@ class GithubCollaborators
         @g.push(@g.remote("origin"), @branch_name)
 
         # Cleanup
-        @g.checkout("main")
+        @g.checkout(GITHUB_BRANCH)
 
         sleep 4
       else

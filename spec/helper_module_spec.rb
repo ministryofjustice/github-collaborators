@@ -526,7 +526,7 @@ class GithubCollaborators
         hash_body = {
           title: EXTEND_REVIEW_DATE_PR_TITLE + " " + login,
           head: branch_name,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -550,7 +550,7 @@ class GithubCollaborators
         hash_body = {
           title: ARCHIVED_REPOSITORY_PR_TITLE,
           head: branch_name,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -575,7 +575,7 @@ class GithubCollaborators
         hash_body = {
           title: DELETE_REPOSITORY_PR_TITLE,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -598,7 +598,7 @@ class GithubCollaborators
         hash_body = {
           title: EMPTY_FILES_PR_TITLE,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -620,7 +620,7 @@ class GithubCollaborators
         hash_body = {
           title: ADD_FULL_ORG_MEMBER_PR_TITLE + " " + login.downcase,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -648,7 +648,7 @@ class GithubCollaborators
         hash_body = {
           title: ADD_COLLAB_FROM_ISSUE + " " + login.downcase,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -672,7 +672,7 @@ class GithubCollaborators
         hash_body = {
           title: REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login.downcase,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -695,7 +695,7 @@ class GithubCollaborators
         hash_body = {
           title: CHANGE_PERMISSION_PR_TITLE + " " + login.downcase,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             

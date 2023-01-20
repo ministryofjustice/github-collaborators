@@ -3,6 +3,12 @@ module Constants
   # Date format
   DATE_FORMAT = "%Y-%m-%d"
 
+  # Branch to use
+  GITHUB_BRANCH = "main"
+
+  # Name of the repository
+  REPO_NAME = "github-collaborators"
+
   # Operations Engineering Bot account email address
   ADDED_BY_EMAIL = "opseng-bot@digital.justice.gov.uk"
 
