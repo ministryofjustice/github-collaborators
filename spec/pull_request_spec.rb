@@ -10,7 +10,7 @@ class GithubCollaborators
     query = %(
       {
         organization(login: "#{ORG}") {
-          repository(name: "github-collaborators") {
+          repository(name: "#{REPO_NAME}") {
             pullRequests(states: OPEN, last: 100) {
               nodes {
                 title

@@ -456,7 +456,7 @@ class GithubCollaborators
         end
       end
 
-      pull_request_url = "#{GH_API_URL}/github-collaborators/pulls"
+      pull_request_url = "#{GH_API_URL}/#{REPO_NAME}/pulls"
 
       context CALL_CREATE_PULL_REQUEST do
         before do

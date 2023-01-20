@@ -19,7 +19,7 @@ class GithubCollaborators
       @reason = collaborator.reason
       @added_by = collaborator.added_by
       @issues = []
-      @href = "#{GH_ORG_URL}/github-collaborators/blob/main/terraform/#{repository_name}.tf"
+      @href = "#{GH_ORG_URL}/#{REPO_NAME}/blob/main/terraform/#{repository_name}.tf"
       @repo_url = "#{GH_ORG_URL}/#{repository_name}"
       @repository = repository_name
       @defined_in_terraform = true

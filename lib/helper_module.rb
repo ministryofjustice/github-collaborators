@@ -161,7 +161,7 @@ module HelperModule
       body: <<~EOF
         Hi there
         
-        We have a process to manage github collaborators in code: #{GH_ORG_URL}/github-collaborators
+        We have a process to manage github collaborators in code: #{GH_ORG_URL}/#{REPO_NAME}
         
         Please follow the procedure described there to grant @#{user_name} access to this repository.
         
@@ -205,7 +205,7 @@ module HelperModule
       body: <<~EOF
         Hi there
         
-        The user @#{user_name} has its access for this repository maintained in code here: #{GH_ORG_URL}/github-collaborators
+        The user @#{user_name} has its access for this repository maintained in code here: #{GH_ORG_URL}/#{REPO_NAME}
 
         The review_after date is due to expire within one month, please update this via a PR if they still require access.
         
@@ -662,7 +662,7 @@ module HelperModule
   def create_pull_request(hash_body)
     module_logger.debug "create_pull_request"
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
-      url = "#{GH_API_URL}/github-collaborators/pulls"
+      url = "#{GH_API_URL}/#{REPO_NAME}/pulls"
       if ENV.fetch("OPS_BOT_TOKEN_ENABLED", 0) == "1"
         # Use a different pull request GitHub token so A.B. can authorise automated pull requests
         GithubCollaborators::HttpClient.new.post_pull_request_json(url, hash_body.to_json)
@@ -682,7 +682,7 @@ module HelperModule
     %[
       {
         organization(login: "#{ORG}") {
-          repository(name: "github-collaborators") {
+          repository(name: "#{REPO_NAME}") {
             pullRequests(states: OPEN, last: 100) {
               nodes {
                 title
