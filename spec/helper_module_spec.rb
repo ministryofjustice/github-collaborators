@@ -283,7 +283,7 @@ class GithubCollaborators
           expect(http_client).to receive(:post_json).with(url, expected_json)
           helper_module.create_team(REPOSITORY_NAME, TEST_TEAM)
         end
-        
+
         it "call remove_user_from_team" do
           expect(http_client).to receive(:delete).with(@team_url)
           helper_module.remove_user_from_team(TEST_TEAM, TEST_USER_1)
@@ -335,7 +335,6 @@ class GithubCollaborators
           ENV.delete("REALLY_POST_TO_GH")
         end
       end
-
 
       context "call add_collaborator_to_repository_team" do
         before do

@@ -332,12 +332,12 @@ module HelperModule
   def add_team_to_repository(repository_name, team_name, required_permission)
     logger.debug("add_team_to_repository")
 
-    if required_permission == "read"
-      actual_permission = "pull"
+    actual_permission = if required_permission == "read"
+      "pull"
     elsif required_permission == "write"
-      actual_permission = "push"
+      "push"
     else
-      actual_permission = required_permission
+      required_permission
     end
 
     url = "#{GH_ORG_API_URL}/teams/#{team_name}/repos/#{ORG}/#{repository_name}"
@@ -414,12 +414,12 @@ module HelperModule
   def create_team_name(repository_name, required_permission)
     module_logger.debug "create_team_name"
 
-    if required_permission == "pull"
-      team_name_permission = "read"
+    team_name_permission = if required_permission == "pull"
+      "read"
     elsif required_permission == "push"
-      team_name_permission = "write"
+      "write"
     else
-      team_name_permission = required_permission
+      required_permission
     end
     tf_safe(repository_name) + "-" + team_name_permission + "-team"
   end
