@@ -1,0 +1,20 @@
+[
+  {
+    "id": 680425,
+    "slug": "operations-engineering",
+    "description": "",
+    "permission": "admin"
+  },
+  {
+    "id": 4678975,
+    "slug": "operations-engineering-write-team",
+    "description": "Automated generated team to grant users access to this repository",
+    "permission": null
+  },
+  {
+    "id": 123567,
+    "slug": "operations-engineering-read-team",
+    "description": "Automated generated team to grant users access to this repository",
+    "permission": "read"
+  }
+]

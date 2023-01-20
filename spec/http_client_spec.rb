@@ -37,6 +37,10 @@ class GithubCollaborators
           expect { hc.patch_json(TEST_URL, nil) }.to raise_error(KeyError)
         end
 
+        it "catch error on put_json" do
+          expect { hc.put_json(TEST_URL, nil) }.to raise_error(KeyError)
+        end
+
         it "catch error on delete" do
           expect { hc.delete(TEST_URL) }.to raise_error(KeyError)
         end
@@ -139,6 +143,12 @@ class GithubCollaborators
         it "call patch_json" do
           stub_request(:patch, TEST_URL).to_return(body: BODY, status: 200)
           reply = hc.patch_json(TEST_URL, nil)
+          expect(reply).to be_instance_of(Net::HTTPOK)
+        end
+
+        it "call put_json" do
+          stub_request(:put, TEST_URL).to_return(body: BODY, status: 200)
+          reply = hc.put_json(TEST_URL, nil)
           expect(reply).to be_instance_of(Net::HTTPOK)
         end
 

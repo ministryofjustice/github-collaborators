@@ -35,6 +35,7 @@ module HelperModule
     if ENV.fetch("REALLY_POST_TO_GH", "0") == "1"
       url = "#{GH_API_URL}/#{repository}/collaborators/#{username}"
       GithubCollaborators::HttpClient.new.delete(url)
+      module_logger.info "Removed #{username} from #{repository}"
       sleep 2
     else
       module_logger.debug "Didn't remove #{username} from #{repository}, this is a dry run"
@@ -139,9 +140,10 @@ module HelperModule
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
       url = "#{GH_API_URL}/#{repository_name}/issues"
       GithubCollaborators::HttpClient.new.post_json(url, unknown_collaborator_hash(user_name).to_json)
+      module_logger.info "Created unknown collaborator issue for #{user_name} on #{repository_name}"
       sleep 2
     else
-      module_logger.debug "Didn't create unknown collaborator issue for #{user_name} on , this is a dry run"
+      module_logger.debug "Didn't create unknown collaborator issue for #{user_name} on #{repository_name}, this is a dry run"
     end
   end
 
@@ -159,7 +161,7 @@ module HelperModule
       body: <<~EOF
         Hi there
         
-        We have a process to manage github collaborators in code: #{GH_ORG_URL}/github-collaborators
+        We have a process to manage github collaborators in code: #{GH_ORG_URL}/#{REPO_NAME}
         
         Please follow the procedure described there to grant @#{user_name} access to this repository.
         
@@ -182,6 +184,7 @@ module HelperModule
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
       url = "#{GH_API_URL}/#{repository_name}/issues"
       GithubCollaborators::HttpClient.new.post_json(url, review_date_expires_soon_hash(user_name).to_json)
+      module_logger.info "Created review date expires soon issue for #{user_name} on #{repository_name}"
       sleep 2
     else
       module_logger.debug "Didn't create review date expires soon issue for #{user_name} on #{repository_name}, this is a dry run"
@@ -202,7 +205,7 @@ module HelperModule
       body: <<~EOF
         Hi there
         
-        The user @#{user_name} has its access for this repository maintained in code here: #{GH_ORG_URL}/github-collaborators
+        The user @#{user_name} has its access for this repository maintained in code here: #{GH_ORG_URL}/#{REPO_NAME}
 
         The review_after date is due to expire within one month, please update this via a PR if they still require access.
         
@@ -307,6 +310,193 @@ module HelperModule
     ]
   end
 
+  # Remove a user from a team
+  #
+  # @param team_name [String] name of the team
+  # @param user_name [String] name of the user
+  def remove_user_from_team(team_name, user_name)
+    logger.debug("remove_user_from_team")
+
+    url = "#{GH_ORG_API_URL}/teams/#{team_name}/memberships/#{user_name}"
+
+    if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+      GithubCollaborators::HttpClient.new.delete(url)
+      module_logger.info "Removed user #{user_name} from #{team_name}"
+      sleep 1
+    else
+      module_logger.debug "Didn't remove user #{user_name} from #{team_name}, this is a dry run"
+    end
+  end
+
+  # Assign a GitHub team to a repository
+  #
+  # @param repository_name [String] name of the repository
+  # @param team_name [String] name of the team
+  # @param required_permission [String] team access permission to the repository
+  def add_team_to_repository(repository_name, team_name, required_permission)
+    logger.debug("add_team_to_repository")
+
+    actual_permission = if required_permission == "read"
+      "pull"
+    elsif required_permission == "write"
+      "push"
+    else
+      required_permission
+    end
+
+    url = "#{GH_ORG_API_URL}/teams/#{team_name}/repos/#{ORG}/#{repository_name}"
+    permission_hash = {permission: actual_permission.to_s}
+
+    if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+      GithubCollaborators::HttpClient.new.put_json(url, permission_hash.to_json)
+      module_logger.info "Added #{team_name} to #{repository_name}"
+      sleep 1
+    else
+      module_logger.debug "Didn't #{team_name} to #{repository_name}, this is a dry run"
+    end
+  end
+
+  # Create a new GitHub team
+  #
+  # @param repository_name [String] name of the repository
+  # @param team_name [String] name of the team
+  def create_team(repository_name, team_name)
+    logger.debug("create_team")
+
+    url = "#{GH_ORG_API_URL}/teams"
+    team_hash = {
+      name: team_name.to_s,
+      description: AUTOMATED_GENERATED_TEAM.to_s,
+      privacy: "closed",
+      repo_names: [repository_name.to_s]
+    }
+
+    if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+      GithubCollaborators::HttpClient.new.post_json(url, team_hash.to_json)
+      module_logger.info "Create #{team_name}"
+      sleep 1
+    else
+      module_logger.debug "Didn't create #{team_name}, this is a dry run"
+    end
+  end
+
+  # Add a collaborator to a team
+  #
+  # @param repository_name [String] name of the repository
+  # @param collaborator_name [String] name of the collaborator
+  def add_collaborator_to_team(team_name, collaborator_name)
+    logger.debug("add_collaborator_to_team")
+
+    if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
+      url = "#{GH_ORG_API_URL}/teams/#{team_name}/memberships/#{collaborator_name}"
+      role_hash = {role: "member"}
+      GithubCollaborators::HttpClient.new.put_json(url, role_hash.to_json)
+      module_logger.info "Added collaborator #{collaborator_name} to #{team_name}"
+      sleep 1
+    else
+      module_logger.debug "Didn't add collaborator #{collaborator_name} to #{team_name}, this is a dry run"
+    end
+  end
+
+  # If find a repository team that was created by automation and
+  # it has the required access permissions, add the collaborator
+  # to it.
+  #
+  # @param repository_name [String] name of the repository
+  # @param collaborator_name [String] name of the collaborator
+  # @param required_permission [String] team access permission to the repository
+  # @return [bool] true if collaborator added to a repository team
+  def add_collaborator_to_automation_generated_team(repository_name, collaborator_name, required_permission)
+    logger.debug("add_collaborator_to_automation_generated_team")
+    teams = get_repository_teams_and_access_permissions(repository_name)
+    teams.each do |team|
+      if team[:permission] == required_permission && team[:description] == AUTOMATED_GENERATED_TEAM
+        add_collaborator_to_team(team[:team_name], collaborator_name)
+        return true
+      end
+    end
+    false
+  end
+
+  # Create a team name for a GitHub team
+  #
+  # @param repository_name [String] name of the repository
+  # @param required_permission [String] access permission to repository
+  def create_team_name(repository_name, required_permission)
+    module_logger.debug "create_team_name"
+
+    team_name_permission = if required_permission == "pull"
+      "read"
+    elsif required_permission == "push"
+      "write"
+    else
+      required_permission
+    end
+    tf_safe(repository_name) + "-" + team_name_permission + "-team"
+  end
+
+  # Create a new repository team with the required access and
+  # add the collaborator to it.
+  #
+  # @param repository_name [String] name of the repository
+  # @param collaborator_name [String] name of the collaborator
+  # @param required_permission [String] team access permission to the repository
+  # @return [bool] true if collaborator added to a repository team
+  def add_collaborator_to_repository_team(repository_name, collaborator_name, required_permission)
+    module_logger.debug "add_collaborator_to_repository_team"
+
+    team_name = create_team_name(repository_name, required_permission)
+
+    # Check if the team already exists
+    url = "#{GH_ORG_API_URL}/teams/#{team_name}"
+    http_code = GithubCollaborators::HttpClient.new.fetch_code(url)
+
+    # When team doesn't exist then create the team
+    if http_code == "404"
+      create_team(repository_name, team_name)
+      # Remove Ops-Eng user that might have run this automation
+      remove_user_from_team(team_name, "nickwalt01")
+      remove_user_from_team(team_name, "ben-al")
+      remove_user_from_team(team_name, "AntonyBishop")
+      remove_user_from_team(team_name, "moj-operations-engineering-bot")
+    end
+
+    # Ensure team exists
+    http_code = GithubCollaborators::HttpClient.new.fetch_code(url)
+    if http_code == "200"
+      add_team_to_repository(repository_name, team_name, required_permission)
+      add_collaborator_to_team(team_name, collaborator_name)
+    end
+  end
+
+  # Query the repository teams and their access to the repository
+  #
+  # @param repository_name [String] name of the repository
+  # @return [Array<[Hash{team_name => String, permission => String, description => String}]>] array of the team names and permissions in a hash item
+  def get_repository_teams_and_access_permissions(repository_name)
+    module_logger.debug "get_repository_teams"
+    url = "#{GH_API_URL}/#{repository_name}/teams"
+    teams = []
+
+    response = GithubCollaborators::HttpClient.new.fetch_json(url)
+    JSON.parse(response)
+      .find_all { |team| team["slug"].downcase }
+      .map { |team|
+      teams.push(
+        {
+          team_name: team["slug"].downcase,
+          permission: team["permission"],
+          description: team["description"]
+        }
+      )
+    }
+
+    # Remove any teams missing the permission value
+    teams.delete_if { |team| team[:permission].nil? }
+
+    teams
+  end
+
   # Query the all_org_members team and return its repositories
   #
   # @return [Array<String>] list of the repository names
@@ -315,7 +505,7 @@ module HelperModule
 
     #  Grabs 100 repositories from the team, if team has more than 100 repositories
     # this will need to be changed to paginate through the results.
-    url = "https://api.github.com/orgs/#{ORG}/teams/all-org-members/repos?per_page=100"
+    url = "#{GH_ORG_API_URL}/teams/all-org-members/repos?per_page=100"
     team_repositories = []
     json = GithubCollaborators::HttpClient.new.fetch_json(url)
     JSON.parse(json)
@@ -394,7 +584,7 @@ module HelperModule
     module_logger.debug "get_org_outside_collaborators"
     outside_collaborators = []
     # This has a hard limit of 100 collaborators, if this value is exceeded, pagination will be needed here
-    url = "https://api.github.com/orgs/#{ORG}/outside_collaborators?per_page=100"
+    url = "#{GH_ORG_API_URL}/outside_collaborators?per_page=100"
     json = GithubCollaborators::HttpClient.new.fetch_json(url)
     JSON.parse(json)
       .find_all { |collaborator| collaborator["login"] }
@@ -472,7 +662,7 @@ module HelperModule
   def create_pull_request(hash_body)
     module_logger.debug "create_pull_request"
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
-      url = "#{GH_API_URL}/github-collaborators/pulls"
+      url = "#{GH_API_URL}/#{REPO_NAME}/pulls"
       if ENV.fetch("OPS_BOT_TOKEN_ENABLED", 0) == "1"
         # Use a different pull request GitHub token so A.B. can authorise automated pull requests
         GithubCollaborators::HttpClient.new.post_pull_request_json(url, hash_body.to_json)
@@ -492,7 +682,7 @@ module HelperModule
     %[
       {
         organization(login: "#{ORG}") {
-          repository(name: "github-collaborators") {
+          repository(name: "#{REPO_NAME}") {
             pullRequests(states: OPEN, last: 100) {
               nodes {
                 title
@@ -521,7 +711,7 @@ module HelperModule
     {
       title: EXTEND_REVIEW_DATE_PR_TITLE + " " + login.downcase,
       head: branch_name.downcase,
-      base: "main",
+      base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
         
@@ -545,7 +735,7 @@ module HelperModule
     {
       title: DELETE_REPOSITORY_PR_TITLE,
       head: branch_name.downcase,
-      base: "main",
+      base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
         
@@ -568,7 +758,7 @@ module HelperModule
     {
       title: ARCHIVED_REPOSITORY_PR_TITLE,
       head: branch_name.downcase,
-      base: "main",
+      base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
         
@@ -593,7 +783,7 @@ module HelperModule
     {
       title: EMPTY_FILES_PR_TITLE,
       head: branch_name.downcase,
-      base: "main",
+      base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
         
@@ -615,7 +805,7 @@ module HelperModule
     {
       title: ADD_COLLAB_FROM_ISSUE + " " + login.downcase,
       head: branch_name.downcase,
-      base: "main",
+      base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
         
@@ -639,7 +829,7 @@ module HelperModule
     {
       title: ADD_FULL_ORG_MEMBER_PR_TITLE + " " + login.downcase,
       head: branch_name.downcase,
-      base: "main",
+      base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
         
@@ -667,7 +857,7 @@ module HelperModule
     {
       title: REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login.downcase,
       head: branch_name.downcase,
-      base: "main",
+      base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
         
@@ -690,7 +880,7 @@ module HelperModule
     {
       title: CHANGE_PERMISSION_PR_TITLE + " " + login.downcase,
       head: branch_name.downcase,
-      base: "main",
+      base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
         

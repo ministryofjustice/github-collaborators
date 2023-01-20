@@ -156,7 +156,31 @@ class GithubCollaborators
       end
 
       @organization.get_full_org_members_with_repository_permission_mismatches(@terraform_files).each do |full_org_member|
-        change_collaborator_permission(full_org_member[:login].downcase, full_org_member[:mismatches])
+        # This code removes the repositories from the mismatches array in each full_org_member
+        # when the user was not added to the Terraform file by our automation. In this scenario
+        # we know what permission to the repository the collaborator should have. Therefore
+        # either create a new team with the required permissions to the repository and add
+        # the collaborator to it or add the collaborator to an existing team.
+        full_org_member[:mismatches].delete_if do |mismatch|
+          collaborator_name = full_org_member[:login].downcase
+          repository_name = mismatch[:repository_name].downcase
+          required_permission = mismatch[:permission]
+          automation_added_user_to_file = @terraform_files.did_automation_add_collaborator_to_file(repository_name, collaborator_name)
+          if automation_added_user_to_file == false
+            if add_collaborator_to_automation_generated_team(repository_name, collaborator_name, required_permission) == false
+              add_collaborator_to_repository_team(repository_name, collaborator_name, required_permission)
+            end
+            true
+          end
+        end
+
+        # If our automation added the collaborator to the Terraform file, and the collaborators
+        # permission has changed on GitHub (because the collaborator team permission has changed)
+        # then match the permission set on GitHub. We dont know what permission the collaborator
+        # should have had originally.
+        if full_org_member[:mismatches].length > 0
+          change_collaborator_permission(full_org_member[:login].downcase, full_org_member[:mismatches])
+        end
       end
 
       # Raise Slack message for collaborators that are attached to no Github repositories
@@ -354,6 +378,9 @@ class GithubCollaborators
         if edited_files.length > 0
           branch_name = "#{UPDATE_REVIEW_DATE_BRANCH_NAME}#{login}"
           type = TYPE_EXTEND
+          edited_files.each do |file_name|
+            logger.info "Extending review date for #{login} in #{file_name}"
+          end
           create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
           add_new_pull_request(pull_request_title, edited_files)
         end
@@ -363,8 +390,8 @@ class GithubCollaborators
     end
 
     # Find which repositories in the Terraform files the App tracks that have been
-    # delete on GitHub, delete those file/s then call the functions to create a new
-    # pull request on GitHub
+    # deleted on GitHub, delete those file/s, then call the functions to create a
+    # new pull request on GitHub
     def deleted_repository_check
       logger.debug "deleted_repository_check"
 
@@ -412,6 +439,7 @@ class GithubCollaborators
 
         # Remove the deleted file from any Collaborator objects
         edited_files.each do |deleted_repository_name|
+          logger.info "Deleting Terraform file for deleted GitHub repository #{deleted_repository_name}"
           # Strip away prefix and file type
           repository_name = File.basename(deleted_repository_name, ".tf")
           @collaborators.delete_if do |collaborator|
@@ -464,6 +492,7 @@ class GithubCollaborators
 
         # Remove the archived file from any Collaborator objects
         edited_files.each do |archived_repository_name|
+          logger.info "Deleting Terraform file for archived GitHub repository #{archived_repository_name}"
           # Strip away prefix and file type
           repository_name = File.basename(archived_repository_name, ".tf")
           @collaborators.delete_if do |collaborator|
@@ -498,6 +527,9 @@ class GithubCollaborators
         type = TYPE_DELETE_EMPTY_FILE
         pull_request_title = EMPTY_FILES_PR_TITLE
         collaborator_name = ""
+        edited_files.each do |file_name|
+          logger.info "Deleting empty Terraform file: #{file_name}"
+        end
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
       end
@@ -538,6 +570,9 @@ class GithubCollaborators
         if edited_files.length > 0
           branch_name = "#{REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME}#{login}"
           type = TYPE_REMOVE
+          edited_files.each do |file_name|
+            logger.info "Removing expired collaborator #{login} from #{file_name}"
+          end
           create_branch_and_pull_request(branch_name, edited_files, pull_request_title, login, type)
           add_new_pull_request(pull_request_title, edited_files)
         end
@@ -569,6 +604,9 @@ class GithubCollaborators
       if edited_files.length > 0
         branch_name = "#{MODIFY_COLLABORATORS_BRANCH_NAME}#{collaborator_name}"
         type = TYPE_PERMISSION
+        edited_files.each do |file_name|
+          logger.info "Changing collaborator #{collaborator_name} permission in #{file_name}"
+        end
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
       end
@@ -609,6 +647,9 @@ class GithubCollaborators
         branch_name = "#{ADD_COLLABORATOR_BRANCH_NAME}#{collaborator_name}"
         type = TYPE_ADD
         pull_request_title = ADD_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name
+        edited_files.each do |file_name|
+          logger.info "Add full Org collaborator #{collaborator_name} to #{file_name}"
+        end
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
       end

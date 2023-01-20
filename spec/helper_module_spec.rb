@@ -91,8 +91,34 @@ class GithubCollaborators
         end
       end
 
+      context "call get_repository_teams_and_access_permissions" do
+        url = "#{GH_API_URL}/#{REPOSITORY_NAME}/teams"
+        repository_teams_json = File.read("spec/fixtures/repository-teams.json")
+        before do
+          expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+        end
+
+        it "when team has admin permission to repository" do
+          expected_teams = [
+            {
+              description: "",
+              permission: "admin",
+              team_name: "operations-engineering"
+            },
+            {
+              description: AUTOMATED_GENERATED_TEAM.to_s,
+              permission: "read",
+              team_name: "operations-engineering-read-team"
+            }
+          ]
+          expect(http_client).to receive(:fetch_json).with(url).and_return(repository_teams_json)
+          the_teams = helper_module.get_repository_teams_and_access_permissions(REPOSITORY_NAME)
+          test_equal(the_teams, expected_teams)
+        end
+      end
+
       context "call get_all_org_members_team_repositories" do
-        url = "https://api.github.com/orgs/#{ORG}/teams/all-org-members/repos?per_page=100"
+        url = "#{GH_ORG_API_URL}/teams/all-org-members/repos?per_page=100"
         before do
           expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
         end
@@ -151,8 +177,197 @@ class GithubCollaborators
         end
       end
 
+      context "call add_collaborator_to_automation_generated_team" do
+        context "" do
+          before do
+            incorrect_team_data = [{
+              team_name: TEST_TEAM,
+              permission: "admin",
+              description: "some description"
+            }]
+            expect(helper_module).to receive(:get_repository_teams_and_access_permissions).and_return(incorrect_team_data)
+            expect(helper_module).not_to receive(:add_collaborator_to_team)
+          end
+
+          it "when a repository team exists but the permission doesn't match" do
+            result = helper_module.add_collaborator_to_automation_generated_team(REPOSITORY_NAME, TEST_USER_1, "pull")
+            test_equal(result, false)
+          end
+
+          it "when a repository team exists with the required permission but isn't an automation created team" do
+            result = helper_module.add_collaborator_to_automation_generated_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+            test_equal(result, false)
+          end
+        end
+
+        it "when a repository team exists with the required permission and is an automation created team" do
+          correct_team_data = [{team_name: TEST_TEAM, permission: "admin", description: AUTOMATED_GENERATED_TEAM}]
+          expect(helper_module).to receive(:get_repository_teams_and_access_permissions).and_return(correct_team_data)
+          expect(helper_module).to receive(:add_collaborator_to_team).with(TEST_TEAM, TEST_USER_1)
+          result = helper_module.add_collaborator_to_automation_generated_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+          test_equal(result, true)
+        end
+      end
+
+      context "when post to GitHub is disabled" do
+        before do
+          ENV.delete("REALLY_POST_TO_GH")
+        end
+
+        it "so do not call remove_user_from_team" do
+          expect(http_client).not_to receive(:delete)
+          helper_module.remove_user_from_team(TEST_TEAM, TEST_USER_1)
+        end
+
+        context "" do
+          before do
+            expect(http_client).not_to receive(:put_json)
+          end
+
+          it "so do not call add_collaborator_to_team" do
+            helper_module.add_collaborator_to_team(TEST_TEAM, TEST_USER_1)
+          end
+
+          it "so do not create_team" do
+            helper_module.create_team(REPOSITORY_NAME, TEST_TEAM)
+          end
+
+          it "so do not call add_team_to_repository" do
+            helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "admin")
+          end
+        end
+      end
+
+      it "call create_team_name with all the permissions" do
+        permissions = ["admin", "pull", "push", "maintain", "triage"]
+        permissions.each do |permission|
+          created_name = helper_module.create_team_name(TEST_TEAM, permission)
+          expected_name = if permission == "pull"
+            "#{TEST_TEAM}-read-team"
+          elsif permission == "push"
+            "#{TEST_TEAM}-write-team"
+          else
+            "#{TEST_TEAM}-#{permission}-team"
+          end
+          test_equal(created_name, expected_name)
+        end
+      end
+
+      context "when post to GitHub is enabled" do
+        before do
+          ENV["REALLY_POST_TO_GH"] = "1"
+          @team_url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/memberships/#{TEST_USER_1}"
+          @url = "#{GH_ORG_API_URL}/teams/#{TEST_TEAM}/repos/#{ORG}/#{REPOSITORY_NAME}"
+        end
+
+        context "" do
+          before do
+            expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client).at_least(5).time
+          end
+
+          it "call add_team_to_repository with all the permissions" do
+            permissions = ["admin", "pull", "push", "maintain", "triage"]
+            permissions.each do |permission|
+              expected_json = %({"permission":"#{permission}"})
+              expect(http_client).to receive(:put_json).with(@url, expected_json)
+              helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, permission)
+            end
+          end
+        end
+
+        context "" do
+          before do
+            expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
+          end
+
+          it "call create_team" do
+            url = "#{GH_ORG_API_URL}/teams"
+            expected_json = %({"name":"#{TEST_TEAM}","description":"#{AUTOMATED_GENERATED_TEAM}","privacy":"closed","repo_names":["#{REPOSITORY_NAME}"]})
+            expect(http_client).to receive(:post_json).with(url, expected_json)
+            helper_module.create_team(REPOSITORY_NAME, TEST_TEAM)
+          end
+
+          it "call remove_user_from_team" do
+            expect(http_client).to receive(:delete).with(@team_url)
+            helper_module.remove_user_from_team(TEST_TEAM, TEST_USER_1)
+          end
+
+          it "call add_collaborator_to_team" do
+            role = {role: "member"}.to_json
+            expect(http_client).to receive(:put_json).with(@team_url, role)
+            helper_module.add_collaborator_to_team(TEST_TEAM, TEST_USER_1)
+          end
+
+          it "call add_team_to_repository with read permissions" do
+            expected_json = %({"permission":"pull"})
+            expect(http_client).to receive(:put_json).with(@url, expected_json)
+            helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "read")
+          end
+
+          it "call add_team_to_repository with write permissions" do
+            expected_json = %({"permission":"push"})
+            expect(http_client).to receive(:put_json).with(@url, expected_json)
+            helper_module.add_team_to_repository(REPOSITORY_NAME, TEST_TEAM, "write")
+          end
+        end
+
+        after do
+          ENV.delete("REALLY_POST_TO_GH")
+        end
+      end
+
+      context "call add_collaborator_to_repository_team" do
+        before do
+          expect(GithubCollaborators::HttpClient).to receive(:new).at_least(2).times.and_return(http_client)
+        end
+
+        team_name = "#{REPOSITORY_NAME}-admin-team"
+        url = "#{GH_ORG_API_URL}/teams/#{team_name}"
+
+        it "when first http_code is 404 and second http code is 404" do
+          expect(http_client).to receive(:fetch_code).with(url).and_return("404")
+          expect(http_client).to receive(:fetch_code).with(url).and_return("404")
+          expect(helper_module).to receive(:create_team).with(REPOSITORY_NAME, team_name)
+          expect(helper_module).to receive(:remove_user_from_team).with(team_name, "nickwalt01")
+          expect(helper_module).to receive(:remove_user_from_team).with(team_name, "ben-al")
+          expect(helper_module).to receive(:remove_user_from_team).with(team_name, "AntonyBishop")
+          expect(helper_module).to receive(:remove_user_from_team).with(team_name, "moj-operations-engineering-bot")
+          expect(helper_module).not_to receive(:add_team_to_repository)
+          helper_module.add_collaborator_to_repository_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+        end
+
+        it "when first http_code is 200 and second http code is 404" do
+          expect(http_client).to receive(:fetch_code).with(url).and_return("200")
+          expect(http_client).to receive(:fetch_code).with(url).and_return("404")
+          expect(helper_module).not_to receive(:create_team)
+          expect(helper_module).not_to receive(:add_team_to_repository)
+          helper_module.add_collaborator_to_repository_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+        end
+
+        it "when first http_code is 200 and second http code is 200" do
+          expect(http_client).to receive(:fetch_code).with(url).at_least(2).times.and_return("200")
+          expect(helper_module).not_to receive(:create_team)
+          expect(helper_module).to receive(:add_team_to_repository).with(REPOSITORY_NAME, team_name, "admin")
+          expect(helper_module).to receive(:add_collaborator_to_team).with(team_name, TEST_USER_1)
+          helper_module.add_collaborator_to_repository_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+        end
+
+        it "when first http_code is 404 and second http code is 200" do
+          expect(http_client).to receive(:fetch_code).with(url).and_return("404")
+          expect(http_client).to receive(:fetch_code).with(url).and_return("200")
+          expect(helper_module).to receive(:create_team).with(REPOSITORY_NAME, team_name)
+          expect(helper_module).to receive(:remove_user_from_team).with(team_name, "nickwalt01")
+          expect(helper_module).to receive(:remove_user_from_team).with(team_name, "ben-al")
+          expect(helper_module).to receive(:remove_user_from_team).with(team_name, "AntonyBishop")
+          expect(helper_module).to receive(:remove_user_from_team).with(team_name, "moj-operations-engineering-bot")
+          expect(helper_module).to receive(:add_team_to_repository).with(REPOSITORY_NAME, team_name, "admin")
+          expect(helper_module).to receive(:add_collaborator_to_team).with(team_name, TEST_USER_1)
+          helper_module.add_collaborator_to_repository_team(REPOSITORY_NAME, TEST_USER_1, "admin")
+        end
+      end
+
       context "call get_org_outside_collaborators" do
-        url = "https://api.github.com/orgs/#{ORG}/outside_collaborators?per_page=100"
+        url = "#{GH_ORG_API_URL}/outside_collaborators?per_page=100"
         before do
           expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
         end
@@ -241,7 +456,7 @@ class GithubCollaborators
         end
       end
 
-      pull_request_url = "#{GH_API_URL}/github-collaborators/pulls"
+      pull_request_url = "#{GH_API_URL}/#{REPO_NAME}/pulls"
 
       context CALL_CREATE_PULL_REQUEST do
         before do
@@ -311,7 +526,7 @@ class GithubCollaborators
         hash_body = {
           title: EXTEND_REVIEW_DATE_PR_TITLE + " " + login,
           head: branch_name,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -335,7 +550,7 @@ class GithubCollaborators
         hash_body = {
           title: ARCHIVED_REPOSITORY_PR_TITLE,
           head: branch_name,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -360,7 +575,7 @@ class GithubCollaborators
         hash_body = {
           title: DELETE_REPOSITORY_PR_TITLE,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -383,7 +598,7 @@ class GithubCollaborators
         hash_body = {
           title: EMPTY_FILES_PR_TITLE,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -405,7 +620,7 @@ class GithubCollaborators
         hash_body = {
           title: ADD_FULL_ORG_MEMBER_PR_TITLE + " " + login.downcase,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -433,7 +648,7 @@ class GithubCollaborators
         hash_body = {
           title: ADD_COLLAB_FROM_ISSUE + " " + login.downcase,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -457,7 +672,7 @@ class GithubCollaborators
         hash_body = {
           title: REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login.downcase,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             
@@ -480,7 +695,7 @@ class GithubCollaborators
         hash_body = {
           title: CHANGE_PERMISSION_PR_TITLE + " " + login.downcase,
           head: branch_name.downcase,
-          base: "main",
+          base: GITHUB_BRANCH,
           body: <<~EOF
             Hi there
             

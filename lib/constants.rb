@@ -3,6 +3,12 @@ module Constants
   # Date format
   DATE_FORMAT = "%Y-%m-%d"
 
+  # Branch to use
+  GITHUB_BRANCH = "main"
+
+  # Name of the repository
+  REPO_NAME = "github-collaborators"
+
   # Operations Engineering Bot account email address
   ADDED_BY_EMAIL = "opseng-bot@digital.justice.gov.uk"
 
@@ -159,6 +165,9 @@ module Constants
   # The GitHub API URL for repositories
   GH_API_URL = "https://api.github.com/repos/#{ORG}"
 
+  # The GitHub API URL for organisation
+  GH_ORG_API_URL = "https://api.github.com/orgs/#{ORG}"
+
   # The GitHub Organization URL
   GH_ORG_URL = "https://github.com/#{ORG}"
 
@@ -209,4 +218,7 @@ module Constants
 
   # Line offset number
   REVIEW_AFTER = 7
+
+  # Description given to automated generated teams
+  AUTOMATED_GENERATED_TEAM = "Automated generated team to grant users access to this repository"
 end

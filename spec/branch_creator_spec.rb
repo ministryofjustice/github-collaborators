@@ -42,7 +42,7 @@ class GithubCollaborators
           before {
             allow_any_instance_of(Git).to receive(:config).with("user.name", OPS_ENG_BOT_NAME)
             allow_any_instance_of(Git).to receive(:config).with("user.email", GITHUB_BOT_EMAIL)
-            allow_any_instance_of(Git::Base).to receive(:checkout).with("branch", new_branch: true, start_point: "main")
+            allow_any_instance_of(Git::Base).to receive(:checkout).with("branch", new_branch: true, start_point: GITHUB_BRANCH)
             @branch_creator = GithubCollaborators::BranchCreator.new
           }
 
@@ -54,7 +54,7 @@ class GithubCollaborators
             allow_any_instance_of(Git::Base).to receive(:commit).with("commit_message")
             allow_any_instance_of(Git::Base).to receive(:remote).with("origin").and_return("origin")
             allow_any_instance_of(Git::Base).to receive(:push).with("origin", "branch")
-            allow_any_instance_of(Git::Base).to receive(:checkout).with("main")
+            allow_any_instance_of(Git::Base).to receive(:checkout).with(GITHUB_BRANCH)
             @branch_creator.create_branch("branch")
             @branch_creator.commit_and_push("commit_message")
           end
