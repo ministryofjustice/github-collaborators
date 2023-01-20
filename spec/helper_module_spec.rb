@@ -238,34 +238,17 @@ class GithubCollaborators
         end
       end
 
-      context "call create_team_name" do
-        it "with admin permission" do
-          created_name = helper_module.create_team_name(TEST_TEAM, "admin")
-          expected_name = "#{TEST_TEAM}-admin-team"
-          test_equal(created_name, expected_name)
-        end
-
-        it "with pull permission" do
-          created_name = helper_module.create_team_name(TEST_TEAM, "pull")
-          expected_name = "#{TEST_TEAM}-read-team"
-          test_equal(created_name, expected_name)
-        end
-
-        it "with push permission" do
-          created_name = helper_module.create_team_name(TEST_TEAM, "push")
-          expected_name = "#{TEST_TEAM}-write-team"
-          test_equal(created_name, expected_name)
-        end
-
-        it "with write permission" do
-          created_name = helper_module.create_team_name(TEST_TEAM, "write")
-          expected_name = "#{TEST_TEAM}-write-team"
-          test_equal(created_name, expected_name)
-        end
-
-        it "with read permission" do
-          created_name = helper_module.create_team_name(TEST_TEAM, "read")
-          expected_name = "#{TEST_TEAM}-read-team"
+      it "call create_team_name with all the permissions" do
+        permissions = ["admin", "pull", "push", "maintain", "triage"]
+        permissions.each do |permission|
+          created_name = helper_module.create_team_name(TEST_TEAM, permission)
+          if permission == "pull"
+            expected_name = "#{TEST_TEAM}-read-team"
+          elsif permission == "push"
+            expected_name = "#{TEST_TEAM}-write-team"
+          else
+            expected_name = "#{TEST_TEAM}-#{permission}-team"
+          end
           test_equal(created_name, expected_name)
         end
       end
