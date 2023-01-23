@@ -80,7 +80,7 @@ module "yjsm-hub-svc" {
       org          = "NEC Software Solutions"
       reason       = "New starter working on YJAF projects"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-01-27"
+      review_after = "2023-07-26"
     },
   ]
 }
