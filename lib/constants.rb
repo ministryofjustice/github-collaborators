@@ -25,7 +25,7 @@ module Constants
   REASON2 = "Collaborator missing from Terraform file"
 
   # The Terraform files to exclude, these are not part of the app
-  EXCLUDE_FILES = ["acronyms.tf", "main.tf", "variables.tf", "versions.tf", "backend.tf"]
+  EXCLUDE_FILES = ["main.tf", "variables.tf", "versions.tf", "backend.tf"]
 
   # The Terraform directory folder
   TERRAFORM_DIR = "terraform"
