@@ -11,7 +11,7 @@ check_file_extensions(){
 
   # Look for files missing correct extension
   for file in $(git diff origin/main --name-only -- terraform/); do
-    if [[ ${file} != *.tf ]]; then
+    if [[ ${file} != *.tf  ]] && [[ ${file} != *.hcl ]]; then
       RC_FLAG=1
       echo "${file} does not have the correct .tf extension"
     fi
