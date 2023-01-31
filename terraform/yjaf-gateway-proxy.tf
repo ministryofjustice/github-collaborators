@@ -240,7 +240,7 @@ module "yjaf-gateway-proxy" {
       org          = "CACI"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-02-06"
+      review_after = "2023-08-05"
     },
     {
       github_user  = "vikasnecsws"
