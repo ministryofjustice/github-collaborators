@@ -40,7 +40,7 @@ module "yjaf-utilities" {
       org          = "NEC SWS"
       reason       = "New front end developer on YJAF team"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-02-07"
+      review_after = "2023-08-06"
     },
     {
       github_user  = "oliviergaubert"
