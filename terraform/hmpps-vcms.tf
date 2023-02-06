@@ -10,7 +10,7 @@ module "hmpps-vcms" {
       org          = "Civica"
       reason       = "Civica developer for Victims Case Management System"
       added_by     = "Probation Infrastructure AWS Team, maximillian.lakanu@digital.justice.gov.uk"
-      review_after = "2023-02-27"
+      review_after = "2023-05-27"
     },
     {
       github_user  = "sim-barnes"
