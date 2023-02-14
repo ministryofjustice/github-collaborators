@@ -20,7 +20,7 @@ module "aws-root-account" {
       org          = "Made Tech Ltd"
       reason       = "Full Org member / collaborator missing from Terraform file"
       added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-02-20"
+      review_after = "2023-08-19"
     },
   ]
 }
