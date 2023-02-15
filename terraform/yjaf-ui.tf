@@ -70,7 +70,7 @@ module "yjaf-ui" {
       org          = "NEC SWS"
       reason       = "Need access to dependabot"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-02-21"
+      review_after = "2023-08-20"
     },
     {
       github_user  = "andrewtrichards"
