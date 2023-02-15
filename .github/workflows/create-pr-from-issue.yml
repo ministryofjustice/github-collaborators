@@ -23,7 +23,7 @@ jobs:
         run: ruby bin/create-pr-from-issue.rb
         env:
           ISSUE: ${{ toJson(github.event.issue) }}
-          ADMIN_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
           OPS_BOT_TOKEN: ${{ secrets.OPS_BOT_TOKEN }}
           REALLY_POST_TO_GH: ${{ secrets.POST_TO_GH }}
           LOG_LEVEL: "info"
