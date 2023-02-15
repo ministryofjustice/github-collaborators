@@ -92,15 +92,5 @@ module "yjaf-gateway" {
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-09-01"
     },
-    {
-      github_user  = "olusegunonec"
-      permission   = "admin"
-      name         = "Olusegun Odunukan"
-      email        = "olusegun.odunukan@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "YJAF"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-11-22"
-    },
   ]
 }
