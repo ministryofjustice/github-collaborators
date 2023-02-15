@@ -43,16 +43,6 @@ module "yjaf-datateam" {
       review_after = "2023-12-23"
     },
     {
-      github_user  = "vikasnecsws"
-      permission   = "admin"
-      name         = "Vikas Omar"
-      email        = "vikas.omar@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "YJAF (new developer)"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-06-07"
-    },
-    {
       github_user  = "angelanec"
       permission   = "admin"
       name         = "Angela Site"

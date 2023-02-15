@@ -62,15 +62,5 @@ module "yjsm-hubadmin" {
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-05-26"
     },
-    {
-      github_user  = "vikasnecsws"
-      permission   = "admin"
-      name         = "Vikas Omar"
-      email        = "vikas.omar@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "New starter working on YJAF projects"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-26"
-    },
   ]
 }
