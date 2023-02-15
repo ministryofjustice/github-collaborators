@@ -63,16 +63,6 @@ module "yjaf-ui" {
       review_after = "2023-12-23"
     },
     {
-      github_user  = "craig-ashford-nec"
-      permission   = "admin"
-      name         = "Craig Ashford"
-      email        = "craig.ashford@necsws.com"
-      org          = "NEC SWS"
-      reason       = "Need access to dependabot"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-02-21"
-    },
-    {
       github_user  = "andrewtrichards"
       permission   = "admin"
       name         = "Andrew Richards"
