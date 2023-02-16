@@ -52,5 +52,15 @@ module "yjaf-utilities" {
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-05-26"
     },
+    {
+      github_user  = "markstanley-nps"
+      permission   = "pull"
+      name         = "Mark Stanley"
+      email        = "mark.stanley@necsws.com"
+      org          = "NECSWS"
+      reason       = "Developer"
+      added_by     = "Mick.Ewers@yjb.gov.uk"
+      review_after = "2024-02-15"
+    },
   ]
 }
