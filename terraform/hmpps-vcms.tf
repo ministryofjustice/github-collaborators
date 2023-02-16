@@ -40,7 +40,7 @@ module "hmpps-vcms" {
       org          = "civica"
       reason       = "Full Org member / collaborator missing from Terraform file"
       added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-02-22"
+      review_after = "2023-08-21"
     },
   ]
 }
