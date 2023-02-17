@@ -93,16 +93,6 @@ module "modernisation-platform-environments" {
       review_after = "2023-05-24"
     },
     {
-      github_user  = "agilisys-agardner"
-      permission   = "push"
-      name         = "Andrew Gardener"
-      email        = "andrew.gardner@agilisys.co.uk"
-      org          = "Agilisys"
-      reason       = "Get access to data-and-insights-hub on Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-02-23"
-    },
-    {
       github_user  = "umeshc-roy"
       permission   = "push"
       name         = "Umesh Ray"
