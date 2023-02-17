@@ -100,7 +100,7 @@ module "modernisation-platform-environments" {
       org          = "Agilisys"
       reason       = "Get access to data-and-insights-hub on Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-02-23"
+      review_after = "2023-08-22"
     },
     {
       github_user  = "umeshc-roy"
