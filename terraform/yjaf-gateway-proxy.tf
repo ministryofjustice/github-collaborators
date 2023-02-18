@@ -30,7 +30,7 @@ module "yjaf-gateway-proxy" {
       org          = "NEC Software Solutions"
       reason       = "Need access to repo for coding tasks"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-02-24"
+      review_after = "2023-08-23"
     },
     {
       github_user  = "oliviergaubert"
