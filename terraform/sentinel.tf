@@ -10,7 +10,7 @@ module "sentinel" {
       org          = "Civica"
       reason       = "Access required as a supporting tool for VCMS"
       added_by     = "Antony Bishop antony.bishop@digital.justice.gov.uk"
-      review_after = "2023-02-27"
+      review_after = "2023-08-26"
     },
     {
       github_user  = "sim-barnes"
