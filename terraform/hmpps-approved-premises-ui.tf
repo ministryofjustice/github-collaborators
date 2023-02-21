@@ -3,7 +3,7 @@ module "hmpps-approved-premises-ui" {
   repository = "hmpps-approved-premises-ui"
   collaborators = [
     {
-      github_user  = "GregJenkinsNCC"
+      github_user  = "gregjenkinsncc"
       permission   = "pull"
       name         = "Greg Jenkins"
       email        = "greg.jenkins@nccgroup.com"
@@ -23,7 +23,7 @@ module "hmpps-approved-premises-ui" {
       review_after = "2023-02-28"
     },
     {
-      github_user  = "JonnyOrrNCC"
+      github_user  = "jonnyorrncc"
       permission   = "pull"
       name         = "Jonny Orr"
       email        = "jonny.orr@nccgroup.com"
@@ -33,7 +33,7 @@ module "hmpps-approved-premises-ui" {
       review_after = "2023-02-28"
     },
     {
-      github_user  = "ThomasWellsNCC"
+      github_user  = "thomaswellsncc"
       permission   = "pull"
       name         = "Thomas Wells"
       email        = "thomas.wells@nccgroup.com"
@@ -41,6 +41,16 @@ module "hmpps-approved-premises-ui" {
       reason       = "Pen. tester"
       added_by     = "Ed Davey <ed.davey@digital.justice.gov.uk>"
       review_after = "2023-02-28"
-    }
+    },
+    {
+      github_user  = "aprilmd"
+      permission   = "push"
+      name         = "april dawson"
+      email        = "april.dawson@digital.justice.gov.uk"
+      org          = "made tech"
+      reason       = "Full Org member / collaborator missing from Terraform file"
+      added_by     = "opseng-bot@digital.justice.gov.uk"
+      review_after = "2023-05-22"
+    },
   ]
 }
