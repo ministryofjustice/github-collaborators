@@ -20,7 +20,7 @@ module "yjaf-poc-app" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-02-24"
+      review_after = "2023-08-23"
     },
     {
       github_user  = "oliviergaubert"
