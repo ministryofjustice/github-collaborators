@@ -10,7 +10,7 @@ module "hmpps-delius-api" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
-      review_after = "2023-02-25"
+      review_after = "2023-08-25"
     },
     {
       github_user  = "peter-bcl"
@@ -20,7 +20,7 @@ module "hmpps-delius-api" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
-      review_after = "2023-02-25"
+      review_after = "2023-08-25"
     },
     {
       github_user  = "seanvalmonte"
@@ -30,7 +30,7 @@ module "hmpps-delius-api" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
-      review_after = "2023-02-25"
+      review_after = "2023-08-25"
     },
   ]
 }
