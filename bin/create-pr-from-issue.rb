@@ -122,7 +122,7 @@ class CreatePrFromIssue
 
     # Overwrite the format of the date in case user enters the date in the incorrect way.
     review_after = review_after_date.strftime(DATE_FORMAT).to_s
-    
+
     if names.nil?
       warn("No names in Issue")
       exit(1)
@@ -189,7 +189,7 @@ class CreatePrFromIssue
     end
 
     collaborators = []
-    for i in 0..usernames.length
+    (0..usernames.length).each do |i|
       collaborators.push(
         {
           login: usernames[i].downcase,
@@ -228,13 +228,12 @@ class CreatePrFromIssue
         collaborator_name = collaborator_name.downcase
         branch_name = "add-collaborator-from-issue-#{collaborator_name}"
         pull_request_title = "#{ADD_COLLAB_FROM_ISSUE} #{collaborator_name}"
-        create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
       else
         branch_name = "add-multiple-collaborators-from-issue"
         pull_request_title = "Add multiple collaborators from issue"
         collaborator_name = "multiple-collaborators"
-        create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
       end
+      create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
     end
   end
 end
