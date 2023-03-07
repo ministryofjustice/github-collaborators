@@ -35,15 +35,11 @@ class CreatePrFromIssue
       # Map values into array
       .map { |field| [field[0], field.drop(1)] }.to_h
 
-    username = the_data["username"][0]
     permission = the_data["permission"][0]
-    email = the_data["email"][0]
-    name = the_data["name"][0]
     org = the_data["org"][0]
     reason = the_data["reason"][0]
     added_by = the_data["added_by"][0]
     review_after = the_data["review_after"][0]
-    repositories = the_data["repositories"]
 
     repositories = []
     the_data["repositories"].each do |repository|
@@ -52,37 +48,38 @@ class CreatePrFromIssue
     end
 
     # Remove any spaces, new lines, tabs, etc
-    username = username.delete(" \t\r\n")
     requested_permission = permission.delete(" \t\r\n")
-    email = email.delete(" \t\r\n")
-    name = name.delete("\t\r\n")
     org = org.delete("\t\r\n")
     reason = reason.delete("\t\r\n")
     added_by = added_by.delete("\t\r\n")
     review_after = review_after.delete("\t\r\n")
 
-    url = "https://api.github.com/users/#{username}"
-    http_code = GithubCollaborators::HttpClient.new.fetch_code(url)
-    if http_code != "200"
-      warn("Username is not valid in Issue")
+    usernames = []
+    the_data["usernames"].each do |username|
+      # Remove any spaces, new lines, tabs, etc
+      usernames.push(username.delete(" \t\r\n"))
+    end
+
+    names = []
+    the_data["names"].each do |name|
+      # Remove any new lines, tabs, etc
+      names.push(name.delete("\t\r\n"))
+    end
+
+    emails = []
+    the_data["emails"].each do |email|
+      # Remove any spaces, new lines, tabs, etc
+      emails.push(email.delete(" \t\r\n"))
+    end
+
+    if emails.length != names.length || names.length != usernames.length
+      warn("Items in the emails, names and usernames sections are not equal")
       exit(1)
     end
 
     permissions = ["admin", "pull", "push", "maintain", "triage"]
     if permissions.include?(requested_permission.downcase) == false
       warn("Incorrect permission used in Issue")
-      exit(1)
-    end
-
-    temp_name = name.delete(" \t\r\n")
-    if name.nil? || name == "" || temp_name == ""
-      warn("No name in Issue")
-      exit(1)
-    end
-
-    temp_email = email.delete(" \t\r\n")
-    if email.nil? || email == "" || temp_email == ""
-      warn("No email in Issue")
       exit(1)
     end
 
@@ -126,38 +123,97 @@ class CreatePrFromIssue
     # Overwrite the format of the date in case user enters the date in the incorrect way.
     review_after = review_after_date.strftime(DATE_FORMAT).to_s
 
+    if names.nil?
+      warn("No names in Issue")
+      exit(1)
+    end
+
+    if emails.nil?
+      warn("No email addresses in Issue")
+      exit(1)
+    end
+
+    if usernames.nil?
+      warn("No usernames in Issue")
+      exit(1)
+    end
+
+    emails.each do |email|
+      temp_email = email.delete(" \t\r\n")
+      if email == "" || temp_email == ""
+        warn("Found an empty email in Issue")
+        exit(1)
+      end
+    end
+
+    usernames.each do |username|
+      temp_username = username.delete(" \t\r\n")
+      if username == "" || temp_username == ""
+        warn("Found an empty username in Issue")
+        exit(1)
+      end
+
+      url = "https://api.github.com/users/#{username}"
+      http_code = GithubCollaborators::HttpClient.new.fetch_code(url)
+      if http_code != "200"
+        warn("Username #{username} not found on GitHub")
+        exit(1)
+      end
+    end
+
+    names.each do |name|
+      temp_name = name.delete(" \t\r\n")
+      if name == "" || temp_name == ""
+        warn("Found an empty name in Issue")
+        exit(1)
+      end
+    end
+
     if repositories.nil?
       warn("No repositories in Issue")
       exit(1)
     end
 
     repositories.each do |repository_name|
+      temp_repository_name = repository_name.delete(" \t\r\n")
+      if repository_name == "" || temp_repository_name == ""
+        warn("Found an empty repository name in Issue")
+        exit(1)
+      end
+
       http_code = GithubCollaborators::HttpClient.new.fetch_code("#{GH_API_URL}/#{repository_name}")
       if http_code == "404"
-        warn("The repository in the Issue does not exist on GitHub")
+        warn("The repository #{repository_name} in the Issue does not exist on GitHub")
         exit(1)
       end
     end
 
-    collaborator = {
-      login: username.downcase,
-      permission: requested_permission.downcase,
-      name: name,
-      email: email,
-      org: org,
-      reason: reason,
-      added_by: added_by,
-      review_after: review_after
-    }
+    collaborators = []
+    (0..usernames.length).each do |i|
+      collaborators.push(
+        {
+          login: usernames[i].downcase,
+          permission: requested_permission.downcase,
+          name: names[i],
+          email: emails[i],
+          org: org,
+          reason: reason,
+          added_by: added_by,
+          review_after: review_after
+        }
+      )
+    end
 
-    # Add user to Terraform file/s
+    # Add user/s to Terraform file/s
     edited_files = []
     terraform_files = @terraform_files.get_terraform_files
     repositories.each do |repository_name|
       @terraform_files.ensure_file_exists_in_memory(repository_name)
       terraform_files.each do |terraform_file|
         if terraform_file.filename == repository_name
-          terraform_file.add_collaborator_from_issue(collaborator)
+          collaborators.each do |collaborator|
+            terraform_file.add_collaborator_from_issue(collaborator)
+          end
           terraform_file.write_to_file
           edited_files.push("terraform/#{repository_name}.tf")
         end
@@ -165,10 +221,18 @@ class CreatePrFromIssue
     end
 
     if edited_files.length > 0
-      collaborator_name = username.downcase
-      branch_name = "add-collaborator-from-issue-#{collaborator_name}"
-      pull_request_title = "#{ADD_COLLAB_FROM_ISSUE} #{collaborator_name}"
       type = TYPE_ADD_FROM_ISSUE
+
+      if usernames.length == 1
+        collaborator_name = usernames[0]
+        collaborator_name = collaborator_name.downcase
+        branch_name = "add-collaborator-from-issue-#{collaborator_name}"
+        pull_request_title = "#{ADD_COLLAB_FROM_ISSUE} #{collaborator_name}"
+      else
+        branch_name = "add-multiple-collaborators-from-issue"
+        pull_request_title = "Add multiple collaborators from issue"
+        collaborator_name = "multiple-collaborators"
+      end
       create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
     end
   end

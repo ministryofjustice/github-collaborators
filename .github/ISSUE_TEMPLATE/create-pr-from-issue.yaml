@@ -1,45 +1,45 @@
-name: Create a Outside Collaborator Pull Request
+name: Create a Outside Collaborator/s Pull Request
 description: >-
-  Creating an issue with this template will automatically create a valid pull
-  request for an outside collaborator
-title: "Please create an outside collaborator pull request "
+  Create an issue from this template will automatically create a valid pull
+  request for an outside collaborator/s
+title: "Please create an outside collaborator/s pull request"
 labels:
   - collaborator
   - pr-create-issue
 body:
-  - type: input
-    id: username
+  - type: textarea
+    id: usernames
     attributes:
-      label: username
-      description: GitHub username
+      label: usernames
+      description: Add the GitHub username of each user/s you wish to add, one username per line please
     validations:
       required: true
-  - type: input
-    id: name
+  - type: textarea
+    id: names
     attributes:
-      label: name
-      description: Name of the user
+      label: names
+      description: Add the name of each user/s you wish to add, one name per line please
     validations:
       required: true
-  - type: input
-    id: email
+  - type: textarea
+    id: emails
     attributes:
-      label: email
-      description: Email of the user
+      label: emails
+      description: Add the email address of each user/s you wish to add, one email address per line please
     validations:
       required: true
   - type: input
     id: org
     attributes:
       label: org
-      description: Which org does this user represent?
+      description: Which organisation do the user/s represent?
     validations:
       required: true
   - type: input
     id: reason
     attributes:
       label: reason
-      description: What reason does this user need access for?
+      description: The reason why the user/s need access?
     validations:
       required: true
   - type: input
@@ -56,7 +56,7 @@ body:
     attributes:
       label: review_after
       description: >-
-        When does access for this user have to be reviewed? Please use format
+        When does access for the user/s have to be reviewed? Please use format
         YYYY-MM-DD e.g. 2022-10-10. No longer than 12 months in the future.
     validations:
       required: true
@@ -64,18 +64,18 @@ body:
     id: permission
     attributes:
       label: permission
-      description: What permission does the user need?
+      description: What permission does the user/s need?
       options:
-        - maintain
-        - push
-        - admin
         - pull
+        - push
+        - maintain
+        - admin
     validations:
       required: true
   - type: textarea
     id: repositories
     attributes:
       label: repositories
-      description: "Please add the repos you wish to add this user to, one per line, not a url or full path, just the name of the repository please"
+      description: "Add the repositories the user/s need access to, one repository name per line, not the url or full path, just the name of the repository please"
     validations:
       required: true
