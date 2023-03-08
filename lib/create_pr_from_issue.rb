@@ -1,8 +1,8 @@
 require_relative "../lib/github_collaborators"
 
-LOGIN = 0
-NAME = 1
-EMAIL = 2
+PR_LOGIN = 0
+PR_NAME = 1
+PR_EMAIL = 2
 
 class CreatePrFromIssue
   include Logging
@@ -16,24 +16,20 @@ class CreatePrFromIssue
     body = the_json_data.fetch("body")
     # Split on field seperator
     @the_data = body.split("###")
-    # Remove empty lines
-    .map { |line| line.strip }
-    .map { |str| str.gsub(/^$\n/, "") }
-    # Split on \n characters to have field name and field value in seperator hash
-    .map { |line| line.split("\n") }
-    # Drop first hash element as not needed
-    .drop(1)
-    # Map values into array
-    .map { |field| [field[0], field.drop(1)] }.to_h
-
-    # Collects the Terraform files and collaborators
-    @terraform_files = GithubCollaborators::TerraformFiles.new
+      # Remove empty lines
+      .map { |line| line.strip }
+      .map { |str| str.gsub(/^$\n/, "") }
+      # Split on \n characters to have field name and field value in seperator hash
+      .map { |line| line.split("\n") }
+      # Drop first hash element as not needed
+      .drop(1)
+      # Map values into array
+      .map { |field| [field[0], field.drop(1)] }.to_h
 
     @http_client = GithubCollaborators::HttpClient.new
   end
 
   def start
-
     emails = get_emails
     usernames = get_usernames
     names = get_names
@@ -43,8 +39,11 @@ class CreatePrFromIssue
       exit(1)
     end
 
-    usernames_emails = usernames.zip(emails)
-    usernames_emails_names = usernames_emails.zip(names)
+    usernames_emails_names = []
+    (0..(usernames.length - 1)).each do |i|
+      usernames_emails_names.push([usernames[i], names[i], emails[i]])
+    end
+
     requested_permission = get_permission
     org = get_org
     reason = get_reason
@@ -56,10 +55,10 @@ class CreatePrFromIssue
     usernames_emails_names.each do |user|
       collaborators.push(
         {
-          login: user[LOGIN],
+          login: user[PR_LOGIN],
           permission: requested_permission,
-          name: user[NAME],
-          email: email[EMAIL],
+          name: user[PR_NAME],
+          email: user[PR_EMAIL],
           org: org,
           reason: reason,
           added_by: added_by,
@@ -80,19 +79,21 @@ class CreatePrFromIssue
   end
 
   def remove_characters_from_string_except_space(value)
-    value = value.delete('***23')
-    value = value.delete('***')
-    value = value.delete("\t\r\n")
+    value.delete("\t\r\n")
   end
 
   def remove_characters_from_string(value)
-    value = value.delete('***23')
-    value = value.delete('***')
-    value = value.delete(" \t\r\n")
+    value.delete(" \t\r\n")
   end
-  
+
   def get_permission
-    requested_permission = remove_characters_from_string(@the_data["permission"][0])
+    permission = @the_data["permission"][0]
+    if permission.nil? || permission.length == 0
+      warn("Incorrect permission in Issue")
+      exit(1)
+    end
+
+    requested_permission = remove_characters_from_string(permission)
 
     permissions = ["admin", "pull", "push", "maintain", "triage"]
     if permissions.include?(requested_permission.downcase) == false
@@ -110,18 +111,12 @@ class CreatePrFromIssue
       repositories.push(repository)
     end
 
-    if repositories.nil?
+    if repositories.nil? || repositories.length == 0
       warn("No repositories in Issue")
       exit(1)
     end
 
     repositories.each do |repository_name|
-      temp_repository_name = repository_name.delete(" \t\r\n")
-      if repository_name == "" || temp_repository_name == ""
-        warn("Found an empty repository name in Issue")
-        exit(1)
-      end
-
       http_code = @http_client.fetch_code("#{GH_API_URL}/#{repository_name}")
       if http_code == "404"
         warn("The repository #{repository_name} in the Issue does not exist on GitHub")
@@ -139,20 +134,14 @@ class CreatePrFromIssue
       usernames.push(username)
     end
 
-    if usernames.nil?
+    if usernames.nil? || usernames.length == 0
       warn("No usernames in Issue")
       exit(1)
     end
 
     usernames.each do |username|
-      temp_username = username.delete(" \t\r\n")
-      if username == "" || temp_username == ""
-        warn("Found an empty username in Issue")
-        exit(1)
-      end
-
-      url = "https://api.github.com/users/#{username}"
-      http_code = @http_client.new.fetch_code(url)
+      url = "#{GH_URL}/users/#{username}"
+      http_code = @http_client.fetch_code(url)
       if http_code != "200"
         warn("Username #{username} not found on GitHub")
         exit(1)
@@ -170,17 +159,9 @@ class CreatePrFromIssue
       names.push(name)
     end
 
-    if names.nil?
+    if names.nil? || names.length == 0
       warn("No names in Issue")
       exit(1)
-    end
-  
-    names.each do |name|
-      temp_name = name.delete(" \t\r\n")
-      if name == "" || temp_name == ""
-        warn("Found an empty name in Issue")
-        exit(1)
-      end
     end
 
     names
@@ -194,35 +175,42 @@ class CreatePrFromIssue
       emails.push(email)
     end
 
-    if emails.nil?
+    if emails.nil? || emails.length == 0
       warn("No email addresses in Issue")
       exit(1)
-    end
-
-    emails.each do |email|
-      temp_email = email.delete(" \t\r\n")
-      if email == "" || temp_email == ""
-        warn("Found an empty email in Issue")
-        exit(1)
-      end
     end
 
     emails
   end
 
   def get_org
-    org = remove_characters_from_string_except_space(@the_data["org"][0])
-    temp_org = remove_characters_from_string(@the_data["org"][0])
+    org = @the_data["org"][0]
+
+    if org.nil? || org.length == 0
+      warn("Incorrect org in Issue")
+      exit(1)
+    end
+
+    org = remove_characters_from_string_except_space(org)
+    temp_org = remove_characters_from_string(org)
     if org.nil? || org == "" || temp_org == ""
       warn("No organisation in Issue")
       exit(1)
     end
+
     org
   end
 
   def get_reason
-    reason = remove_characters_from_string_except_space(@the_data["reason"][0])
-    temp_reason = remove_characters_from_string(@the_data["reason"][0])
+    reason = @the_data["reason"][0]
+
+    if reason.nil? || reason.length == 0
+      warn("Incorrect reason in Issue")
+      exit(1)
+    end
+
+    reason = remove_characters_from_string_except_space(reason)
+    temp_reason = remove_characters_from_string(reason)
     if reason.nil? || reason == "" || temp_reason == ""
       warn("No reason in Issue")
       exit(1)
@@ -231,18 +219,33 @@ class CreatePrFromIssue
   end
 
   def get_added_by
-    added_by = remove_characters_from_string_except_space(@the_data["added_by"][0])
-    temp_added_by = remove_characters_from_string(@the_data["added_by"][0])
+    added_by = @the_data["added_by"][0]
+
+    if added_by.nil? || added_by.length == 0
+      warn("Incorrect added_by in Issue")
+      exit(1)
+    end
+
+    added_by = remove_characters_from_string_except_space(added_by)
+    temp_added_by = remove_characters_from_string(added_by)
     if added_by.nil? || added_by == "" || temp_added_by == ""
       warn("No added_by in Issue")
       exit(1)
     end
+
     added_by
   end
 
   def get_review_after
-    review_after = remove_characters_from_string_except_space(@the_data["review_after"][0])
-    temp_review_after = remove_characters_from_string(@the_data["review_after"][0])
+    review_after = @the_data["review_after"][0]
+
+    if review_after.nil? || review_after.length == 0
+      warn("Incorrect review_after in Issue")
+      exit(1)
+    end
+
+    review_after = remove_characters_from_string_except_space(review_after)
+    temp_review_after = remove_characters_from_string(review_after)
     if review_after.nil? || review_after == "" || temp_review_after == ""
       warn("No review_after in Issue")
       exit(1)
@@ -262,21 +265,25 @@ class CreatePrFromIssue
     end
 
     # Overwrite the format of the date in case user enters the date in the incorrect way.
-    review_after = review_after_date.strftime(DATE_FORMAT).to_s
+    review_after_date.strftime(DATE_FORMAT).to_s
   end
 
   def add_users_to_files(collaborators)
     edited_files = []
-    terraform_files = @terraform_files.get_terraform_files
+    # Collects the Terraform files and collaborators
+    terraform_files = GithubCollaborators::TerraformFiles.new
+    the_terraform_files = terraform_files.get_terraform_files
     get_repositories.each do |repository_name|
-      @terraform_files.ensure_file_exists_in_memory(repository_name)
-      terraform_files.each do |terraform_file|
+      terraform_files.ensure_file_exists_in_memory(repository_name)
+      the_terraform_files.each do |terraform_file|
         if terraform_file.filename == repository_name
           collaborators.each do |collaborator|
             terraform_file.add_collaborator_from_issue(collaborator)
           end
-          terraform_file.write_to_file
-          edited_files.push("terraform/#{repository_name}.tf")
+          if collaborators.length > 0
+            terraform_file.write_to_file
+            edited_files.push("terraform/#{repository_name}.tf")
+          end
         end
       end
     end
@@ -284,7 +291,7 @@ class CreatePrFromIssue
   end
 
   def create_single_user_pull_request(edited_files, collaborator)
-    collaborator_name = collaborator["login"].downcase
+    collaborator_name = collaborator[:login].downcase
     branch_name = "add-collaborator-from-issue-#{collaborator_name}"
     pull_request_title = "#{ADD_COLLAB_FROM_ISSUE} #{collaborator_name}"
     create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, TYPE_ADD_FROM_ISSUE)
@@ -293,8 +300,6 @@ class CreatePrFromIssue
   def create_multiple_users_pull_request(edited_files)
     collaborator_name = "multiple-collaborators"
     branch_name = "add-multiple-collaborators-from-issue"
-    pull_request_title = "Add multiple collaborators from issue"
-    create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, TYPE_ADD_FROM_ISSUE)
+    create_branch_and_pull_request(branch_name, edited_files, MULITPLE_COLLABORATORS_PR_TITLE, collaborator_name, TYPE_ADD_FROM_ISSUE)
   end
 end
-
