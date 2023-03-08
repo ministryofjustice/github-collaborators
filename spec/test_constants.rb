@@ -48,6 +48,11 @@ module TestConstants
   WHEN_PULL_REQUEST_DOESNT_EXIST = "when pull request doesn't exist"
   GRACE_PERIOD_OKAY = (Date.today - 45).strftime(DATE_FORMAT)
   GRACE_PERIOD_EXPIRED = (Date.today - 46).strftime(DATE_FORMAT)
+  CORRECT_REVIEW_DATE = (Date.today + 45).strftime(DATE_FORMAT)
+  INCORRECT_REVIEW_DATE_PAST = GRACE_PERIOD_OKAY
+  INCORRECT_REVIEW_DATE_FUTURE = (Date.today + 500).strftime(DATE_FORMAT)
+  CORRECT_PERMISSION = "push"
+  INCORRECT__PERMISSION = "write"
   OPEN = "open"
   CLOSED = "closed"
   CREATED_DATE = "2019-10-01"
