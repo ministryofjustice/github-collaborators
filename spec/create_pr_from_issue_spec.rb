@@ -124,18 +124,18 @@ class GithubCollaborators
         expect(@create_pr_from_issue).to receive(:get_repositories).and_return([REPOSITORY_NAME])
         expect(terraform_files).to receive(:get_terraform_files).and_return([file])
         collaborator = create_collaborator_data("")
-        test_equal(@create_pr_from_issue.add_users_to_files([collaborator]), ["terraform/somerepo.tf"])
+        test_equal(@create_pr_from_issue.add_users_to_files([collaborator]), [TEST_TERRAFORM_FILE_FULL_PATH])
       end
 
       it "call create_single_user_pull_request" do
         collaborator = create_collaborator_data("")
-        @create_pr_from_issue.create_single_user_pull_request(["terraform/somerepo.tf"], collaborator)
-        allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("add-collaborator-from-issue-#{TEST_COLLABORATOR_LOGIN}", ["terraform/somerepo.tf"], "#{ADD_COLLAB_FROM_ISSUE} #{TEST_COLLABORATOR_NAME}", TEST_COLLABORATOR_LOGIN, TYPE_ADD_FROM_ISSUE)
+        @create_pr_from_issue.create_single_user_pull_request([TEST_TERRAFORM_FILE_FULL_PATH], collaborator)
+        allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("add-collaborator-from-issue-#{TEST_COLLABORATOR_LOGIN}", [TEST_TERRAFORM_FILE_FULL_PATH], "#{ADD_COLLAB_FROM_ISSUE} #{TEST_COLLABORATOR_NAME}", TEST_COLLABORATOR_LOGIN, TYPE_ADD_FROM_ISSUE)
       end
 
       it "call create_multiple_users_pull_request" do
-        allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("add-multiple-collaborators-from-issue", ["terraform/somerepo.tf"], MULITPLE_COLLABORATORS_PR_TITLE, "multiple-collaborators", TYPE_ADD_FROM_ISSUE)
-        @create_pr_from_issue.create_multiple_users_pull_request(["terraform/somerepo.tf"])
+        allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with("add-multiple-collaborators-from-issue", [TEST_TERRAFORM_FILE_FULL_PATH], MULITPLE_COLLABORATORS_PR_TITLE, "multiple-collaborators", TYPE_ADD_FROM_ISSUE)
+        @create_pr_from_issue.create_multiple_users_pull_request([TEST_TERRAFORM_FILE_FULL_PATH])
       end
     end
 
@@ -176,8 +176,8 @@ class GithubCollaborators
           expect(@create_pr_from_issue).to receive(:get_names).and_return([TEST_COLLABORATOR_NAME, TEST_COLLABORATOR_NAME, TEST_COLLABORATOR_NAME])
           expect(@create_pr_from_issue).to receive(:get_review_after).and_return("")
           collaborators = [@collaborator1, @collaborator2, @collaborator3]
-          expect(@create_pr_from_issue).to receive(:add_users_to_files).with(collaborators).and_return(["terraform/somerepo.tf"])
-          expect(@create_pr_from_issue).to receive(:create_multiple_users_pull_request).with(["terraform/somerepo.tf"])
+          expect(@create_pr_from_issue).to receive(:add_users_to_files).with(collaborators).and_return([TEST_TERRAFORM_FILE_FULL_PATH])
+          expect(@create_pr_from_issue).to receive(:create_multiple_users_pull_request).with([TEST_TERRAFORM_FILE_FULL_PATH])
           @create_pr_from_issue.start
         end
 
@@ -187,8 +187,8 @@ class GithubCollaborators
           expect(@create_pr_from_issue).to receive(:get_names).and_return([TEST_COLLABORATOR_NAME])
           expect(@create_pr_from_issue).to receive(:get_review_after).and_return("")
           collaborators = [@collaborator1]
-          expect(@create_pr_from_issue).to receive(:add_users_to_files).with(collaborators).and_return(["terraform/somerepo.tf"])
-          expect(@create_pr_from_issue).to receive(:create_single_user_pull_request).with(["terraform/somerepo.tf"], @collaborator1)
+          expect(@create_pr_from_issue).to receive(:add_users_to_files).with(collaborators).and_return([TEST_TERRAFORM_FILE_FULL_PATH])
+          expect(@create_pr_from_issue).to receive(:create_single_user_pull_request).with([TEST_TERRAFORM_FILE_FULL_PATH], @collaborator1)
           @create_pr_from_issue.start
         end
       end
@@ -256,13 +256,13 @@ class GithubCollaborators
     end
 
     context "test bad parameters" do
-      context "with missing values" do
+      context "" do
         before {
           incorrect_json_missing_values = {body: "### usernames\n\n\n\n### names\n\n\n\n### emails\n\n\n\n### org\n\n\n\n### reason\n\n\n\n### added_by\n\n\n\n### review_after\n\n\n\n### permission\n\nwrite\n\n### repositories\n\n"}.to_json
           @create_pr_from_issue = CreatePrFromIssue.new(incorrect_json_missing_values)
         }
 
-        it "test system exit occurs" do
+        it "test system exit occurs with missing values" do
           test_get_repositories(@create_pr_from_issue)
           test_get_usernames(@create_pr_from_issue)
           test_get_names(@create_pr_from_issue)
@@ -275,13 +275,13 @@ class GithubCollaborators
         end
       end
 
-      context "with blank values" do
+      context "" do
         before {
           incorrect_json_blank_values = {body: "### usernames\n\n \n\n### names\n\n \n\n### emails\n\n \n\n### org\n\n \n\n### reason\n\n \n\n### added_by\n\n\n\n### review_after\n\n \n\n### permission\n\n \n\n### repositories\n\n "}.to_json
           @create_pr_from_issue = CreatePrFromIssue.new(incorrect_json_blank_values)
         }
 
-        it "test system exit occurs" do
+        it "test system exit occurs with blank values" do
           test_get_repositories(@create_pr_from_issue)
           test_get_usernames(@create_pr_from_issue)
           test_get_names(@create_pr_from_issue)
@@ -294,13 +294,13 @@ class GithubCollaborators
         end
       end
 
-      context "with nil values" do
+      context "" do
         before {
           incorrect_json_nil_values = {body: "### usernames\n\n\n\n### names\n\n\n\n### emails\n\n\n\n### org\n\n\n\n### reason\n\n\n\n### added_by\n\n\n\n### review_after\n\n\n\n### permission\n\n\n\n### repositories\n\n"}.to_json
           @create_pr_from_issue = CreatePrFromIssue.new(incorrect_json_nil_values)
         }
 
-        it "test system exit occurs" do
+        it "test system exit occurs with nil values" do
           test_get_repositories(@create_pr_from_issue)
           test_get_usernames(@create_pr_from_issue)
           test_get_names(@create_pr_from_issue)
