@@ -82,5 +82,15 @@ module "yjaf-cmm" {
       added_by     = "Mick.Ewers@yjb.gov.uk"
       review_after = "2024-02-15"
     },
+    {
+      github_user  = "angelanec"
+      permission   = "admin"
+      name         = "Angela Site"
+      email        = "angela.site@necsws.com"
+      org          = "NECSWS"
+      reason       = "Development & support related actions on YJAF"
+      added_by     = "Mick.Ewers@yjb.gov.uk"
+      review_after = "2023-06-07"
+    },
   ]
 }
