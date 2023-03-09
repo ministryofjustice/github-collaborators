@@ -1,16 +1,16 @@
-module "cloud-operations-slack-bot" {
+module "terraform-aws-panw-asg" {
   source     = "./modules/repository-collaborators"
-  repository = "cloud-operations-slack-bot"
+  repository = "terraform-aws-panw-asg"
   collaborators = [
     {
       github_user  = "emileswarts"
       permission   = "admin"
-      name         = "Emile Swarts"
+      name         = "emile swarts"
       email        = "emile@madetech.com"
-      org          = "Made Tech Ltd"
+      org          = "made tech ltd"
       reason       = "Full Org member / collaborator missing from Terraform file"
       added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-08-19"
+      review_after = "2023-06-05"
     },
   ]
 }
