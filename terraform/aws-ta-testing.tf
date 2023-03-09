@@ -4,7 +4,7 @@ module "aws-ta-testing" {
   collaborators = [
     {
       github_user  = "emileswarts"
-      permission   = "admin"
+      permission   = "push"
       name         = "Emile Swarts"
       email        = "emile@madetech.com"
       org          = "Made Tech Ltd"
