@@ -108,6 +108,9 @@ module Constants
   # Pull request title
   DELETE_REPOSITORY_PR_TITLE = "Delete repository Terraform file/s"
 
+  # Pull request title
+  MULITPLE_COLLABORATORS_PR_TITLE = "Add multiple collaborators from issue"
+
   # Collaborator data issue
   USERNAME_MISSING = "Collaborator username is missing"
 
@@ -162,17 +165,20 @@ module Constants
   # Organization name
   ORG = "ministryofjustice"
 
+  # The GH API URL
+  GH_URL = "https://api.github.com"
+
   # The GitHub API URL for repositories
-  GH_API_URL = "https://api.github.com/repos/#{ORG}"
+  GH_API_URL = "#{GH_URL}/repos/#{ORG}"
 
   # The GitHub API URL for organisation
-  GH_ORG_API_URL = "https://api.github.com/orgs/#{ORG}"
+  GH_ORG_API_URL = "#{GH_URL}/orgs/#{ORG}"
 
   # The GitHub Organization URL
   GH_ORG_URL = "https://github.com/#{ORG}"
 
   # The GitHub GraphQL API URL
-  GRAPHQL_URI = "https://api.github.com/graphql"
+  GRAPHQL_URI = "#{GH_URL}/graphql"
 
   # Days in a year
   YEAR = 365
