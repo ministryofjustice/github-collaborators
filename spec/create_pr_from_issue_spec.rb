@@ -219,6 +219,42 @@ class GithubCollaborators
       end
     end
 
+    def test_get_permission(create_pr_from_issue)
+      expect { create_pr_from_issue.get_permission }.to raise_error(SystemExit)
+    end
+
+    def test_get_repositories(create_pr_from_issue)
+      expect { create_pr_from_issue.get_repositories }.to raise_error(SystemExit)
+    end
+
+    def test_get_usernames(create_pr_from_issue)
+      expect { create_pr_from_issue.get_usernames }.to raise_error(SystemExit)
+    end
+
+    def test_get_names(create_pr_from_issue)
+      expect { create_pr_from_issue.get_names }.to raise_error(SystemExit)
+    end
+
+    def test_get_emails(create_pr_from_issue)
+      expect { create_pr_from_issue.get_emails }.to raise_error(SystemExit)
+    end
+
+    def test_get_org(create_pr_from_issue)
+      expect { create_pr_from_issue.get_org }.to raise_error(SystemExit)
+    end
+
+    def test_get_reason(create_pr_from_issue)
+      expect { create_pr_from_issue.get_reason }.to raise_error(SystemExit)
+    end
+
+    def test_get_added_by(create_pr_from_issue)
+      expect { create_pr_from_issue.get_added_by }.to raise_error(SystemExit)
+    end
+
+    def test_get_review_after(create_pr_from_issue)
+      expect { create_pr_from_issue.get_review_after }.to raise_error(SystemExit)
+    end
+
     context "test bad parameters" do
       context "with missing values" do
         before {
@@ -226,44 +262,16 @@ class GithubCollaborators
           @create_pr_from_issue = CreatePrFromIssue.new(incorrect_json_missing_values)
         }
 
-        it "call get_permission" do
-          expect { @create_pr_from_issue.get_permission }.to raise_error(SystemExit)
-        end
-
-        it "call get_repositories" do
-          expect { @create_pr_from_issue.get_repositories }.to raise_error(SystemExit)
-        end
-
-        it "call get_usernames" do
-          expect { @create_pr_from_issue.get_usernames }.to raise_error(SystemExit)
-        end
-
-        it "call get_names" do
-          expect { @create_pr_from_issue.get_names }.to raise_error(SystemExit)
-        end
-
-        it "call get_emails" do
-          expect { @create_pr_from_issue.get_emails }.to raise_error(SystemExit)
-        end
-
-        it "call get_org" do
-          expect { @create_pr_from_issue.get_org }.to raise_error(SystemExit)
-        end
-
-        it "call get_reason" do
-          expect { @create_pr_from_issue.get_reason }.to raise_error(SystemExit)
-        end
-
-        it "call get_added_by" do
-          expect { @create_pr_from_issue.get_added_by }.to raise_error(SystemExit)
-        end
-
-        it "call get_review_after" do
-          expect { @create_pr_from_issue.get_added_by }.to raise_error(SystemExit)
-        end
-
-        it "call get_review_after" do
-          expect { @create_pr_from_issue.get_review_after }.to raise_error(SystemExit)
+        it "test system exit occurs" do
+          test_get_repositories(@create_pr_from_issue)
+          test_get_usernames(@create_pr_from_issue)
+          test_get_names(@create_pr_from_issue)
+          test_get_emails(@create_pr_from_issue)
+          test_get_org(@create_pr_from_issue)
+          test_get_reason(@create_pr_from_issue)
+          test_get_added_by(@create_pr_from_issue)
+          test_get_review_after(@create_pr_from_issue)
+          test_get_permission(@create_pr_from_issue)
         end
       end
 
@@ -273,44 +281,16 @@ class GithubCollaborators
           @create_pr_from_issue = CreatePrFromIssue.new(incorrect_json_blank_values)
         }
 
-        it "call get_permission" do
-          expect { @create_pr_from_issue.get_permission }.to raise_error(SystemExit)
-        end
-
-        it "call get_repositories" do
-          expect { @create_pr_from_issue.get_repositories }.to raise_error(SystemExit)
-        end
-
-        it "call get_usernames" do
-          expect { @create_pr_from_issue.get_usernames }.to raise_error(SystemExit)
-        end
-
-        it "call get_names" do
-          expect { @create_pr_from_issue.get_names }.to raise_error(SystemExit)
-        end
-
-        it "call get_emails" do
-          expect { @create_pr_from_issue.get_emails }.to raise_error(SystemExit)
-        end
-
-        it "call get_org" do
-          expect { @create_pr_from_issue.get_org }.to raise_error(SystemExit)
-        end
-
-        it "call get_reason" do
-          expect { @create_pr_from_issue.get_reason }.to raise_error(SystemExit)
-        end
-
-        it "call get_added_by" do
-          expect { @create_pr_from_issue.get_added_by }.to raise_error(SystemExit)
-        end
-
-        it "call get_review_after" do
-          expect { @create_pr_from_issue.get_added_by }.to raise_error(SystemExit)
-        end
-
-        it "call get_review_after" do
-          expect { @create_pr_from_issue.get_review_after }.to raise_error(SystemExit)
+        it "test system exit occurs" do
+          test_get_repositories(@create_pr_from_issue)
+          test_get_usernames(@create_pr_from_issue)
+          test_get_names(@create_pr_from_issue)
+          test_get_emails(@create_pr_from_issue)
+          test_get_org(@create_pr_from_issue)
+          test_get_reason(@create_pr_from_issue)
+          test_get_added_by(@create_pr_from_issue)
+          test_get_review_after(@create_pr_from_issue)
+          test_get_permission(@create_pr_from_issue)
         end
       end
 
@@ -320,40 +300,16 @@ class GithubCollaborators
           @create_pr_from_issue = CreatePrFromIssue.new(incorrect_json_nil_values)
         }
 
-        it "call get_permission" do
-          expect { @create_pr_from_issue.get_permission }.to raise_error(SystemExit)
-        end
-
-        it "call get_repositories" do
-          expect { @create_pr_from_issue.get_repositories }.to raise_error(SystemExit)
-        end
-
-        it "call get_usernames" do
-          expect { @create_pr_from_issue.get_usernames }.to raise_error(SystemExit)
-        end
-
-        it "call get_names" do
-          expect { @create_pr_from_issue.get_names }.to raise_error(SystemExit)
-        end
-
-        it "call get_emails" do
-          expect { @create_pr_from_issue.get_emails }.to raise_error(SystemExit)
-        end
-
-        it "call get_org" do
-          expect { @create_pr_from_issue.get_org }.to raise_error(SystemExit)
-        end
-
-        it "call get_reason" do
-          expect { @create_pr_from_issue.get_reason }.to raise_error(SystemExit)
-        end
-
-        it "call get_added_by" do
-          expect { @create_pr_from_issue.get_added_by }.to raise_error(SystemExit)
-        end
-
-        it "call get_review_after" do
-          expect { @create_pr_from_issue.get_review_after }.to raise_error(SystemExit)
+        it "test system exit occurs" do
+          test_get_repositories(@create_pr_from_issue)
+          test_get_usernames(@create_pr_from_issue)
+          test_get_names(@create_pr_from_issue)
+          test_get_emails(@create_pr_from_issue)
+          test_get_org(@create_pr_from_issue)
+          test_get_reason(@create_pr_from_issue)
+          test_get_added_by(@create_pr_from_issue)
+          test_get_review_after(@create_pr_from_issue)
+          test_get_permission(@create_pr_from_issue)
         end
       end
 
