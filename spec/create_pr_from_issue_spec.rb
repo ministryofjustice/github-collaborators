@@ -124,7 +124,19 @@ class GithubCollaborators
         expect(@create_pr_from_issue).to receive(:get_repositories).and_return([REPOSITORY_NAME])
         expect(terraform_files).to receive(:get_terraform_files).and_return([file])
         collaborator = create_collaborator_data("")
+        expect(terraform_files).to receive(:is_user_in_file).and_return(false)
         test_equal(@create_pr_from_issue.add_users_to_files([collaborator]), [TEST_TERRAFORM_FILE_FULL_PATH])
+      end
+
+      it "call add_users_to_files when provide repositories and terraform file with same name exists but collaborator already exists in the file" do
+        file = create_terraform_file_with_name(REPOSITORY_NAME)
+        expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+        expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(REPOSITORY_NAME)
+        expect(@create_pr_from_issue).to receive(:get_repositories).and_return([REPOSITORY_NAME])
+        expect(terraform_files).to receive(:get_terraform_files).and_return([file])
+        collaborator = create_collaborator_data("")
+        expect(terraform_files).to receive(:is_user_in_file).and_return(true)
+        expect { @create_pr_from_issue.add_users_to_files([collaborator]) }.to raise_error(SystemExit)
       end
 
       it "call create_single_user_pull_request" do

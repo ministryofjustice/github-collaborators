@@ -278,6 +278,10 @@ class CreatePrFromIssue
       the_terraform_files.each do |terraform_file|
         if terraform_file.filename == repository_name
           collaborators.each do |collaborator|
+            if terraform_files.is_user_in_file(repository_name.downcase, collaborator[:login]) == true
+              warn("The user #{collaborator[:login]} already exists in the file #{repository_name.downcase}.tf")
+              exit(1)
+            end
             terraform_file.add_collaborator_from_issue(collaborator)
           end
           if collaborators.length > 0
