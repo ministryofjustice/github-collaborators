@@ -17,5 +17,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        scan_type: changed
+        scan_type: full
         tfsec_exclude: AWS095
