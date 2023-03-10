@@ -17,5 +17,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        scan_type: full
+        scan_type: single
         tfsec_exclude: AWS095
+        terraform_working_dir: terraform
