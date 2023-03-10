@@ -32,5 +32,15 @@ module "hmpps-delius-api" {
       added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
       review_after = "2023-08-25"
     },
+    {
+      github_user  = "aprilmd"
+      permission   = "push"
+      name         = "april dawson"
+      email        = "april.dawson@digital.justice.gov.uk"
+      org          = "made tech"
+      reason       = "Full Org member / collaborator missing from Terraform file"
+      added_by     = "opseng-bot@digital.justice.gov.uk"
+      review_after = "2023-06-08"
+    },
   ]
 }
