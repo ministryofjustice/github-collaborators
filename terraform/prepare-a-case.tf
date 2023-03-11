@@ -44,7 +44,7 @@ module "prepare-a-case" {
     },
     {
       github_user  = "bjpirt"
-      permission   = "push"
+      permission   = "pull"
       name         = "ben pirt"
       email        = "ben@madetech.com"
       org          = "Made Tech"
