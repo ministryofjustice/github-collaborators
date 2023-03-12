@@ -10,7 +10,7 @@ module "pfs-software-services_terraform" {
       org          = "Kainos"
       reason       = "Kainos is working on transfering code from a kainos owned repo to an MOJ owned repo"
       added_by     = "Incell Infrastructure team, federico.staiano1@justice.gov.uk"
-      review_after = "2023-03-18"
+      review_after = "2023-09-14"
     },
     {
       github_user  = "nathanials"
