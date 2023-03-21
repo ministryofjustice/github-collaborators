@@ -12,6 +12,8 @@ class CreatePrFromIssue
     # This class takes the body generated from a GitHub ticket
     # created within /.github/ISSUE_TEMPLATE/create-pr-from-issue.yaml
     the_json_data = JSON.parse(json_data)
+    # Get Issue number so can close issue
+    @issue_number = the_json_data.fetch("issue_number")
     # Fetch the body var
     body = the_json_data.fetch("body")
     # Split on field seperator
@@ -76,6 +78,8 @@ class CreatePrFromIssue
         create_multiple_users_pull_request(edited_files)
       end
     end
+
+    remove_issue(REPO_NAME, @issue_number)
   end
 
   def remove_characters_from_string_except_space(value)
