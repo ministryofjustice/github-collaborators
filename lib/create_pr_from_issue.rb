@@ -13,7 +13,7 @@ class CreatePrFromIssue
     # created within /.github/ISSUE_TEMPLATE/create-pr-from-issue.yaml
     the_json_data = JSON.parse(json_data)
     # Get Issue number so can close issue
-    @issue_number = the_json_data.fetch("issue_number")
+    @issue_number = the_json_data.fetch("number")
     # Fetch the body var
     body = the_json_data.fetch("body")
     # Split on field seperator
