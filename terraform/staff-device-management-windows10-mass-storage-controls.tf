@@ -10,7 +10,7 @@ module "staff-device-management-windows10-mass-storage-controls" {
       org          = "MadeTech"
       reason       = "VICTOR product development"
       added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2023-03-30"
+      review_after = "2023-09-26"
     },
     {
       github_user  = "bingliumt"
@@ -21,6 +21,6 @@ module "staff-device-management-windows10-mass-storage-controls" {
       reason       = "VICTOR product development"
       added_by     = "matthew.white1@justice.gov.uk"
       review_after = "2023-03-30"
-    }
+    },
   ]
 }
