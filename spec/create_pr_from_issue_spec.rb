@@ -13,7 +13,7 @@ class GithubCollaborators
 
     context "test good path" do
       before {
-        good_json_one_user = {issue_number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{ADDED_BY_EMAIL}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}"}.to_json
+        good_json_one_user = {number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{ADDED_BY_EMAIL}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}"}.to_json
         @create_pr_from_issue = CreatePrFromIssue.new(good_json_one_user)
       }
 
@@ -153,7 +153,7 @@ class GithubCollaborators
 
     context "test start" do
       before {
-        good_json_one_user = {issue_number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{ADDED_BY_EMAIL}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}"}.to_json
+        good_json_one_user = {number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{ADDED_BY_EMAIL}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}"}.to_json
         @create_pr_from_issue = CreatePrFromIssue.new(good_json_one_user)
       }
 
@@ -210,7 +210,7 @@ class GithubCollaborators
 
     context "test good path when have multiple users" do
       before {
-        good_json_multiple_users = {issue_number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\r\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\r\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\r\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{ADDED_BY_EMAIL}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}\r\n#{TEST_REPO_NAME}"}.to_json
+        good_json_multiple_users = {number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\r\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\r\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\r\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{ADDED_BY_EMAIL}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}\r\n#{TEST_REPO_NAME}"}.to_json
         @create_pr_from_issue = CreatePrFromIssue.new(good_json_multiple_users)
       }
 
@@ -272,7 +272,7 @@ class GithubCollaborators
     context "test bad parameters" do
       context "" do
         before {
-          incorrect_json_missing_values = {issue_number: 123, body: "### usernames\n\n\n\n### names\n\n\n\n### emails\n\n\n\n### org\n\n\n\n### reason\n\n\n\n### added_by\n\n\n\n### review_after\n\n\n\n### permission\n\nwrite\n\n### repositories\n\n"}.to_json
+          incorrect_json_missing_values = {number: 123, body: "### usernames\n\n\n\n### names\n\n\n\n### emails\n\n\n\n### org\n\n\n\n### reason\n\n\n\n### added_by\n\n\n\n### review_after\n\n\n\n### permission\n\nwrite\n\n### repositories\n\n"}.to_json
           @create_pr_from_issue = CreatePrFromIssue.new(incorrect_json_missing_values)
         }
 
@@ -291,7 +291,7 @@ class GithubCollaborators
 
       context "" do
         before {
-          incorrect_json_blank_values = {issue_number: 123, body: "### usernames\n\n \n\n### names\n\n \n\n### emails\n\n \n\n### org\n\n \n\n### reason\n\n \n\n### added_by\n\n\n\n### review_after\n\n \n\n### permission\n\n \n\n### repositories\n\n "}.to_json
+          incorrect_json_blank_values = {number: 123, body: "### usernames\n\n \n\n### names\n\n \n\n### emails\n\n \n\n### org\n\n \n\n### reason\n\n \n\n### added_by\n\n\n\n### review_after\n\n \n\n### permission\n\n \n\n### repositories\n\n "}.to_json
           @create_pr_from_issue = CreatePrFromIssue.new(incorrect_json_blank_values)
         }
 
@@ -310,7 +310,7 @@ class GithubCollaborators
 
       context "" do
         before {
-          incorrect_json_nil_values = {issue_number: 123, body: "### usernames\n\n\n\n### names\n\n\n\n### emails\n\n\n\n### org\n\n\n\n### reason\n\n\n\n### added_by\n\n\n\n### review_after\n\n\n\n### permission\n\n\n\n### repositories\n\n"}.to_json
+          incorrect_json_nil_values = {number: 123, body: "### usernames\n\n\n\n### names\n\n\n\n### emails\n\n\n\n### org\n\n\n\n### reason\n\n\n\n### added_by\n\n\n\n### review_after\n\n\n\n### permission\n\n\n\n### repositories\n\n"}.to_json
           @create_pr_from_issue = CreatePrFromIssue.new(incorrect_json_nil_values)
         }
 
@@ -329,7 +329,7 @@ class GithubCollaborators
 
       context "" do
         before {
-          incorrect_json = {issue_number: 123, body: "### usernames\n\n\n\n### names\n\n\n\n### emails\n\n\n\n### org\n\n\n\n### reason\n\n\n\n### added_by\n\n\n\n### review_after\n\n#{INCORRECT_REVIEW_DATE_FUTURE}\n\n### permission\n\n\n\n### repositories\n\n"}.to_json
+          incorrect_json = {number: 123, body: "### usernames\n\n\n\n### names\n\n\n\n### emails\n\n\n\n### org\n\n\n\n### reason\n\n\n\n### added_by\n\n\n\n### review_after\n\n#{INCORRECT_REVIEW_DATE_FUTURE}\n\n### permission\n\n\n\n### repositories\n\n"}.to_json
           @create_pr_from_issue = CreatePrFromIssue.new(incorrect_json)
         }
 
@@ -340,7 +340,7 @@ class GithubCollaborators
 
       context "" do
         before {
-          incorrect_json = {issue_number: 123, body: "### usernames\n\n\n\n### names\n\n\n\n### emails\n\n\n\n### org\n\n\n\n### reason\n\n\n\n### added_by\n\n\n\n### review_after\n\n#{INCORRECT_REVIEW_DATE_PAST}\n\n### permission\n\n\n\n### repositories\n\n"}.to_json
+          incorrect_json = {number: 123, body: "### usernames\n\n\n\n### names\n\n\n\n### emails\n\n\n\n### org\n\n\n\n### reason\n\n\n\n### added_by\n\n\n\n### review_after\n\n#{INCORRECT_REVIEW_DATE_PAST}\n\n### permission\n\n\n\n### repositories\n\n"}.to_json
           @create_pr_from_issue = CreatePrFromIssue.new(incorrect_json)
         }
 
