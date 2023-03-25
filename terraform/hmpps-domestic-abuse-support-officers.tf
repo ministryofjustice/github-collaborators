@@ -30,7 +30,7 @@ module "hmpps-domestic-abuse-support-officers" {
       org          = "Civica"
       reason       = "Civica developer for DASO"
       added_by     = "Probation Infrastructure AWS Team, awssupportteam@digital.justice.gov.uk"
-      review_after = "2023-03-31"
+      review_after = "2023-09-27"
     },
     {
       github_user  = "shaunthornburgh"
