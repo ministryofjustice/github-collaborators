@@ -23,16 +23,6 @@ module "hmpps-domestic-abuse-support-officers" {
       review_after = "2023-12-20"
     },
     {
-      github_user  = "codesureuk"
-      permission   = "maintain"
-      name         = "Toby Liddicoat"
-      email        = "toby.liddicoat@civica.co.uk"
-      org          = "Civica"
-      reason       = "Civica developer for DASO"
-      added_by     = "Probation Infrastructure AWS Team, awssupportteam@digital.justice.gov.uk"
-      review_after = "2023-03-31"
-    },
-    {
       github_user  = "shaunthornburgh"
       permission   = "push"
       name         = "Shaun Thornburgh"
