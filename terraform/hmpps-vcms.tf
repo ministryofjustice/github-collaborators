@@ -23,16 +23,6 @@ module "hmpps-vcms" {
       review_after = "2023-12-20"
     },
     {
-      github_user  = "codesureuk"
-      permission   = "maintain"
-      name         = "Toby Liddicoat"
-      email        = "toby.liddicoat@civica.co.uk"
-      org          = "Civica"
-      reason       = "Civica developer for Victims Case Management System"
-      added_by     = "Probation Infrastructure AWS Team, maximillian.lakanu@digital.justice.gov.uk"
-      review_after = "2023-03-31"
-    },
-    {
       github_user  = "simoncreasy-civica"
       permission   = "push"
       name         = "Simon Creasy"
