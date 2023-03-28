@@ -10,7 +10,7 @@ module "staff-device-management-intune-scripts" {
       org          = "MadeTech"
       reason       = "VICTOR product development"
       added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2023-03-30"
+      review_after = "2023-09-26"
     },
     {
       github_user  = "bingliumt"
