@@ -10,7 +10,7 @@ module "hmpps-integration-api-docs" {
       org          = "madetech"
       reason       = "Full Org member / collaborator missing from Terraform file"
       added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-04-11"
+      review_after = "2023-10-29"
     },
     {
       github_user  = "mcoffey-mt"
@@ -20,7 +20,7 @@ module "hmpps-integration-api-docs" {
       org          = "made tech"
       reason       = "Full Org member / collaborator missing from Terraform file"
       added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-04-11"
+      review_after = "2023-10-29"
     },
     {
       github_user  = "chubberlisk"
@@ -30,7 +30,7 @@ module "hmpps-integration-api-docs" {
       org          = "made tech"
       reason       = "Full Org member / collaborator missing from Terraform file"
       added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-04-11"
+      review_after = "2023-10-29"
     },
     {
       github_user  = "emileswarts"
@@ -40,7 +40,7 @@ module "hmpps-integration-api-docs" {
       org          = "made tech ltd"
       reason       = "Full Org member / collaborator missing from Terraform file"
       added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-04-11"
+      review_after = "2023-10-29"
     },
     {
       github_user  = "aprilmd"
@@ -50,7 +50,7 @@ module "hmpps-integration-api-docs" {
       org          = "made tech"
       reason       = "Full Org member / collaborator missing from Terraform file"
       added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-04-20"
+      review_after = "2023-10-29"
     },
   ]
 }
