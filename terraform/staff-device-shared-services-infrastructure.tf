@@ -20,7 +20,7 @@ module "staff-device-shared-services-infrastructure" {
       org          = "madetech"
       reason       = "Full Org member / collaborator missing from Terraform file"
       added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-04-06"
+      review_after = "2023-10-03"
     },
   ]
 }
