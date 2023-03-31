@@ -13,16 +13,6 @@ module "staff-device-management-intune-scripts" {
       review_after = "2023-03-30"
     },
     {
-      github_user  = "bingliumt"
-      permission   = "admin"
-      name         = "Bingjie Liu"
-      email        = "bingjie.liu@madetech.com"
-      org          = "MadeTech"
-      reason       = "VICTOR product development"
-      added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2023-03-30"
-    },
-    {
       github_user  = "emileswarts"
       permission   = "push"
       name         = "Emile Swarts"
