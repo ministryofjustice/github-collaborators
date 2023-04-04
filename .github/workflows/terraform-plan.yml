@@ -12,8 +12,8 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_VAR_github_token: ${{ secrets.OPS_BOT_TOKEN }}
   GITHUB_APP_ID: ${{ secrets.APP_ID }}
-  GITHUB_APP_INSTALLATION_ID: ${{ secrets.INSTALLATION_ID }}
-  GITHUB_APP_PEM_FILE: ${{ secrets.PEM_FILE }}
+  GITHUB_APP_INSTALLATION_ID: ${{ secrets.APP_INSTALLATION_ID }}
+  GITHUB_APP_PEM_FILE: ${{ secrets.APP_PEM_FILE }}
   TF_IN_AUTOMATION: true
 
 jobs:
