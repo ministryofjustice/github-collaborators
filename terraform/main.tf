@@ -5,9 +5,7 @@ provider "github" {
   #   write_delay_ms = "1000"
   #   read_delay_ms  = "1000"
 
-  app_auth {
-    id              = var.app_id
-    installation_id = var.app_installation_id
-    pem_file        = var.app_pem_file
-  }
+  # This uses environment variables stored in GitHub secrets to authenticate, comment this out to run locally and use token auth
+  # https://registry.terraform.io/providers/integrations/github/latest/docs
+  app_auth { }
 }
