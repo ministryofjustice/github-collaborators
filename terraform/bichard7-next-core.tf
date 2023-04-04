@@ -20,7 +20,7 @@ module "bichard7-next-core" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
-      review_after = "2023-12-30"
+      review_after = "2023-12-31"
     },
     {
       github_user  = "daviesjamie"
