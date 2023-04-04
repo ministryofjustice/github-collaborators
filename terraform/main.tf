@@ -7,5 +7,5 @@ provider "github" {
 
   # This uses environment variables stored in GitHub secrets to authenticate, comment this out to run locally and use token auth
   # https://registry.terraform.io/providers/integrations/github/latest/docs
-  app_auth { }
+  app_auth {}
 }
