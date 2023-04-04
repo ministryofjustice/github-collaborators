@@ -19,6 +19,5 @@ jobs:
       - run: bundle install
       - run: bin/close-expired-issues.rb
         env:
-          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
           OPS_BOT_TOKEN: ${{ secrets.OPS_BOT_TOKEN }}
           LOG_LEVEL: "info"

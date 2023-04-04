@@ -19,7 +19,6 @@ jobs:
       - name: Check the outside collaborators
         run: bin/outside-collaborators.rb
         env:
-          ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
           OPS_BOT_TOKEN: ${{ secrets.OPS_BOT_TOKEN }}
           REALLY_POST_TO_SLACK: ${{ secrets.POST_TO_SLACK }}
           REALLY_POST_TO_GH: ${{ secrets.POST_TO_GH }}

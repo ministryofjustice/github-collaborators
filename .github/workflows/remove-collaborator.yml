@@ -20,4 +20,4 @@ jobs:
         with:
           python-version: "3.10"
       - run: python3 -m pip install -r scripts/requirements.txt
-      - run: python3 scripts/remove-collaborator.py ${{ secrets.ADMIN_GITHUB_TOKEN }} ${{ github.event.inputs.repository }} ${{ github.event.inputs.github_user }}
+      - run: python3 scripts/remove-collaborator.py ${{ secrets.OPS_BOT_TOKEN }} ${{ github.event.inputs.repository }} ${{ github.event.inputs.github_user }}

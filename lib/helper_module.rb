@@ -663,12 +663,7 @@ module HelperModule
     module_logger.debug "create_pull_request"
     if ENV.fetch("REALLY_POST_TO_GH", 0) == "1"
       url = "#{GH_API_URL}/#{REPO_NAME}/pulls"
-      if ENV.fetch("OPS_BOT_TOKEN_ENABLED", 0) == "1"
-        # Use a different pull request GitHub token so A.B. can authorise automated pull requests
-        GithubCollaborators::HttpClient.new.post_pull_request_json(url, hash_body.to_json)
-      else
-        GithubCollaborators::HttpClient.new.post_json(url, hash_body.to_json)
-      end
+      GithubCollaborators::HttpClient.new.post_pull_request_json(url, hash_body.to_json)
       sleep 1
     else
       module_logger.debug "Didn't create pull request, this is a dry run"

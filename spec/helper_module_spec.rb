@@ -502,24 +502,6 @@ class GithubCollaborators
         end
       end
 
-      context CALL_CREATE_PULL_REQUEST do
-        before do
-          ENV["REALLY_POST_TO_GH"] = "1"
-          ENV["OPS_BOT_TOKEN_ENABLED"] = "0"
-        end
-
-        it "when post to github env variable is set and ops eng bot env variables isn't set" do
-          expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
-          expect(http_client).to receive(:post_json).with(pull_request_url, "".to_json)
-          helper_module.create_pull_request("")
-        end
-
-        after do
-          ENV.delete("REALLY_POST_TO_GH")
-          ENV.delete("OPS_BOT_TOKEN_ENABLED")
-        end
-      end
-
       context "" do
         login = TEST_USER
         branch_name = BRANCH_NAME

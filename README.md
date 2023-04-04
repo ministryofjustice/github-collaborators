@@ -113,7 +113,7 @@ To run Terraform apply locally:
 
 To run Terraform apply locally:
 
-- `ADMIN_GITHUB_TOKEN` must contain a GitHub personal access token (PAC) enabled for MoJ SSO, with the following scopes:
+- `OPS_BOT_TOKEN` must contain a GitHub personal access token (PAC) enabled for MoJ SSO, with the following scopes:
 
   - admin:org
   - repo
@@ -184,7 +184,6 @@ To debug in VS Code use the below launch configrations within `.vscode/launch.js
       "request": "launch",
       "program": "${workspaceRoot}/bin/close-issues.rb",
       "env": {
-        "ADMIN_GITHUB_TOKEN": "add-token",
         "REALLY_POST_TO_SLACK": "0",
         "REALLY_POST_TO_GH": "0",
         "OPS_BOT_TOKEN_ENABLED": "0",

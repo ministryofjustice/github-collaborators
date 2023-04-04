@@ -14,7 +14,6 @@ class GithubCollaborators
       context "when one env var is missing" do
         before {
           ENV.delete("OPS_BOT_TOKEN")
-          ENV["ADMIN_GITHUB_TOKEN"] = ""
         }
 
         it CATCH_ERROR do
@@ -50,32 +49,9 @@ class GithubCollaborators
         end
       end
 
-      context "when other env var is missing" do
-        before {
-          ENV["OPS_BOT_TOKEN"] = ""
-          ENV.delete("ADMIN_GITHUB_TOKEN")
-        }
-
-        it CATCH_ERROR do
-          expect { GithubCollaborators::HttpClient.new }.to raise_error(KeyError)
-        end
-      end
-
-      context "when both env vars are missing" do
-        before {
-          ENV.delete("OPS_BOT_TOKEN")
-          ENV.delete("ADMIN_GITHUB_TOKEN")
-        }
-
-        it CATCH_ERROR do
-          expect { GithubCollaborators::HttpClient.new }.to raise_error(KeyError)
-        end
-      end
-
-      context "when correct env vars are provided" do
+      context "when correct env vars is provided" do
         before do
           ENV["OPS_BOT_TOKEN"] = ""
-          ENV["ADMIN_GITHUB_TOKEN"] = ""
         end
 
         it "call post_pull_request_json" do
@@ -160,7 +136,6 @@ class GithubCollaborators
 
         after do
           ENV.delete("OPS_BOT_TOKEN")
-          ENV.delete("ADMIN_GITHUB_TOKEN")
         end
       end
     end
