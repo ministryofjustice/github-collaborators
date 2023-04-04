@@ -9,7 +9,6 @@ class GithubCollaborators
 
     def initialize
       logger.debug "initialize"
-      @github_token = ENV.fetch("ADMIN_GITHUB_TOKEN")
       @ops_bot_token = ENV.fetch("OPS_BOT_TOKEN")
     end
 
@@ -149,7 +148,7 @@ class GithubCollaborators
       {
         "Accept" => APPLICATION_JSON,
         "Content-Type" => APPLICATION_JSON,
-        "Authorization" => "token #{@github_token}"
+        "Authorization" => "token #{@ops_bot_token}"
       }
     end
 

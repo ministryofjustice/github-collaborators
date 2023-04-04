@@ -15,4 +15,4 @@ jobs:
       - run: python3 scripts/check-fork-status.py
         env:
           PR_DATA: ${{ toJson(github.event.pull_request) }}
-          TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+          TOKEN: ${{ secrets.OPS_BOT_TOKEN }}

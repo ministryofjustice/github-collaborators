@@ -11,7 +11,7 @@ class GithubCollaborators
       }
 
       before do
-        ENV["ADMIN_GITHUB_TOKEN"] = ""
+        ENV["OPS_BOT_TOKEN"] = ""
       end
 
       let(:terraform_files) { double(GithubCollaborators::TerraformFiles) }
@@ -340,7 +340,7 @@ class GithubCollaborators
       end
 
       after do
-        ENV.delete("ADMIN_GITHUB_TOKEN")
+        ENV.delete("OPS_BOT_TOKEN")
       end
     end
   end
