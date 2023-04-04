@@ -6,8 +6,8 @@ provider "github" {
   #   read_delay_ms  = "1000"
 
   app_auth {
-    id = GITHUB_APP_ID
+    id              = GITHUB_APP_ID
     installation_id = GITHUB_APP_INSTALLATION_ID
-    pem_file = GITHUB_APP_PEM_FILE
+    pem_file        = GITHUB_APP_PEM_FILE
   }
 }
