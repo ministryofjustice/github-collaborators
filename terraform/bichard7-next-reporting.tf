@@ -92,5 +92,15 @@ module "bichard7-next-reporting" {
       added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
+    {
+      github_user  = "Seth-Barber"
+      permission   = "pull"
+      name         = "Seth Barber"
+      email        = "seth.barber@madetech.com"
+      org          = "Madetech"
+      reason       = "CJSE Bichard Development"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
+      review_after = "2023-12-31"
+    },
   ]
 }
