@@ -9,7 +9,7 @@ module "moj-cjse-bichard7" {
       email        = "ben@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
     {
@@ -19,7 +19,7 @@ module "moj-cjse-bichard7" {
       email        = "emad.karamad@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
     {
@@ -29,7 +29,7 @@ module "moj-cjse-bichard7" {
       email        = "jamie.davies@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
     {
@@ -39,7 +39,7 @@ module "moj-cjse-bichard7" {
       email        = "alice.lee@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
     {
@@ -49,7 +49,7 @@ module "moj-cjse-bichard7" {
       email        = "csaba@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
     {
@@ -59,7 +59,7 @@ module "moj-cjse-bichard7" {
       email        = "joe.folkard@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
     {
@@ -69,7 +69,7 @@ module "moj-cjse-bichard7" {
       email        = "donny.hyon@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
     {
@@ -79,7 +79,7 @@ module "moj-cjse-bichard7" {
       email        = "agnieszka.zbikowska@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
     {
@@ -89,7 +89,7 @@ module "moj-cjse-bichard7" {
       email        = "ian.king@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
   ]
