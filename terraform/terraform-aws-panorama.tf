@@ -4,7 +4,7 @@ module "terraform-aws-panorama" {
   collaborators = [
     {
       github_user  = "emileswarts"
-      permission   = "maintain"
+      permission   = "push"
       name         = "Emile Swarts"
       email        = "emile@madetech.com"
       org          = "Made Tech Ltd"
