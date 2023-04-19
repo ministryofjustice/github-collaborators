@@ -8,9 +8,10 @@ class CreatePrFromIssue
   include Logging
   include HelperModule
 
-  def initialize(json_data)
+  def initialize()
     # This class takes the body generated from a GitHub ticket
     # created within /.github/ISSUE_TEMPLATE/create-pr-from-issue.yaml
+    json_data = {number: 123, body: "### usernames\n\ngregi2n\n\n### names\n\nNick Walters\n\n### emails\n\nnick.walters@digital.justice.gov.uk\n\n### org\n\nMoJ\n\n### reason\n\nTest\n\n### added_by\n\nNick\n\n### review_after\n\n2023/07/25\n\n### permission\n\nAdmin\n\n### repositories\n\noperations-engineering"}.to_json
     the_json_data = JSON.parse(json_data)
     # Get Issue number so can close issue
     @issue_number = the_json_data.fetch("number")
