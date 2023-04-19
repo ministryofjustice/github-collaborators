@@ -706,6 +706,7 @@ module HelperModule
     {
       title: EXTEND_REVIEW_DATE_PR_TITLE + " " + login.downcase,
       head: branch_name.downcase,
+      draft: true,
       base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
@@ -730,6 +731,7 @@ module HelperModule
     {
       title: DELETE_REPOSITORY_PR_TITLE,
       head: branch_name.downcase,
+      draft: true,
       base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
@@ -753,6 +755,7 @@ module HelperModule
     {
       title: ARCHIVED_REPOSITORY_PR_TITLE,
       head: branch_name.downcase,
+      draft: true,
       base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
@@ -778,6 +781,7 @@ module HelperModule
     {
       title: EMPTY_FILES_PR_TITLE,
       head: branch_name.downcase,
+      draft: true,
       base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
@@ -800,6 +804,7 @@ module HelperModule
     {
       title: ADD_COLLAB_FROM_ISSUE + " " + login.downcase,
       head: branch_name.downcase,
+      draft: true,
       base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
@@ -824,6 +829,7 @@ module HelperModule
     {
       title: ADD_FULL_ORG_MEMBER_PR_TITLE + " " + login.downcase,
       head: branch_name.downcase,
+      draft: true,
       base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
@@ -852,6 +858,7 @@ module HelperModule
     {
       title: REMOVE_EXPIRED_COLLABORATOR_PR_TITLE + " " + login.downcase,
       head: branch_name.downcase,
+      draft: true,
       base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
@@ -875,6 +882,7 @@ module HelperModule
     {
       title: CHANGE_PERMISSION_PR_TITLE + " " + login.downcase,
       head: branch_name.downcase,
+      draft: true,
       base: GITHUB_BRANCH,
       body: <<~EOF
         Hi there
