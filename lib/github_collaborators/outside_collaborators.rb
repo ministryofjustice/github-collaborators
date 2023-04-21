@@ -205,11 +205,13 @@ class GithubCollaborators
         repository_name = collaborator.repository.downcase
         collaborator_login = collaborator.login.downcase
 
-        issues = @organization.read_repository_issues(repository_name)
-        issue_exist = does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, repository_name, collaborator_login)
+        if @organization.is_collaborator_a_full_org_member(collaborator_login) == false
+          issues = @organization.read_repository_issues(repository_name)
+          issue_exist = does_issue_already_exist(issues, COLLABORATOR_EXPIRES_SOON, repository_name, collaborator_login)
 
-        if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH) && issue_exist == false
-          create_review_date_expires_soon_issue(collaborator_login, repository_name)
+          if collaborator.issues.include?(REVIEW_DATE_WITHIN_MONTH) && issue_exist == false
+            create_review_date_expires_soon_issue(collaborator_login, repository_name)
+          end
         end
       end
     end

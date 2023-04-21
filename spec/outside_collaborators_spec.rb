@@ -640,11 +640,12 @@ class GithubCollaborators
         end
       end
 
-      context "call is_renewal_within_one_month" do
+      context "call is_renewal_within_one_month when user is non full org member" do
         before do
           expect(terraform_files).to receive(:get_terraform_files).and_return([])
           @outside_collaborators = GithubCollaborators::OutsideCollaborators.new
           expect(organization).to receive(:read_repository_issues).with(REPOSITORY_NAME).and_return([])
+          expect(organization).to receive(:is_collaborator_a_full_org_member).with(TEST_USER).and_return(false)
         end
 
         it "when collaborator issue is not renewal within a month" do
@@ -665,6 +666,22 @@ class GithubCollaborators
           allow_any_instance_of(HelperModule).to receive(:does_issue_already_exist).and_return(true)
           expect(@outside_collaborators).not_to receive(:create_review_date_expires_soon_issue)
           @outside_collaborators.is_renewal_within_one_month([@collaborator1])
+        end
+      end
+
+      context "call is_renewal_within_one_month when user is a full org member" do
+        before do
+          expect(terraform_files).to receive(:get_terraform_files).and_return([])
+          @outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+          expect(organization).to receive(:is_collaborator_a_full_org_member).with(TEST_USER).and_return(true)
+        end
+
+        it "do not create an issue" do
+          terraform_block = create_terraform_block_review_date_more_than_month
+          collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          collaborator.check_for_issues
+          expect(@outside_collaborators).not_to receive(:create_review_date_expires_soon_issue)
+          @outside_collaborators.is_renewal_within_one_month([collaborator])
         end
       end
     end
