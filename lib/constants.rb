@@ -91,6 +91,9 @@ module Constants
   ADD_FULL_ORG_MEMBER_PR_TITLE = "Add full Org member / collaborator to Terraform file/s for"
 
   # Pull request title
+  REMOVE_FULL_ORG_MEMBER_PR_TITLE = "Remove full Org member / collaborator from Terraform file/s for"
+
+  # Pull request title
   ADD_COLLAB_FROM_ISSUE = "Add collaborator to Terraform file/s from Issue for"
 
   # Pull request title
@@ -161,6 +164,9 @@ module Constants
 
   # Branch name
   ADD_COLLABORATOR_BRANCH_NAME = "add-collaborator-"
+
+  # Branch name
+  REMOVE_FULL_ORG_MEMBER_BRANCH_NAME = "remove-full-org-member-"
 
   # Organization name
   ORG = "ministryofjustice"
