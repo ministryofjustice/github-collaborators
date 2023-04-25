@@ -429,6 +429,7 @@ class GithubCollaborators
 
         it "when full org member not in terraform file" do
           outside_collaborators = GithubCollaborators::OutsideCollaborators.new
+          expect(organization).to receive(:get_full_org_members_not_on_github).and_return([])
           expect(organization).to receive(:get_full_org_members_not_in_terraform_file).and_return([@collaborator1])
           expect(organization).to receive(:get_full_org_members_with_repository_permission_mismatches).and_return([])
           expect(organization).to receive(:get_odd_full_org_members).and_return([])
@@ -443,6 +444,7 @@ class GithubCollaborators
         context "" do
           before do
             expect(organization).to receive(:get_full_org_members_not_in_terraform_file).and_return([])
+            expect(organization).to receive(:get_full_org_members_not_on_github).and_return([])
             @outside_collaborators = GithubCollaborators::OutsideCollaborators.new
           end
 
