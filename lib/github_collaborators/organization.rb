@@ -149,6 +149,21 @@ class GithubCollaborators
       return_list
     end
 
+    # Find which full org members are defined in a Terraform file but not on GitHub
+    #
+    # @return [Array<GithubCollaborators::FullOrgMember>] a list of FullOrgMember objects
+    def get_full_org_members_not_on_github
+      logger.debug "get_full_org_members_not_on_github"
+      return_list = []
+      @full_org_members.each do |full_org_member|
+        # Compares the GitHub and Terraform repositories
+        if full_org_member.removed_from_github_repository
+          return_list.push(full_org_member)
+        end
+      end
+      return_list
+    end
+
     # Find which FullOrgMembers have a difference in repository access permissions
     #
     # @return [Array<Hash{login => String, mismatches => Array[Hash{ permission => String, repository_name => String }]}>] a list of hash items that have data from the the FullOrgMember objects

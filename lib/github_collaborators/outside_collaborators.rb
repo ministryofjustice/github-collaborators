@@ -151,6 +151,10 @@ class GithubCollaborators
     def full_org_members_check
       logger.debug "full_org_members_check"
 
+      @organization.get_full_org_members_not_on_github.each do |full_org_member|
+        remove_full_org_member_from_terraform_files(full_org_member)
+      end
+
       @organization.get_full_org_members_not_in_terraform_file.each do |full_org_member|
         add_collaborator(full_org_member)
       end
@@ -531,6 +535,42 @@ class GithubCollaborators
         collaborator_name = ""
         edited_files.each do |file_name|
           logger.info "Deleting empty Terraform file: #{file_name}"
+        end
+        create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
+        add_new_pull_request(pull_request_title, edited_files)
+      end
+    end
+
+    # Call the functions to remove full Organization member from Terraform file/s
+    # then call the functions to create a new pull request on GitHub
+    # @param collaborator [GithubCollaborators::FullOrgMember] a collaborator object
+    def remove_full_org_member_from_terraform_files(collaborator)
+      logger.debug "remove_full_org_member_from_terraform_files"
+
+      collaborator_name = collaborator.login.downcase
+      repositories = collaborator.removed_from_repositories
+      pull_request_title = REMOVE_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name
+
+      # Remove the repository if an open pull request is already removing the full org member
+      repositories.delete_if { |repository_name| does_pr_already_exist("#{repository_name.downcase}.tf", pull_request_title) }
+
+      edited_files = []
+      repositories.each do |repository_name|
+        repository_name = repository_name.downcase
+        # No pull request exists, modify the file/s
+        if @terraform_files.does_file_exist(repository_name)
+          @terraform_files.remove_collaborator_from_file(repository_name, collaborator_name)
+          edited_files.push("terraform/#{repository_name}.tf")
+        else
+          logger.warn "The #{repository_name}.tf file is missing when removing #{collaborator_name}"
+        end
+      end
+
+      if edited_files.length > 0
+        branch_name = "#{REMOVE_FULL_ORG_MEMBER_BRANCH_NAME}#{collaborator_name}"
+        type = TYPE_REMOVE
+        edited_files.each do |file_name|
+          logger.info "Removing full org member #{collaborator_name} from #{file_name}"
         end
         create_branch_and_pull_request(branch_name, edited_files, pull_request_title, collaborator_name, type)
         add_new_pull_request(pull_request_title, edited_files)
