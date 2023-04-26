@@ -233,7 +233,7 @@ class GithubCollaborators
 
     # Check if the full org member has been removed from any GitHub repositories
     #
-    # @return [Bool] true if full org member exists in a terraform file but not in a Github repository
+    # @return [Bool] true if full org member exists in a Terraform file but is missing from the Github repository
     def removed_from_github_repository
       logger.debug "removed_from_github_repository"
       removed_repositories = []
@@ -245,7 +245,7 @@ class GithubCollaborators
 
       repositories.each do |repository_name|
         repository_name = repository_name.downcase
-        # expect to find the repository name on GitHub but not in a Terraform file
+        # expect to find the repository name in a Terraform file but not on Github
         if @terraform_repositories.count(repository_name) > 0 &&
             @github_repositories.count(repository_name) == 0
           removed_repositories.push(repository_name)
@@ -265,7 +265,6 @@ class GithubCollaborators
         @removed_from_repositories.uniq!
       end
 
-      # Result is based on being removed from any repositories
       if @removed_from_repositories.length == 0
         return false
       end
