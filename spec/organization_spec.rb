@@ -79,16 +79,16 @@ class GithubCollaborators
             allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([])
             @organization = GithubCollaborators::Organization.new
           end
-  
+
           it "when no full org members" do
             test_equal(@organization.get_full_org_members_not_on_github.length, 0)
           end
-  
+
           it "when full org member hasn't been removed on GitHub" do
             @organization.add_full_org_member(TEST_USER_1)
             test_equal(@organization.get_full_org_members_not_on_github.length, 0)
           end
-  
+
           it "when full org member has been removed on GitHub" do
             @organization.add_full_org_member(TEST_USER_1)
             allow_any_instance_of(GithubCollaborators::FullOrgMember).to receive(:removed_from_github_repository).and_return(true)

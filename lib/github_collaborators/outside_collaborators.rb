@@ -550,7 +550,7 @@ class GithubCollaborators
       collaborator_name = collaborator.login.downcase
       repositories = collaborator.removed_from_repositories
       pull_request_title = REMOVE_FULL_ORG_MEMBER_PR_TITLE + " " + collaborator_name
- 
+
       # Remove the repository if an open pull request is already removing the full org member
       repositories.delete_if { |repository_name| does_pr_already_exist("#{repository_name.downcase}.tf", pull_request_title) }
 
@@ -565,7 +565,7 @@ class GithubCollaborators
           logger.warn "The #{repository_name}.tf file is missing when removing #{collaborator_name}"
         end
       end
-      
+
       if edited_files.length > 0
         branch_name = "#{REMOVE_FULL_ORG_MEMBER_BRANCH_NAME}#{collaborator_name}"
         type = TYPE_REMOVE
@@ -576,8 +576,7 @@ class GithubCollaborators
         add_new_pull_request(pull_request_title, edited_files)
       end
     end
-    
-    
+
     # Call the functions to remove a collaborator from Terraform file/s
     # then call the functions to create a new pull request on GitHub
     # @param expired_collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects

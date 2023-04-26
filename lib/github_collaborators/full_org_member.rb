@@ -29,7 +29,7 @@ class GithubCollaborators
       # Array<String>
       @missing_from_repositories = []
 
-      # This array will store the Github repositories where the collaborator has been removed 
+      # This array will store the Github repositories where the collaborator has been removed
       # Array<String>
       @removed_from_repositories = []
 
@@ -233,7 +233,7 @@ class GithubCollaborators
 
     # Check if the full org member has been removed from any GitHub repositories
     #
-    # @return [Bool] true if full org member exists in a terraform file but not in a Github repository 
+    # @return [Bool] true if full org member exists in a terraform file but not in a Github repository
     def removed_from_github_repository
       logger.debug "removed_from_github_repository"
       removed_repositories = []
@@ -247,7 +247,7 @@ class GithubCollaborators
         repository_name = repository_name.downcase
         # expect to find the repository name on GitHub but not in a Terraform file
         if @terraform_repositories.count(repository_name) > 0 &&
-          @github_repositories.count(repository_name) == 0
+            @github_repositories.count(repository_name) == 0
           removed_repositories.push(repository_name)
         end
       end

@@ -220,7 +220,7 @@ class GithubCollaborators
             @outside_collaborators.change_collaborator_permission(TEST_USER_2, repositories)
           end
         end
-        
+
         context "call remove_full_org_member_from_terraform_files" do
           before do
             @full_org_member = GithubCollaborators::FullOrgMember.new(TEST_USER_1)
@@ -249,7 +249,7 @@ class GithubCollaborators
               @outside_collaborators.remove_full_org_member_from_terraform_files(@full_org_member)
             end
           end
-        
+
           it "and create a new PR" do
             @full_org_member.removed_from_repositories.push(TEST_REPO_NAME)
             expect(@outside_collaborators).to receive(:does_pr_already_exist).and_return(false)
