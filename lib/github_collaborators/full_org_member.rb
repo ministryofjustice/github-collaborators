@@ -247,8 +247,8 @@ class GithubCollaborators
         repository_name = repository_name.downcase
         # expect to find the repository name on GitHub but not in a Terraform file
         if @terraform_repositories.count(repository_name) > 0 &&
-            @github_repositories.count(repository_name) == 0
-            removed_repositories.push(repository_name)
+          @github_repositories.count(repository_name) == 0
+          removed_repositories.push(repository_name)
         end
       end
 

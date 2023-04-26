@@ -232,6 +232,35 @@ class GithubCollaborators
         end
       end
 
+      context "call removed_from_github_repository" do
+        it "when added no repositories" do
+          test_equal(@full_org_member.removed_from_github_repository, false)
+        end
+
+        it "when user is in a Terraform file and GitHub repo" do
+          @full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
+          @full_org_member.add_github_repository(TEST_REPO_NAME1)
+          test_equal(@full_org_member.terraform_repositories.length, 1)
+          test_equal(@full_org_member.github_repositories.length, 1)
+          test_equal(@full_org_member.removed_from_github_repository, false)
+        end
+
+        it "when user is in a Terraform file but not on the GitHub repo" do
+          @full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
+          test_equal(@full_org_member.terraform_repositories.length, 1)
+          test_equal(@full_org_member.github_repositories.length, 0)
+          test_equal(@full_org_member.removed_from_github_repository, true)
+        end
+
+        it "when user is in a Terraform file but not on the GitHub repo which is a all-org-members team" do
+          @full_org_member.add_terraform_repositories([TEST_REPO_NAME1])
+          @full_org_member.add_all_org_members_team_repositories([TEST_REPO_NAME1])
+          test_equal(@full_org_member.terraform_repositories.length, 1)
+          test_equal(@full_org_member.github_repositories.length, 0)
+          test_equal(@full_org_member.removed_from_github_repository, false)
+        end
+      end
+
       context "call missing_from_terraform_files" do
         it "when added no repositories" do
           test_equal(@full_org_member.missing_from_terraform_files, false)
