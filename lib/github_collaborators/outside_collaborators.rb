@@ -559,7 +559,7 @@ class GithubCollaborators
         repository_name = repository_name.downcase
         # No pull request exists, modify the file/s
         if @terraform_files.does_file_exist(repository_name)
-          @terraform_files.remove_collaborator_from_file(collaborator.repository.downcase, login)
+          @terraform_files.remove_collaborator_from_file(repository_name, collaborator_name)
           edited_files.push("terraform/#{repository_name}.tf")
         else
           logger.warn "The #{repository_name}.tf file is missing when removing #{collaborator_name}"
