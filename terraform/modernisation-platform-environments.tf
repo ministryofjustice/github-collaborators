@@ -10,7 +10,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-05-24"
+      review_after = "2024-05-24"
     },
     {
       github_user  = "jamesashton-roc"
@@ -20,7 +20,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-05-24"
+      review_after = "2024-05-24"
     },
     {
       github_user  = "mmbroc"
@@ -30,7 +30,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-05-24"
+      review_after = "2024-05-24"
     },
     {
       github_user  = "md-roc"
@@ -40,7 +40,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-05-24"
+      review_after = "2024-05-24"
     },
     {
       github_user  = "craigygordon"
@@ -50,7 +50,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-05-24"
+      review_after = "2024-05-24"
     },
     {
       github_user  = "andylandroc"
@@ -60,7 +60,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-05-24"
+      review_after = "2024-05-24"
     },
     {
       github_user  = "trudley"
@@ -70,7 +70,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-05-24"
+      review_after = "2024-05-24"
     },
     {
       github_user  = "helenvickers-roc"
@@ -80,7 +80,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-05-24"
+      review_after = "2024-05-24"
     },
     {
       github_user  = "tom-whi"
@@ -90,7 +90,7 @@ module "modernisation-platform-environments" {
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-05-24"
+      review_after = "2024-05-24"
     },
     {
       github_user  = "umeshc-roy"
@@ -121,6 +121,26 @@ module "modernisation-platform-environments" {
       reason       = "Get access to PPUD on Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
       review_after = "2023-11-04"
+    },
+    {
+      github_user  = "GemmaMills01"
+      permission   = "push"
+      name         = "Gemma Mills"
+      email        = "gemma.mills@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Get access to Delius-IAPS on Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2024-03-01"
+    },
+    {
+      github_user  = "tedcolver01"
+      permission   = "push"
+      name         = "Ted Colver"
+      email        = "gemma.mills@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Get access to Delius-IAPS on Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2024-03-01"
     },
   ]
 }
