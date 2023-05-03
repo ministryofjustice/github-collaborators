@@ -33,16 +33,6 @@ module "prepare-a-case" {
       review_after = "2023-05-26"
     },
     {
-      github_user  = "emileswarts"
-      permission   = "push"
-      name         = "emile swarts"
-      email        = "emile@madetech.com"
-      org          = "Made Tech"
-      reason       = "Full Org member / collaborator missing from Terraform file"
-      added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-05-26"
-    },
-    {
       github_user  = "bjpirt"
       permission   = "pull"
       name         = "ben pirt"

@@ -53,16 +53,6 @@ module "pfs-software-services_terraform" {
       review_after = "2023-06-08"
     },
     {
-      github_user  = "emileswarts"
-      permission   = "push"
-      name         = "emile swarts"
-      email        = "emile@madetech.com"
-      org          = "Made Tech"
-      reason       = "Full Org member / collaborator missing from Terraform file"
-      added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-06-08"
-    },
-    {
       github_user  = "bjpirt"
       permission   = "push"
       name         = "ben pirt"
