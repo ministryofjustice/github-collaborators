@@ -46,6 +46,9 @@ module Constants
   TYPE_REMOVE = "remove"
 
   # Pull request type
+  TYPE_REMOVE_FULL_ORG_MEMBER = "remove_full_org_member"
+
+  # Pull request type
   TYPE_PERMISSION = "permission"
 
   # Pull request type

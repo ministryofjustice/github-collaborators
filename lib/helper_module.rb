@@ -643,6 +643,8 @@ module HelperModule
       create_pull_request(extend_date_hash(collaborator_name, branch_name))
     elsif type == TYPE_REMOVE
       create_pull_request(remove_collaborator_hash(collaborator_name, branch_name))
+    elsif type == TYPE_REMOVE_FULL_ORG_MEMBER
+      create_pull_request(remove_full_org_member_hash(collaborator_name, branch_name))      
     elsif type == TYPE_PERMISSION
       create_pull_request(modify_collaborator_permission_hash(collaborator_name, branch_name))
     elsif type == TYPE_ADD

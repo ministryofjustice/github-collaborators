@@ -568,7 +568,7 @@ class GithubCollaborators
 
       if edited_files.length > 0
         branch_name = "#{REMOVE_FULL_ORG_MEMBER_BRANCH_NAME}#{collaborator_name}"
-        type = TYPE_REMOVE
+        type = TYPE_REMOVE_FULL_ORG_MEMBER
         edited_files.each do |file_name|
           logger.info "Removing full org member #{collaborator_name} from #{file_name}"
         end
