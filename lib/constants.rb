@@ -94,7 +94,7 @@ module Constants
   ADD_FULL_ORG_MEMBER_PR_TITLE = "Add full Org member / collaborator to Terraform file/s for"
 
   # Pull request title
-  REMOVE_FULL_ORG_MEMBER_PR_TITLE = "Remove full Org member / collaborator from Terraform file/s for"
+  REMOVE_FULL_ORG_MEMBER_PR_TITLE = "Remove full Org member collaborator from Terraform file/s for"
 
   # Pull request title
   ADD_COLLAB_FROM_ISSUE = "Add collaborator to Terraform file/s from Issue for"

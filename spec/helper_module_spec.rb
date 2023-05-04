@@ -432,6 +432,9 @@ class GithubCollaborators
             elsif type == TYPE_EXTEND
               expect(helper_module).to receive(:create_pull_request)
               expect(helper_module).to receive(:extend_date_hash).with(collaborator_name, branch_name)
+            elsif type == TYPE_REMOVE_FULL_ORG_MEMBER
+              expect(helper_module).to receive(:create_pull_request)
+              expect(helper_module).to receive(:remove_full_org_member_hash).with(collaborator_name, branch_name)
             elsif type == TYPE_REMOVE
               expect(helper_module).to receive(:create_pull_request)
               expect(helper_module).to receive(:remove_collaborator_hash).with(collaborator_name, branch_name)
@@ -675,6 +678,34 @@ class GithubCollaborators
 
         it "call remove_collaborator_hash" do
           test_equal(helper_module.remove_collaborator_hash(login, branch_name), hash_body)
+        end
+      end
+
+      context "" do
+        login = TEST_USER
+        branch_name = BRANCH_NAME
+        hash_body = {
+          title: REMOVE_FULL_ORG_MEMBER_PR_TITLE + " " + login.downcase,
+          head: branch_name.downcase,
+          draft: true,
+          base: GITHUB_BRANCH,
+          body: <<~EOF
+            Hi there
+          
+            **IMPORTANT** Approve and run this PR before any others. A collaborator repository access has been removed. Running tf apply on another PR will invite the collaborator to repository again.
+    
+            This is the GitHub-Collaborator repository bot.
+            
+            The full org member / collaborator #{login.downcase} access to one or more repositories has been revoked.
+            
+            This is because the collaborator is a full organization member and is able to join repositories outside of Terraform via Teams.
+            
+            This pull request ensures we keep track of those collaborators and which repositories they are accessing.
+          EOF
+        }
+
+        it "call remove_full_org_member_hash" do
+          test_equal(helper_module.remove_full_org_member_hash(login, branch_name), hash_body)
         end
       end
 
