@@ -99,7 +99,7 @@ module "bichard7-next-shared-infrastructure" {
       email        = "richard.cane@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@justice.gov.uk>"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
     {
