@@ -643,6 +643,8 @@ module HelperModule
       create_pull_request(extend_date_hash(collaborator_name, branch_name))
     elsif type == TYPE_REMOVE
       create_pull_request(remove_collaborator_hash(collaborator_name, branch_name))
+    elsif type == TYPE_REMOVE_FULL_ORG_MEMBER
+      create_pull_request(remove_full_org_member_hash(collaborator_name, branch_name))
     elsif type == TYPE_PERMISSION
       create_pull_request(modify_collaborator_permission_hash(collaborator_name, branch_name))
     elsif type == TYPE_ADD
@@ -868,6 +870,34 @@ module HelperModule
         The collaborator #{login.downcase} review date has expired for the file/s contained in this pull request.
         
         Either approve this pull request, modify it or delete it if it is no longer necessary.
+      EOF
+    }
+  end
+
+  # Composes a GitHub branch structured message
+  #
+  # @param login [String] name of collaborator
+  # @param branch_name [String] name of new branch
+  # @return [Hash{title => String, head => String, base => String, body => String}] the message to send to GitHub
+  def remove_full_org_member_hash(login, branch_name)
+    module_logger.debug "remove_full_org_member_hash"
+    {
+      title: REMOVE_FULL_ORG_MEMBER_PR_TITLE + " " + login.downcase,
+      head: branch_name.downcase,
+      draft: true,
+      base: GITHUB_BRANCH,
+      body: <<~EOF
+        Hi there
+
+        **IMPORTANT** Approve and run this PR before any others. A collaborator repository access has been removed. Running tf apply on another PR will invite the collaborator to repository again.
+
+        This is the GitHub-Collaborator repository bot.
+
+        The full org member / collaborator #{login.downcase} access to one or more repositories has been revoked.
+
+        This is because the collaborator is a full organization member and is able to join repositories outside of Terraform via Teams.
+
+        This pull request ensures we keep track of those collaborators and which repositories they are accessing.
       EOF
     }
   end
