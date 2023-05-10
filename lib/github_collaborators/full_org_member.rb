@@ -206,7 +206,7 @@ class GithubCollaborators
         if @github_repositories.count(repository_name) > 0 &&
             @terraform_repositories.count(repository_name) == 0 &&
             !is_repo_already_known(repository_name)
-            @missing_from_repositories.push(repository_name)
+          @missing_from_repositories.push(repository_name)
         end
       end
 
