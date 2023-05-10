@@ -194,8 +194,6 @@ class GithubCollaborators
     def missing_from_terraform_files
       logger.debug "missing_from_terraform_files"
 
-      missing_repositories = []
-
       # Join the two arrays
       repositories = @github_repositories + @terraform_repositories
       repositories.uniq!
@@ -204,24 +202,12 @@ class GithubCollaborators
       repositories.each do |repository_name|
         repository_name = repository_name.downcase
         # expect to find the repository name on GitHub but not in a Terraform file
+        # Filter out repositories from the all-org-members team and archived repositories
         if @github_repositories.count(repository_name) > 0 &&
-            @terraform_repositories.count(repository_name) == 0
-          missing_repositories.push(repository_name)
-        end
-      end
-
-      if missing_repositories.length > 0
-        # Store the missing repositories to the object variable
-        missing_repositories.each do |repository_name|
-          repository_name = repository_name.downcase
-          # but filter out the all-org-members team repositories
-          if !@all_org_members_team_repositories.include?(repository_name)
+            @terraform_repositories.count(repository_name) == 0 &&
+            !is_repo_already_known(repository_name)
             @missing_from_repositories.push(repository_name)
-          end
         end
-
-        @missing_from_repositories.sort!
-        @missing_from_repositories.uniq!
       end
 
       # Result is based on any missing repositories

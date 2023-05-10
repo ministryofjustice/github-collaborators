@@ -319,6 +319,24 @@ class GithubCollaborators
             test_equal(@full_org_member.terraform_repositories.length, 2)
             test_equal(@full_org_member.missing_from_terraform_files, false)
           end
+
+          it "when github and terraform repositories do match but one repo is an archived repo" do
+            @full_org_member.add_archived_repositories([TEST_REPO_NAME1])
+            @full_org_member.get_full_org_member_repositories
+            @full_org_member.add_terraform_repositories([TEST_REPO_NAME2, TEST_REPO_NAME1, TEST_REPO_NAME3])
+            test_equal(@full_org_member.github_repositories.length, 2)
+            test_equal(@full_org_member.terraform_repositories.length, 2)
+            test_equal(@full_org_member.missing_from_terraform_files, false)
+          end
+
+          it "when repos are archived repos" do
+            @full_org_member.add_archived_repositories([TEST_REPO_NAME1, TEST_REPO_NAME2, TEST_REPO_NAME3])
+            @full_org_member.get_full_org_member_repositories
+            @full_org_member.add_terraform_repositories([TEST_REPO_NAME1, TEST_REPO_NAME2, TEST_REPO_NAME3])
+            test_equal(@full_org_member.github_repositories.length, 0)
+            test_equal(@full_org_member.terraform_repositories.length, 0)
+            test_equal(@full_org_member.missing_from_terraform_files, false)
+          end
         end
 
         context "call mismatched_repository_permissions_check" do
