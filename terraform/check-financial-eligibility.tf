@@ -8,9 +8,9 @@ module "check-financial-eligibility" {
       name         = "daniel elliott"
       email        = "bsi.security.tester2@digital.justice.gov.uk"
       org          = "bsi"
-      reason       = "Full Org member / collaborator missing from Terraform file"
-      added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-08-09"
+      reason       = "security Testing/ITHC"
+      added_by     = "william.clarke@digital.justice.gov.uk"
+      review_after = "2023-06-26"
     },
   ]
 }
