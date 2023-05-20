@@ -70,7 +70,7 @@ module "yjaf-case" {
       org          = "NEC Software Solutions"
       reason       = "New starter (well returning Dev) working on all YJAF projects etc"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-05-26"
+      review_after = "2023-11-22"
     },
     {
       github_user  = "angelanec"
