@@ -1,8 +1,6 @@
-import os
 import unittest
 from unittest.mock import MagicMock, patch
 
-from github import Github
 from scripts.check_fork_status import PullRequestForked
 
 
