@@ -142,5 +142,15 @@ module "modernisation-platform-environments" {
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-03-01"
     },
+    {
+      github_user  = "simonytta"
+      permission   = "push"
+      name         = "Simona Treivase"
+      email        = "Simona.Treivase@justice.gov.uk"
+      org          = "Agilisys"
+      reason       = "Get access to Data Insights Hub on the Modernisation Platform"
+      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      review_after = "2024-05-25"
+    },
   ]
 }
