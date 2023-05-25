@@ -59,4 +59,3 @@ if __name__ == "__main__":
     pr_processor.process_pull_request()
     print("Finished")
     sys.exit(0)
-
