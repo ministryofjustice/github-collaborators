@@ -22,6 +22,7 @@ comment_message = """
   Operations Engineering
 """
 
+
 class PullRequestForked:
     def __init__(self, oauth_token, pr_json_data):
         self.oauth_token = oauth_token
@@ -36,7 +37,8 @@ class PullRequestForked:
             if pr_is_fork:
                 try:
                     gh = Github(self.oauth_token)
-                    repo_name = "ministryofjustice/" + self.pr_json_data["head"]["repo"]["name"]
+                    repo_name = "ministryofjustice/" + \
+                        self.pr_json_data["head"]["repo"]["name"]
                     repo = gh.get_repo(repo_name)
                     pull = repo.get_pull(self.pr_json_data["number"])
                     pull.create_issue_comment(comment_message)
@@ -48,6 +50,7 @@ class PullRequestForked:
                     print(e)
             else:
                 return False
+
 
 # Usage example
 if __name__ == "__main__":
