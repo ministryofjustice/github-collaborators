@@ -23,26 +23,6 @@ module "modernisation-platform-environments" {
       review_after = "2024-05-24"
     },
     {
-      github_user  = "mmbroc"
-      permission   = "push"
-      name         = "Michael Bullen"
-      email        = "Michael.Bullen@roctechnologies.com"
-      org          = "Roc Technologies"
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-24"
-    },
-    {
-      github_user  = "md-roc"
-      permission   = "push"
-      name         = "Mittul Datani"
-      email        = "Mittul.Datani@roctechnologies.com"
-      org          = "Roc Technologies"
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-24"
-    },
-    {
       github_user  = "craigygordon"
       permission   = "push"
       name         = "Craig Gordon"
@@ -77,16 +57,6 @@ module "modernisation-platform-environments" {
       permission   = "push"
       name         = "Helen Vickers"
       email        = "Helen.Vickers@roctechnologies.com"
-      org          = "Roc Technologies"
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-24"
-    },
-    {
-      github_user  = "tom-whi"
-      permission   = "push"
-      name         = "Tom Whiteley"
-      email        = "Tom.Whiteley@roctechnologies.com"
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
