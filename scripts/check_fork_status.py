@@ -43,8 +43,11 @@ class PullRequestForked:
                     # Delay for GH API
                     time.sleep(10)
                     pull.edit(state="closed")
+                    return True
                 except Exception as e:
                     print(e)
+            else:
+                return False
 
 # Usage example
 if __name__ == "__main__":
