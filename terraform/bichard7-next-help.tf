@@ -9,7 +9,7 @@ module "bichard7-next-help" {
       email        = "ben@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
-      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
+      added_by     = "Dom Tomkins <dom.tomkins@disdfsdgital.justice.gov.uk>"
       review_after = "2023-12-31"
     },
     {
