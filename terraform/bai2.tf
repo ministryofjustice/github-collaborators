@@ -3,7 +3,7 @@ module "bai2" {
   repository = "bai2"
   collaborators = [
     {
-      github_user  = "ibrechin"
+      github_user  = "ibredfds32423chin"
       permission   = "admin"
       name         = "Ian Brechin"
       email        = "ian.brechin@gmail.com"
