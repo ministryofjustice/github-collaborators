@@ -25,4 +25,5 @@ jobs:
       - name: Do check
         run: ruby bin/check-collaborators-usernames.rb
         env:
+          OPS_BOT_TOKEN: ${{ secrets.OPS_BOT_TOKEN }}
           LOG_LEVEL: "info"
