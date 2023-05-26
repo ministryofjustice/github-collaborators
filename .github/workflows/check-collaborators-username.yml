@@ -1,8 +1,11 @@
 name: Check collaborators username within a PR
 
-on: 
+on:
   pull_request:
     paths: "terraform/**"
+
+env:
+  RUBY_VERSION: 3.1.0
 
 jobs:
   check-collaborators-username:
@@ -13,14 +16,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Python
-        uses: actions/setup-python@v4
+      - uses: ruby/setup-ruby@v1
         with:
-          python-version: "3.10"
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: true
 
+      - run: bundle install
       - name: Do check
-        run: |
-          git diff-tree -r --no-commit-id --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} > modified_files.txt
-          chmod 755 modified_files.txt
-          python3 -m pip install -r scripts/requirements.txt
-          python3 scripts/check-collaborators-username.py ${{ secrets.GITHUB_TOKEN }}
+        run: ruby bin/check-collaborators-usernames.rb
+        env:
+          LOG_LEVEL: "info"
