@@ -7,6 +7,7 @@ class CheckCollaboratorUsernames
   include HelperModule
 
   def start
+    found_error = false
     all_collaborators = []
     http_client = GithubCollaborators::HttpClient.new
     the_terraform_files = GithubCollaborators::TerraformFiles.new
@@ -22,8 +23,12 @@ class CheckCollaboratorUsernames
       http_code = http_client.fetch_code(url)
       if http_code != "200"
         logger.error("Collaborator #{collaborator} username not found on GitHub")
-        exit(1)
+        found_error = true
       end
+    end
+
+    if found_error == true
+      exit 1
     end
   end
 end

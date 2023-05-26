@@ -1004,7 +1004,7 @@ module HelperModule
         if !json_data.dig("data", "search", "repos").nil?
           repositories = json_data.dig("data", "search", "repos")
           repositories.each do |repo|
-            archived_repositories.push(repo.dig("repo", "name"))
+            archived_repositories.push(repo.dig("repo", "name").downcase)
           end
         end
         end_cursor = json_data.dig("data", "search", "pageInfo", "endCursor")
