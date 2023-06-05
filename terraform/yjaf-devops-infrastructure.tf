@@ -53,16 +53,6 @@ module "yjaf-devops-infrastructure" {
       review_after = "2023-08-23"
     },
     {
-      github_user  = "andrewtrichards"
-      permission   = "admin"
-      name         = "Andrew Richards"
-      email        = "a.t.richards@btopenworld.com"
-      org          = "NEC Software Solutions"
-      reason       = "New starter (well returning Dev) working on all YJAF projects etc"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-05-26"
-    },
-    {
       github_user  = "markstanley-nps"
       permission   = "pull"
       name         = "Mark Stanley"
