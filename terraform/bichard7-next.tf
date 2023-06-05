@@ -93,6 +93,16 @@ module "bichard7-next" {
       review_after = "2023-12-31"
     },
     {
+      github_user  = "richrace"
+      permission   = "push"
+      name         = "Richard Race"
+      email        = "richard.race@madetech.com"
+      org          = "Madetech"
+      reason       = "CJSE Bichard Development"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
+      review_after = "2023-12-31"
+    },
+    {
       github_user  = "Seth-Barber"
       permission   = "pull"
       name         = "Seth Barber"
