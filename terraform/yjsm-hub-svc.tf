@@ -43,16 +43,6 @@ module "yjsm-hub-svc" {
       review_after = "2023-12-23"
     },
     {
-      github_user  = "griffinjuknps"
-      permission   = "admin"
-      name         = "Jeremy Griffin"
-      email        = "jeremy.griffin@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "YJAF developer. Needing access to the work on backend coding tasks"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-06-02"
-    },
-    {
       github_user  = "andrewtrichards"
       permission   = "admin"
       name         = "Andrew Richards"
