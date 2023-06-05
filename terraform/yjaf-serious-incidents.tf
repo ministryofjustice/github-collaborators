@@ -43,16 +43,6 @@ module "yjaf-serious-incidents" {
       review_after = "2023-07-21"
     },
     {
-      github_user  = "andrewtrichards"
-      permission   = "admin"
-      name         = "Andrew Richards"
-      email        = "a.t.richards@btopenworld.com"
-      org          = "NEC Software Solutions"
-      reason       = "New starter (well returning Dev) working on all YJAF projects etc"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-05-26"
-    },
-    {
       github_user  = "angelanec"
       permission   = "admin"
       name         = "Angela Site"
