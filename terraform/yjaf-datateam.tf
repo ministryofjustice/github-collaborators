@@ -50,7 +50,7 @@ module "yjaf-datateam" {
       org          = "NEC Software Solutions"
       reason       = "Perform CRUD actions on YJAF"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-06-07"
+      review_after = "2023-12-04"
     },
     {
       github_user  = "markstanley-nps"

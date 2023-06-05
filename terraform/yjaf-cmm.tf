@@ -90,7 +90,7 @@ module "yjaf-cmm" {
       org          = "NECSWS"
       reason       = "Development & support related actions on YJAF"
       added_by     = "Mick.Ewers@yjb.gov.uk"
-      review_after = "2023-06-07"
+      review_after = "2023-12-04"
     },
   ]
 }
