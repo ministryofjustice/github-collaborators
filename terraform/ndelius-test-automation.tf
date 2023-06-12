@@ -73,16 +73,6 @@ module "ndelius-test-automation" {
       review_after = "2024-02-25"
     },
     {
-      github_user  = "andrewrichardson76"
-      permission   = "admin"
-      name         = "Andrew Richardson"
-      email        = "arichardson@unilink.com"
-      org          = "Unilink"
-      reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
-      review_after = "2023-06-09"
-    },
-    {
       github_user  = "madan-thapa"
       permission   = "admin"
       name         = "Madan Thapa"
