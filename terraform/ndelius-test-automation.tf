@@ -90,7 +90,7 @@ module "ndelius-test-automation" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
-      review_after = "2023-06-24"
+      review_after = "2023-12-21"
     },
   ]
 }
