@@ -60,7 +60,7 @@ module "yjaf-ui" {
       org          = "NEC Software Solutions"
       reason       = "YJAF"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-06-26"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "markstanley-nps"
