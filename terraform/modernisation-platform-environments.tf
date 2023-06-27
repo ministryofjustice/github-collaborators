@@ -93,7 +93,7 @@ module "modernisation-platform-environments" {
       review_after = "2023-11-04"
     },
     {
-      github_user  = "GemmaMills01"
+      github_user  = "gemmamills01"
       permission   = "push"
       name         = "Gemma Mills"
       email        = "gemma.mills@necsws.com"
@@ -121,6 +121,16 @@ module "modernisation-platform-environments" {
       reason       = "Get access to Data Insights Hub on the Modernisation Platform"
       added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-05-25"
+    },
+    {
+      github_user  = "nbuckingham72"
+      permission   = "pull"
+      name         = "nick buckingham"
+      email        = "nick.buckingham@lumen.com"
+      org          = "Lumen Technologies"
+      reason       = "The user will manage the PPUD terraform code on day to day basis"
+      added_by     = "mark.hardy@digital.justice.gov.uk"
+      review_after = "2023-12-31"
     },
   ]
 }
