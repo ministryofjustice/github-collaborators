@@ -124,7 +124,7 @@ module "modernisation-platform-environments" {
     },
     {
       github_user  = "nbuckingham72"
-      permission   = "pull"
+      permission   = "push"
       name         = "nick buckingham"
       email        = "nick.buckingham@lumen.com"
       org          = "Lumen Technologies"
