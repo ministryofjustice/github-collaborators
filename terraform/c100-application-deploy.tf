@@ -10,7 +10,7 @@ module "c100-application-deploy" {
       org          = "HMCTS"
       reason       = "HMCTS migration team"
       added_by     = "jake.mulley@digital.justice.gov.uk"
-      review_after = "2023-06-29"
+      review_after = "2023-12-26"
     },
   ]
 }
