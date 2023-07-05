@@ -33,17 +33,7 @@ module "hmpps-integration-api" {
       review_after = "2024-01-01"
     },
     {
-      github_user  = "bjpirt"
-      permission   = "admin"
-      name         = "Ben Pirt"
-      email        = "ben.pirt@digital.justice.gov.uk"
-      org          = "Made Tech"
-      reason       = "Managed service provider for the new HMPPS Integration API"
-      added_by     = "Martin Ballhatchet <martin.ballhatchet@digital.justice.gov.uk>"
-      review_after = "2024-01-01"
-    },
-    {
-      github_user  = "AprilMD"
+      github_user  = "aprilmd"
       permission   = "admin"
       name         = "April Dawson"
       email        = "April.Dawson@digital.justice.gov.uk"
@@ -51,6 +41,6 @@ module "hmpps-integration-api" {
       reason       = "Managed service provider for the new HMPPS Integration API"
       added_by     = "Martin Ballhatchet <martin.ballhatchet@digital.justice.gov.uk>"
       review_after = "2024-01-01"
-    }
+    },
   ]
 }
