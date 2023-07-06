@@ -8,9 +8,19 @@ module "dps-smoketest" {
       name         = "richard odonnell"
       email        = "[richard.odonnell.testing1@bsigroup.com](mailto:richard.odonnell.testing1@bsigroup.com)"
       org          = "digital-prison-reporting"
-      reason       = "Full Org member / collaborator missing from Terraform file"
-      added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-10-04"
+      reason       = "IT Health Check"
+      added_by     = "hari.chintala@digital.justice.gov.uk"
+      review_after = "2023-08-30"
+    },
+    {
+      github_user  = "joe-bsi"
+      permission   = "push"
+      name         = "joe beauchamp"
+      email        = "[joe.beauchamp.bsi@gmail.com](mailto:joe.beauchamp.bsi@gmail.com)"
+      org          = "digital-prison-reporting"
+      reason       = "IT Health Check"
+      added_by     = "hari.chintala@digital.justice.gov.uk"
+      review_after = "2023-08-30"
     },
   ]
 }
