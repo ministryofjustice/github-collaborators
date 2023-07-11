@@ -82,5 +82,15 @@ module "yjaf-cmm" {
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
       review_after = "2023-09-12"
     },
+    {
+      github_user  = "stephenhobden"
+      permission   = "admin"
+      name         = "Stephen Hobden"
+      email        = "stephen.hobden@necsws.com"
+      org          = "NECSWS"
+      reason       = "Want to amend logging settings for all microservices"
+      added_by     = "Mick.Ewers@yjb.gov.uk"
+      review_after = "2024-07-09"
+    },
   ]
 }
