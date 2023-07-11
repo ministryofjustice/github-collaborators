@@ -24,13 +24,13 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "stephenhobden"
-      permission   = "push"
+      permission   = "admin"
       name         = "Stephen Hobden"
       email        = "stephen.hobden@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Need access to repo for coding tasks"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-08-23"
+      review_after = "2024-07-09"
     },
     {
       github_user  = "oliviergaubert"
