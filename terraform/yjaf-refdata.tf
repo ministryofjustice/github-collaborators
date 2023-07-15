@@ -30,7 +30,7 @@ module "yjaf-refdata" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-21"
+      review_after = "2024-01-17"
     },
     {
       github_user  = "javaidarshadnec"
