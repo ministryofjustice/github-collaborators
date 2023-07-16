@@ -150,7 +150,7 @@ module "yjaf-gateway-proxy" {
       org          = "NEC Software Solutions"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2024-01-18"
     },
     {
       github_user  = "suraj-necsws"
