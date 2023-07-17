@@ -60,7 +60,7 @@ module "yjaf-gateway-proxy" {
       org          = "Capita"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "richardwheatleycapita"
@@ -70,7 +70,7 @@ module "yjaf-gateway-proxy" {
       org          = "Capita"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "kieran-tanner"
@@ -80,7 +80,7 @@ module "yjaf-gateway-proxy" {
       org          = "OneAdvanced"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "paulfitzgerald-advanced"
@@ -90,7 +90,7 @@ module "yjaf-gateway-proxy" {
       org          = "OneAdvanced"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "tmamedova"
@@ -100,7 +100,7 @@ module "yjaf-gateway-proxy" {
       org          = "OneAdvanced"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "vkolesnikovas"
@@ -110,7 +110,7 @@ module "yjaf-gateway-proxy" {
       org          = "OneAdvanced"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "bryanmaguireadvanced"
@@ -120,7 +120,7 @@ module "yjaf-gateway-proxy" {
       org          = "OneAdvanced"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "ahmedali-necsws"
@@ -130,7 +130,7 @@ module "yjaf-gateway-proxy" {
       org          = "NEC Software Solutions"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "balpurewal"
@@ -140,7 +140,7 @@ module "yjaf-gateway-proxy" {
       org          = "NEC Software Solutions"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "griffinjuknps"
@@ -150,7 +150,7 @@ module "yjaf-gateway-proxy" {
       org          = "NEC Software Solutions"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "suraj-necsws"
@@ -160,7 +160,7 @@ module "yjaf-gateway-proxy" {
       org          = "NEC Software Solutions"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "howiedouglasaccessgroup"
@@ -170,7 +170,7 @@ module "yjaf-gateway-proxy" {
       org          = "AccessGroup"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-07-22"
+      review_after = "2023-12-23"
     },
     {
       github_user  = "abaldwin-caci"
