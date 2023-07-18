@@ -260,7 +260,7 @@ module "yjaf-gateway-proxy" {
       org          = "NEC Software Solutions"
       reason       = "YJAF (new developer)"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-09-12"
+      review_after = "2024-07-17"
     },
   ]
 }

@@ -60,7 +60,7 @@ module "yjaf-conversions" {
       org          = "NEC Software Solutions"
       reason       = "YJAF (new developer)"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-09-01"
+      review_after = "2024-07-17"
     },
     {
       github_user  = "markstanley-nps"
