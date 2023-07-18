@@ -23,16 +23,6 @@ module "hmpps-integration-api" {
       review_after = "2024-01-01"
     },
     {
-      github_user  = "mcoffey-mt"
-      permission   = "admin"
-      name         = "Matthew Coffey"
-      email        = "matthew.coffey@digital.justice.gov.uk"
-      org          = "Made Tech"
-      reason       = "Managed service provider for the new HMPPS Integration API"
-      added_by     = "Martin Ballhatchet <martin.ballhatchet@digital.justice.gov.uk>"
-      review_after = "2024-01-01"
-    },
-    {
       github_user  = "aprilmd"
       permission   = "admin"
       name         = "April Dawson"
