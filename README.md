@@ -190,6 +190,7 @@ To debug in VS Code use the below launch configrations within `.vscode/launch.js
       "env": {
         "REALLY_POST_TO_SLACK": "0",
         "REALLY_POST_TO_GH": "0",
+        "REALLY_SEND_TO_NOTIFY": "0",
         "OPS_BOT_TOKEN_ENABLED": "0",
         "OPS_BOT_TOKEN": "add-ops-bot-token",
         "LOG_LEVEL": "debug",
