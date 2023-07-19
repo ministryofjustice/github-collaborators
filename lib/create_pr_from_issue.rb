@@ -256,7 +256,7 @@ class CreatePrFromIssue
     end
 
     review_after_date = Date.parse(review_after)
-    one_year_from_now = Date.today + 365
+    one_year_from_now = Date.today + 366
 
     if review_after_date > one_year_from_now
       warn("The review_after date in the Issue is longer than one year")
