@@ -11,7 +11,6 @@ class GithubCollaborators
       expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
     end
 
-    
     context "date in one year" do
       before {
         correct_json = {number: 123, body: "### usernames\n\n\n\n### names\n\n\n\n### emails\n\n\n\n### org\n\n\n\n### reason\n\n\n\n### added_by\n\n\n\n### review_after\n\n#{CORRECT_REVIEW_DATE_FUTURE}\n\n### permission\n\n\n\n### repositories\n\n"}.to_json
@@ -88,7 +87,7 @@ class GithubCollaborators
       it "call get_review_after" do
         test_equal(@create_pr_from_issue.get_review_after, CORRECT_REVIEW_DATE)
       end
-      
+
       let(:terraform_files) { double(GithubCollaborators::TerraformFiles) }
 
       context "" do
