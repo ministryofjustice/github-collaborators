@@ -61,4 +61,6 @@ module TestConstants
   CATCH_ERROR = "catch error"
   TEMP_TERRAFORM_FILES = "spec/tmp/*.tf"
   STUB_TERRAFORM_FILES = "GithubCollaborators::TerraformFiles::TERRAFORM_FILES"
+  NOTIFY_TEST_API_TOKEN = "123456"
+  NOTIFY_PROD_API_TOKEN = "654321"
 end

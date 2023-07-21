@@ -2,20 +2,20 @@
 class GithubCollaborators
   # The NotifyClient class
   class NotifyClient
-    attr_accessor :settings
+    attr_reader :api_key, :expire_email_template_id, :client
     include Logging
     include Constants
 
     def initialize
       logger.debug "initialize"
-      api_key = ""
+      @api_key = ""
       if ENV.fetch("REALLY_SEND_TO_NOTIFY", 0) == "1"
-        api_key = ENV.fetch("NOTIFY_PROD_TOKEN")
+        @api_key = ENV.fetch("NOTIFY_PROD_TOKEN")
       else
-        api_key = ENV.fetch("NOTIFY_TEST_TOKEN")
+        @api_key = ENV.fetch("NOTIFY_TEST_TOKEN")
       end
       @client ||= Notifications::Client.new(api_key)
-      @expire_email_template_id = "f28c1972-4a01-46b6-8343-d1edaf6e10a4"
+      @expire_email_template_id = EXPIRE_EMAIL_TEMPLATE_ID
     end
 
     # Wrapper function to send an expire Notify email to the user
@@ -35,7 +35,7 @@ class GithubCollaborators
 
     # Wrapper function to get the failed Notify expire emails
     #
-    def check_for_undelivered_expire_emails()
+    def check_for_undelivered_expire_emails
       check_for_undelivered_emails_for_template(@expire_email_template_id)
     end
     

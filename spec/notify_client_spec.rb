@@ -3,29 +3,102 @@ class GithubCollaborators
   include Constants
 
   describe NotifyClient do
+    let(:notifications_client) { double(Notifications::Client) }
+
     context "test NotifyClient" do
-      # context "when env var doesn't exist" do
-      #   before {
-      #     ENV.delete("REALLY_SEND_TO_NOTIFY")
-      #   }
+      context "test initialize" do
+        context "when top level env var doesn't exist" do
+          before {
+            ENV.delete("REALLY_SEND_TO_NOTIFY")
+          }
+  
+          it CATCH_ERROR do
+            expect { GithubCollaborators::NotifyClient.new }.to raise_error(KeyError)
+          end
+        end
 
-      #   it "call post_slack_message when collaborators is zero" do
-      #     expect(HTTP).not_to receive(:post)
-      #     notify_client = GithubCollaborators::NotifyClient.new
-      #     notify_client.send_expire_email
-      #   end
-      # end
+        context "when top level env var does exist" do
+          context "and inner level env car doesn't exist" do
+            before {
+              ENV["REALLY_SEND_TO_NOTIFY"] = "0"
+              ENV.delete("NOTIFY_TEST_TOKEN")
+            }
+        
+            it CATCH_ERROR do
+              expect { GithubCollaborators::NotifyClient.new }.to raise_error(KeyError)
+            end
+          end
 
-      context "when env var exists" do
+          context "and inner level env car doesn't exist" do
+            before {
+              ENV["REALLY_SEND_TO_NOTIFY"] = "1"
+              ENV.delete("NOTIFY_PROD_TOKEN")
+            }
+        
+            it CATCH_ERROR do
+              expect { GithubCollaborators::NotifyClient.new }.to raise_error(KeyError)
+            end
+          end
+        end
+
+        context "" do
+          before {
+            ENV["REALLY_SEND_TO_NOTIFY"] = "0"
+            ENV["NOTIFY_TEST_TOKEN"] = NOTIFY_TEST_API_TOKEN
+            ENV.delete("NOTIFY_PROD_TOKEN")
+            expect(Notifications::Client).to receive(:new).and_return(notifications_client)
+            @notify_client = GithubCollaborators::NotifyClient.new
+          }
+
+          it "test the Notify test api key is correct" do
+            test_equal(@notify_client.api_key, NOTIFY_TEST_API_TOKEN)
+          end
+
+          it "test email template id is correct" do
+            test_equal(@notify_client.expire_email_template_id, EXPIRE_EMAIL_TEMPLATE_ID)
+          end
+
+          after do
+            ENV.delete("REALLY_SEND_TO_NOTIFY")
+            ENV.delete("NOTIFY_TEST_TOKEN")
+          end
+        end
+
+        context "test the Notify prod api key is correct" do
+          before {
+            ENV["REALLY_SEND_TO_NOTIFY"] = "1"
+            ENV["NOTIFY_PROD_TOKEN"] = NOTIFY_PROD_API_TOKEN
+            ENV.delete("NOTIFY_TEST_TOKEN")
+          }
+          it "" do
+            expect(Notifications::Client).to receive(:new).and_return(notifications_client)
+            notify_client = GithubCollaborators::NotifyClient.new
+            test_equal(notify_client.api_key, NOTIFY_PROD_API_TOKEN)
+          end
+          after do
+            ENV.delete("REALLY_SEND_TO_NOTIFY")
+            ENV.delete("NOTIFY_PROD_TOKEN")
+          end
+        end
+      end
+
+      context "tests functions" do
         before {
           ENV["REALLY_SEND_TO_NOTIFY"] = "0"
-          ENV["NOTIFY_TEST_TOKEN"] = "123456"
+          ENV["NOTIFY_TEST_TOKEN"] = NOTIFY_TEST_API_TOKEN
+          expect(Notifications::Client).to receive(:new).and_return(notifications_client)
+          @notify_client = GithubCollaborators::NotifyClient.new
         }
 
         it "test send_expire_email" do
-          expect(NotifyClient).to receive(:send_email_reply_to_ops_eng).with(NotifyClient.expire_email_template_id, TEST_COLLABORATOR_EMAIL, {repo_name: REPOSITORY_NAME})
-          notify_client = GithubCollaborators::NotifyClient.new
-          notify_client.send_expire_email(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
+          expect(@notify_client).to receive(:send_email_reply_to_ops_eng).with(EXPIRE_EMAIL_TEMPLATE_ID, TEST_COLLABORATOR_EMAIL, {repo_name: REPOSITORY_NAME})
+          @notify_client.send_expire_email(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
+        end
+
+        it "test check_for_undelivered_expire_emails" do
+          expect(@notify_client).to receive(:check_for_undelivered_emails_for_template).with(EXPIRE_EMAIL_TEMPLATE_ID)
+          @notify_client.check_for_undelivered_expire_emails
+
         end
 
         after do
