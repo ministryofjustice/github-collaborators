@@ -3,6 +3,9 @@ module Constants
   # Date format
   DATE_FORMAT = "%Y-%m-%d"
 
+  # Date format
+  DATE_FORMAT = "%Y-%m-%d"
+
   # Branch to use
   GITHUB_BRANCH = "main"
 
@@ -239,4 +242,7 @@ module Constants
 
   # Notify template ID value
   EXPIRE_EMAIL_TEMPLATE_ID = "f28c1972-4a01-46b6-8343-d1edaf6e10a4"
+
+  # Notify reply email ID value
+  OPERATIONS_ENGINEERING_EMAIL_ID = "6767e190-996f-462c-b7f8-9bafe7b96a01"
 end
