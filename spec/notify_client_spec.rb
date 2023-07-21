@@ -95,11 +95,21 @@ class GithubCollaborators
           @notify_client.send_expire_email(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
         end
 
-        it "test check_for_undelivered_expire_emails" do
+        it "test check_for_undelivered_expire_emails calls check_for_undelivered_emails_for_template" do
           expect(@notify_client).to receive(:check_for_undelivered_emails_for_template).with(EXPIRE_EMAIL_TEMPLATE_ID)
           @notify_client.check_for_undelivered_expire_emails
-
         end
+
+        it "test check_for_undelivered_expire_emails when no notifications exist" do
+          expect(@notify_client).to receive(:get_notifications_by_type_and_status).with("email", "failed").and_return({notifications: []})
+          test_equal([], @notify_client.check_for_undelivered_expire_emails)
+        end
+
+        # it "test check_for_undelivered_expire_emails when notifications exist" do
+        #   the_notifaction = {created_at: "2017-05-14T12:15:30.000000Z", email_address: "TEST_COLLABORATOR_EMAIL", status: "permanent-failure", template: {id: EXPIRE_EMAIL_TEMPLATE_ID}}
+        #   expect(@notify_client).to receive(:get_notifications_by_type_and_status).with("email", "failed").and_return({notifications: [the_notifaction]})
+        #   test_equal([], @notify_client.check_for_undelivered_expire_emails)
+        # end
 
         after do
           ENV.delete("REALLY_SEND_TO_NOTIFY")

@@ -48,16 +48,16 @@ class GithubCollaborators
     # @return [Array<Hash{email_address => String, created_at => String, status => String}>] data from the failed emails
     def check_for_undelivered_emails_for_template(template_id)
       undelivered_emails = []
-      the_notifications = get_notifications_by_type_and_status("email", "failed")["notifications"]
-      the_notifications.each do |notification|
-        created_at = notification["created_at"].to_time.iso8601
-        notification_id = notification["template"]["id"]
+      the_notifications = get_notifications_by_type_and_status("email", "failed")
+      the_notifications[:notifications].each do |notification|
+        created_at = notification[:created_at].to_time.iso8601
+        notification_id = notification[:template][:id]
         if notification_id == template_id and created_at == Date.today
           undelivered_emails.push(
             {
-              "email_address": notification["email_address"],
-              "created_at": created_at,
-              "status": notification["status"]
+              email_address: notification[:email_address],
+              created_at: created_at,
+              status: notification[:status]
             }
           )
         end
