@@ -82,5 +82,15 @@ module "yjaf-ui" {
       added_by     = "Mick.Ewers@yjb.gov.uk"
       review_after = "2024-07-09"
     },
+    {
+      github_user  = "angelanec"
+      permission   = "admin"
+      name         = "Angela Site"
+      email        = "angela.site@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "YJAF (new developer)"
+      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
+      review_after = "2024-07-17"
+    },
   ]
 }
