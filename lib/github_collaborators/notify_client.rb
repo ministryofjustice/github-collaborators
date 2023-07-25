@@ -48,15 +48,16 @@ class GithubCollaborators
     def check_for_undelivered_emails_for_template(template_id)
       undelivered_emails = []
       the_notifications = get_notifications_by_type_and_status("email", "failed")
-      the_notifications[:notifications].each do |notification|
-        created_at = Date.parse(notification[:created_at])
-        notification_id = notification[:template][:id]
-        if notification_id == template_id && created_at == Date.today
+      the_notifications.collection.each do |notification|
+        created_at = notification.created_at.strftime(DATE_FORMAT).to_s
+        today = Date.today.strftime(DATE_FORMAT).to_s
+        notification_id = notification.template["id"]
+        if notification_id == template_id && created_at == today
           undelivered_emails.push(
             {
-              email_address: notification[:email_address],
-              created_at: Date.parse(notification[:created_at]).strftime(DATE_FORMAT),
-              status: notification[:status]
+              email_address: notification.email_address,
+              created_at: created_at,
+              status: notification.status
             }
           )
         end
@@ -70,7 +71,7 @@ class GithubCollaborators
     # @param status [String] success or failed
     # @return [Array] the notifications from Notify
     def get_notifications_by_type_and_status(template_type, status)
-      @client.get_all_notifications(status, template_type)
+      @client.get_notifications(status: status, template_type: template_type)
     end
 
     # Send an email using Notify and use the operations-engineering
@@ -80,7 +81,7 @@ class GithubCollaborators
     # @param email [String] the user email address
     # @param personalisation [Hash{repo_name => String}] the repository name
     def send_email_reply_to_ops_eng(template_id, email, personalisation)
-      @client.send_email(email, template_id, personalisation, OPERATIONS_ENGINEERING_EMAIL_ID)
+      @client.send_email(email_address: email, template_id: template_id, personalisation: personalisation, email_reply_to_id: OPERATIONS_ENGINEERING_EMAIL_ID)
       logger.debug "Sent Notify email to #{email}"
     end
   end
