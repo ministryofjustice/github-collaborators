@@ -22,6 +22,7 @@ class GithubCollaborators
     # @param email_address [String] the user email address
     # @param repo_name [String] repository name user expires from
     def send_expire_email(email_address, repo_name)
+      logger.debug "send_expire_email"
       personalisation = {
         repo_name: repo_name
       }
@@ -35,6 +36,7 @@ class GithubCollaborators
     # Wrapper function to get the failed Notify expire emails
     #
     def check_for_undelivered_expire_emails
+      logger.debug "check_for_undelivered_expire_emails"
       check_for_undelivered_emails_for_template(EXPIRE_EMAIL_TEMPLATE_ID)
     end
 
@@ -46,6 +48,7 @@ class GithubCollaborators
     # @param template_id [String] the email template id
     # @return [Array<Hash{email_address => String, created_at => String, status => String}>] data from the failed emails
     def check_for_undelivered_emails_for_template(template_id)
+      logger.debug "check_for_undelivered_emails_for_template"
       undelivered_emails = []
       the_notifications = get_notifications_by_type_and_status("email", "failed")
       the_notifications.collection.each do |notification|
@@ -71,6 +74,7 @@ class GithubCollaborators
     # @param status [String] success or failed
     # @return [Array] the notifications from Notify
     def get_notifications_by_type_and_status(template_type, status)
+      logger.debug "get_notifications_by_type_and_status"
       @client.get_notifications(status: status, template_type: template_type)
     end
 
@@ -81,8 +85,8 @@ class GithubCollaborators
     # @param email [String] the user email address
     # @param personalisation [Hash{repo_name => String}] the repository name
     def send_email_reply_to_ops_eng(template_id, email, personalisation)
+      logger.debug "send_email_reply_to_ops_eng"
       @client.send_email(email_address: email, template_id: template_id, personalisation: personalisation, email_reply_to_id: OPERATIONS_ENGINEERING_EMAIL_ID)
-      logger.debug "Sent Notify email to #{email}"
     end
   end
 end
