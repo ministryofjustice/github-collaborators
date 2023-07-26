@@ -46,7 +46,7 @@ class GithubCollaborators
     # the email template id
     #
     # @param template_id [String] the email template id
-    # @return [Array<Hash{email_address => String, created_at => String, status => String}>] data from the failed emails
+    # @return [Array<email_address => String>] the failed email addresses
     def check_for_undelivered_emails_for_template(template_id)
       logger.debug "check_for_undelivered_emails_for_template"
       undelivered_emails = []
@@ -56,13 +56,7 @@ class GithubCollaborators
         today = Date.today.strftime(DATE_FORMAT).to_s
         notification_id = notification.template["id"]
         if notification_id == template_id && created_at == today
-          undelivered_emails.push(
-            {
-              email_address: notification.email_address,
-              created_at: created_at,
-              status: notification.status
-            }
-          )
+          undelivered_emails.push(notification.email_address)
         end
       end
       undelivered_emails

@@ -135,12 +135,7 @@ class GithubCollaborators
             @notifications_object.collection[0].template["id"] = EXPIRE_EMAIL_TEMPLATE_ID
             expect(@notify_client).to receive(:get_notifications_by_type_and_status).with("email", "failed").and_return(@notifications_object)
             failed_notifications = @notify_client.check_for_undelivered_expire_emails
-            expected_notification = {
-              email_address: TEST_COLLABORATOR_EMAIL,
-              created_at: Date.today.strftime(DATE_FORMAT),
-              status: "permanent-failure"
-            }
-            test_equal(expected_notification, failed_notifications[0])
+            test_equal(failed_notifications, [TEST_COLLABORATOR_EMAIL])
           end
 
           it "when notifications exist but has an old date" do
