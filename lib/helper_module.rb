@@ -1207,20 +1207,21 @@ module HelperModule
       notify_client.send_expire_email(collaborator.email, collaborator.repository.downcase)
     end
 
-    sleep 90
-
-    failed_emails = notify_client.check_for_undelivered_expire_emails
-    failed_emails.sort!
-    failed_emails.uniq!
-
-    failed_emails.each do |failed_email|
-      collaborators.each do |collaborator|
-        if collaborator.email.downcase == failed_email.downcase
-          collaborators_for_slack_message.push(collaborator)
+    if collaborators.length > 0
+      failed_emails = notify_client.check_for_undelivered_expire_emails
+      failed_emails.sort!
+      failed_emails.uniq!
+      failed_emails.each do |failed_email|
+        collaborators.each do |collaborator|
+          if collaborator.email.downcase == failed_email.downcase
+            collaborators_for_slack_message.push(collaborator)
+          end
         end
       end
     end
 
-    GithubCollaborators::SlackNotifier.new(GithubCollaborators::UndeliveredNotifyEmail.new, collaborators_for_slack_message).post_slack_message
+    if collaborators_for_slack_message.length > 0
+      GithubCollaborators::SlackNotifier.new(GithubCollaborators::UndeliveredNotifyEmail.new, collaborators_for_slack_message).post_slack_message
+    end
   end
 end

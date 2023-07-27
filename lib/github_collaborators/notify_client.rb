@@ -37,6 +37,7 @@ class GithubCollaborators
     #
     def check_for_undelivered_expire_emails
       logger.debug "check_for_undelivered_expire_emails"
+      sleep 90
       check_for_undelivered_emails_for_template(EXPIRE_EMAIL_TEMPLATE_ID)
     end
 

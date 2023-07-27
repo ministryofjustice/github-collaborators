@@ -118,6 +118,8 @@ class GithubCollaborators
             @notifications_object.collection[0].email_address = TEST_COLLABORATOR_EMAIL
             @notifications_object.collection[0].status = "permanent-failure"
             @notifications_object.collection[0].template["id"] = EXPIRE_EMAIL_TEMPLATE_ID
+            # Stub sleep
+            allow_any_instance_of(GithubCollaborators::NotifyClient).to receive(:sleep)
           } 
 
           it "calls check_for_undelivered_emails_for_template" do
