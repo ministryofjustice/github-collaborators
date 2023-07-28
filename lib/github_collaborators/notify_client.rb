@@ -12,7 +12,7 @@ class GithubCollaborators
       if ENV.fetch("REALLY_SEND_TO_NOTIFY", 0) == "1"
         @api_key = ENV.fetch("NOTIFY_PROD_TOKEN")
       end
-      @client ||= Notifications::Client.new(api_key)
+      @client ||= Notifications::Client.new(@api_key)
     end
 
     # Wrapper function to send an expire Notify email to the user
