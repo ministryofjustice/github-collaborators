@@ -18,11 +18,11 @@ class GithubCollaborators
     # Wrapper function to send an expire Notify email to the user
     #
     # @param email_address [String] the user email address
-    # @param repo_name [String] repository name user expires from
-    def send_expire_email(email_address, repo_name)
+    # @param repository_name [String] name of the repository
+    def send_expire_email(email_address, repository_name)
       logger.debug "send_expire_email"
       personalisation = {
-        repo_name: repo_name
+        repo_name: repository_name
       }
       send_email_reply_to_ops_eng(
         EXPIRE_EMAIL_TEMPLATE_ID,
@@ -35,6 +35,7 @@ class GithubCollaborators
     #
     def check_for_undelivered_expire_emails
       logger.debug "check_for_undelivered_expire_emails"
+      # Give Notify time to receive undelivered emails
       sleep 90
       check_for_undelivered_emails_for_template(EXPIRE_EMAIL_TEMPLATE_ID)
     end
