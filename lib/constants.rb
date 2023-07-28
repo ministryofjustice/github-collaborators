@@ -3,9 +3,6 @@ module Constants
   # Date format
   DATE_FORMAT = "%Y-%m-%d"
 
-  # Date format
-  DATE_FORMAT = "%Y-%m-%d"
-
   # Branch to use
   GITHUB_BRANCH = "main"
 
