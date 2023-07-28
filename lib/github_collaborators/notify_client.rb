@@ -46,7 +46,7 @@ class GithubCollaborators
     # the email template id
     #
     # @param template_id [String] the email template id
-    # @return [Array<email_address => String>] the failed email addresses
+    # @return [Array<String>] the failed email addresses
     def check_for_undelivered_emails_for_template(template_id)
       logger.debug "check_for_undelivered_emails_for_template"
       undelivered_emails = []
@@ -66,14 +66,14 @@ class GithubCollaborators
     #
     # @param template_type [String] the type of data to obtain
     # @param status [String] success or failed
-    # @return [Array] the notifications from Notify
+    # @return [Array<Array<Notify objects>>] the notification objects from Notify
     def get_notifications_by_type_and_status(template_type, status)
       logger.debug "get_notifications_by_type_and_status"
       @client.get_notifications(status: status, template_type: template_type)
     end
 
     # Send an email using Notify and use the operations-engineering
-    # ID for replies.
+    # email ID for the reply address.
     #
     # @param template_id [String] the email template id
     # @param email [String] the user email address
