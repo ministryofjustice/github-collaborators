@@ -8,11 +8,9 @@ class GithubCollaborators
 
     def initialize
       logger.debug "initialize"
-      @api_key = ""
-      @api_key = if ENV.fetch("REALLY_SEND_TO_NOTIFY", 0) == "1"
-        ENV.fetch("NOTIFY_PROD_TOKEN")
-      else
-        ENV.fetch("NOTIFY_TEST_TOKEN")
+      @api_key = ENV.fetch("NOTIFY_TEST_TOKEN")
+      if ENV.fetch("REALLY_SEND_TO_NOTIFY", 0) == "1"
+        @api_key = ENV.fetch("NOTIFY_PROD_TOKEN")
       end
       @client ||= Notifications::Client.new(api_key)
     end

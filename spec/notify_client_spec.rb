@@ -84,7 +84,7 @@ class GithubCollaborators
           before {
             ENV["REALLY_SEND_TO_NOTIFY"] = "1"
             ENV["NOTIFY_PROD_TOKEN"] = NOTIFY_PROD_API_TOKEN
-            ENV.delete("NOTIFY_TEST_TOKEN")
+            ENV["NOTIFY_TEST_TOKEN"] = NOTIFY_TEST_API_TOKEN
           }
           it "" do
             expect(Notifications::Client).to receive(:new).and_return(notifications_client)
@@ -94,6 +94,7 @@ class GithubCollaborators
           after do
             ENV.delete("REALLY_SEND_TO_NOTIFY")
             ENV.delete("NOTIFY_PROD_TOKEN")
+            ENV.delete("NOTIFY_TEST_TOKEN")
           end
         end
       end
