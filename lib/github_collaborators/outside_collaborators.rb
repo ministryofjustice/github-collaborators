@@ -270,7 +270,6 @@ class GithubCollaborators
       if full_org_collaborators.length > 0
         extended_collaborators = extend_date(full_org_collaborators)
         if extended_collaborators.length > 0
-          send_collaborator_notify_email(extended_collaborators)
           GithubCollaborators::SlackNotifier.new(GithubCollaborators::FullOrgMemberExpiresSoon.new, extended_collaborators).post_slack_message
         end
       end
@@ -308,6 +307,7 @@ class GithubCollaborators
       if outside_collaborators.length > 0
         extended_collaborators = extend_date(outside_collaborators)
         if extended_collaborators.length > 0
+          send_collaborator_notify_email(extended_collaborators)
           GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, extended_collaborators).post_slack_message
         end
       end
