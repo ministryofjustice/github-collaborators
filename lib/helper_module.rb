@@ -1200,7 +1200,6 @@ module HelperModule
     logger.debug "send_collaborator_notify_email"
     collaborators_for_slack_message = []
 
-    # Notify object to send emails to collaborators
     notify_client = GithubCollaborators::NotifyClient.new
 
     collaborators.each do |collaborator|
