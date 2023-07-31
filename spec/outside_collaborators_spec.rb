@@ -624,6 +624,7 @@ class GithubCollaborators
             expect(@organization).to receive(:is_collaborator_an_org_member).with(@collaborator1.login).and_return(false)
             expect(@outside_collaborators).to receive(:extend_date).with([@collaborator1]).and_return([@collaborator1])
             expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::ExpiresSoon), [@collaborator1]).and_return(expires_soon_slack_message)
+            allow_any_instance_of(HelperModule).to receive(:send_collaborator_notify_email).with([@collaborator1])
             expect(expires_soon_slack_message).to receive(:post_slack_message)
             @outside_collaborators.extend_collaborators_review_date([@collaborator1])
           end

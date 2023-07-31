@@ -13,3 +13,4 @@ gem "bundler"
 gem "git"
 gem "uuidtools"
 gem "cgi", "~> 0.3.6"
+gem 'notifications-ruby-client', '~> 5.4'

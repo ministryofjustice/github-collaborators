@@ -1192,4 +1192,35 @@ module HelperModule
     end
     unknown_collaborators
   end
+
+  # Send collaborator a notify email and check for undelivered email,
+  # raise a Slack alert for any non delivered emails addresses.
+  # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
+  def send_collaborator_notify_email(collaborators)
+    logger.debug "send_collaborator_notify_email"
+    collaborators_for_slack_message = []
+
+    notify_client = GithubCollaborators::NotifyClient.new
+
+    collaborators.each do |collaborator|
+      notify_client.send_expire_email(collaborator.email, collaborator.repository.downcase)
+    end
+
+    if collaborators.length > 0
+      failed_emails = notify_client.check_for_undelivered_expire_emails
+      failed_emails.sort!
+      failed_emails.uniq!
+      failed_emails.each do |failed_email|
+        collaborators.each do |collaborator|
+          if collaborator.email.downcase == failed_email.downcase
+            collaborators_for_slack_message.push(collaborator)
+          end
+        end
+      end
+    end
+
+    if collaborators_for_slack_message.length > 0
+      GithubCollaborators::SlackNotifier.new(GithubCollaborators::UndeliveredNotifyEmail.new, collaborators_for_slack_message).post_slack_message
+    end
+  end
 end
