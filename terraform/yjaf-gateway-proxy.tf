@@ -180,7 +180,7 @@ module "yjaf-gateway-proxy" {
       org          = "CACI"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-08-05"
+      review_after = "2024-01-31"
     },
     {
       github_user  = "schungcaci"
@@ -190,7 +190,7 @@ module "yjaf-gateway-proxy" {
       org          = "CACI"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-08-05"
+      review_after = "2024-01-31"
     },
     {
       github_user  = "adcouth"
@@ -200,7 +200,7 @@ module "yjaf-gateway-proxy" {
       org          = "CACI"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-08-05"
+      review_after = "2024-01-31"
     },
     {
       github_user  = "vcurtis-w14"
@@ -210,7 +210,7 @@ module "yjaf-gateway-proxy" {
       org          = "CACI"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-08-05"
+      review_after = "2024-01-31"
     },
     {
       github_user  = "ameldrum86"
@@ -220,7 +220,7 @@ module "yjaf-gateway-proxy" {
       org          = "CACI"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-08-05"
+      review_after = "2024-01-31"
     },
     {
       github_user  = "yarseyah"
@@ -230,7 +230,7 @@ module "yjaf-gateway-proxy" {
       org          = "CACI"
       reason       = "3rd Party Access for network"
       added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
-      review_after = "2023-08-05"
+      review_after = "2024-01-31"
     },
     {
       github_user  = "markstanley-nps"
