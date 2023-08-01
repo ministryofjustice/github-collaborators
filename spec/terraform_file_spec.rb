@@ -100,7 +100,7 @@ class GithubCollaborators
 
           it "call write_to_file" do
             expected_output = create_test_file_template
-            expect(File).to receive(:write).with("terraform/test-repo.tf", expected_output)
+            expect(File).to receive(:write).with("#{TERRAFORM_DIR}/test-repo.tf", expected_output)
             @terraform_file.write_to_file
           end
 

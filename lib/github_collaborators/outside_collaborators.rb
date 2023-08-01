@@ -376,7 +376,7 @@ class GithubCollaborators
           if !does_pr_already_exist(terraform_file_name, pull_request_title)
             # No pull request exists, modify the file
             @terraform_files.extend_date_in_file(collaborator.repository.downcase, login)
-            file_name = "terraform/#{terraform_file_name}"
+            file_name = "#{TERRAFORM_DIR}/#{terraform_file_name}"
             edited_files.push(file_name)
             collaborators_for_slack_message.push(collaborator)
           end
@@ -525,7 +525,7 @@ class GithubCollaborators
       edited_files = []
       empty_files.each do |empty_file_name|
         @terraform_files.remove_file(empty_file_name.downcase)
-        file_name = "terraform/#{empty_file_name.downcase}.tf"
+        file_name = "#{TERRAFORM_DIR}/#{empty_file_name.downcase}.tf"
         edited_files.push(file_name)
       end
 
@@ -561,7 +561,7 @@ class GithubCollaborators
         # No pull request exists, modify the file/s
         if @terraform_files.does_file_exist(repository_name)
           @terraform_files.remove_collaborator_from_file(repository_name, collaborator_name)
-          edited_files.push("terraform/#{repository_name}.tf")
+          edited_files.push("#{TERRAFORM_DIR}/#{repository_name}.tf")
         else
           logger.warn "The #{repository_name}.tf file is missing when removing #{collaborator_name}"
         end
@@ -603,7 +603,7 @@ class GithubCollaborators
 
           if !does_pr_already_exist(terraform_file_name, pull_request_title)
             # No pull request exists, modify the file
-            file_name = "terraform/#{terraform_file_name}"
+            file_name = "#{TERRAFORM_DIR}/#{terraform_file_name}"
             @terraform_files.remove_collaborator_from_file(collaborator.repository.downcase, login)
             edited_files.push(file_name)
             collaborators_for_slack_message.push(collaborator)
@@ -641,7 +641,7 @@ class GithubCollaborators
         repository_name = repository[:repository_name].downcase
         @terraform_files.ensure_file_exists_in_memory(repository_name)
         @terraform_files.change_collaborator_permission_in_file(repository_name, collaborator_name, repository[:permission])
-        edited_files.push("terraform/#{repository_name}.tf")
+        edited_files.push("#{TERRAFORM_DIR}/#{repository_name}.tf")
       end
 
       if edited_files.length > 0
@@ -679,7 +679,7 @@ class GithubCollaborators
         # Get the github permission for that repository
         repository_permission = collaborator.get_repository_permission(repository_name)
         @terraform_files.add_full_org_collaborator_to_file(repository_name, collaborator, repository_permission)
-        edited_files.push("terraform/#{repository_name}.tf")
+        edited_files.push("#{TERRAFORM_DIR}/#{repository_name}.tf")
 
         # Add repository name to this array because related Terraform file is not on the main
         # branch on GitHub, this array will exclude checking for this file name later on
@@ -744,7 +744,7 @@ class GithubCollaborators
       @repo_pull_requests.each do |pull_request|
         if pull_request[:title].include?(title_message.to_s) &&
             (
-              pull_request[:files].include?("terraform/#{terraform_file_name}") ||
+              pull_request[:files].include?("#{TERRAFORM_DIR}/#{terraform_file_name}") ||
               pull_request[:files].include?(terraform_file_name)
             )
           logger.debug "PR already open for #{terraform_file_name} file"
