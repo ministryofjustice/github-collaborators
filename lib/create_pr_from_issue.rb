@@ -31,6 +31,67 @@ class CreatePrFromIssue
     @http_client = GithubCollaborators::HttpClient.new
   end
 
+  # def initialize
+  # end
+
+  def email_approver(requested_permission, collaborator_emails, org_name, reason, review_after_date, terraform_file_names)
+    requested_repositories = []
+    terraform_file_names.each do |terraform_file_name|
+      repo_name = File.basename(terraform_file_name, ".tf")
+      requested_repositories.push(repo_name)
+    end
+    
+    if requested_repositories.length == 1 && collaborator_emails.length == 1
+      message = "
+      Hello
+
+      Can you approve #{collaborator_emails.join()} is allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation \"#{requested_repositories.join("")}\" repository until #{review_after_date} for the reason \"#{reason}\":
+      
+      Regards
+      The Operations-Engineering Team
+      "
+    end
+
+    if requested_repositories.length > 1 && collaborator_emails.length == 1
+      message = "
+      Hello
+
+      Can you approve #{collaborator_emails.join()} is allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation repositories until #{review_after_date} for the reason \"#{reason}\"?
+      
+      Repositories: #{requested_repositories.join(", ")}
+
+      Regards
+      The Operations-Engineering Team
+      "
+    end
+
+    if requested_repositories.length == 1 && collaborator_emails.length > 1
+      message = "
+      Hello
+
+      Can you approve #{collaborator_emails.join(", ")} are allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation \"#{requested_repositories.join("")}\" repository until #{review_after_date} for the reason \"#{reason}\":
+      
+      Regards
+      The Operations-Engineering Team
+      "
+    end
+
+    if requested_repositories.length > 1 && collaborator_emails.length > 1
+      message = "
+      Hello
+
+      Can you approve #{collaborator_emails.join(", ")} are allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation repositories until #{review_after_date} for the reason \"#{reason}\"?
+      
+      Repositories: #{requested_repositories.join(", ")}
+
+      Regards
+      The Operations-Engineering Team
+      "
+    end
+
+    puts message
+  end
+
   def start
     emails = get_emails
     usernames = get_usernames
@@ -78,6 +139,8 @@ class CreatePrFromIssue
         create_multiple_users_pull_request(edited_files)
       end
     end
+
+    email_approver(requested_permission, emails, org, reason, review_after, edited_files)
 
     remove_issue(REPO_NAME, @issue_number)
   end
