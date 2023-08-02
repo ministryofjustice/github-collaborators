@@ -34,7 +34,7 @@ class CreatePrFromIssue
   # def initialize
   # end
 
-  def email_approver(requested_permission, collaborator_emails, org_name, reason, review_after_date, terraform_file_names)
+  def email_approver(requested_permission, collaborator_emails, reason, review_after_date, terraform_file_names)
     requested_repositories = []
 
     # Get the repository names
@@ -129,7 +129,7 @@ class CreatePrFromIssue
       end
     end
 
-    email_approver(requested_permission, emails, org, reason, review_after, edited_files)
+    email_approver(requested_permission, emails, reason, review_after, edited_files)
 
     remove_issue(REPO_NAME, @issue_number)
   end
