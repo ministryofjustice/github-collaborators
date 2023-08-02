@@ -34,53 +34,6 @@ class CreatePrFromIssue
   # def initialize
   # end
 
-  def email_approver(requested_permission, collaborator_emails, reason, review_after_date, terraform_file_names)
-    requested_repositories = []
-
-    # Get the repository names
-    terraform_file_names.each do |terraform_file_name|
-      repo_name = File.basename(terraform_file_name, ".tf")
-      requested_repositories.push(repo_name)
-    end
-
-    collaborators = ""
-    repositories = ""
-    
-    if requested_repositories.length == 1 && collaborator_emails.length == 1
-      collaborators = "#{collaborator_emails.join()} is"
-      repositories = "repository \"#{requested_repositories.join("")}\""
-    elsif requested_repositories.length == 1 && collaborator_emails.length > 1
-      last_email = collaborator_emails.last
-      collaborator_emails.pop
-      collaborators = "#{collaborator_emails.join(", ")} and #{last_email} are"
-      repositories = "repository \"#{requested_repositories.join("")}\""
-    else
-      last_repository = requested_repositories.last
-      requested_repositories.pop
-
-      if collaborator_emails.length == 1
-        collaborators = "#{collaborator_emails.join()} is"
-        repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\""
-      else
-        last_email = collaborator_emails.last
-        collaborator_emails.pop
-        collaborators = "#{collaborator_emails.join(", ")} and #{last_email} are"
-        repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\"" 
-      end
-    end
-
-    message = "
-    Hello
-
-    Can you approve #{collaborators} allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation #{repositories} until #{review_after_date} for the reason \"#{reason}\".
-
-    Regards
-    The Operations-Engineering Team
-    "
-
-    puts message
-  end
-
   def start
     emails = get_emails
     usernames = get_usernames
@@ -129,7 +82,8 @@ class CreatePrFromIssue
       end
     end
 
-    email_approver(requested_permission, emails, reason, review_after, edited_files)
+    message = create_email_approver_message(requested_permission, emails, reason, review_after, edited_files)
+    send_approver_notify_email(message)
 
     remove_issue(REPO_NAME, @issue_number)
   end
@@ -361,5 +315,49 @@ class CreatePrFromIssue
     collaborator_name = "multiple-collaborators"
     branch_name = "add-multiple-collaborators-from-issue"
     create_branch_and_pull_request(branch_name, edited_files, MULITPLE_COLLABORATORS_PR_TITLE, collaborator_name, TYPE_ADD_FROM_ISSUE)
+  end
+
+  def create_email_approver_message(requested_permission, collaborator_emails, reason, review_after_date, terraform_file_names)
+    requested_repositories = []
+
+    # Get the repository names
+    terraform_file_names.each do |terraform_file_name|
+      repo_name = File.basename(terraform_file_name, ".tf")
+      requested_repositories.push(repo_name)
+    end
+
+    collaborators = ""
+    repositories = ""
+    
+    if requested_repositories.length == 1 && collaborator_emails.length == 1
+      collaborators = "#{collaborator_emails.join()} is"
+      repositories = "repository \"#{requested_repositories.join("")}\""
+    elsif requested_repositories.length == 1 && collaborator_emails.length > 1
+      last_email = collaborator_emails.last
+      collaborator_emails.pop
+      collaborators = "#{collaborator_emails.join(", ")} and #{last_email} are"
+      repositories = "repository \"#{requested_repositories.join("")}\""
+    else
+      last_repository = requested_repositories.last
+      requested_repositories.pop
+
+      if collaborator_emails.length == 1
+        collaborators = "#{collaborator_emails.join()} is"
+        repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\""
+      else
+        last_email = collaborator_emails.last
+        collaborator_emails.pop
+        collaborators = "#{collaborator_emails.join(", ")} and #{last_email} are"
+        repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\"" 
+      end
+    end
+
+    "
+    Hello
+
+    Can you approve #{collaborators} allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation #{repositories} until #{review_after_date} for the reason \"#{reason}\".
+
+    Operations-Engineering Team
+    "
   end
 end

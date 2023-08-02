@@ -242,4 +242,7 @@ module Constants
 
   # Notify reply email ID value
   OPERATIONS_ENGINEERING_EMAIL_ID = "6767e190-996f-462c-b7f8-9bafe7b96a01"
+
+  # Notify template ID value
+  APPROVER_EMAIL_TEMPLATE_ID = "a86e5680-f41d-4d85-9c05-45e243ad0281"
 end

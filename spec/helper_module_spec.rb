@@ -1094,7 +1094,7 @@ class GithubCollaborators
 
       context "call send_collaborator_notify_email" do
         let(:notify_client) { double(GithubCollaborators::NotifyClient) }
-        let(:undelivered_notify_email_slack_message) { double(GithubCollaborators::UndeliveredNotifyEmail) }
+        let(:undelivered_notify_email_slack_message) { double(GithubCollaborators::UndeliveredExpireNotifyEmail) }
 
         before do
           expect(GithubCollaborators::NotifyClient).to receive(:new).and_return(notify_client)
@@ -1119,7 +1119,7 @@ class GithubCollaborators
         it "with a collaborator object, notify failed to send the email, and returns known email" do
           expect(notify_client).to receive(:send_expire_email).with(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
           expect(notify_client).to receive(:check_for_undelivered_expire_emails).and_return([TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL])
-          expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::UndeliveredNotifyEmail), [@collaborator]).and_return(undelivered_notify_email_slack_message)
+          expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::UndeliveredExpireNotifyEmail), [@collaborator]).and_return(undelivered_notify_email_slack_message)
           expect(undelivered_notify_email_slack_message).to receive(:post_slack_message)
           helper_module.send_collaborator_notify_email([@collaborator])
         end

@@ -2,8 +2,8 @@ class GithubCollaborators
   include TestConstants
   include Constants
 
-  describe UndeliveredNotifyEmail do
-    context "test UndeliveredNotifyEmail" do
+  describe UndeliveredExpireNotifyEmail do
+    context "test UndeliveredExpireNotifyEmail" do
       subject(:undelivered_notify_email) { described_class.new }
 
       it "call create_line" do
