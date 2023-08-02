@@ -36,58 +36,47 @@ class CreatePrFromIssue
 
   def email_approver(requested_permission, collaborator_emails, org_name, reason, review_after_date, terraform_file_names)
     requested_repositories = []
+
+    # Get the repository names
     terraform_file_names.each do |terraform_file_name|
       repo_name = File.basename(terraform_file_name, ".tf")
       requested_repositories.push(repo_name)
     end
+
+    collaborators = ""
+    repositories = ""
     
     if requested_repositories.length == 1 && collaborator_emails.length == 1
-      message = "
-      Hello
+      collaborators = "#{collaborator_emails.join()} is"
+      repositories = "repository \"#{requested_repositories.join("")}\""
+    elsif requested_repositories.length == 1 && collaborator_emails.length > 1
+      last_email = collaborator_emails.last
+      collaborator_emails.pop
+      collaborators = "#{collaborator_emails.join(", ")} and #{last_email} are"
+      repositories = "repository \"#{requested_repositories.join("")}\""
+    else
+      last_repository = requested_repositories.last
+      requested_repositories.pop
 
-      Can you approve #{collaborator_emails.join()} is allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation \"#{requested_repositories.join("")}\" repository until #{review_after_date} for the reason \"#{reason}\":
-      
-      Regards
-      The Operations-Engineering Team
-      "
+      if collaborator_emails.length == 1
+        collaborators = "#{collaborator_emails.join()} is"
+        repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\""
+      else
+        last_email = collaborator_emails.last
+        collaborator_emails.pop
+        collaborators = "#{collaborator_emails.join(", ")} and #{last_email} are"
+        repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\"" 
+      end
     end
 
-    if requested_repositories.length > 1 && collaborator_emails.length == 1
-      message = "
-      Hello
+    message = "
+    Hello
 
-      Can you approve #{collaborator_emails.join()} is allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation repositories until #{review_after_date} for the reason \"#{reason}\"?
-      
-      Repositories: #{requested_repositories.join(", ")}
+    Can you approve #{collaborators} allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation #{repositories} until #{review_after_date} for the reason \"#{reason}\".
 
-      Regards
-      The Operations-Engineering Team
-      "
-    end
-
-    if requested_repositories.length == 1 && collaborator_emails.length > 1
-      message = "
-      Hello
-
-      Can you approve #{collaborator_emails.join(", ")} are allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation \"#{requested_repositories.join("")}\" repository until #{review_after_date} for the reason \"#{reason}\":
-      
-      Regards
-      The Operations-Engineering Team
-      "
-    end
-
-    if requested_repositories.length > 1 && collaborator_emails.length > 1
-      message = "
-      Hello
-
-      Can you approve #{collaborator_emails.join(", ")} are allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation repositories until #{review_after_date} for the reason \"#{reason}\"?
-      
-      Repositories: #{requested_repositories.join(", ")}
-
-      Regards
-      The Operations-Engineering Team
-      "
-    end
+    Regards
+    The Operations-Engineering Team
+    "
 
     puts message
   end
