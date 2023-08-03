@@ -1225,20 +1225,45 @@ module HelperModule
   end
 
   # Send approver a notify email and check for undelivered email,
-  # raise a Slack alert for any non delivered emails addresses.
+  # raise a Slack alert for non delivered email.
   # @param message [string] the message to send to approver
-  def send_approver_notify_email(message, email_address)
+  def send_approver_notify_email(email_address, requested_permission, collaborator_emails, reason, review_after_date, terraform_file_names)
     logger.debug "send_approver_notify_email"
-    collaborators_for_slack_message = []
+    
+    # Get the repository names
+    requested_repositories = []
+    terraform_file_names.each do |terraform_file_name|
+      repo_name = File.basename(terraform_file_name, ".tf")
+      requested_repositories.push(repo_name)
+    end
+
+    # Compose the dynamic sections of the email content
+    collaborators = ""
+    if collaborator_emails.length == 1
+      collaborators = "#{collaborator_emails.join()} is"
+    else
+      last_email = collaborator_emails.last
+      collaborator_emails.pop
+      collaborators = "#{collaborator_emails.join(", ")} and #{last_email} are"
+    end
+    
+    repositories = ""
+    if requested_repositories.length == 1 
+      repositories = "repository \"#{requested_repositories.join("")}\""
+    else
+      last_repository = requested_repositories.last
+      requested_repositories.pop
+      repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\"" 
+    end
 
     notify_client = GithubCollaborators::NotifyClient.new
 
-    notify_client.send_approver_email(email_address, message)
+    notify_client.send_approver_email(email_address, requested_permission, collaborators, repositories, reason, review_after_date)
 
-    failed_emails = notify_client.check_for_undelivered_approver_emails
+    # email_for_slack_message = notify_client.check_for_undelivered_approver_emails
 
-    if failed_emails.length > 0
-      GithubCollaborators::SlackNotifier.new(GithubCollaborators::UndeliveredApproverNotifyEmail.new, collaborators_for_slack_message).post_slack_message
-    end
+    # if email_for_slack_message.length > 0
+    #   GithubCollaborators::SlackNotifier.new(GithubCollaborators::UndeliveredApproverNotifyEmail.new, email_for_slack_message).post_slack_message
+    # end
   end
 end

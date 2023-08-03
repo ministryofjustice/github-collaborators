@@ -79,8 +79,7 @@ class CreatePrFromIssue
       end
     end
 
-    message = create_email_approver_message(requested_permission, emails, reason, review_after, edited_files)
-    send_approver_notify_email(message)
+    send_approver_notify_email(added_by, requested_permission, emails, reason, review_after, edited_files)
 
     remove_issue(REPO_NAME, @issue_number)
   end
@@ -312,43 +311,5 @@ class CreatePrFromIssue
     collaborator_name = "multiple-collaborators"
     branch_name = "add-multiple-collaborators-from-issue"
     create_branch_and_pull_request(branch_name, edited_files, MULITPLE_COLLABORATORS_PR_TITLE, collaborator_name, TYPE_ADD_FROM_ISSUE)
-  end
-
-  def create_email_approver_message(requested_permission, collaborator_emails, reason, review_after_date, terraform_file_names)
-    requested_repositories = []
-
-    # Get the repository names
-    terraform_file_names.each do |terraform_file_name|
-      repo_name = File.basename(terraform_file_name, ".tf")
-      requested_repositories.push(repo_name)
-    end
-
-    
-    # Compose the dynamic sections of the email content
-    collaborators = ""
-    if collaborator_emails.length == 1
-      collaborators = "#{collaborator_emails.join()} is"
-    else
-      last_email = collaborator_emails.last
-      collaborator_emails.pop
-      collaborators = "#{collaborator_emails.join(", ")} and #{last_email} are"
-    end
-    
-    repositories = ""
-    if requested_repositories.length == 1 
-      repositories = "repository \"#{requested_repositories.join("")}\""
-    else
-      last_repository = requested_repositories.last
-      requested_repositories.pop
-      repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\"" 
-    end
-
-    "
-    Hello
-
-    Can you approve #{collaborators} allowed #{requested_permission} access to the Ministry of Justice GitHub Organisation #{repositories} until #{review_after_date} for the reason \"#{reason}\".
-
-    Operations-Engineering Team
-    "
   end
 end
