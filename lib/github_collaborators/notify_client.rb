@@ -42,10 +42,10 @@ class GithubCollaborators
     def send_approver_email(email_address, requested_permission, collaborators, repositories, reason, review_after_date)
       logger.debug "send_approver_email"
       personalisation = {
-        collaborators: collaborators
-        requested_permission: requested_permission
-        repositories: repositories
-        review_after_date: review_after_date
+        collaborators: collaborators,
+        requested_permission: requested_permission,
+        repositories: repositories,
+        review_after_date: review_after_date,
         reason: reason
       }
       send_email_reply_to_ops_eng(
