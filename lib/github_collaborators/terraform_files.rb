@@ -66,6 +66,14 @@ class GithubCollaborators
       @defined_in_terraform = false
     end
 
+    # Add a email address to collaborator TerraformBlock
+    #
+    # @param email_address [String] the email address
+    def add_collaborator_email_address(email_address)
+      logger.debug "add_collaborator_email_address"
+      @email = email_address.downcase
+    end
+
     # Add collaborator details to the TerraformBlock. This is called to
     # create TerraformBlocks for the collaborators found in Terraform files.
     #
