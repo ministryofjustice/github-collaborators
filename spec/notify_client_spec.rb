@@ -112,56 +112,78 @@ class GithubCollaborators
           @notify_client.send_expire_email(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
         end
 
-        context "test check_for_undelivered_expire_emails" do
+        it "test send_approver_email" do
+          personalisation = {
+            collaborators: [TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL],
+            requested_permission: "maintain",
+            repositories: [REPOSITORY_NAME, REPOSITORY_NAME],
+            review_after_date: CREATED_DATE,
+            reason: TEST_COLLABORATOR_REASON
+          }
+          expect(@notify_client).to receive(:send_email_reply_to_ops_eng).with(APPROVER_EMAIL_TEMPLATE_ID, TEST_COLLABORATOR_ADDED_BY, personalisation)
+          @notify_client.send_approver_email(TEST_COLLABORATOR_ADDED_BY, "maintain", [TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL], [REPOSITORY_NAME, REPOSITORY_NAME], TEST_COLLABORATOR_REASON, CREATED_DATE)
+        end
+
+        context "" do
           before {
-            @notifications_object = MockNotifications.new
-            @notifications_object.collection[0].created_at = Date.today
-            @notifications_object.collection[0].email_address = TEST_COLLABORATOR_EMAIL
-            @notifications_object.collection[0].status = "permanent-failure"
-            @notifications_object.collection[0].template["id"] = EXPIRE_EMAIL_TEMPLATE_ID
             # Stub sleep
             allow_any_instance_of(GithubCollaborators::NotifyClient).to receive(:sleep)
           }
 
-          it "calls check_for_undelivered_emails_for_template" do
+          it "test check_for_undelivered_approver_emails" do
+            expect(@notify_client).to receive(:check_for_undelivered_emails_for_template).with(APPROVER_EMAIL_TEMPLATE_ID)
+            @notify_client.check_for_undelivered_approver_emails
+          end
+
+          it "test check_for_undelivered_expire_emails" do
             expect(@notify_client).to receive(:check_for_undelivered_emails_for_template).with(EXPIRE_EMAIL_TEMPLATE_ID)
             @notify_client.check_for_undelivered_expire_emails
           end
 
-          it "when no notifications exist" do
-            @notifications_object.collection = []
-            expect(@notify_client).to receive(:get_notifications_by_type_and_status).with("email", "failed").and_return(@notifications_object)
-            test_equal([], @notify_client.check_for_undelivered_expire_emails)
+          context "test check_for_undelivered_emails_for_template via check_for_undelivered_expire_emails" do
+            before {
+              @notifications_object = MockNotifications.new
+              @notifications_object.collection[0].created_at = Date.today
+              @notifications_object.collection[0].email_address = TEST_COLLABORATOR_EMAIL
+              @notifications_object.collection[0].status = "permanent-failure"
+              @notifications_object.collection[0].template["id"] = EXPIRE_EMAIL_TEMPLATE_ID
+            }
+
+            it "when no notifications exist" do
+              @notifications_object.collection = []
+              expect(@notify_client).to receive(:get_notifications_by_type_and_status).with("email", "failed").and_return(@notifications_object)
+              test_equal([], @notify_client.check_for_undelivered_expire_emails)
+            end
+
+            it "when notifications exist" do
+              @notifications_object.collection[0].template["id"] = EXPIRE_EMAIL_TEMPLATE_ID
+              expect(@notify_client).to receive(:get_notifications_by_type_and_status).with("email", "failed").and_return(@notifications_object)
+              failed_notifications = @notify_client.check_for_undelivered_expire_emails
+              test_equal(failed_notifications, [TEST_COLLABORATOR_EMAIL])
+            end
+
+            it "when notifications exist but has an old date" do
+              @notifications_object.collection[0].created_at = Date.today - 1
+              expect(@notify_client.client).to receive(:get_notifications).with(status: "failed", template_type: "email").and_return(@notifications_object)
+              test_equal([], @notify_client.check_for_undelivered_expire_emails)
+            end
+
+            it "when notifications exist but incorrect template id" do
+              @notifications_object.collection[0].template["id"] = 123
+              expect(@notify_client.client).to receive(:get_notifications).with(status: "failed", template_type: "email").and_return(@notifications_object)
+              test_equal([], @notify_client.check_for_undelivered_expire_emails)
+            end
           end
 
-          it "when notifications exist" do
-            @notifications_object.collection[0].template["id"] = EXPIRE_EMAIL_TEMPLATE_ID
-            expect(@notify_client).to receive(:get_notifications_by_type_and_status).with("email", "failed").and_return(@notifications_object)
-            failed_notifications = @notify_client.check_for_undelivered_expire_emails
-            test_equal(failed_notifications, [TEST_COLLABORATOR_EMAIL])
+          it "test send_email_reply_to_ops_eng via send_expire_email" do
+            expect(@notify_client.client).to receive(:send_email).with(email_address: TEST_COLLABORATOR_EMAIL, template_id: EXPIRE_EMAIL_TEMPLATE_ID, personalisation: {repo_name: REPOSITORY_NAME}, email_reply_to_id: OPERATIONS_ENGINEERING_EMAIL_ID)
+            @notify_client.send_expire_email(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
           end
 
-          it "when notifications exist but has an old date" do
-            @notifications_object.collection[0].created_at = Date.today - 1
-            expect(@notify_client.client).to receive(:get_notifications).with(status: "failed", template_type: "email").and_return(@notifications_object)
-            test_equal([], @notify_client.check_for_undelivered_expire_emails)
+          after do
+            ENV.delete("REALLY_SEND_TO_NOTIFY")
+            ENV.delete("NOTIFY_TEST_TOKEN")
           end
-
-          it "when notifications exist but incorrect template id" do
-            @notifications_object.collection[0].template["id"] = 123
-            expect(@notify_client.client).to receive(:get_notifications).with(status: "failed", template_type: "email").and_return(@notifications_object)
-            test_equal([], @notify_client.check_for_undelivered_expire_emails)
-          end
-        end
-
-        it "test send_email_reply_to_ops_eng" do
-          expect(@notify_client.client).to receive(:send_email).with(email_address: TEST_COLLABORATOR_EMAIL, template_id: EXPIRE_EMAIL_TEMPLATE_ID, personalisation: {repo_name: REPOSITORY_NAME}, email_reply_to_id: OPERATIONS_ENGINEERING_EMAIL_ID)
-          @notify_client.send_expire_email(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
-        end
-
-        after do
-          ENV.delete("REALLY_SEND_TO_NOTIFY")
-          ENV.delete("NOTIFY_TEST_TOKEN")
         end
       end
     end
