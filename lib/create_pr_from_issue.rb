@@ -31,9 +31,6 @@ class CreatePrFromIssue
     @http_client = GithubCollaborators::HttpClient.new
   end
 
-  # def initialize
-  # end
-
   def start
     emails = get_emails
     usernames = get_usernames
@@ -326,30 +323,24 @@ class CreatePrFromIssue
       requested_repositories.push(repo_name)
     end
 
-    collaborators = ""
-    repositories = ""
     
-    if requested_repositories.length == 1 && collaborator_emails.length == 1
+    # Compose the dynamic sections of the email content
+    collaborators = ""
+    if collaborator_emails.length == 1
       collaborators = "#{collaborator_emails.join()} is"
-      repositories = "repository \"#{requested_repositories.join("")}\""
-    elsif requested_repositories.length == 1 && collaborator_emails.length > 1
+    else
       last_email = collaborator_emails.last
       collaborator_emails.pop
       collaborators = "#{collaborator_emails.join(", ")} and #{last_email} are"
+    end
+    
+    repositories = ""
+    if requested_repositories.length == 1 
       repositories = "repository \"#{requested_repositories.join("")}\""
     else
       last_repository = requested_repositories.last
       requested_repositories.pop
-
-      if collaborator_emails.length == 1
-        collaborators = "#{collaborator_emails.join()} is"
-        repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\""
-      else
-        last_email = collaborator_emails.last
-        collaborator_emails.pop
-        collaborators = "#{collaborator_emails.join(", ")} and #{last_email} are"
-        repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\"" 
-      end
+      repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\"" 
     end
 
     "
