@@ -1260,10 +1260,13 @@ module HelperModule
 
     notify_client.send_approver_email(email_address, requested_permission, collaborators, repositories, reason, review_after_date)
 
-    # email_for_slack_message = notify_client.check_for_undelivered_approver_emails
+    email_for_slack_message = notify_client.check_for_undelivered_approver_emails
 
-    # if email_for_slack_message.length > 0
-    #   GithubCollaborators::SlackNotifier.new(GithubCollaborators::UndeliveredApproverNotifyEmail.new, email_for_slack_message).post_slack_message
-    # end
+    if email_for_slack_message.length > 0
+      terraform_block = GithubCollaborators::TerraformBlock.new
+      terraform_block.add_collaborator_email_address(email_address)
+      collaborator = GithubCollaborators::Collaborator.new(terraform_block, "")
+      GithubCollaborators::SlackNotifier.new(GithubCollaborators::UndeliveredApproverNotifyEmail.new, [collaborator]).post_slack_message
+    end
   end
 end
