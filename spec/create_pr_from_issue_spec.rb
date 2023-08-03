@@ -202,6 +202,7 @@ class GithubCollaborators
           expect(@create_pr_from_issue).to receive(:add_users_to_files).with(collaborators).and_return([TEST_TERRAFORM_FILE_FULL_PATH])
           expect(@create_pr_from_issue).to receive(:create_multiple_users_pull_request).with([TEST_TERRAFORM_FILE_FULL_PATH])
           allow_any_instance_of(HelperModule).to receive(:remove_issue).with(REPO_NAME, 123)
+          allow_any_instance_of(HelperModule).to receive(:send_approver_notify_email).with(TEST_COLLABORATOR_ADDED_BY, "maintain", [TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, "", [TEST_TERRAFORM_FILE_FULL_PATH])
           @create_pr_from_issue.start
         end
 
@@ -214,6 +215,7 @@ class GithubCollaborators
           expect(@create_pr_from_issue).to receive(:add_users_to_files).with(collaborators).and_return([TEST_TERRAFORM_FILE_FULL_PATH])
           expect(@create_pr_from_issue).to receive(:create_single_user_pull_request).with([TEST_TERRAFORM_FILE_FULL_PATH], @collaborator1)
           allow_any_instance_of(HelperModule).to receive(:remove_issue).with(REPO_NAME, 123)
+          allow_any_instance_of(HelperModule).to receive(:send_approver_notify_email).with(TEST_COLLABORATOR_ADDED_BY, "maintain", [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, "", [TEST_TERRAFORM_FILE_FULL_PATH])
           @create_pr_from_issue.start
         end
       end
