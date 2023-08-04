@@ -93,6 +93,16 @@ module "bichard7-next-infrastructure-docker-images" {
       review_after = "2023-12-31"
     },
     {
+      github_user  = "senny10"
+      permission   = "push"
+      name         = "Seneca Saunders"
+      email        = "seneca.saunders@madetech.com"
+      org          = "Madetech"
+      reason       = "CJSE Bichard Development"
+      added_by     = "Dom Tomkins <dom.tomkins@digital.justice.gov.uk>"
+      review_after = "2023-12-31"
+    },
+    {
       github_user  = "richrace"
       permission   = "push"
       name         = "Richard Race"
