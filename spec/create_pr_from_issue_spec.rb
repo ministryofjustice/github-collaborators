@@ -141,6 +141,7 @@ class GithubCollaborators
         it "call add_users_to_files when provide repositories and terraform file with same name exists and collaborators to add to file" do
           expect(terraform_files).to receive(:is_user_in_file).and_return(false)
           test_equal(@create_pr_from_issue.add_users_to_files([@collaborator]), [TEST_TERRAFORM_FILE_FULL_PATH])
+          File.delete(TEST_SPEC_FILE)
         end
 
         it "call add_users_to_files when provide repositories and terraform file with same name exists but collaborator already exists in the file" do

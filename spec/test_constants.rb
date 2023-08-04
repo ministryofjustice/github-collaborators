@@ -32,6 +32,7 @@ module TestConstants
   TEST_REPO_NAME5 = "test-repo5"
   TEST_REPO_NAME_EXPIRED_USER = "test-repo-user-expired"
   TEST_DIR = "spec/fixtures"
+  TEST_SPEC_FILE = "spec/fixtures/#{REPOSITORY_NAME}.tf"
   TEST_DIR_OVERRIDE = "Constants::TERRAFORM_DIR"
   REPO_URL = "#{GH_ORG_URL}/#{REPOSITORY_NAME}|#{REPOSITORY_NAME}"
   URL = "#{GH_API_URL}/#{REPOSITORY_NAME}/issues"
