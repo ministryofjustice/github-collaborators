@@ -129,7 +129,7 @@ class GithubCollaborators
       end
 
       context "" do
-        before { 
+        before {
           file = create_terraform_file_with_name(REPOSITORY_NAME)
           expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
           expect(@create_pr_from_issue).to receive(:get_repositories).and_return([REPOSITORY_NAME])
@@ -137,7 +137,7 @@ class GithubCollaborators
           expect(terraform_files).to receive(:get_terraform_files).and_return([file])
           @collaborator = create_collaborator_data("")
         }
-        
+
         it "call add_users_to_files when provide repositories and terraform file with same name exists and collaborators to add to file" do
           expect(terraform_files).to receive(:is_user_in_file).and_return(false)
           test_equal(@create_pr_from_issue.add_users_to_files([@collaborator]), [TEST_TERRAFORM_FILE_FULL_PATH])

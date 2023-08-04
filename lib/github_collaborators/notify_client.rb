@@ -31,7 +31,7 @@ class GithubCollaborators
       )
     end
 
-    # Wrapper function to send an approver Notify email 
+    # Wrapper function to send an approver Notify email
     #
     # @param email_address [String] the approver email address
     # @param requested_permission [String] repository access level
@@ -63,7 +63,7 @@ class GithubCollaborators
       sleep 90
       check_for_undelivered_emails_for_template(EXPIRE_EMAIL_TEMPLATE_ID)
     end
-    
+
     # Wrapper function to get the failed approver Notify emails
     #
     def check_for_undelivered_approver_emails

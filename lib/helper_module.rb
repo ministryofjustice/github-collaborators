@@ -1234,7 +1234,7 @@ module HelperModule
   # @param terraform_file_names [Array<String>] a list of the Terraform files that represent the repositories
   def send_approver_notify_email(email_address, requested_permission, collaborator_emails, reason, review_after_date, terraform_file_names)
     logger.debug "send_approver_notify_email"
-    
+
     allowed_permissions = ["admin", "pull", "push", "maintain", "triage"]
     if email_address == "" || !allowed_permissions.include?(requested_permission.downcase) || collaborator_emails.length == 0 || reason == "" || review_after_date == "" || terraform_file_names.length == 0
       return
@@ -1250,20 +1250,20 @@ module HelperModule
     # Compose the dynamic sections of the email content
     collaborators = ""
     if collaborator_emails.length == 1
-      collaborators = "#{collaborator_emails.join()} is"
+      collaborators = "#{collaborator_emails.join} is"
     else
       last_email = collaborator_emails.last
       collaborator_emails.pop
       collaborators = "#{collaborator_emails.join(", ")} and #{last_email} are"
     end
-    
+
     repositories = ""
-    if requested_repositories.length == 1 
+    if requested_repositories.length == 1
       repositories = "repository \"#{requested_repositories.join("")}\""
     else
       last_repository = requested_repositories.last
       requested_repositories.pop
-      repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\"" 
+      repositories = "repositories \"#{requested_repositories.join(", ")} and #{last_repository}\""
     end
 
     notify_client = GithubCollaborators::NotifyClient.new

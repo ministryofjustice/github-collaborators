@@ -1130,7 +1130,7 @@ class GithubCollaborators
           helper_module.send_collaborator_notify_email([@collaborator])
         end
       end
-    
+
       context "call send_approver_notify_email" do
         let(:notify_client) { double(GithubCollaborators::NotifyClient) }
         let(:undelivered_notify_email_slack_message) { double(GithubCollaborators::UndeliveredApproverNotifyEmail) }
@@ -1140,7 +1140,7 @@ class GithubCollaborators
             expect(notify_client).not_to receive(:send_approver_email)
             expect(notify_client).not_to receive(:check_for_undelivered_approver_emails)
           }
-          
+
           it "with no inputs" do
             helper_module.send_approver_notify_email("", "", [], "", "", [])
           end
@@ -1212,7 +1212,7 @@ class GithubCollaborators
               helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE, TEST_FILE, TEST_FILE])
             end
           end
-            
+
           it "with undelivered approver email address" do
             terraform_block = create_terraform_block_review_date_empty
             terraform_block.add_collaborator_email_address(TEST_RANDOM_EMAIL)
