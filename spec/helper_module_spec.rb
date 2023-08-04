@@ -1130,6 +1130,27 @@ class GithubCollaborators
           helper_module.send_collaborator_notify_email([@collaborator])
         end
       end
+    
+      context "call send_approver_notify_email" do
+        let(:notify_client) { double(GithubCollaborators::NotifyClient) }
+        let(:undelivered_notify_email_slack_message) { double(GithubCollaborators::UndeliveredApproverNotifyEmail) }
+
+        it "with no inputs" do
+          expect(notify_client).not_to receive(:send_approver_email)
+          expect(notify_client).not_to receive(:check_for_undelivered_approver_emails)
+          helper_module.send_approver_notify_email("", "", [], "", "", [])
+        end
+
+        context "" do
+          before do
+            expect(GithubCollaborators::NotifyClient).to receive(:new).and_return(notify_client)
+            # Stub sleep
+            allow_any_instance_of(helper_module).to receive(:sleep)
+            terraform_block = create_terraform_block_review_date_empty
+            @collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          end
+        end
+      end
     end
   end
 end

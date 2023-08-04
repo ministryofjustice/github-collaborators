@@ -1226,10 +1226,20 @@ module HelperModule
 
   # Send approver a notify email and check for undelivered email,
   # raise a Slack alert for non delivered email.
-  # @param message [string] the message to send to approver
+  # @param email_address [String] the approver email address
+  # @param requested_permission [String] collaborator permission to repositories
+  # @param collaborator_emails [Array<String>] list of collaborator email addresses
+  # @param reason [String] the reason for access to the repository
+  # @param review_after_date [String] the collaborator renewal date
+  # @param terraform_file_names [Array<String>] a list of the Terraform files that represent the repositories
   def send_approver_notify_email(email_address, requested_permission, collaborator_emails, reason, review_after_date, terraform_file_names)
     logger.debug "send_approver_notify_email"
     
+    allowed_permissions = ["admin", "pull", "push", "maintain", "triage"]
+    if email_address = "" || !allowed_permissions.include?(requested_permission) || collaborator_emails.length == 0 || reason == "" || review_after_date == "" || terraform_file_names.length == 0
+      return
+    end
+
     # Get the repository names
     requested_repositories = []
     terraform_file_names.each do |terraform_file_name|
