@@ -1236,7 +1236,7 @@ module HelperModule
     logger.debug "send_approver_notify_email"
     
     allowed_permissions = ["admin", "pull", "push", "maintain", "triage"]
-    if email_address = "" || !allowed_permissions.include?(requested_permission) || collaborator_emails.length == 0 || reason == "" || review_after_date == "" || terraform_file_names.length == 0
+    if email_address == "" || !allowed_permissions.include?(requested_permission.downcase) || collaborator_emails.length == 0 || reason == "" || review_after_date == "" || terraform_file_names.length == 0
       return
     end
 
