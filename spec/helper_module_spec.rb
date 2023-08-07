@@ -1145,19 +1145,19 @@ class GithubCollaborators
             helper_module.send_approver_notify_email("", "", [], "", "", [])
           end
 
-          it "withfirst input missing" do
+          it "with first input missing" do
             helper_module.send_approver_notify_email("", TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE])
           end
 
-          it "withsecond input missing" do
+          it "with second input missing" do
             helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, "", [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE])
           end
 
-          it "withthird input missing" do
+          it "with third input missing" do
             helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE])
           end
 
-          it "withfourth input" do
+          it "with fourth input" do
             helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], "", CREATED_DATE, [TEST_FILE])
           end
 
@@ -1165,7 +1165,7 @@ class GithubCollaborators
             helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, "", [TEST_FILE])
           end
 
-          it "withsixth input missing" do
+          it "with sixth input missing" do
             helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [])
           end
         end
