@@ -1,7 +1,7 @@
 # The GithubCollaborators class namespace
 class GithubCollaborators
-  # The UndeliveredNotifyEmail class
-  class UndeliveredNotifyEmail
+  # The UndeliveredExpireNotifyEmail class
+  class UndeliveredExpireNotifyEmail
     include Logging
 
     # Creates a line to be used within a Slack message using app data

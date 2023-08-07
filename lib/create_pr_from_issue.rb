@@ -79,6 +79,8 @@ class CreatePrFromIssue
       end
     end
 
+    send_approver_notify_email(added_by, requested_permission, emails, reason, review_after, edited_files)
+
     remove_issue(REPO_NAME, @issue_number)
   end
 

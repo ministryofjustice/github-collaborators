@@ -1094,7 +1094,7 @@ class GithubCollaborators
 
       context "call send_collaborator_notify_email" do
         let(:notify_client) { double(GithubCollaborators::NotifyClient) }
-        let(:undelivered_notify_email_slack_message) { double(GithubCollaborators::UndeliveredNotifyEmail) }
+        let(:undelivered_notify_email_slack_message) { double(GithubCollaborators::UndeliveredExpireNotifyEmail) }
 
         before do
           expect(GithubCollaborators::NotifyClient).to receive(:new).and_return(notify_client)
@@ -1119,15 +1119,112 @@ class GithubCollaborators
         it "with a collaborator object, notify failed to send the email, and returns known email" do
           expect(notify_client).to receive(:send_expire_email).with(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
           expect(notify_client).to receive(:check_for_undelivered_expire_emails).and_return([TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL])
-          expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::UndeliveredNotifyEmail), [@collaborator]).and_return(undelivered_notify_email_slack_message)
+          expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::UndeliveredExpireNotifyEmail), [@collaborator]).and_return(undelivered_notify_email_slack_message)
           expect(undelivered_notify_email_slack_message).to receive(:post_slack_message)
           helper_module.send_collaborator_notify_email([@collaborator])
         end
 
         it "with a collaborator object, notify failed to send the email, but returns an unknown email" do
           expect(notify_client).to receive(:send_expire_email).with(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
-          expect(notify_client).to receive(:check_for_undelivered_expire_emails).and_return(["random-email@org.com"])
+          expect(notify_client).to receive(:check_for_undelivered_expire_emails).and_return([TEST_RANDOM_EMAIL])
           helper_module.send_collaborator_notify_email([@collaborator])
+        end
+      end
+
+      context "call send_approver_notify_email" do
+        let(:notify_client) { double(GithubCollaborators::NotifyClient) }
+        let(:undelivered_notify_email_slack_message) { double(GithubCollaborators::UndeliveredApproverNotifyEmail) }
+
+        context "" do
+          before {
+            expect(notify_client).not_to receive(:send_approver_email)
+            expect(notify_client).not_to receive(:check_for_undelivered_approver_emails)
+          }
+
+          it "with no inputs" do
+            helper_module.send_approver_notify_email("", "", [], "", "", [])
+          end
+
+          it "with first input missing" do
+            helper_module.send_approver_notify_email("", TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE])
+          end
+
+          it "with second input missing" do
+            helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, "", [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE])
+          end
+
+          it "with third input missing" do
+            helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE])
+          end
+
+          it "with fourth input" do
+            helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], "", CREATED_DATE, [TEST_FILE])
+          end
+
+          it "withfifth input missing" do
+            helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, "", [TEST_FILE])
+          end
+
+          it "with sixth input missing" do
+            helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [])
+          end
+        end
+
+        context "" do
+          before do
+            # Stub sleep
+            allow_any_instance_of(helper_module).to receive(:sleep)
+            expect(GithubCollaborators::NotifyClient).to receive(:new).and_return(notify_client)
+          end
+
+          context "" do
+            before do
+              expect(notify_client).to receive(:check_for_undelivered_approver_emails).and_return("")
+            end
+
+            it "with one collaborator and one repository" do
+              expect(notify_client).to receive(:send_approver_email).with(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, "#{TEST_COLLABORATOR_EMAIL} is", "repository \"#{TEST_REPO_NAME}\"", TEST_COLLABORATOR_REASON, CREATED_DATE)
+              helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE])
+            end
+
+            it "with one collaborator and two repositories" do
+              expect(notify_client).to receive(:send_approver_email).with(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, "#{TEST_COLLABORATOR_EMAIL} is", "repositories \"#{TEST_REPO_NAME} and #{TEST_REPO_NAME}\"", TEST_COLLABORATOR_REASON, CREATED_DATE)
+              helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE, TEST_FILE])
+            end
+
+            it "with one collaborator and three repositories" do
+              expect(notify_client).to receive(:send_approver_email).with(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, "#{TEST_COLLABORATOR_EMAIL} is", "repositories \"#{TEST_REPO_NAME}, #{TEST_REPO_NAME} and #{TEST_REPO_NAME}\"", TEST_COLLABORATOR_REASON, CREATED_DATE)
+              helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE, TEST_FILE, TEST_FILE])
+            end
+
+            it "with two collaborators and one repository" do
+              expect(notify_client).to receive(:send_approver_email).with(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, "#{TEST_COLLABORATOR_EMAIL} and #{TEST_COLLABORATOR_EMAIL} are", "repository \"#{TEST_REPO_NAME}\"", TEST_COLLABORATOR_REASON, CREATED_DATE)
+              helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE])
+            end
+
+            it "with three collaborator and two repositories" do
+              expect(notify_client).to receive(:send_approver_email).with(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, "#{TEST_COLLABORATOR_EMAIL}, #{TEST_COLLABORATOR_EMAIL} and #{TEST_COLLABORATOR_EMAIL} are", "repositories \"#{TEST_REPO_NAME} and #{TEST_REPO_NAME}\"", TEST_COLLABORATOR_REASON, CREATED_DATE)
+              helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE, TEST_FILE])
+            end
+
+            it "with three collaborator and three repositories" do
+              expect(notify_client).to receive(:send_approver_email).with(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, "#{TEST_COLLABORATOR_EMAIL}, #{TEST_COLLABORATOR_EMAIL} and #{TEST_COLLABORATOR_EMAIL} are", "repositories \"#{TEST_REPO_NAME}, #{TEST_REPO_NAME} and #{TEST_REPO_NAME}\"", TEST_COLLABORATOR_REASON, CREATED_DATE)
+              helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE, TEST_FILE, TEST_FILE])
+            end
+          end
+
+          it "with undelivered approver email address" do
+            terraform_block = create_terraform_block_review_date_empty
+            terraform_block.add_collaborator_email_address(TEST_RANDOM_EMAIL)
+            collaborator = GithubCollaborators::Collaborator.new(terraform_block, "")
+            expect(GithubCollaborators::TerraformBlock).to receive(:new).and_return(terraform_block)
+            expect(GithubCollaborators::Collaborator).to receive(:new).with(terraform_block, "").and_return(collaborator)
+            expect(notify_client).to receive(:send_approver_email).with(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, "#{TEST_COLLABORATOR_EMAIL} is", "repository \"#{TEST_REPO_NAME}\"", TEST_COLLABORATOR_REASON, CREATED_DATE)
+            expect(notify_client).to receive(:check_for_undelivered_approver_emails).and_return(TEST_RANDOM_EMAIL)
+            expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::UndeliveredApproverNotifyEmail), [collaborator]).and_return(undelivered_notify_email_slack_message)
+            expect(undelivered_notify_email_slack_message).to receive(:post_slack_message)
+            helper_module.send_approver_notify_email(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_FILE])
+          end
         end
       end
     end

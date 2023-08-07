@@ -31,13 +31,46 @@ class GithubCollaborators
       )
     end
 
-    # Wrapper function to get the failed Notify expire emails
+    # Wrapper function to send an approver Notify email
+    #
+    # @param email_address [String] the approver email address
+    # @param requested_permission [String] repository access level
+    # @param collaborators [String] list of collaborators email addresses
+    # @param repositories [String] list of repositories names
+    # @param reason [String] reason to access repositories
+    # @param review_after_date [String] renewal date
+    def send_approver_email(email_address, requested_permission, collaborators, repositories, reason, review_after_date)
+      logger.debug "send_approver_email"
+      personalisation = {
+        collaborators: collaborators,
+        requested_permission: requested_permission,
+        repositories: repositories,
+        review_after_date: review_after_date,
+        reason: reason
+      }
+      send_email_reply_to_ops_eng(
+        APPROVER_EMAIL_TEMPLATE_ID,
+        email_address,
+        personalisation
+      )
+    end
+
+    # Wrapper function to get the failed expire Notify emails
     #
     def check_for_undelivered_expire_emails
       logger.debug "check_for_undelivered_expire_emails"
       # Give Notify time to receive undelivered emails
       sleep 90
       check_for_undelivered_emails_for_template(EXPIRE_EMAIL_TEMPLATE_ID)
+    end
+
+    # Wrapper function to get the failed approver Notify emails
+    #
+    def check_for_undelivered_approver_emails
+      logger.debug "check_for_undelivered_approver_emails"
+      # Give Notify time to receive undelivered emails
+      sleep 90
+      check_for_undelivered_emails_for_template(APPROVER_EMAIL_TEMPLATE_ID)
     end
 
     private

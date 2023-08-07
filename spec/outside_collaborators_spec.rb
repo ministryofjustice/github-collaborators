@@ -326,7 +326,7 @@ class GithubCollaborators
 
         it "when empty file exists" do
           expect(terraform_files).to receive(:remove_file).with(EMPTY_REPOSITORY_NAME)
-          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with(DELETE_EMPTY_FILE_BRANCH_NAME, ["terraform/empty-file.tf"], EMPTY_FILES_PR_TITLE, "", TYPE_DELETE_EMPTY_FILE)
+          allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with(DELETE_EMPTY_FILE_BRANCH_NAME, ["#{TERRAFORM_DIR}/empty-file.tf"], EMPTY_FILES_PR_TITLE, "", TYPE_DELETE_EMPTY_FILE)
           @outside_collaborators.remove_empty_files
         end
 

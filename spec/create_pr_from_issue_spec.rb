@@ -128,26 +128,26 @@ class GithubCollaborators
         end
       end
 
-      it "call add_users_to_files when provide repositories and terraform file with same name exists and collaborators to add to file" do
-        file = create_terraform_file_with_name(REPOSITORY_NAME)
-        expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
-        expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(REPOSITORY_NAME)
-        expect(@create_pr_from_issue).to receive(:get_repositories).and_return([REPOSITORY_NAME])
-        expect(terraform_files).to receive(:get_terraform_files).and_return([file])
-        collaborator = create_collaborator_data("")
-        expect(terraform_files).to receive(:is_user_in_file).and_return(false)
-        test_equal(@create_pr_from_issue.add_users_to_files([collaborator]), [TEST_TERRAFORM_FILE_FULL_PATH])
-      end
+      context "" do
+        before {
+          file = create_terraform_file_with_name(REPOSITORY_NAME)
+          expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
+          expect(@create_pr_from_issue).to receive(:get_repositories).and_return([REPOSITORY_NAME])
+          expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(REPOSITORY_NAME)
+          expect(terraform_files).to receive(:get_terraform_files).and_return([file])
+          @collaborator = create_collaborator_data("")
+        }
 
-      it "call add_users_to_files when provide repositories and terraform file with same name exists but collaborator already exists in the file" do
-        file = create_terraform_file_with_name(REPOSITORY_NAME)
-        expect(GithubCollaborators::TerraformFiles).to receive(:new).and_return(terraform_files).at_least(1).times
-        expect(terraform_files).to receive(:ensure_file_exists_in_memory).with(REPOSITORY_NAME)
-        expect(@create_pr_from_issue).to receive(:get_repositories).and_return([REPOSITORY_NAME])
-        expect(terraform_files).to receive(:get_terraform_files).and_return([file])
-        collaborator = create_collaborator_data("")
-        expect(terraform_files).to receive(:is_user_in_file).and_return(true)
-        expect { @create_pr_from_issue.add_users_to_files([collaborator]) }.to raise_error(SystemExit)
+        it "call add_users_to_files when provide repositories and terraform file with same name exists and collaborators to add to file" do
+          expect(terraform_files).to receive(:is_user_in_file).and_return(false)
+          test_equal(@create_pr_from_issue.add_users_to_files([@collaborator]), [TEST_TERRAFORM_FILE_FULL_PATH])
+          File.delete(TEST_SPEC_FILE)
+        end
+
+        it "call add_users_to_files when provide repositories and terraform file with same name exists but collaborator already exists in the file" do
+          expect(terraform_files).to receive(:is_user_in_file).and_return(true)
+          expect { @create_pr_from_issue.add_users_to_files([@collaborator]) }.to raise_error(SystemExit)
+        end
       end
 
       it "call create_single_user_pull_request" do
@@ -168,18 +168,22 @@ class GithubCollaborators
         @create_pr_from_issue = CreatePrFromIssue.new(good_json_one_user)
       }
 
-      it "when lists do not match 1" do
-        expect(@create_pr_from_issue).to receive(:get_emails).and_return([TEST_COLLABORATOR_EMAIL])
-        expect(@create_pr_from_issue).to receive(:get_usernames).and_return([])
-        expect(@create_pr_from_issue).to receive(:get_names).and_return([TEST_COLLABORATOR_NAME, TEST_COLLABORATOR_NAME])
-        expect { @create_pr_from_issue.start }.to raise_error(SystemExit)
-      end
+      context "" do
+        before {
+          expect(@create_pr_from_issue).to receive(:get_emails).and_return([TEST_COLLABORATOR_EMAIL])
+        }
 
-      it "when lists do not match 2" do
-        expect(@create_pr_from_issue).to receive(:get_emails).and_return([TEST_COLLABORATOR_EMAIL])
-        expect(@create_pr_from_issue).to receive(:get_usernames).and_return([TEST_COLLABORATOR_LOGIN, TEST_COLLABORATOR_LOGIN])
-        expect(@create_pr_from_issue).to receive(:get_names).and_return([TEST_COLLABORATOR_NAME])
-        expect { @create_pr_from_issue.start }.to raise_error(SystemExit)
+        it "when lists do not match 1" do
+          expect(@create_pr_from_issue).to receive(:get_usernames).and_return([])
+          expect(@create_pr_from_issue).to receive(:get_names).and_return([TEST_COLLABORATOR_NAME, TEST_COLLABORATOR_NAME])
+          expect { @create_pr_from_issue.start }.to raise_error(SystemExit)
+        end
+
+        it "when lists do not match 2" do
+          expect(@create_pr_from_issue).to receive(:get_usernames).and_return([TEST_COLLABORATOR_LOGIN, TEST_COLLABORATOR_LOGIN])
+          expect(@create_pr_from_issue).to receive(:get_names).and_return([TEST_COLLABORATOR_NAME])
+          expect { @create_pr_from_issue.start }.to raise_error(SystemExit)
+        end
       end
 
       context "" do
@@ -187,21 +191,28 @@ class GithubCollaborators
           expect(@create_pr_from_issue).to receive(:get_permission).and_return(TEST_COLLABORATOR_PERMISSION)
           expect(@create_pr_from_issue).to receive(:get_org).and_return(TEST_COLLABORATOR_ORG)
           expect(@create_pr_from_issue).to receive(:get_reason).and_return(TEST_COLLABORATOR_REASON)
-          expect(@create_pr_from_issue).to receive(:get_added_by).and_return(TEST_COLLABORATOR_ADDED_BY)
+          expect(@create_pr_from_issue).to receive(:get_added_by).and_return(TEST_RANDOM_EMAIL)
+          expect(@create_pr_from_issue).to receive(:get_review_after).and_return(CREATED_DATE)
           @collaborator1 = create_collaborator_hash_with_login(TEST_USER_1)
           @collaborator2 = create_collaborator_hash_with_login(TEST_USER_2)
           @collaborator3 = create_collaborator_hash_with_login(TEST_USER_3)
+          @collaborator1[:added_by] = TEST_RANDOM_EMAIL
+          @collaborator2[:added_by] = TEST_RANDOM_EMAIL
+          @collaborator3[:added_by] = TEST_RANDOM_EMAIL
+          @collaborator1[:review_after] = CREATED_DATE
+          @collaborator2[:review_after] = CREATED_DATE
+          @collaborator3[:review_after] = CREATED_DATE
+          allow_any_instance_of(HelperModule).to receive(:remove_issue).with(REPO_NAME, 123)
         end
 
         it "when mulitple users and lists match in size" do
           expect(@create_pr_from_issue).to receive(:get_emails).and_return([TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL])
           expect(@create_pr_from_issue).to receive(:get_usernames).and_return([TEST_USER_1, TEST_USER_2, TEST_USER_3])
           expect(@create_pr_from_issue).to receive(:get_names).and_return([TEST_COLLABORATOR_NAME, TEST_COLLABORATOR_NAME, TEST_COLLABORATOR_NAME])
-          expect(@create_pr_from_issue).to receive(:get_review_after).and_return("")
           collaborators = [@collaborator1, @collaborator2, @collaborator3]
           expect(@create_pr_from_issue).to receive(:add_users_to_files).with(collaborators).and_return([TEST_TERRAFORM_FILE_FULL_PATH])
           expect(@create_pr_from_issue).to receive(:create_multiple_users_pull_request).with([TEST_TERRAFORM_FILE_FULL_PATH])
-          allow_any_instance_of(HelperModule).to receive(:remove_issue).with(REPO_NAME, 123)
+          allow_any_instance_of(HelperModule).to receive(:send_approver_notify_email).with(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_TERRAFORM_FILE_FULL_PATH])
           @create_pr_from_issue.start
         end
 
@@ -209,11 +220,10 @@ class GithubCollaborators
           expect(@create_pr_from_issue).to receive(:get_emails).and_return([TEST_COLLABORATOR_EMAIL])
           expect(@create_pr_from_issue).to receive(:get_usernames).and_return([TEST_USER_1])
           expect(@create_pr_from_issue).to receive(:get_names).and_return([TEST_COLLABORATOR_NAME])
-          expect(@create_pr_from_issue).to receive(:get_review_after).and_return("")
           collaborators = [@collaborator1]
           expect(@create_pr_from_issue).to receive(:add_users_to_files).with(collaborators).and_return([TEST_TERRAFORM_FILE_FULL_PATH])
           expect(@create_pr_from_issue).to receive(:create_single_user_pull_request).with([TEST_TERRAFORM_FILE_FULL_PATH], @collaborator1)
-          allow_any_instance_of(HelperModule).to receive(:remove_issue).with(REPO_NAME, 123)
+          allow_any_instance_of(HelperModule).to receive(:send_approver_notify_email).with(TEST_RANDOM_EMAIL, TEST_COLLABORATOR_PERMISSION, [TEST_COLLABORATOR_EMAIL], TEST_COLLABORATOR_REASON, CREATED_DATE, [TEST_TERRAFORM_FILE_FULL_PATH])
           @create_pr_from_issue.start
         end
       end

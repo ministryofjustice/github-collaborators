@@ -43,6 +43,18 @@ class GithubCollaborators
         test_equal(@terraform_block.review_after, review_date)
       end
 
+      it "call add_collaborator_email_address" do
+        @terraform_block.add_collaborator_email_address(TEST_COLLABORATOR_EMAIL)
+        test_equal(@terraform_block.username, "")
+        test_equal(@terraform_block.permission, "")
+        test_equal(@terraform_block.name, "")
+        test_equal(@terraform_block.email, TEST_COLLABORATOR_EMAIL)
+        test_equal(@terraform_block.org, "")
+        test_equal(@terraform_block.reason, "")
+        test_equal(@terraform_block.added_by, "")
+        test_equal(@terraform_block.review_after, "")
+      end
+
       it "call add_unknown_collaborator_data" do
         @terraform_block.add_unknown_collaborator_data(TEST_COLLABORATOR_LOGIN)
         test_equal(@terraform_block.username, TEST_COLLABORATOR_LOGIN)

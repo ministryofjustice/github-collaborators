@@ -1,4 +1,7 @@
 class GithubCollaborators
+  include TestConstants
+  include Constants
+
   describe Collaborator do
     context "test Collaborator" do
       context "call check_for_issues" do
