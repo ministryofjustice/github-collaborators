@@ -490,10 +490,9 @@ class GithubCollaborators
       context CALL_CREATE_PULL_REQUEST do
         before do
           ENV["REALLY_POST_TO_GH"] = "1"
-          ENV["OPS_BOT_TOKEN_ENABLED"] = "1"
         end
 
-        it "when post to github and ops eng bot env variables are set" do
+        it "when post to github env variables is set" do
           expect(GithubCollaborators::HttpClient).to receive(:new).and_return(http_client)
           expect(http_client).to receive(:post_pull_request_json).with(pull_request_url, "".to_json)
           helper_module.create_pull_request("")
@@ -501,7 +500,6 @@ class GithubCollaborators
 
         after do
           ENV.delete("REALLY_POST_TO_GH")
-          ENV.delete("OPS_BOT_TOKEN_ENABLED")
         end
       end
 
