@@ -41,7 +41,7 @@ Please supply all the requested information, so that your request can be process
 
 ## Which MoJ team/person is responsible for this request? This must be a "*.justice.gov.uk" or "*.digital.justice.gov.uk" email address.
 
-This should a email address `awesome.team@digital.justice.gov.uk`
+This should an email address `awesome.team@digital.justice.gov.uk`
 
 Team email addresses are preferred, rather than individual email addresses, to make it easier to follow-up at a later date.
 
