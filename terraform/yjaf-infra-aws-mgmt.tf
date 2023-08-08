@@ -9,7 +9,7 @@ module "yjaf-infra-aws-mgmt" {
       email        = "thomas.tipler@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2023-08-23"
     },
     {
@@ -19,7 +19,7 @@ module "yjaf-infra-aws-mgmt" {
       email        = "olivier.gaubert@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2023-12-18"
     },
     {
@@ -29,7 +29,7 @@ module "yjaf-infra-aws-mgmt" {
       email        = "mark.stanley@necsws.com"
       org          = "NECSWS"
       reason       = "Developer"
-      added_by     = "Mick.Ewers@yjb.gov.uk"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2024-02-15"
     },
   ]

@@ -9,7 +9,7 @@ module "yjaf-assets" {
       email        = "olivier.gaubert@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2023-12-18"
     },
     {
@@ -19,7 +19,7 @@ module "yjaf-assets" {
       email        = "greg.whiting@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2023-12-13"
     },
     {
@@ -29,7 +29,7 @@ module "yjaf-assets" {
       email        = "vasil.dimitrov@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2023-12-18"
     },
     {
@@ -39,7 +39,7 @@ module "yjaf-assets" {
       email        = "thomas.tipler@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2024-01-17"
     },
     {
@@ -49,7 +49,7 @@ module "yjaf-assets" {
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2023-12-23"
     },
     {
@@ -59,7 +59,7 @@ module "yjaf-assets" {
       email        = "angela.site@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF (new developer)"
-      added_by     = "Mick Ewers <Mick.Ewers@yjb.gov.uk> on behalf of the YJB"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2024-07-17"
     },
     {
@@ -69,7 +69,7 @@ module "yjaf-assets" {
       email        = "mark.stanley@necsws.com"
       org          = "NECSWS"
       reason       = "Developer"
-      added_by     = "Mick.Ewers@yjb.gov.uk"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2024-02-15"
     },
     {
@@ -79,7 +79,7 @@ module "yjaf-assets" {
       email        = "andrew.richards1@necsws.com"
       org          = "NEC SWS"
       reason       = "Existing developer"
-      added_by     = "Mick.Ewers@yjb.gov.uk"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2024-06-01"
     },
     {
@@ -89,7 +89,7 @@ module "yjaf-assets" {
       email        = "stephen.hobden@necsws.com"
       org          = "NECSWS"
       reason       = "Want to amend logging settings for all microservices"
-      added_by     = "Mick.Ewers@yjb.gov.uk"
+      added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2024-07-09"
     },
   ]

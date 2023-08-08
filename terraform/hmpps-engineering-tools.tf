@@ -9,7 +9,7 @@ module "hmpps-engineering-tools" {
       email        = "simon.creasy@civica.co.uk"
       org          = "civica"
       reason       = "HMPPS related work"
-      added_by     = "Vincent Cheung <vincent.cheung@digital.justice.gov.uk>"
+      added_by     = "vincent.cheung@digital.justice.gov.uk"
       review_after = "2023-12-20"
     },
     {
@@ -19,7 +19,7 @@ module "hmpps-engineering-tools" {
       email        = "simon.barnes@civica.co.uk"
       org          = "civica"
       reason       = "HMPPS related work"
-      added_by     = "Vincent Cheung <vincent.cheung@digital.justice.gov.uk>"
+      added_by     = "vincent.cheung@digital.justice.gov.uk"
       review_after = "2023-12-20"
     },
     {
@@ -29,7 +29,7 @@ module "hmpps-engineering-tools" {
       email        = "Miriam.Gomez-Orozco@civica.co.uk"
       org          = "civica"
       reason       = "HMPPS related work"
-      added_by     = "Vincent Cheung <vincent.cheung@digital.justice.gov.uk>"
+      added_by     = "vincent.cheung@digital.justice.gov.uk"
       review_after = "2023-12-20"
     },
   ]

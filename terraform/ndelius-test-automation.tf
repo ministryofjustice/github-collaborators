@@ -9,7 +9,7 @@ module "ndelius-test-automation" {
       email        = "mlaskowski@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2024-02-25"
     },
     {
@@ -19,7 +19,7 @@ module "ndelius-test-automation" {
       email        = "pwilson@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2024-02-25"
     },
     {
@@ -29,7 +29,7 @@ module "ndelius-test-automation" {
       email        = "aoyedele@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2024-02-25"
     },
     {
@@ -39,7 +39,7 @@ module "ndelius-test-automation" {
       email        = "ndavison@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2024-02-25"
     },
     {
@@ -49,7 +49,7 @@ module "ndelius-test-automation" {
       email        = "jrobson@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2024-02-25"
     },
     {
@@ -59,7 +59,7 @@ module "ndelius-test-automation" {
       email        = "yfedviv@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2024-02-25"
     },
     {
@@ -69,7 +69,7 @@ module "ndelius-test-automation" {
       email        = "lclarke@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2024-02-25"
     },
     {
@@ -79,7 +79,7 @@ module "ndelius-test-automation" {
       email        = "mlaskowski@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2023-12-21"
     },
     {
@@ -89,7 +89,7 @@ module "ndelius-test-automation" {
       email        = "svalmonte@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2023-12-21"
     },
     {
@@ -99,7 +99,7 @@ module "ndelius-test-automation" {
       email        = "arichardson@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2023-12-21"
     },
   ]

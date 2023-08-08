@@ -9,7 +9,7 @@ module "ndelius-serenity-automation" {
       email        = "mlaskowski@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2024-03-21"
     },
   ]

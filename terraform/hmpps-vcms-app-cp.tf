@@ -9,7 +9,7 @@ module "hmpps-vcms-app-cp" {
       email        = "simon.creasy@civica.co.uk"
       org          = "Civica"
       reason       = "Civica developer for Victims Case Management System"
-      added_by     = "Probation WebOps team, probation-webops@digital.justice.gov.uk"
+      added_by     = "probation-webops@digital.justice.gov.uk"
       review_after = "2023-12-21"
     },
     {
@@ -19,7 +19,7 @@ module "hmpps-vcms-app-cp" {
       email        = "simon.barnes@civica.co.uk"
       org          = "Civica"
       reason       = "Civica developer for Victims Case Management System"
-      added_by     = "Probation WebOps team, probation-webops@digital.justice.gov.uk"
+      added_by     = "probation-webops@digital.justice.gov.uk"
       review_after = "2023-12-20"
     },
     {
@@ -29,7 +29,7 @@ module "hmpps-vcms-app-cp" {
       email        = "Miriam.Gomez-Orozco@civica.co.uk"
       org          = "civica"
       reason       = "Civica developer for Victims Case Management System"
-      added_by     = "Probation WebOps team, probation-webops@digital.justice.gov.uk"
+      added_by     = "probation-webops@digital.justice.gov.uk"
       review_after = "2023-12-21"
     },
   ]

@@ -9,7 +9,7 @@ module "hmpps-integration-api" {
       email        = "emile.swarts@digital.justice.gov.uk"
       org          = "Made Tech"
       reason       = "Managed service provider for the new HMPPS Integration API"
-      added_by     = "Martin Ballhatchet <martin.ballhatchet@digital.justice.gov.uk>"
+      added_by     = "martin.ballhatchet@digital.justice.gov.uk"
       review_after = "2024-01-01"
     },
     {
@@ -19,7 +19,7 @@ module "hmpps-integration-api" {
       email        = "wen.tingwang@digital.justice.gov.uk"
       org          = "Made Tech"
       reason       = "Managed service provider for the new HMPPS Integration API"
-      added_by     = "Martin Ballhatchet <martin.ballhatchet@digital.justice.gov.uk>"
+      added_by     = "martin.ballhatchet@digital.justice.gov.uk"
       review_after = "2024-01-01"
     },
     {
@@ -29,7 +29,7 @@ module "hmpps-integration-api" {
       email        = "April.Dawson@digital.justice.gov.uk"
       org          = "Made Tech"
       reason       = "Managed service provider for the new HMPPS Integration API"
-      added_by     = "Martin Ballhatchet <martin.ballhatchet@digital.justice.gov.uk>"
+      added_by     = "martin.ballhatchet@digital.justice.gov.uk"
       review_after = "2024-01-01"
     },
   ]

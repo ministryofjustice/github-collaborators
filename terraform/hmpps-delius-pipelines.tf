@@ -9,7 +9,7 @@ module "hmpps-delius-pipelines" {
       email        = "simon.creasy@civica.co.uk"
       org          = "civica"
       reason       = "HMPPS related work"
-      added_by     = "Vincent Cheung <vincent.cheung@digital.justice.gov.uk>"
+      added_by     = "vincent.cheung@digital.justice.gov.uk"
       review_after = "2023-12-20"
     },
     {
@@ -19,7 +19,7 @@ module "hmpps-delius-pipelines" {
       email        = "simon.barnes@civica.co.uk"
       org          = "civica"
       reason       = "HMPPS related work"
-      added_by     = "Vincent Cheung <vincent.cheung@digital.justice.gov.uk>"
+      added_by     = "vincent.cheung@digital.justice.gov.uk"
       review_after = "2023-12-20"
     },
     {
@@ -29,7 +29,7 @@ module "hmpps-delius-pipelines" {
       email        = "Miriam.Gomez-Orozco@civica.co.uk"
       org          = "civica"
       reason       = "HMPPS related work"
-      added_by     = "Vincent Cheung <vincent.cheung@digital.justice.gov.uk>"
+      added_by     = "vincent.cheung@digital.justice.gov.uk"
       review_after = "2023-12-20"
     },
     {
@@ -39,7 +39,7 @@ module "hmpps-delius-pipelines" {
       email        = "pwilson@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Marcus Aspin <marcus.aspin@digital.justice.gov.uk>"
+      added_by     = "marcus.aspin@digital.justice.gov.uk"
       review_after = "2023-12-28"
     },
   ]

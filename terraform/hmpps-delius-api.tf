@@ -9,7 +9,7 @@ module "hmpps-delius-api" {
       email        = "mlaskowski@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2024-08-25"
     },
     {
@@ -19,7 +19,7 @@ module "hmpps-delius-api" {
       email        = "pwilson@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2024-08-25"
     },
     {
@@ -29,7 +29,7 @@ module "hmpps-delius-api" {
       email        = "svalmonte@unilink.com"
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "Nicola Hodgkinson <nicola.hodgkinson@justice.gov.uk>"
+      added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2023-08-25"
     },
   ]
