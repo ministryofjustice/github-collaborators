@@ -47,8 +47,7 @@ body:
     attributes:
       label: added_by
       description: >-
-        The MoJ user and email address that is requesting GitHub access on behalf of the user? Please use format Name <email>
-        e.g. "Ben Ashton <ben.ashton@digital.justice.gov.uk>"
+        The email address of the MoJ team or person that is requesting GitHub access on behalf of the user? e.g. "ben.ashton@digital.justice.gov.uk"
     validations:
       required: true
   - type: input
@@ -57,7 +56,7 @@ body:
       label: review_after
       description: >-
         When does access for the user/s have to be reviewed? Please use format
-        YYYY-MM-DD e.g. 2022-10-10. No longer than 12 months in the future.
+        YYYY-MM-DD e.g. 2022-10-10. No longer than 12 months in the future from today.
     validations:
       required: true
   - type: dropdown
