@@ -9,7 +9,7 @@ module "modernisation-platform-environments" {
       email        = "John.Broom@roctechnologies.com"
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-05-24"
     },
     {
@@ -19,7 +19,7 @@ module "modernisation-platform-environments" {
       email        = "James.Ashton@roctechnologies.com"
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-05-24"
     },
     {
@@ -29,7 +29,7 @@ module "modernisation-platform-environments" {
       email        = "Craig.Gordon@roctechnologies.com"
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-05-24"
     },
     {
@@ -39,7 +39,7 @@ module "modernisation-platform-environments" {
       email        = "Andy.Land@roctechnologies.com"
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-05-24"
     },
     {
@@ -49,7 +49,7 @@ module "modernisation-platform-environments" {
       email        = "Tom.Rudley@roctechnologies.com"
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-05-24"
     },
     {
@@ -59,7 +59,7 @@ module "modernisation-platform-environments" {
       email        = "Helen.Vickers@roctechnologies.com"
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-05-24"
     },
     {
@@ -69,7 +69,7 @@ module "modernisation-platform-environments" {
       email        = "Umesh.Ray@lumen.com"
       org          = "Lumen"
       reason       = "Get access to PPUD on Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2023-11-04"
     },
     {
@@ -79,7 +79,7 @@ module "modernisation-platform-environments" {
       email        = "Pankaj.Pant@lumen.com"
       org          = "Lumen"
       reason       = "Get access to PPUD on Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2023-11-04"
     },
     {
@@ -89,7 +89,7 @@ module "modernisation-platform-environments" {
       email        = "Luis.MartinezArnal@lumen.com"
       org          = "Lumen"
       reason       = "Get access to PPUD on Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2023-11-04"
     },
     {
@@ -99,7 +99,7 @@ module "modernisation-platform-environments" {
       email        = "gemma.mills@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Get access to Delius-IAPS on Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-03-01"
     },
     {
@@ -109,7 +109,7 @@ module "modernisation-platform-environments" {
       email        = "gemma.mills@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Get access to Delius-IAPS on Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-03-01"
     },
     {
@@ -119,7 +119,7 @@ module "modernisation-platform-environments" {
       email        = "Simona.Treivase@justice.gov.uk"
       org          = "Agilisys"
       reason       = "Get access to Data Insights Hub on the Modernisation Platform"
-      added_by     = "Modernisation Platform team, modernisation-platform@digital.justice.gov.uk"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-05-25"
     },
     {

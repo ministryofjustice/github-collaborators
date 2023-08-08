@@ -9,7 +9,7 @@ module "hmpps-vcms" {
       email        = "Miriam.Gomez-Orozco@civica.co.uk"
       org          = "Civica"
       reason       = "Civica developer for Victims Case Management System"
-      added_by     = "Probation Infrastructure AWS Team, maximillian.lakanu@digital.justice.gov.uk"
+      added_by     = "maximillian.lakanu@digital.justice.gov.uk"
       review_after = "2023-11-23"
     },
     {
@@ -19,7 +19,7 @@ module "hmpps-vcms" {
       email        = "simon.barnes@civica.co.uk"
       org          = "Civica"
       reason       = "Civica developer for Victims Case Management System"
-      added_by     = "Probation Infrastructure AWS Team, maximillian.lakanu@digital.justice.gov.uk"
+      added_by     = "maximillian.lakanu@digital.justice.gov.uk"
       review_after = "2023-12-20"
     },
     {

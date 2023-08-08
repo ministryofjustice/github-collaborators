@@ -9,7 +9,7 @@ module "hmpps-domestic-abuse-support-officers" {
       email        = "Miriam.Gomez-Orozco@civica.co.uk"
       org          = "Civica"
       reason       = "Civica developer for DASO"
-      added_by     = "Probation Infrastructure AWS Team, awssupportteam@digital.justice.gov.uk"
+      added_by     = "awssupportteam@digital.justice.gov.uk"
       review_after = "2023-11-23"
     },
     {
@@ -19,7 +19,7 @@ module "hmpps-domestic-abuse-support-officers" {
       email        = "simon.barnes@civica.co.uk"
       org          = "Civica"
       reason       = "Civica developer for DASO"
-      added_by     = "Probation Infrastructure AWS Team, awssupportteam@digital.justice.gov.uk"
+      added_by     = "awssupportteam@digital.justice.gov.uk"
       review_after = "2023-12-20"
     },
     {
