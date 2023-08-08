@@ -193,7 +193,6 @@ To debug in VS Code use the below launch configrations within `.vscode/launch.js
         "REALLY_SEND_TO_NOTIFY": "0",
         "NOTIFY_PROD_TOKEN: "add-prod-token",
         "NOTIFY_TEST_TOKEN: "add-test-token",
-        "OPS_BOT_TOKEN_ENABLED": "0",
         "OPS_BOT_TOKEN": "add-ops-bot-token",
         "LOG_LEVEL": "debug",
         "SLACK_WEBHOOK_URL": "add-slack-link",
