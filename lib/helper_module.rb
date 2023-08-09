@@ -1202,7 +1202,10 @@ module HelperModule
 
     notify_client = GithubCollaborators::NotifyClient.new
 
+    recently_delivered_emails = notify_client.get_recently_delivered_emails
+
     collaborators.each do |collaborator|
+      
       notify_client.send_expire_email(collaborator.email, collaborator.repository.downcase)
     end
 
