@@ -55,6 +55,13 @@ class GithubCollaborators
       )
     end
 
+    # Wrapper function to get the recently delivered expire Notify emails
+    #
+    def get_recently_delivered_emails
+      logger.debug "get_recently_delivered_emails"
+      check_for_delivered_emails_by_template(EXPIRE_EMAIL_TEMPLATE_ID)
+    end
+
     # Wrapper function to get the failed expire Notify emails
     #
     def check_for_undelivered_expire_emails
@@ -74,6 +81,26 @@ class GithubCollaborators
     end
 
     private
+
+    # Get the emails delivered by Notify based on the email template id
+    #
+    # @param template_id [String] the email template id
+    # @return [Array<Hash{email => String, content => String}>] the delivered email addresses and email body
+    def check_for_delivered_emails_by_template(template_id)
+      logger.debug "check_for_delivered_emails_by_template"
+      delivered_emails = []
+      the_notifications = get_notifications_by_type_and_status("email", "delivered")
+      the_notifications.collection.each do |notification|
+        created_at = notification.created_at.to_datetime
+        today_minus_a_week = (Date.today - 7).to_datetime
+        notification_id = notification.template["id"]
+        if notification_id == template_id && created_at > today_minus_a_week
+          delivered_emails.push({email: notification.email_address, content: notification.body})
+        end
+      end
+      delivered_emails.uniq!
+      delivered_emails.sort_by { |delivered_email| delivered_email[:email].downcase }
+    end
 
     # Get the emails that failed to send from Notify based on
     # the email template id
