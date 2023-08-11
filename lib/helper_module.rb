@@ -595,6 +595,7 @@ module HelperModule
   # Get the github-collaborators repository pull requests
   #
   # @return [Array<[Hash{title => String, files => [Array<String>]}]>] a list of hash values containing the pull request title and related files
+  # TODO change unit tests for this
   def get_pull_requests
     module_logger.debug "get_pull_requests"
     pull_requests = []
@@ -607,11 +608,38 @@ module HelperModule
       # Iterate over the pull requests
       data.fetch("nodes").each do |pull_request_data|
         title = pull_request_data.fetch("title")
-        files = pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
+        pull_request_number = pull_request_data.fetch("number")
+        number_pull_request_files = pull_request_data.dig("files", "totalCount")
+        files = []
+        if number_pull_request_files < 99
+          files = pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
+        else
+          files = get_pull_request_files(pull_request_number)
+        end
         pull_requests.push({title: title.to_s, files: files})
       end
     end
     pull_requests
+  end
+
+  # TODO add doxygen
+  def get_pull_request_files(pull_request_number)
+    module_logger.debug "get_pull_request_files"
+    files = []
+    end_cursor = nil
+    graphql = GithubCollaborators::GithubGraphQlClient.new
+    loop do
+      response = graphql.run_query(pull_request_files_query(end_cursor, pull_request_number))
+      json_data = JSON.parse(response)
+      # TODO change below code to access the data from the pull_request_files_query() query
+      if !json_data.dig("data", "organization", "repository", "pullRequests").nil?
+        data = json_data.dig("data", "organization", "repository", "pullRequests")
+        files += pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
+      end
+      end_cursor = json_data.dig("data", "search", "pageInfo", "endCursor")
+      break unless json_data.dig("data", "search", "pageInfo", "hasNextPage")
+    end
+    files
   end
 
   # Create a Git branch, create a valid branch name and raise a specific pull request
@@ -672,6 +700,33 @@ module HelperModule
     end
   end
 
+  # Create a GraphQL query that returns the file in a github-collaborators repository pull request
+  #
+  # @param end_cursor [String] id of next page in search results
+  # @param pull_request_number [String] number of pull request on repository
+  # @return [String] the GraphQL query
+  def pull_request_files_query(end_cursor, pull_request_number)
+    after = end_cursor.nil? ? "null" : "\"#{end_cursor}\""
+    %[
+      {
+        organization(login: "#{ORG}") {
+          repository(name: "#{REPO_NAME}") {
+            pullRequest(number: #{pull_request_number}) {
+              files(
+                first: 100
+                after: #{after}
+              ) {
+                nodes {
+                  path
+                }
+              }
+            }
+          }
+        }
+      }
+      ]
+  end
+  
   # Create a GraphQL query that returns the github-collaborators repository pull requests
   #
   # @return [String] the GraphQL query
@@ -683,12 +738,14 @@ module HelperModule
             pullRequests(states: OPEN, last: 100) {
               nodes {
                 title
+                number
                 files(first: 100) {
                   edges {
                     node {
                       path
                     }
                   }
+                  totalCount
                 }
               }
             }
