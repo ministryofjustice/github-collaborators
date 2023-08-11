@@ -186,7 +186,7 @@ class GithubCollaborators
               @notifications_object.collection[0].email_address = TEST_COLLABORATOR_EMAIL
               @notifications_object.collection[0].template["id"] = EXPIRE_EMAIL_TEMPLATE_ID
               @notifications_object.collection[0].body = "Email content #{TEST_COLLABORATOR_EMAIL}"
-              @expected_result = [{:content=>"Email content someuser@some-email.com", :email=>"someuser@some-email.com"}]
+              @expected_result = [{:content=>"Email content #{TEST_COLLABORATOR_EMAIL}", :email=>TEST_COLLABORATOR_EMAIL}]
             }
 
             it "when no delivered emails exist" do
