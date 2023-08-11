@@ -1126,13 +1126,13 @@ class GithubCollaborators
               expect(notify_client).to receive(:send_expire_email).with(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
             }
             
-            it "because haven't emailed the collaborator" do
+            it "because haven't emailed the collaborator in last 7 days" do
               recent_emails = [{:content=>"Email content #{REPOSITORY_NAME}", :email=>TEST_RANDOM_EMAIL}]
               expect(notify_client).to receive(:get_recently_delivered_emails).and_return(recent_emails)
               helper_module.send_collaborator_notify_email([@collaborator])
             end
             
-            it "because haven't emailed that collaborator about a specific repository" do
+            it "because haven't emailed the collaborator about a specific repository" do
               recent_emails = [{:content=>"Email content some-repository", :email=>TEST_COLLABORATOR_EMAIL}]
               expect(notify_client).to receive(:get_recently_delivered_emails).and_return(recent_emails)
               helper_module.send_collaborator_notify_email([@collaborator])

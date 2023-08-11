@@ -1203,7 +1203,8 @@ module HelperModule
 
     recently_delivered_emails = notify_client.get_recently_delivered_emails
 
-    # See if already emailed the collaborator within last seven days
+    # Check if already emailed the collaborator within the last
+    # seven days about expiring on this repository
     emailed_collaborator_already = []
     collaborators.each do |collaborator|
       recently_delivered_emails.each do |delivered_email|

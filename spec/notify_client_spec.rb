@@ -6,8 +6,8 @@ class GithubCollaborators
     attr_reader :collection
     attr_writer :collection
     class MockNotificationsReply
-      attr_reader :created_at, :template, :email_address, :status, :body
-      attr_writer :created_at, :template, :email_address, :status, :body
+      attr_reader :created_at, :template, :email_address, :body
+      attr_writer :created_at, :template, :email_address, :body
       def initialize
         @created_at = ""
         @template = {id: ""}

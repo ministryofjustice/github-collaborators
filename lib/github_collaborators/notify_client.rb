@@ -92,8 +92,7 @@ class GithubCollaborators
       the_notifications = get_notifications_by_type_and_status("email", "delivered")
       the_notifications.collection.each do |notification|
         created_at = notification.created_at.to_datetime
-        today_minus_a_week = Date.today - 7
-        today_minus_a_week = today_minus_a_week.to_datetime
+        today_minus_a_week = (Date.today - 7).to_datetime
         notification_id = notification.template["id"]
         if notification_id == template_id && created_at > today_minus_a_week 
           delivered_emails.push({email: notification.email_address, content: notification.body})
