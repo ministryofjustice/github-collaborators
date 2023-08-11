@@ -1207,9 +1207,7 @@ module HelperModule
     emailed_collaborator_already = []
     collaborators.each do |collaborator|
       recently_delivered_emails.each do |delivered_email|
-        if delivered_email[:email] == collaborator.email && 
-          delivered_email[:content].include?(collaborator.repository.downcase) &&
-          delivered_email[:content].include?(collaborator.email)
+        if delivered_email[:email] == collaborator.email && delivered_email[:content].include?(collaborator.repository.downcase)
           emailed_collaborator_already.push(collaborator)
         end
       end
