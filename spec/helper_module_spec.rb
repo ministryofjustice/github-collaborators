@@ -1104,13 +1104,13 @@ class GithubCollaborators
 
         context "" do
           context "do not email collaborator" do
-            before { 
-              @recent_emails = [{:content=>"Email content #{REPOSITORY_NAME}", :email=>TEST_COLLABORATOR_EMAIL}]
+            before {
+              @recent_emails = [{content: "Email content #{REPOSITORY_NAME}", email: TEST_COLLABORATOR_EMAIL}]
               expect(notify_client).to receive(:get_recently_delivered_emails).and_return(@recent_emails)
               expect(notify_client).not_to receive(:send_expire_email)
               expect(notify_client).not_to receive(:check_for_undelivered_expire_emails)
             }
-            
+
             it "because pass in no collaborator object even when recent emails exist" do
               helper_module.send_collaborator_notify_email([])
             end
@@ -1119,21 +1119,21 @@ class GithubCollaborators
               helper_module.send_collaborator_notify_email([@collaborator])
             end
           end
-        
+
           context "email the collaborator" do
-            before { 
+            before {
               expect(notify_client).to receive(:check_for_undelivered_expire_emails).and_return([])
               expect(notify_client).to receive(:send_expire_email).with(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
             }
-            
+
             it "because haven't emailed the collaborator in last 7 days" do
-              recent_emails = [{:content=>"Email content #{REPOSITORY_NAME}", :email=>TEST_RANDOM_EMAIL}]
+              recent_emails = [{content: "Email content #{REPOSITORY_NAME}", email: TEST_RANDOM_EMAIL}]
               expect(notify_client).to receive(:get_recently_delivered_emails).and_return(recent_emails)
               helper_module.send_collaborator_notify_email([@collaborator])
             end
-            
+
             it "because haven't emailed the collaborator about a specific repository" do
-              recent_emails = [{:content=>"Email content some-repository", :email=>TEST_COLLABORATOR_EMAIL}]
+              recent_emails = [{content: "Email content some-repository", email: TEST_COLLABORATOR_EMAIL}]
               expect(notify_client).to receive(:get_recently_delivered_emails).and_return(recent_emails)
               helper_module.send_collaborator_notify_email([@collaborator])
             end
@@ -1165,14 +1165,14 @@ class GithubCollaborators
               expect(notify_client).to receive(:check_for_undelivered_expire_emails).and_return([])
               helper_module.send_collaborator_notify_email([@collaborator])
             end
-  
+
             it "with a collaborator object, notify failed to send the email, and returns known email" do
               expect(notify_client).to receive(:check_for_undelivered_expire_emails).and_return([TEST_COLLABORATOR_EMAIL, TEST_COLLABORATOR_EMAIL])
               expect(GithubCollaborators::SlackNotifier).to receive(:new).with(instance_of(GithubCollaborators::UndeliveredExpireNotifyEmail), [@collaborator]).and_return(undelivered_notify_email_slack_message)
               expect(undelivered_notify_email_slack_message).to receive(:post_slack_message)
               helper_module.send_collaborator_notify_email([@collaborator])
             end
-  
+
             it "with a collaborator object, notify failed to send the email, but returns an unknown email" do
               expect(notify_client).to receive(:check_for_undelivered_expire_emails).and_return([TEST_RANDOM_EMAIL])
               helper_module.send_collaborator_notify_email([@collaborator])

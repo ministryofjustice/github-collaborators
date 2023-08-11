@@ -186,7 +186,7 @@ class GithubCollaborators
               @notifications_object.collection[0].email_address = TEST_COLLABORATOR_EMAIL
               @notifications_object.collection[0].template["id"] = EXPIRE_EMAIL_TEMPLATE_ID
               @notifications_object.collection[0].body = "Email content #{REPOSITORY_NAME}"
-              @expected_result = [{:content=>"Email content #{REPOSITORY_NAME}", :email=>TEST_COLLABORATOR_EMAIL}]
+              @expected_result = [{content: "Email content #{REPOSITORY_NAME}", email: TEST_COLLABORATOR_EMAIL}]
             }
 
             it "when no delivered emails exist" do
@@ -221,7 +221,7 @@ class GithubCollaborators
               test_equal(1, delivered_emails.length)
             end
           end
-      
+
           it "test send_email_reply_to_ops_eng via send_expire_email" do
             expect(@notify_client.client).to receive(:send_email).with(email_address: TEST_COLLABORATOR_EMAIL, template_id: EXPIRE_EMAIL_TEMPLATE_ID, personalisation: {repo_name: REPOSITORY_NAME}, email_reply_to_id: OPERATIONS_ENGINEERING_EMAIL_ID)
             @notify_client.send_expire_email(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
@@ -238,7 +238,7 @@ class GithubCollaborators
               expect(@notify_client.client).to receive(:get_notifications).with(status: "delivered", template_type: "email").and_return(@notifications_object)
               @notify_client.get_recently_delivered_emails
             end
-            
+
             it "via check_for_undelivered_expire_emails" do
               expect(@notify_client.client).to receive(:get_notifications).with(status: "failed", template_type: "email").and_return(@notifications_object)
               @notify_client.check_for_undelivered_expire_emails

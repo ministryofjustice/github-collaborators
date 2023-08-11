@@ -94,7 +94,7 @@ class GithubCollaborators
         created_at = notification.created_at.to_datetime
         today_minus_a_week = (Date.today - 7).to_datetime
         notification_id = notification.template["id"]
-        if notification_id == template_id && created_at > today_minus_a_week 
+        if notification_id == template_id && created_at > today_minus_a_week
           delivered_emails.push({email: notification.email_address, content: notification.body})
         end
       end
