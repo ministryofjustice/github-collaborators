@@ -59,7 +59,7 @@ class GithubCollaborators
     #
     def get_recently_delivered_emails
       logger.debug "get_recently_delivered_emails"
-      check_for_delivered_emails_by_template(APPROVER_EMAIL_TEMPLATE_ID)
+      check_for_delivered_emails_by_template(EXPIRE_EMAIL_TEMPLATE_ID)
     end
 
     # Wrapper function to get the failed expire Notify emails
