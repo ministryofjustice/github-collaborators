@@ -113,7 +113,7 @@ module "bichard7-next-tests" {
       review_after = "2023-12-31"
     },
     {
-      github_user  = "Seth-Barber"
+      github_user  = "seth-barber"
       permission   = "pull"
       name         = "Seth Barber"
       email        = "seth.barber@madetech.com"
@@ -149,6 +149,16 @@ module "bichard7-next-tests" {
       email        = "Mahesh.Subramanian1@hmcts.net"
       org          = "HMCTS"
       reason       = "Integration testing for Common Platform"
+      added_by     = "dom.tomkins@digital.justice.gov.uk"
+      review_after = "2023-12-31"
+    },
+    {
+      github_user  = "ammaar-limbada-madetech"
+      permission   = "push"
+      name         = "Ammaar Limbada"
+      email        = "ammaar.limbada@madetech.com"
+      org          = "Madetech"
+      reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
       review_after = "2023-12-31"
     },
