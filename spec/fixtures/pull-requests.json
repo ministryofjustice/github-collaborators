@@ -6,7 +6,9 @@
           "nodes": [
             {
               "title": "Pull request 1",
+              "number": 1,
               "files": {
+                "totalCount": 3,
                 "edges": [
                   {
                     "node": {
@@ -28,7 +30,9 @@
             },
             {
               "title": "Pull request 2",
+              "number": 2,
               "files": {
+                "totalCount": 3,
                 "edges": [
                   {
                     "node": {

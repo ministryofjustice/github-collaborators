@@ -595,7 +595,6 @@ module HelperModule
   # Get the github-collaborators repository pull requests
   #
   # @return [Array<[Hash{title => String, files => [Array<String>]}]>] a list of hash values containing the pull request title and related files
-  # TODO change unit tests for this
   def get_pull_requests
     module_logger.debug "get_pull_requests"
     pull_requests = []
@@ -622,7 +621,10 @@ module HelperModule
     pull_requests
   end
 
-  # TODO add doxygen
+  # Get the files from a github-collaborators repository pull request
+  #
+  # param pull_request_number [Numeric] The pull request number
+  # @return [Array<String>] a list of paths to terraform files
   def get_pull_request_files(pull_request_number)
     module_logger.debug "get_pull_request_files"
     files = []
@@ -631,13 +633,11 @@ module HelperModule
     loop do
       response = graphql.run_query(pull_request_files_query(end_cursor, pull_request_number))
       json_data = JSON.parse(response)
-      # TODO change below code to access the data from the pull_request_files_query() query
-      if !json_data.dig("data", "organization", "repository", "pullRequests").nil?
-        data = json_data.dig("data", "organization", "repository", "pullRequests")
-        files += pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
+      if !json_data.dig("data", "organization", "repository", "pullRequest", "files").nil?
+        files += json_data.dig("data", "organization", "repository", "pullRequest", "files", "nodes").map { |d| d.dig("path") }
       end
-      end_cursor = json_data.dig("data", "search", "pageInfo", "endCursor")
-      break unless json_data.dig("data", "search", "pageInfo", "hasNextPage")
+      end_cursor = json_data.dig("data", "organization", "repository", "pullRequest", "files", "pageInfo", "endCursor")
+      break unless json_data.dig("data", "organization", "repository", "pullRequest", "files", "pageInfo", "hasNextPage")
     end
     files
   end
@@ -719,6 +719,10 @@ module HelperModule
                 nodes {
                   path
                 }
+                pageInfo {
+                  hasNextPage
+                  endCursor
+                }
               }
             }
           }
@@ -735,17 +739,17 @@ module HelperModule
       {
         organization(login: "#{ORG}") {
           repository(name: "#{REPO_NAME}") {
-            pullRequests(states: OPEN, last: 100) {
+            pullRequests(states: OPEN, first: 100) {
               nodes {
                 title
                 number
                 files(first: 100) {
+                  totalCount
                   edges {
                     node {
                       path
                     }
                   }
-                  totalCount
                 }
               }
             }

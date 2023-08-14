@@ -11,10 +11,12 @@ class GithubCollaborators
       {
         organization(login: "#{ORG}") {
           repository(name: "#{REPO_NAME}") {
-            pullRequests(states: OPEN, last: 100) {
+            pullRequests(states: OPEN, first: 100) {
               nodes {
                 title
+                number
                 files(first: 100) {
+                  totalCount
                   edges {
                     node {
                       path
