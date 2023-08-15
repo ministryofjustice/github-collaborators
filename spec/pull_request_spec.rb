@@ -78,7 +78,9 @@ class GithubCollaborators
       it "when pull request has less than 100 files" do
         expect(graphql_client).to receive(:run_query).with(pull_request_query).and_return(hundred_files_pull_request_json)
         response = Array.new(100, TEST_RANDOM_FILE)
-        test_equal(helper_module.get_pull_request_files(1), response)
+        pull_request_files = helper_module.get_pull_request_files(1)
+        test_equal(pull_request_files, response)
+        test_equal(pull_request_files.length, 100)
       end
 
     end
