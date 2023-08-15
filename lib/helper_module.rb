@@ -610,10 +610,10 @@ module HelperModule
         pull_request_number = pull_request_data.fetch("number")
         number_pull_request_files = pull_request_data.dig("files", "totalCount")
         files = []
-        if number_pull_request_files < 101
-          files = pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
+        files = if number_pull_request_files < 101
+          pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
         else
-          files = get_pull_request_files(pull_request_number)
+          get_pull_request_files(pull_request_number)
         end
         pull_requests.push({title: title.to_s, files: files})
       end
@@ -730,7 +730,7 @@ module HelperModule
       }
       ]
   end
-  
+
   # Create a GraphQL query that returns the github-collaborators repository pull requests
   #
   # @return [String] the GraphQL query

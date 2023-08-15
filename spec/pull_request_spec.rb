@@ -49,7 +49,7 @@ class GithubCollaborators
       )
 
       real_path = {
-        "path": TEST_RANDOM_FILE
+        path: TEST_RANDOM_FILE
       }
 
       hundred_real_paths = Array.new(100, real_path)
@@ -98,7 +98,7 @@ class GithubCollaborators
         expect(graphql_client).to receive(:run_query).with(pull_request_query).and_return(no_pull_request_json)
         test_equal(helper_module.get_pull_request_files(1), [])
       end
-      
+
       it "when pull request has less than 100 files" do
         expect(graphql_client).to receive(:run_query).with(pull_request_query).and_return(hundred_files_pull_request_json)
         response = Array.new(100, TEST_RANDOM_FILE)
@@ -188,8 +188,8 @@ class GithubCollaborators
       )
 
       real_edge = {
-        "node": {
-          "path": TEST_RANDOM_FILE
+        node: {
+          path: TEST_RANDOM_FILE
         }
       }
 
