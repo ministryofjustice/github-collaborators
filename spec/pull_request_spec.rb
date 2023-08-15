@@ -61,7 +61,31 @@ class GithubCollaborators
               "repository": {
                 "pullRequest": {
                   "files": {
-                    "nodes": #{hundred_real_paths.to_json}
+                    "nodes": #{hundred_real_paths.to_json},
+                    "pageInfo": {
+                      "hasNextPage": false,
+                      "endCursor": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      )
+
+      hundred_files_and_more_pull_request_json = %(
+        {
+          "data": {
+            "organization": {
+              "repository": {
+                "pullRequest": {
+                  "files": {
+                    "nodes": #{hundred_real_paths.to_json},
+                    "pageInfo": {
+                      "hasNextPage": true,
+                      "endCursor": "abc"
+                    }
                   }
                 }
               }
@@ -83,6 +107,14 @@ class GithubCollaborators
         test_equal(pull_request_files.length, 100)
       end
 
+      it "when pull request has more than 100 files" do
+        expect(graphql_client).to receive(:run_query).with(pull_request_query).and_return(hundred_files_and_more_pull_request_json).at_least(1).times
+        expect(graphql_client).to receive(:run_query).and_return(hundred_files_pull_request_json).at_least(1).times
+        response = Array.new(200, TEST_RANDOM_FILE)
+        pull_request_files = helper_module.get_pull_request_files(1)
+        test_equal(pull_request_files, response)
+        test_equal(pull_request_files.length, 200)
+      end
     end
 
     context "call get_pull_requests" do
