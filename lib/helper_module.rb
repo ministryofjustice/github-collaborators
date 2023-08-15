@@ -610,7 +610,7 @@ module HelperModule
         pull_request_number = pull_request_data.fetch("number")
         number_pull_request_files = pull_request_data.dig("files", "totalCount")
         files = []
-        if number_pull_request_files < 99
+        if number_pull_request_files < 101
           files = pull_request_data.dig("files", "edges").map { |d| d.dig("node", "path") }
         else
           files = get_pull_request_files(pull_request_number)
