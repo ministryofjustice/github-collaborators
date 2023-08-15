@@ -32,5 +32,15 @@ module "hmpps-delius-api" {
       added_by     = "nicola.hodgkinson@justice.gov.uk"
       review_after = "2023-08-25"
     },
+    {
+      github_user  = "joe-bsi"
+      permission   = "push"
+      name         = "joe beauchamp"
+      email        = "joe.beauchamp.bsi@gmail.com"
+      org          = "digital-prison-reporting"
+      reason       = "Full Org member / collaborator missing from Terraform file"
+      added_by     = "opseng-bot@digital.justice.gov.uk"
+      review_after = "2023-11-13"
+    },
   ]
 }
