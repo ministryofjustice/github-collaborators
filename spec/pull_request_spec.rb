@@ -7,7 +7,11 @@ class GithubCollaborators
     let(:pull_requests_json) { File.read("spec/fixtures/pull-requests.json") }
     let(:graphql_client) { double(GithubCollaborators::GithubGraphQlClient) }
 
-    query = %(
+    context "call get_pull_request_files" do
+    end
+
+    context "call get_pull_requests" do
+      query = %(
       {
         organization(login: "#{ORG}") {
           repository(name: "#{REPO_NAME}") {
@@ -30,83 +34,83 @@ class GithubCollaborators
       }
       )
 
-    no_pull_requests_json = %(
-      {
-        "data": {
-          "organization": {
-            "repository": {
-              "pullRequests": {
-                "nodes": []
+      no_pull_requests_json = %(
+        {
+          "data": {
+            "organization": {
+              "repository": {
+                "pullRequests": {
+                  "nodes": []
+                }
               }
             }
           }
         }
-      }
-    )
+      )
 
-    edge = %(
-      {
+      edge = %(
+        {
+          "node": {
+            "path": "somefile"
+          }
+        }
+      )
+
+      hundred_one_edges = Array.new(101, edge)
+      pull_request_with_many_files_json = %(
+        {
+          "data": {
+            "organization": {
+              "repository": {
+                "pullRequests": {
+                  "nodes": [
+                    {
+                      "title": "Pull request 1",
+                      "number": 1,
+                      "files": {
+                        "totalCount": 101,
+                        "edges": #{hundred_one_edges}
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      )
+
+      real_edge = {
         "node": {
           "path": "somefile"
         }
       }
-    )
 
-    hundred_one_edges = Array.new(101, edge)
-    pull_request_with_many_files_json = %(
-      {
-        "data": {
-          "organization": {
-            "repository": {
-              "pullRequests": {
-                "nodes": [
-                  {
-                    "title": "Pull request 1",
-                    "number": 1,
-                    "files": {
-                      "totalCount": 101,
-                      "edges": #{hundred_one_edges}
+      hundred_real_edges = Array.new(100, real_edge)
+      pull_request_with_alot_files_json = %(
+        {
+          "data": {
+            "organization": {
+              "repository": {
+                "pullRequests": {
+                  "nodes": [
+                    {
+                      "title": "Pull request 1",
+                      "number": 1,
+                      "files": {
+                        "totalCount": 100,
+                        "edges": #{hundred_real_edges.to_json}
+                      }
                     }
-                  }
-                ]
+                  ]
+                }
               }
             }
           }
         }
-      }
-    )
+      )
 
-    real_edge = {
-      "node": {
-        "path": "somefile"
-      }
-    }
-
-    hundred_real_edges = Array.new(100, real_edge)
-    pull_request_with_alot_files_json = %(
-      {
-        "data": {
-          "organization": {
-            "repository": {
-              "pullRequests": {
-                "nodes": [
-                  {
-                    "title": "Pull request 1",
-                    "number": 1,
-                    "files": {
-                      "totalCount": 100,
-                      "edges": #{hundred_real_edges.to_json}
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        }
-      }
-    )
-
-    context "call get_pull_requests" do
+    
       before do
         expect(GithubCollaborators::GithubGraphQlClient).to receive(:new).and_return(graphql_client)
       end
