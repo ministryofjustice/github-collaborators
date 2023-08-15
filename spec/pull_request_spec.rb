@@ -125,7 +125,7 @@ class GithubCollaborators
       it "when pull request exists with more than 100 files" do
         expect(graphql_client).to receive(:run_query).with(query).and_return(pull_request_with_many_files_json)
         the_files = Array.new(101, "somefile") 
-        allow_any_instance_of(HelperModule).to receive(:get_pull_request_files).and_return(the_files)
+        expect(helper_module).to receive(:get_pull_request_files).and_return(the_files)
         pull_requests = helper_module.get_pull_requests
         test_equal(pull_requests, [{title: "Pull request 1", files: the_files}])
         test_equal(pull_requests[0][:files].length, 101)
@@ -133,8 +133,11 @@ class GithubCollaborators
 
       it "when pull request exists with less than 101 files" do
         expect(graphql_client).to receive(:run_query).with(query).and_return(pull_request_with_alot_files_json)
+        expect(helper_module).not_to receive(:get_pull_request_files)
         the_files = Array.new(100, "somefile")
-        test_equal(helper_module.get_pull_requests, [{title: "Pull request 1", files: the_files}])
+        pull_requests = helper_module.get_pull_requests
+        test_equal(pull_requests, [{title: "Pull request 1", files: the_files}])
+        test_equal(pull_requests[0][:files].length, 100)
       end
     end
   end
