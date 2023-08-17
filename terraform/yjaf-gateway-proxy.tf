@@ -20,7 +20,7 @@ module "yjaf-gateway-proxy" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2023-08-23"
+      review_after = "2024-02-19"
     },
     {
       github_user  = "stephenhobden"
