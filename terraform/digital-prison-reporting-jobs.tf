@@ -10,7 +10,7 @@ module "digital-prison-reporting-jobs" {
       org          = "digital-prison-reporting"
       reason       = "IT Health Check"
       added_by     = "hari.chintala@digital.justice.gov.uk"
-      review_after = "2023-08-30"
+      review_after = "2024-02-26"
     },
     {
       github_user  = "rodonnell1-bsi"
