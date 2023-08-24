@@ -23,16 +23,6 @@ module "yjaf-gateway" {
       review_after = "2023-12-18"
     },
     {
-      github_user  = "ttipler"
-      permission   = "admin"
-      name         = "Thomas Tipler"
-      email        = "thomas.tipler@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2023-08-23"
-    },
-    {
       github_user  = "javaidarshadnec"
       permission   = "admin"
       name         = "Javaid Arshad"
