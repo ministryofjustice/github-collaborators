@@ -133,10 +133,20 @@ module "bichard7-next-user-service" {
       review_after = "2023-12-31"
     },
     {
-      github_user  = "Seth-Barber"
+      github_user  = "seth-barber"
       permission   = "pull"
       name         = "Seth Barber"
       email        = "seth.barber@madetech.com"
+      org          = "Madetech"
+      reason       = "CJSE Bichard Development"
+      added_by     = "dom.tomkins@digital.justice.gov.uk"
+      review_after = "2023-12-31"
+    },
+    {
+      github_user  = "ammaar-limbada-madetech"
+      permission   = "push"
+      name         = "Ammaar Limbada"
+      email        = "ammaar.limbada@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
