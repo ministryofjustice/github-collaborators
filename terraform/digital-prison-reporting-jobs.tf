@@ -22,15 +22,5 @@ module "digital-prison-reporting-jobs" {
       added_by     = "hari.chintala@digital.justice.gov.uk"
       review_after = "2023-08-30"
     },
-    {
-      github_user  = "shaun-bsi"
-      permission   = "push"
-      name         = "Shaun Dundavan"
-      email        = "shaun.dundavan@bsigroup.com"
-      org          = "digital-prison-reporting"
-      reason       = "IT Health Check"
-      added_by     = "hari.chintala@digital.justice.gov.uk"
-      review_after = "2023-08-30"
-    },
   ]
 }
