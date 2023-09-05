@@ -3,7 +3,7 @@ module "cla_public" {
   repository = "cla_public"
   collaborators = [
     {
-      github_user  = "BenMillar-CGI "
+      github_user  = "BenMillar-CGI"
       permission   = "push"
       name         = "Ben Millar"
       email        = "ben.millar@digital.justice.gov.uk"
