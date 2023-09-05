@@ -6,7 +6,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: main
       - run: bash scripts/repository-check.sh ${{ github.event.inputs.github_user }} ${{ secrets.OPS_BOT_TOKEN }}
