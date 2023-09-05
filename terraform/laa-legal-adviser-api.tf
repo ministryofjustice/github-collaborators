@@ -3,7 +3,7 @@ module "laa-legal-adviser-api" {
   repository = "laa-legal-adviser-api"
   collaborators = [
     {
-      github_user  = "BenMillar-CGI "
+      github_user  = "BenMillar-CGI"
       permission   = "push"
       name         = "Ben Millar"
       email        = "ben.millar@digital.justice.gov.uk"
