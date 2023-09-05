@@ -3,7 +3,7 @@ module "cla_frontend" {
   repository = "cla_frontend"
   collaborators = [
     {
-      github_user  = "BenMillar-CGI "
+      github_user  = "BenMillar-CGI"
       permission   = "push"
       name         = "Ben Millar"
       email        = "ben.millar@digital.justice.gov.uk"
