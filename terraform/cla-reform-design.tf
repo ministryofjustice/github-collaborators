@@ -4,13 +4,13 @@ module "cla-reform-design" {
   collaborators = [
     {
       github_user  = "benmillar-cgi"
-      permission   = "admin"
-      name         = "ben millar"
+      permission   = "push"
+      name         = "Ben Millar"
       email        = "ben.millar@digital.justice.gov.uk"
-      org          = "cgi"
-      reason       = "Full Org member / collaborator missing from Terraform file"
-      added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-12-06"
+      org          = "CGI"
+      reason       = "needs to be able to submit and approve pull requests, push access to CLA repositories"
+      added_by     = "heather.poole@digital.justice.gov.uk"
+      review_after = "2024-03-05"
     },
   ]
 }
