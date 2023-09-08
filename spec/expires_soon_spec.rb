@@ -38,12 +38,12 @@ class GithubCollaborators
 
       it "singular message" do
         line = expires_soon.singular_message
-        test_equal(line, "I've found a collaborator whose review date will expire shortly, a pull request has been created to extend the date for this collaborator")
+        test_equal(line, "I've found a collaborator whose review date will expire shortly, a pull request has been created to extend the date for this collaborator. Notify has emailed the user")
       end
 
       it "multiple message" do
         line = expires_soon.multiple_message(4)
-        test_equal(line, "I've found 4 collaborators whose review date will expire shortly, pull requests have been created to extend the date for these collaborators")
+        test_equal(line, "I've found 4 collaborators whose review date will expire shortly, pull requests have been created to extend the date for these collaborators. Notify has emailed these users")
       end
     end
   end

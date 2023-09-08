@@ -33,7 +33,7 @@ class GithubCollaborators
     #
     # @return [String] the formatted string
     def singular_message
-      "I've found a collaborator whose review date will expire shortly, a pull request has been created to extend the date for this collaborator"
+      "I've found a collaborator whose review date will expire shortly, a pull request has been created to extend the date for this collaborator. Notify has emailed the user"
     end
 
     # Creates the first line to be used within a Slack message when a multiple
@@ -42,7 +42,7 @@ class GithubCollaborators
     # @param collaborators [Numeric] the number of collaborators in the message
     # @return [String] the formatted string
     def multiple_message(collaborators)
-      "I've found #{collaborators} collaborators whose review date will expire shortly, pull requests have been created to extend the date for these collaborators"
+      "I've found #{collaborators} collaborators whose review date will expire shortly, pull requests have been created to extend the date for these collaborators. Notify has emailed these users"
     end
   end
 end
