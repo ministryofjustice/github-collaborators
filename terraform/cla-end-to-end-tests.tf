@@ -4,7 +4,7 @@ module "cla-end-to-end-tests" {
   collaborators = [
     {
       github_user  = "benmillar-cgi"
-      permission   = "push"
+      permission   = "admin"
       name         = "Ben Millar"
       email        = "ben.millar@digital.justice.gov.uk"
       org          = "CGI"

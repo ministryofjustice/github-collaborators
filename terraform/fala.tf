@@ -4,7 +4,7 @@ module "fala" {
   collaborators = [
     {
       github_user  = "BenMillar-CGI"
-      permission   = "push"
+      permission   = "admin"
       name         = "Ben Millar"
       email        = "ben.millar@digital.justice.gov.uk"
       org          = "CGI"
