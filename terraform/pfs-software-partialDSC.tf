@@ -1,6 +1,6 @@
-module "pfs-software-partialDSC" {
+module "pfs-software-partialdsc" {
   source     = "./modules/repository-collaborators"
-  repository = "pfs-software-partialDSC"
+  repository = "pfs-software-partialdsc"
   collaborators = [
     {
       github_user  = "nathanials"
