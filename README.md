@@ -171,10 +171,77 @@ To run the unit tests use `bundle exec rspec` or `rspec`.
 
 `rspec` will generate a code coverage report using simplecov and create a `coverage` folder. Open the report using `open coverage/index.html`
 
-Install `rspec` and `ruby-debug-ide` (locally for VS-Code to debug the tests):
+Install `rspec`:
 
 ```
 gem install rspec --install-dir ./bin
+```
+
+### New Debugger Setup in VS Code
+
+#### If updating:
+
+Uninstall any Ruby extensions in VS Code. Then install the Ruby by Spotify extension. Rename existing `launch.json` to something else. Re-open VS Code.
+
+#### If starting fresh:
+
+Install the Ruby by Spotify extension.
+
+Press the debug button to create a new `launch.json`. Use these settings for debugging and testing:
+
+```
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python",
+      "type": "python",
+      "python": "${workspaceFolder}/venv/bin/python3",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "program": "${workspaceFolder}/scripts/check-collaborators-username.py",
+      "console": "integratedTerminal",
+      "args": [""]
+    },
+    {
+      "type": "ruby_lsp",
+      "name": "Debug - script",
+      "request": "launch",
+      "program": "ruby ${workspaceRoot}/bin/outside-collaborators.rb",
+      "env": {
+        "REALLY_POST_TO_SLACK": "0",
+        "REALLY_POST_TO_GH": "0",
+        "REALLY_SEND_TO_NOTIFY": "0",
+        "NOTIFY_PROD_TOKEN: "add-prod-token",
+        "NOTIFY_TEST_TOKEN: "add-test-token",
+        "OPS_BOT_TOKEN": "add-ops-bot-token",
+        "LOG_LEVEL": "debug",
+        "SLACK_WEBHOOK_URL": "add-slack-link",
+      }
+    },
+    {
+      "name": "RSpec - file",
+      "type": "ruby_lsp",
+      "request": "launch",
+      "program": "ruby ${workspaceRoot}/bin/bin/rspec ${file}"
+    },
+    {
+      "name": "RSpec - all",
+      "type": "ruby_lsp",
+      "request": "launch",
+      "program": "${workspaceRoot}/bin/bin/rspec"
+    }
+  ]
+}
+```
+
+### Previous Debugger Setup
+
+**Older versions of VS Code worked with `ruby-debug-ide`, this has been deprecated**
+
+Install `ruby-debug-ide` (locally for VS-Code to debug the tests):
+
+```
 sudo gem install ruby-debug-ide
 ```
 
