@@ -235,7 +235,7 @@ Press the debug button to create a new `launch.json`. Use these settings for deb
 }
 ```
 
-### Previous Debugger Setup 
+### Previous Debugger Setup
 
 **Older versions of VS Code worked with `ruby-debug-ide`, this has been deprecated**
 
