@@ -1,6 +1,6 @@
-module "opg-modernising-lpa" {
+module "opg-use-an-lpa" {
   source     = "./modules/repository-collaborators"
-  repository = "opg-modernising-lpa"
+  repository = "opg-use-an-lpa"
   collaborators = [
     {
       github_user  = "weblate"
@@ -9,7 +9,7 @@ module "opg-modernising-lpa" {
       email        = "hosted@weblate.org"
       org          = "Ministry of Justice"
       reason       = "Used by Weblate"
-      added_by     = "andrew.pearce@digital.justice.gov.uk"
+      added_by     = "adam.cooper@digital.justice.gov.uk"
       review_after = "2024-10-10"
     },
   ]
