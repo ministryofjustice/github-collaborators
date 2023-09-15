@@ -9,7 +9,7 @@ module "cloud-platform-environments" {
       email        = "Daniel.elliott@bsigroup.com"
       org          = "BSI"
       reason       = "CICA IT Health Check"
-      added_by     = "adrian.roworth@digitial.justice.gov.uk"
+      added_by     = "adrian.roworth@digital.justice.gov.uk"
       review_after = "2023-10-13"
     },
     {
@@ -19,7 +19,7 @@ module "cloud-platform-environments" {
       email        = "joseph.phee@bsigroup.com"
       org          = "BSI"
       reason       = "CICA IT Health Check"
-      added_by     = "adrian.roworth@digitial.justice.gov.uk"
+      added_by     = "adrian.roworth@digital.justice.gov.uk"
       review_after = "2023-10-13"
     },
   ]
