@@ -4,7 +4,7 @@ module "cica-apply-prototype" {
   collaborators = [
     {
       github_user  = "bsi0714"
-      permission   = "admin"
+      permission   = "push"
       name         = "daniel elliott"
       email        = "daniel.elliott@bsigroup.com"
       org          = "bsi"
