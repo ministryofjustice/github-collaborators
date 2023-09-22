@@ -29,7 +29,7 @@ module "cloud-platform-environments" {
       email        = "hope.bailey-withers@informed.com"
       org          = "Informed Solutions"
       reason       = "AWS CP CLI access"
-      added_by     = "adrian.roworth@digitial.justice.gov.uk"
+      added_by     = "adrian.roworth@digital.justice.gov.uk"
       review_after = "2024-09-22"
     },
     {
@@ -39,7 +39,7 @@ module "cloud-platform-environments" {
       email        = "michael.senkiw@informed.com"
       org          = "Informed Solutions"
       reason       = "AWS CP CLI access"
-      added_by     = "adrian.roworth@digitial.justice.gov.uk"
+      added_by     = "adrian.roworth@digital.justice.gov.uk"
       review_after = "2024-09-22"
     },
     {
@@ -49,7 +49,7 @@ module "cloud-platform-environments" {
       email        = "daniel.rex@informed.com"
       org          = "Informed Solutions"
       reason       = "AWS CP CLI access"
-      added_by     = "adrian.roworth@digitial.justice.gov.uk"
+      added_by     = "adrian.roworth@digital.justice.gov.uk"
       review_after = "2024-09-22"
     },
   ]
