@@ -22,5 +22,35 @@ module "cloud-platform-environments" {
       added_by     = "adrian.roworth@digital.justice.gov.uk"
       review_after = "2023-10-13"
     },
+    {
+      github_user  = "hopebaileywithers"
+      permission   = "pull"
+      name         = "Hope Bailey-Withers"
+      email        = "hope.bailey-withers@informed.com"
+      org          = "Informed Solutions"
+      reason       = "AWS CP CLI access"
+      added_by     = "adrian.roworth@digital.justice.gov.uk"
+      review_after = "2024-09-22"
+    },
+    {
+      github_user  = "msenkiw"
+      permission   = "pull"
+      name         = "Michael Senkiw"
+      email        = "michael.senkiw@informed.com"
+      org          = "Informed Solutions"
+      reason       = "AWS CP CLI access"
+      added_by     = "adrian.roworth@digital.justice.gov.uk"
+      review_after = "2024-09-22"
+    },
+    {
+      github_user  = "dr103"
+      permission   = "pull"
+      name         = "Daniel Rex"
+      email        = "daniel.rex@informed.com"
+      org          = "Informed Solutions"
+      reason       = "AWS CP CLI access"
+      added_by     = "adrian.roworth@digital.justice.gov.uk"
+      review_after = "2024-09-22"
+    },
   ]
 }
