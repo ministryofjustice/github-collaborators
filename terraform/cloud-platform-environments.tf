@@ -59,7 +59,7 @@ module "cloud-platform-environments" {
       email        = "jack.burt@informed.com"
       org          = "Informed Solutions"
       reason       = "AWS CP CLI access"
-      added_by     = "adrian.roworth@digitial.justice.gov.uk"
+      added_by     = "adrian.roworth@digital.justice.gov.uk"
       review_after = "2024-09-22"
     },
   ]
