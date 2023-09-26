@@ -22,5 +22,15 @@ module "apply-for-compensation-prototype" {
       added_by     = "opseng-bot@digital.justice.gov.uk"
       review_after = "2023-12-20"
     },
+    {
+      github_user  = "jack-burt-is"
+      permission   = "admin"
+      name         = "jack burt"
+      email        = "jack.burt@informed.com"
+      org          = "informed solutions"
+      reason       = "Full Org member / collaborator missing from Terraform file"
+      added_by     = "opseng-bot@digital.justice.gov.uk"
+      review_after = "2023-12-25"
+    },
   ]
 }
