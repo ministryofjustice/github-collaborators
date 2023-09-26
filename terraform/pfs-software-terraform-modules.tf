@@ -32,7 +32,7 @@ module "pfs-software-terraform-modules" {
       added_by     = "jonathan.houston@justice.gov.uk"
       review_after = "2024-02-01"
     },
-     {
+    {
       github_user  = "DmeehanKainos"
       permission   = "admin"
       name         = "Darren Meehan"
