@@ -32,7 +32,7 @@ module "pfs-software-powershelldsc" {
       added_by     = "federico.staiano1@justice.gov.uk"
       review_after = "2024-02-01"
     },
-     {
+    {
       github_user  = "DmeehanKainos"
       permission   = "admin"
       name         = "Darren Meehan"
