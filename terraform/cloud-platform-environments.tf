@@ -4,7 +4,7 @@ module "cloud-platform-environments" {
   collaborators = [
     {
       github_user  = "bsi0714"
-      permission   = "pull"
+      permission   = "push"
       name         = "Daniel Elliott"
       email        = "Daniel.elliott@bsigroup.com"
       org          = "BSI"
@@ -14,7 +14,7 @@ module "cloud-platform-environments" {
     },
     {
       github_user  = "jp-bsi"
-      permission   = "pull"
+      permission   = "push"
       name         = "Joe Phee"
       email        = "joseph.phee@bsigroup.com"
       org          = "BSI"
@@ -24,7 +24,7 @@ module "cloud-platform-environments" {
     },
     {
       github_user  = "hopebaileywithers"
-      permission   = "pull"
+      permission   = "push"
       name         = "Hope Bailey-Withers"
       email        = "hope.bailey-withers@informed.com"
       org          = "Informed Solutions"
@@ -34,7 +34,7 @@ module "cloud-platform-environments" {
     },
     {
       github_user  = "msenkiw"
-      permission   = "pull"
+      permission   = "push"
       name         = "Michael Senkiw"
       email        = "michael.senkiw@informed.com"
       org          = "Informed Solutions"
@@ -44,7 +44,7 @@ module "cloud-platform-environments" {
     },
     {
       github_user  = "dr103"
-      permission   = "pull"
+      permission   = "push"
       name         = "Daniel Rex"
       email        = "daniel.rex@informed.com"
       org          = "Informed Solutions"
@@ -54,7 +54,7 @@ module "cloud-platform-environments" {
     },
     {
       github_user  = "jack-burt-is"
-      permission   = "pull"
+      permission   = "push"
       name         = "Jack Burt"
       email        = "jack.burt@informed.com"
       org          = "Informed Solutions"
