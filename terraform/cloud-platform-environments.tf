@@ -52,5 +52,15 @@ module "cloud-platform-environments" {
       added_by     = "adrian.roworth@digital.justice.gov.uk"
       review_after = "2024-09-22"
     },
+    {
+      github_user  = "jack-burt-is"
+      permission   = "pull"
+      name         = "Jack Burt"
+      email        = "jack.burt@informed.com"
+      org          = "Informed Solutions"
+      reason       = "AWS CP CLI access"
+      added_by     = "adrian.roworth@digital.justice.gov.uk"
+      review_after = "2024-09-22"
+    },
   ]
 }
