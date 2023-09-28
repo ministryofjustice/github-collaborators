@@ -23,16 +23,6 @@ module "bichard7-next-help" {
       review_after = "2023-12-31"
     },
     {
-      github_user  = "daviesjamie"
-      permission   = "admin"
-      name         = "Jamie Davies"
-      email        = "jamie.davies@madetech.com"
-      org          = "Madetech"
-      reason       = "CJSE Bichard Development"
-      added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
-    },
-    {
       github_user  = "monotypical"
       permission   = "push"
       name         = "Alice Lee"
@@ -63,10 +53,10 @@ module "bichard7-next-help" {
       review_after = "2023-12-31"
     },
     {
-      github_user  = "donnyhyon"
+      github_user  = "BushraAbdullahi"
       permission   = "push"
-      name         = "Donnie Hyon"
-      email        = "donny.hyon@madetech.com"
+      name         = "Bushra Abdullahi"
+      email        = "bushra.abdullahi@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
