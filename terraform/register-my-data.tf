@@ -12,5 +12,5 @@ module "register-my-data" {
       added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2024-03-29"
     },
-   ]
-  }
+  ]
+}
