@@ -1265,21 +1265,22 @@ module HelperModule
 
     # Check if already emailed the collaborator within the last
     # seven days about expiring on this repository
-    emailed_collaborator_already = []
+    collaborator_repos = Hash.new { |hash, key| hash[key] = [] }
+
     collaborators.each do |collaborator|
       recently_delivered_emails.each do |delivered_email|
         if delivered_email[:email] == collaborator.email && delivered_email[:content].include?(collaborator.repository.downcase)
-          emailed_collaborator_already.push(collaborator)
+          collaborator_repos[collaborator].push(collaborator.repository.downcase)
         end
       end
     end
 
-    # Remove the collaborators have already emailed
-    collaborators_to_email = collaborators - emailed_collaborator_already
+    # Remove the collaborators have already been emailed
+    collaborators_to_email = collaborators.reject { |collaborator| collaborator_repos[collaborator].include?(collaborator.repository.downcase) }
 
-    # Send the email to remaining collaborators
+    # Send single the email to remaining collaborators with a list of repositories
     collaborators_to_email.each do |collaborator|
-      notify_client.send_expire_email(collaborator.email, collaborator.repository.downcase)
+      notify_client.send_expire_email(collaborator.email, collaborator_repos[collaborator])
     end
 
     # Check for undelivered expire emails
