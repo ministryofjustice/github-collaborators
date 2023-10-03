@@ -22,5 +22,15 @@ module "pfs-software-services_terraform" {
       added_by     = "federico.staiano1@justice.gov.uk"
       review_after = "2023-12-14"
     },
+ {
+      github_user  = "DmeehanKainos"
+      permission   = "admin"
+      name         = "Darren Meehan"
+      email        = "darren.meehan@kainos.com"
+      org          = "Kainos"
+      reason       = "Kainos is working on new modernization platform for Unilink services"
+      added_by     = "federico.staiano1@justice.gov.uk"
+      review_after = "2024-02-01"
+    },
   ]
 }
