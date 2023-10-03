@@ -23,7 +23,7 @@ module "pfs-software-services_terraform" {
       review_after = "2023-12-14"
     },
     {
-      github_user  = "DmeehanKainos"
+      github_user  = "dmeehankainos"
       permission   = "admin"
       name         = "Darren Meehan"
       email        = "darren.meehan@kainos.com"
