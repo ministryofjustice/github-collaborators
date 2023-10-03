@@ -22,7 +22,7 @@ class GithubCollaborators
     def send_expire_email(email_address, repository_names)
       logger.debug "send_expire_email"
       personalisation = {
-        repo_names: repository_names.join(', ')
+        repo_names: repository_names.join(", ")
       }
       send_email_reply_to_ops_eng(
         EXPIRE_EMAIL_TEMPLATE_ID,
