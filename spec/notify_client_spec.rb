@@ -108,8 +108,8 @@ class GithubCollaborators
         }
 
         it "test send_expire_email" do
-          expect(@notify_client).to receive(:send_email_reply_to_ops_eng).with(EXPIRE_EMAIL_TEMPLATE_ID, TEST_COLLABORATOR_EMAIL, {repo_name: REPOSITORY_NAME})
-          @notify_client.send_expire_email(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
+          expect(@notify_client).to receive(:send_email_reply_to_ops_eng).with(EXPIRE_EMAIL_TEMPLATE_ID, TEST_COLLABORATOR_EMAIL, {repo_names: REPOSITORY_NAME})
+          @notify_client.send_expire_email(TEST_COLLABORATOR_EMAIL, [REPOSITORY_NAME])
         end
 
         it "test send_approver_email" do
