@@ -11,7 +11,7 @@ module TestConstants
   TEST_COLLABORATOR_REASON = "some reason"
   TEST_COLLABORATOR_ADDED_BY = "other user"
   TEST_COLLABORATOR_PERMISSION = "maintain"
-  REPOSITORY_NAME = "somerepo"
+  REPOSITORY_NAME = ["somerepo"]
   BRANCH_NAME = "somebranch"
   EMPTY_REPOSITORY_NAME = "empty-file"
   TEST_TERRAFORM_FILE = "#{REPOSITORY_NAME}.tf"
