@@ -1130,7 +1130,7 @@ class GithubCollaborators
               helper_module.send_collaborator_notify_email([@collaborator, @collaborator1])
             end
           end
-          
+
           context "email the collaborator" do
             before {
               expect(notify_client).to receive(:check_for_undelivered_expire_emails).and_return([])
