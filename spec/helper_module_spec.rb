@@ -1100,6 +1100,7 @@ class GithubCollaborators
           allow_any_instance_of(helper_module).to receive(:sleep)
           terraform_block = create_terraform_block_review_date_empty
           @collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
+          @collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
         }
 
         context "" do
@@ -1121,9 +1122,19 @@ class GithubCollaborators
           end
 
           context "email the collaborator" do
+            it "with a list of repositories" do
+              expect(notify_client).to receive(:check_for_undelivered_expire_emails).and_return([])
+              expect(notify_client).to receive(:send_expire_email).with(TEST_COLLABORATOR_EMAIL, [REPOSITORY_NAME, TEST_REPO_NAME])
+              recent_emails = [{content: "Email content old-repo", email: TEST_RANDOM_EMAIL}]
+              expect(notify_client).to receive(:get_recently_delivered_emails).and_return(recent_emails)
+              helper_module.send_collaborator_notify_email([@collaborator, @collaborator1])
+            end
+          end
+          
+          context "email the collaborator" do
             before {
               expect(notify_client).to receive(:check_for_undelivered_expire_emails).and_return([])
-              expect(notify_client).to receive(:send_expire_email).with(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
+              expect(notify_client).to receive(:send_expire_email).with(TEST_COLLABORATOR_EMAIL, [REPOSITORY_NAME])
             }
 
             it "because haven't emailed the collaborator in last 7 days" do
@@ -1158,7 +1169,7 @@ class GithubCollaborators
 
           context "" do
             before {
-              expect(notify_client).to receive(:send_expire_email).with(TEST_COLLABORATOR_EMAIL, REPOSITORY_NAME)
+              expect(notify_client).to receive(:send_expire_email).with(TEST_COLLABORATOR_EMAIL, [REPOSITORY_NAME])
             }
 
             it "with a collaborator object and sent the email okay" do
