@@ -1265,31 +1265,35 @@ module HelperModule
 
     # Check if already emailed the collaborator within the last
     # seven days about expiring on this repository
-    emailed_collaborator_already = []
+    collaborator_repos = Hash.new { |hash, key| hash[key] = [] }
+
     collaborators.each do |collaborator|
+      collaborator_repos[collaborator.login].push(collaborator.repository.downcase)
       recently_delivered_emails.each do |delivered_email|
         if delivered_email[:email] == collaborator.email && delivered_email[:content].include?(collaborator.repository.downcase)
-          emailed_collaborator_already.push(collaborator)
+          collaborator_repos[collaborator.login].delete_if { |repository| repository == collaborator.repository.downcase }
         end
       end
     end
 
-    # Remove the collaborators have already emailed
-    collaborators_to_email = collaborators - emailed_collaborator_already
-
-    # Send the email to remaining collaborators
-    collaborators_to_email.each do |collaborator|
-      notify_client.send_expire_email(collaborator.email, collaborator.repository.downcase)
+    # Send email to collaborators
+    emailed_collaborators = []
+    collaborators.each do |collaborator|
+      if collaborator_repos[collaborator.login].length > 0
+        notify_client.send_expire_email(collaborator.email, collaborator_repos[collaborator.login])
+        emailed_collaborators.push(collaborator)
+        collaborator_repos.delete(collaborator.login)
+      end
     end
 
     # Check for undelivered expire emails
     collaborators_for_slack_message = []
-    if collaborators_to_email.length > 0
+    if emailed_collaborators.length > 0
       failed_emails = notify_client.check_for_undelivered_expire_emails
       failed_emails.sort!
       failed_emails.uniq!
       failed_emails.each do |failed_email|
-        collaborators_to_email.each do |collaborator|
+        emailed_collaborators.each do |collaborator|
           if collaborator.email.downcase == failed_email.downcase
             collaborators_for_slack_message.push(collaborator)
           end
