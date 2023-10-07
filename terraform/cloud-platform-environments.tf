@@ -10,7 +10,7 @@ module "cloud-platform-environments" {
       org          = "BSI"
       reason       = "CICA IT Health Check"
       added_by     = "adrian.roworth@digital.justice.gov.uk"
-      review_after = "2023-10-13"
+      review_after = "2024-04-10"
     },
     {
       github_user  = "jp-bsi"
