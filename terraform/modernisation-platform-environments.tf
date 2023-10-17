@@ -70,7 +70,7 @@ module "modernisation-platform-environments" {
       org          = "Lumen"
       reason       = "Get access to PPUD on Modernisation Platform"
       added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-11-04"
+      review_after = "2024-05-04"
     },
     {
       github_user  = "pankaj-pant-lumen"
