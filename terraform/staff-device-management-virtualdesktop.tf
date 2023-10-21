@@ -20,7 +20,7 @@ module "staff-device-management-virtualdesktop" {
       org          = "Content and Cloud"
       reason       = "PTTP Tech Team"
       added_by     = "matthew.white1@justice.gov.uk"
-      review_after = "2023-10-27"
+      review_after = "2024-04-24"
     },
   ]
 }
