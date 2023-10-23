@@ -30,7 +30,7 @@ module "hmpps-integration-api-docs" {
       org          = "made tech"
       reason       = "Full Org member / collaborator missing from Terraform file"
       added_by     = "opseng-bot@digital.justice.gov.uk"
-      review_after = "2023-10-29"
+      review_after = "2024-04-26"
     },
   ]
 }
