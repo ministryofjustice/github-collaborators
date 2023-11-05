@@ -83,16 +83,6 @@ module "modernisation-platform-environments" {
       review_after = "2023-11-04"
     },
     {
-      github_user  = "larnal-lumen"
-      permission   = "push"
-      name         = "Luis Martinez Arnal"
-      email        = "Luis.MartinezArnal@lumen.com"
-      org          = "Lumen"
-      reason       = "Get access to PPUD on Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2023-11-04"
-    },
-    {
       github_user  = "gemmamills01"
       permission   = "push"
       name         = "Gemma Mills"
