@@ -6,7 +6,7 @@ GEM
     bundler-audit (0.9.1)
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
-    cgi (0.3.6)
+    cgi (0.4.0)
     crack (0.4.5)
       rexml
     date (3.3.3)
@@ -81,7 +81,7 @@ PLATFORMS
 DEPENDENCIES
   bundler
   bundler-audit
-  cgi (~> 0.3.6)
+  cgi (~> 0.4.0)
   date
   erb
   git
