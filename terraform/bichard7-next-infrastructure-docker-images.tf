@@ -3,16 +3,6 @@ module "bichard7-next-infrastructure-docker-images" {
   repository = "bichard7-next-infrastructure-docker-images"
   collaborators = [
     {
-      github_user  = "bjpirt"
-      permission   = "admin"
-      name         = "Ben Pirt"
-      email        = "ben@madetech.com"
-      org          = "Madetech"
-      reason       = "CJSE Bichard Development"
-      added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
-    },
-    {
       github_user  = "emadkaramad"
       permission   = "push"
       name         = "Emad Karamad"
@@ -27,16 +17,6 @@ module "bichard7-next-infrastructure-docker-images" {
       permission   = "push"
       name         = "Alice Lee"
       email        = "alice.lee@madetech.com"
-      org          = "Madetech"
-      reason       = "CJSE Bichard Development"
-      added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
-    },
-    {
-      github_user  = "c-gyorfi"
-      permission   = "push"
-      name         = "Csaba Gyorfi"
-      email        = "csaba@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
