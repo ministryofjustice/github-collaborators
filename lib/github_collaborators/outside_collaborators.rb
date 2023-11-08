@@ -420,7 +420,7 @@ class GithubCollaborators
 
       repo_delta.delete_if do |repository_name|
         http_code = GithubCollaborators::HttpClient.new.fetch_code("#{GH_API_URL}/#{repository_name}")
-        if @organization.is_full_org_member_attached_to_repository(repository_name) == true || http_code == "301" || http_code != "404"
+        if http_code == "200" || http_code == "403"
           true
         end
       end
