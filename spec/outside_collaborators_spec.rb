@@ -802,8 +802,8 @@ class GithubCollaborators
                 @url = "#{GH_API_URL}/#{TEST_REPO_NAME}"
               end
 
-              it "and get a 301 code so do not delete a file" do
-                expect(http_client).to receive(:fetch_code).with(@url).and_return("301")
+              it "and get a 403 code so do not delete a file" do
+                expect(http_client).to receive(:fetch_code).with(@url).and_return("403")
                 expect(terraform_files).not_to receive(:remove_file)
                 @outside_collaborators.deleted_repository_check
               end
@@ -814,14 +814,7 @@ class GithubCollaborators
                 @outside_collaborators.deleted_repository_check
               end
 
-              it "and a full org member is attached to the so do not delete a file" do
-                expect(http_client).to receive(:fetch_code).with(@url).and_return("404")
-                allow_any_instance_of(Organization).to receive(:is_full_org_member_attached_to_repository).with(TEST_REPO_NAME).and_return(true)
-                expect(terraform_files).not_to receive(:remove_file)
-                @outside_collaborators.deleted_repository_check
-              end
-
-              it "and get a 404 code so do delete a file" do
+              it "and get any other code so do delete a file" do
                 expect(http_client).to receive(:fetch_code).with(@url).and_return("404")
                 expect(terraform_files).to receive(:remove_file).with(TEST_REPO_NAME)
                 allow_any_instance_of(HelperModule).to receive(:create_branch_and_pull_request).with(DELETE_FILE_BRANCH_NAME, [TEST_FILE], DELETE_REPOSITORY_PR_TITLE, "", TYPE_DELETE_FILE)
