@@ -30,7 +30,7 @@ module "yjaf-datateam" {
       org          = "NEC SWS"
       reason       = "Requesting access so I can perhaps start sharing DB workload with Andrew"
       added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2023-12-23"
+      review_after = "2024-05-02"
     },
     {
       github_user  = "markstanley-nps"
