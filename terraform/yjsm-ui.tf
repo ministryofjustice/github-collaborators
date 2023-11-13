@@ -30,7 +30,7 @@ module "yjsm-ui" {
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
       added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2023-12-12"
+      review_after = "2024-05-02"
     },
     {
       github_user  = "oliviergaubert"
