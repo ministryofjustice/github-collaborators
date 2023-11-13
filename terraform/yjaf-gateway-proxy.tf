@@ -22,5 +22,15 @@ module "yjaf-gateway-proxy" {
       added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2024-05-02"
     },
+    {
+      github_user  = "necpgilgunn"
+      permission   = "pull"
+      name         = "Philip Gilgunn"
+      email        = "philip.gilgunn@necsws.com"
+      org          = "NECSWS"
+      reason       = "Head of Technology"
+      added_by     = "mick.ewers@yjb.gov.uk"
+      review_after = "2024-05-02"
+    },
   ]
 }
