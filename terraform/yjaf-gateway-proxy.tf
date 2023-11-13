@@ -24,7 +24,7 @@ module "yjaf-gateway-proxy" {
     },
     {
       github_user  = "necpgilgunn"
-      permission   = "read"
+      permission   = "pull"
       name         = "Philip Gilgunn"
       email        = "philip.gilgunn@necsws.com"
       org          = "NECSWS"
