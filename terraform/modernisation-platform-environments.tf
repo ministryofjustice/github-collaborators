@@ -112,5 +112,15 @@ module "modernisation-platform-environments" {
       added_by     = "mark.hardy@digital.justice.gov.uk"
       review_after = "2023-12-31"
     },
+    {
+      github_user  = "pankaj-pant-lumen"
+      permission   = "push"
+      name         = "Pankaj Pant"
+      email        = "Pankaj.Pant@lumen.com"
+      org          = "Lumen"
+      reason       = "Get access to PPUD on Modernisation Platform"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
+      review_after = "2024-05-04"
+    },
   ]
 }
