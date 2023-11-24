@@ -23,16 +23,6 @@ module "ndelius-test-automation" {
       review_after = "2024-02-25"
     },
     {
-      github_user  = "unilinkuser-alexo"
-      permission   = "admin"
-      name         = "Alex Oyedele"
-      email        = "aoyedele@unilink.com"
-      org          = "Unilink"
-      reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
-      added_by     = "nicola.hodgkinson@justice.gov.uk"
-      review_after = "2024-02-25"
-    },
-    {
       github_user  = "nd070322"
       permission   = "admin"
       name         = "Neale Davison"
@@ -80,7 +70,7 @@ module "ndelius-test-automation" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "nicola.hodgkinson@justice.gov.uk"
-      review_after = "2023-12-21"
+      review_after = "2024-12-21"
     },
     {
       github_user  = "seanvalmonte"
@@ -90,7 +80,7 @@ module "ndelius-test-automation" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "nicola.hodgkinson@justice.gov.uk"
-      review_after = "2023-12-21"
+      review_after = "2024-12-21"
     },
     {
       github_user  = "andrewrichardson76"
@@ -100,7 +90,7 @@ module "ndelius-test-automation" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "nicola.hodgkinson@justice.gov.uk"
-      review_after = "2023-12-21"
+      review_after = "2024-12-21"
     },
   ]
 }
