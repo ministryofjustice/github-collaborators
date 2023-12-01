@@ -10,7 +10,7 @@ module "bichard7-next-user-service" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
     {
       github_user  = "monotypical"
@@ -20,7 +20,7 @@ module "bichard7-next-user-service" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
     {
       github_user  = "sachindangui"
@@ -30,7 +30,7 @@ module "bichard7-next-user-service" {
       org          = "HMCTS"
       reason       = "Integration testing for Common Platform"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
     {
       github_user  = "maheshsubramanian"
@@ -40,7 +40,7 @@ module "bichard7-next-user-service" {
       org          = "HMCTS"
       reason       = "Integration testing for Common Platform"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
     {
       github_user  = "joe-fol"
@@ -50,7 +50,7 @@ module "bichard7-next-user-service" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
     {
       github_user  = "BushraAbdullahi"
@@ -60,7 +60,7 @@ module "bichard7-next-user-service" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
     {
       github_user  = "ian-antking"
@@ -70,7 +70,7 @@ module "bichard7-next-user-service" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
     {
       github_user  = "richardcane"
@@ -80,7 +80,7 @@ module "bichard7-next-user-service" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
     {
       github_user  = "senny10"
@@ -90,7 +90,7 @@ module "bichard7-next-user-service" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
     {
       github_user  = "richrace"
@@ -100,7 +100,7 @@ module "bichard7-next-user-service" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
     {
       github_user  = "seth-barber"
@@ -110,7 +110,7 @@ module "bichard7-next-user-service" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
     {
       github_user  = "ammaar-limbada-madetech"
@@ -120,7 +120,7 @@ module "bichard7-next-user-service" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2023-12-31"
+      review_after = "2024-12-31"
     },
   ]
 }
