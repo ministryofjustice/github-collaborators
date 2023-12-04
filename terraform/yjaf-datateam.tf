@@ -84,7 +84,7 @@ module "yjaf-datateam" {
     },
     {
       github_user  = "vasildimitrov22"
-      permission   = "push"
+      permission   = "admin"
       name         = "Vasil Dimitrov"
       email        = "vasil.dimitrov@necsws.com"
       org          = "NEC Software Solutions"
