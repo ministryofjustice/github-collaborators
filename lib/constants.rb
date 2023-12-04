@@ -9,20 +9,14 @@ module Constants
   # Name of the repository
   REPO_NAME = "github-collaborators"
 
-  # Operations Engineering Bot account email address
-  ADDED_BY_EMAIL = "opseng-bot@digital.justice.gov.uk"
-
   # GitHub Bot account email address
   GITHUB_BOT_EMAIL = "github-actions[bot]@users.noreply.github.com"
 
   # Operations Engineering Bot name
   OPS_ENG_BOT_NAME = "Operations Engineering Bot"
 
-  # The reason why a full organisation collaborator is missing from a Terraform file
-  REASON1 = "Full Org member / collaborator missing from Terraform file"
-
   # The reason why a collaborator is missing from a Terraform file
-  REASON2 = "Collaborator missing from Terraform file"
+  REASON1 = "Collaborator missing from Terraform file"
 
   # The Terraform files to exclude, these are not part of the app
   EXCLUDE_FILES = ["main.tf", "variables.tf", "versions.tf", "backend.tf"]
@@ -46,15 +40,6 @@ module Constants
   TYPE_REMOVE = "remove"
 
   # Pull request type
-  TYPE_REMOVE_FULL_ORG_MEMBER = "remove_full_org_member"
-
-  # Pull request type
-  TYPE_PERMISSION = "permission"
-
-  # Pull request type
-  TYPE_ADD = "add"
-
-  # Pull request type
   TYPE_ADD_FROM_ISSUE = "add_from_issue"
 
   # Pull request type
@@ -67,13 +52,7 @@ module Constants
   COLLABORATOR_EXPIRES_SOON = "Collaborator review date expires soon for user"
 
   # Github issue title
-  COLLABORATOR_EXPIRY_UPCOMING = "Review after date expiry is upcoming for user"
-
-  # Github issue title
   DEFINE_COLLABORATOR_IN_CODE = "Please define outside collaborators in code"
-
-  # Github issue title
-  USE_TEAM_ACCESS = "User access removed, access is now via a team"
 
   # App internal issue
   REVIEW_DATE_WITHIN_MONTH = "Review after date is within a month"
@@ -91,12 +70,6 @@ module Constants
   EMPTY_FILES_PR_TITLE = "Delete empty Terraform file/s"
 
   # Pull request title
-  ADD_FULL_ORG_MEMBER_PR_TITLE = "Add full Org member / collaborator to Terraform file/s for"
-
-  # Pull request title
-  REMOVE_FULL_ORG_MEMBER_PR_TITLE = "Remove full Org member collaborator from Terraform file/s for"
-
-  # Pull request title
   ADD_COLLAB_FROM_ISSUE = "Add collaborator to Terraform file/s from Issue for"
 
   # Pull request title
@@ -104,9 +77,6 @@ module Constants
 
   # Pull request title
   REMOVE_EXPIRED_COLLABORATOR_PR_TITLE = "Remove expired collaborator from Terraform file/s for"
-
-  # Pull request title
-  CHANGE_PERMISSION_PR_TITLE = "Modify permission in Terraform file/s for"
 
   # Pull request title
   ARCHIVED_REPOSITORY_PR_TITLE = "Delete archived repository Terraform file/s"
@@ -161,15 +131,6 @@ module Constants
 
   # Branch name
   REMOVE_EXPIRED_COLLABORATORS_BRANCH_NAME = "remove-expired-collaborator-"
-
-  # Branch name
-  MODIFY_COLLABORATORS_BRANCH_NAME = "modify-collaborator-permission-"
-
-  # Branch name
-  ADD_COLLABORATOR_BRANCH_NAME = "add-collaborator-"
-
-  # Branch name
-  REMOVE_FULL_ORG_MEMBER_BRANCH_NAME = "remove-full-org-member-"
 
   # Organization name
   ORG = "ministryofjustice"
@@ -233,9 +194,6 @@ module Constants
 
   # Line offset number
   REVIEW_AFTER = 7
-
-  # Description given to automated generated teams
-  AUTOMATED_GENERATED_TEAM = "Automated generated team to grant users access to this repository"
 
   # Notify template ID value
   EXPIRE_EMAIL_TEMPLATE_ID = "f28c1972-4a01-46b6-8343-d1edaf6e10a4"
