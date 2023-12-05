@@ -24,7 +24,7 @@ class GithubCollaborators
 
     context "test good path" do
       before {
-        good_json_one_user = {number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{ADDED_BY_EMAIL}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}"}.to_json
+        good_json_one_user = {number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{TEST_COLLABORATOR_ADDED_BY}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}"}.to_json
         @create_pr_from_issue = CreatePrFromIssue.new(good_json_one_user)
       }
 
@@ -81,7 +81,7 @@ class GithubCollaborators
       end
 
       it "call get_added_by" do
-        test_equal(@create_pr_from_issue.get_added_by, ADDED_BY_EMAIL)
+        test_equal(@create_pr_from_issue.get_added_by, TEST_COLLABORATOR_ADDED_BY)
       end
 
       it "call get_review_after" do
@@ -164,7 +164,7 @@ class GithubCollaborators
 
     context "test start" do
       before {
-        good_json_one_user = {number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{ADDED_BY_EMAIL}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}"}.to_json
+        good_json_one_user = {number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{TEST_COLLABORATOR_ADDED_BY}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}"}.to_json
         @create_pr_from_issue = CreatePrFromIssue.new(good_json_one_user)
       }
 
@@ -231,7 +231,7 @@ class GithubCollaborators
 
     context "test good path when have multiple users" do
       before {
-        good_json_multiple_users = {number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\r\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\r\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\r\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{ADDED_BY_EMAIL}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}\r\n#{TEST_REPO_NAME}"}.to_json
+        good_json_multiple_users = {number: 123, body: "### usernames\n\n#{TEST_COLLABORATOR_LOGIN}\r\n#{TEST_COLLABORATOR_LOGIN}\n\n### names\n\n#{TEST_COLLABORATOR_NAME}\r\n#{TEST_COLLABORATOR_NAME}\n\n### emails\n\n#{TEST_COLLABORATOR_EMAIL}\r\n#{TEST_COLLABORATOR_EMAIL}\n\n### org\n\n#{TEST_COLLABORATOR_ORG}\n\n### reason\n\n#{REASON1}\n\n### added_by\n\n#{TEST_COLLABORATOR_ADDED_BY}\n\n### review_after\n\n#{CORRECT_REVIEW_DATE}\n\n### permission\n\n#{CORRECT_PERMISSION}\n\n### repositories\n\n#{TEST_REPO_NAME}\r\n#{TEST_REPO_NAME}"}.to_json
         @create_pr_from_issue = CreatePrFromIssue.new(good_json_multiple_users)
       }
 
