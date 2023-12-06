@@ -102,5 +102,15 @@ module "bichard7-next-shared-infrastructure" {
       added_by     = "dom.tomkins@digital.justice.gov.uk"
       review_after = "2024-12-31"
     },
+    {
+      github_user  = "tausifpatel"
+      permission   = "push"
+      name         = "Tausif Patel"
+      email        = "mohmed.tausif@madetech.com"
+      org          = "Madetech"
+      reason       = "CJSE Bichard Development"
+      added_by     = "dom.tomkins@digital.justice.gov.uk"
+      review_after = "2024-12-31"
+    },
   ]
 }
