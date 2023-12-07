@@ -10,7 +10,7 @@ module "yjaf-gateway" {
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
       added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2023-12-13"
+      review_after = "2024-06-10"
     },
     {
       github_user  = "vasildimitrov22"
