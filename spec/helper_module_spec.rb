@@ -760,7 +760,6 @@ class GithubCollaborators
           @collaborator = GithubCollaborators::Collaborator.new(terraform_block, REPOSITORY_NAME)
           @collaborator1 = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
         }
-
         context "" do
           context "do not email collaborator" do
             before {
