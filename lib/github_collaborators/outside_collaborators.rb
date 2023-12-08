@@ -192,9 +192,6 @@ class GithubCollaborators
     def extend_collaborators_review_date(collaborators)
       logger.debug "extend_collaborators_review_date"
 
-      # Filter out full org collaborators
-      outside_collaborators = collaborators.select { |collaborator| !@organization.is_collaborator_an_org_member(collaborator.login.downcase) }
-
       if outside_collaborators.length > 0
         extended_collaborators = extend_date(outside_collaborators)
         if extended_collaborators.length > 0
