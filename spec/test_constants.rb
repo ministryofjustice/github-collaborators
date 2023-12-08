@@ -23,7 +23,7 @@ module TestConstants
   TEST_USER_1 = "someuser1"
   TEST_USER_2 = "someuser2"
   TEST_USER_3 = "someuser3"
-  TEST_USER_6 = "someuser4"
+  TEST_USER_4 = "someuser4"
   TEST_REPO_NAME1 = "test-repo1"
   TEST_REPO_NAME2 = "test-repo2"
   TEST_REPO_NAME3 = "test-repo3"
