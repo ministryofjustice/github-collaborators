@@ -79,11 +79,6 @@ class GithubCollaborators
               @terraform_file.add_collaborator_from_issue(collaborator_data)
             end
 
-            it "call add_org_member_collaborator" do
-              terraform_blocks = @terraform_file.get_terraform_blocks
-              test_equal(terraform_blocks.length, 2)
-            end
-
             it "call remove_collaborator" do
               terraform_blocks = @terraform_file.get_terraform_blocks
               test_equal(terraform_blocks.length, 2)
