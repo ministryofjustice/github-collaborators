@@ -527,7 +527,6 @@ class GithubCollaborators
         repo1.store_collaborators_names([TEST_USER_3, TEST_USER_3])
         repo2 = GithubCollaborators::Repository.new(TEST_REPO_NAME2, 0)
         allow_any_instance_of(HelperModule).to receive(:get_org_outside_collaborators).and_return([])
-        allow_any_instance_of(HelperModule).to receive(:get_all_organisation_members).and_return([])
         allow_any_instance_of(HelperModule).to receive(:get_archived_repositories).and_return([])
         allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
         organization = GithubCollaborators::Organization.new
