@@ -4,7 +4,6 @@ class GithubCollaborators
 
   describe TerraformFile do
     context "test TerraformFile" do
-
       context "" do
         before do
           @terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)

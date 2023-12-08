@@ -39,7 +39,7 @@ class GithubCollaborators
         @collaborator1.check_for_issues
 
         review_date = Date.today.strftime(DATE_FORMAT)
-        
+
         collaborator_data = create_collaborator_data(review_date)
         collaborator_data[:login] = TEST_USER_2
         terraform_block = create_terraform_block(collaborator_data)
@@ -512,7 +512,7 @@ class GithubCollaborators
             allow_any_instance_of(HelperModule).to receive(:get_active_repositories).and_return([repo1, repo2])
             organization = GithubCollaborators::Organization.new
             expect(GithubCollaborators::Organization).to receive(:new).and_return(organization).at_least(1).times
-           
+
             file = create_empty_terraform_file
             expect(terraform_files).to receive(:get_terraform_files).and_return([file]).at_least(1).times
             expect(terraform_files).to receive(:get_collaborators_in_file).and_return([]).at_least(2).times
