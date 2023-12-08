@@ -106,45 +106,6 @@ module TestHelpers
     create_terraform_block(collaborator_data)
   end
 
-  def collaborator_with_correct_reason_and_added_by
-    {
-      login: TEST_COLLABORATOR_LOGIN,
-      permission: TEST_COLLABORATOR_PERMISSION,
-      name: TEST_COLLABORATOR_NAME,
-      email: TEST_COLLABORATOR_EMAIL,
-      org: TEST_COLLABORATOR_ORG,
-      reason: REASON1,
-      added_by: ADDED_BY_EMAIL,
-      review_after: ""
-    }
-  end
-
-  def collaborator_with_incorrect_added_by
-    {
-      login: TEST_COLLABORATOR_LOGIN,
-      permission: TEST_COLLABORATOR_PERMISSION,
-      name: TEST_COLLABORATOR_NAME,
-      email: TEST_COLLABORATOR_EMAIL,
-      org: TEST_COLLABORATOR_ORG,
-      reason: REASON1,
-      added_by: TEST_COLLABORATOR_ADDED_BY,
-      review_after: ""
-    }
-  end
-
-  def collaborator_with_incorrect_reason
-    {
-      login: TEST_COLLABORATOR_LOGIN,
-      permission: TEST_COLLABORATOR_PERMISSION,
-      name: TEST_COLLABORATOR_NAME,
-      email: TEST_COLLABORATOR_EMAIL,
-      org: TEST_COLLABORATOR_ORG,
-      reason: TEST_COLLABORATOR_REASON,
-      added_by: ADDED_BY_EMAIL,
-      review_after: ""
-    }
-  end
-
   def create_test_data(review_date)
     collaborator_data = create_collaborator_data(review_date)
     create_terraform_block(collaborator_data)
