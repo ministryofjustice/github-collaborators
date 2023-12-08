@@ -159,6 +159,9 @@ class GithubCollaborators
     def remove_expired_collaborators(collaborators)
       logger.debug "remove_expired_collaborators"
 
+        if collaborators.length > 0
+        removed_collaborators = remove_collaborator(collaborators)
+          
         if removed_collaborators.length > 0
           GithubCollaborators::SlackNotifier.new(GithubCollaborators::Expired.new, removed_collaborators).post_slack_message
         end
