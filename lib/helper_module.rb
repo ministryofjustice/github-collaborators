@@ -90,8 +90,7 @@ module HelperModule
       # Check for the issues created by this application and that the issue is open
       if (
         issue[:title].include?(COLLABORATOR_EXPIRES_SOON) ||
-        issue[:title].include?(DEFINE_COLLABORATOR_IN_CODE) ||
-        issue[:title].include?(USE_TEAM_ACCESS)
+        issue[:title].include?(DEFINE_COLLABORATOR_IN_CODE)
       ) && issue[:state] == "open"
         # Get issue created date and add 45 day grace period
         created_date = Date.parse(issue[:created_at])
