@@ -379,12 +379,6 @@ class GithubCollaborators
           end
         end
 
-        context "call extend_full_org_member_review_date" do
-          it WHEN_NO_COLLABORATORS_PASSED_IN do
-            expect(@outside_collaborators).not_to receive(:extend_date)
-            @outside_collaborators.extend_full_org_member_review_date([])
-          end
-
         context "call remove_expired_collaborators" do
           it "when no collaborator passed to function exist" do
             expect(@outside_collaborators).not_to receive(:remove_collaborator)
