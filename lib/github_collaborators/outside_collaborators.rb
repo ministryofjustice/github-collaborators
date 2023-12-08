@@ -168,24 +168,6 @@ class GithubCollaborators
       end
     end
 
-    # Call the functions to remove collaborators from Terraform file/s who are full Organization
-    # members whose review date has expired then call the function to raise a Slack message
-    # with the collaborators that were modified
-    # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
-    def remove_expired_full_org_members(collaborators)
-      logger.debug "remove_expired_full_org_members"
-
-      # Find the collaborators that have full org membership
-      full_org_collaborators = collaborators.select { |collaborator| @organization.is_collaborator_an_org_member(collaborator.login.downcase) }
-
-      if full_org_collaborators.length > 0
-        removed_collaborators = remove_collaborator(full_org_collaborators)
-        if removed_collaborators.length > 0
-          GithubCollaborators::SlackNotifier.new(GithubCollaborators::FullOrgMemberExpired.new, removed_collaborators).post_slack_message
-        end
-      end
-    end
-
     # Find the collaborators whose review date has expired then call
     # the functions to remove the collaborator from the Terraform file/s
     # @param collaborators [Array<GithubCollaborators::Collaborator>] a list of Collaborator objects
