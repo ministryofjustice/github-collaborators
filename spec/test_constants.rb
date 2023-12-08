@@ -19,12 +19,11 @@ module TestConstants
   TEST_REPO_NAME = "test-repo"
   TEST_REPO_NAME_TERRAFORM_FILE = "#{TEST_REPO_NAME}.tf"
   TEST_FILE = "#{TERRAFORM_DIR}/#{TEST_REPO_NAME}.tf"
-  TEST_TEAM = "someteam"
   TEST_USER = "someuser"
   TEST_USER_1 = "someuser1"
   TEST_USER_2 = "someuser2"
   TEST_USER_3 = "someuser3"
-  TEST_USER_6 = "someuser6"
+  TEST_USER_6 = "someuser4"
   TEST_REPO_NAME1 = "test-repo1"
   TEST_REPO_NAME2 = "test-repo2"
   TEST_REPO_NAME3 = "test-repo3"
@@ -44,8 +43,7 @@ module TestConstants
   WHEN_COLLABORATORS_EXISTS = "when collaborators exist"
   WHEN_NO_COLLABORATORS_EXISTS = "when collaborators don't exist"
   WHEN_NO_COLLABORATORS_PASSED_IN = "when no collaborator is passed in"
-  WHEN_COLLABORATOR_FULL_ORG_MEMBER = "when collaborator is a full org collaborator"
-  WHEN_COLLABORATOR_NOT_FULL_ORG_MEMBER = "when collaborator is not a full org collaborator"
+  WITH_COLLABORATOR = "when collaborator is passed in "
   WHEN_PULL_REQUEST_DOESNT_EXIST = "when pull request doesn't exist"
   GRACE_PERIOD_OKAY = (Date.today - 45).strftime(DATE_FORMAT)
   GRACE_PERIOD_EXPIRED = (Date.today - 46).strftime(DATE_FORMAT)
@@ -54,7 +52,6 @@ module TestConstants
   INCORRECT_REVIEW_DATE_FUTURE = (Date.today + 500).strftime(DATE_FORMAT)
   CORRECT_REVIEW_DATE_FUTURE = (Date.today + 366).strftime(DATE_FORMAT)
   CORRECT_PERMISSION = "push"
-  INCORRECT__PERMISSION = "write"
   OPEN = "open"
   CLOSED = "closed"
   CREATED_DATE = "2019-10-01"
