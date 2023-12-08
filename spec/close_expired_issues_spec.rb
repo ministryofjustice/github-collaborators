@@ -49,6 +49,7 @@ class GithubCollaborators
           expect(helper_module).to receive(:get_issues_from_github).with(REPOSITORY_NAME).and_return(issues)
           helper_module.close_expired_issues(REPOSITORY_NAME)
         end
+      end
 
       context "do not remove issue" do
         before do
