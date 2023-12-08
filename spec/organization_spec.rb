@@ -117,6 +117,10 @@ class GithubCollaborators
             before do
               @organization = GithubCollaborators::Organization.new
             end
+
+            it "call get_org_archived_repositories when empty" do
+              test_equal(@organization.get_org_archived_repositories.length, 0)
+            end
           end
         end
       end
