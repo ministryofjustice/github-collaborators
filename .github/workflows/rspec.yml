@@ -6,8 +6,9 @@ env:
 on:
   workflow_dispatch:
   push:
+    branches: [main]
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    branches: [main]
 
 jobs:
   rspec-test:

@@ -192,8 +192,8 @@ class GithubCollaborators
     def extend_collaborators_review_date(collaborators)
       logger.debug "extend_collaborators_review_date"
 
-      if outside_collaborators.length > 0
-        extended_collaborators = extend_date(outside_collaborators)
+      if collaborators.length > 0
+        extended_collaborators = extend_date(collaborators)
         if extended_collaborators.length > 0
           send_collaborator_notify_email(extended_collaborators)
           GithubCollaborators::SlackNotifier.new(GithubCollaborators::ExpiresSoon.new, extended_collaborators).post_slack_message

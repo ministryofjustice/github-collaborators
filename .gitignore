@@ -18,3 +18,4 @@ bin/plugins
 bin/specifications
 doc
 .yardoc
+.idea
