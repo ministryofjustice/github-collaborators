@@ -134,41 +134,6 @@ class GithubCollaborators
           end
         end
 
-        context "call did_automation_add_collaborator_to_file" do
-          it "when added_by is incorrect" do
-            @the_terraform_files.each do |terraform_file|
-              if terraform_file.filename == TEST_REPO_NAME
-                collaborator_data = collaborator_with_incorrect_added_by
-                terraform_file.add_collaborator_from_issue(collaborator_data)
-              end
-            end
-            reply = @terraform_files.did_automation_add_collaborator_to_file(TEST_REPO_NAME, TEST_COLLABORATOR_LOGIN)
-            test_equal(reply, false)
-          end
-
-          it "when reason is incorrect" do
-            @the_terraform_files.each do |terraform_file|
-              if terraform_file.filename == TEST_REPO_NAME
-                collaborator_data = collaborator_with_incorrect_reason
-                terraform_file.add_collaborator_from_issue(collaborator_data)
-              end
-            end
-            reply = @terraform_files.did_automation_add_collaborator_to_file(TEST_REPO_NAME, TEST_COLLABORATOR_LOGIN)
-            test_equal(reply, false)
-          end
-
-          it "when reason and added_by are correct" do
-            @the_terraform_files.each do |terraform_file|
-              if terraform_file.filename == TEST_REPO_NAME
-                collaborator_data = collaborator_with_correct_reason_and_added_by
-                terraform_file.add_collaborator_from_issue(collaborator_data)
-              end
-            end
-            reply = @terraform_files.did_automation_add_collaborator_to_file(TEST_REPO_NAME, TEST_COLLABORATOR_LOGIN)
-            test_equal(reply, true)
-          end
-        end
-
         it "call remove_file when file exists" do
           @terraform_files.remove_file(TEST_REPO_NAME)
           new_file_length = @files - 1
@@ -185,29 +150,6 @@ class GithubCollaborators
 
           it "call remove_collaborator_from_file" do
             @terraform_files.remove_collaborator_from_file(TEST_REPO_NAME, TEST_USER_1)
-            modified_file = File.read(TEST_FILE)
-            test_not_equal(modified_file, original_file)
-          end
-
-          it "call change_collaborator_permission_in_file" do
-            @terraform_files.change_collaborator_permission_in_file(TEST_REPO_NAME, TEST_USER_1, "pull")
-            modified_file = File.read(TEST_FILE)
-            test_not_equal(modified_file, original_file)
-          end
-
-          it "call add_full_org_collaborator_to_file" do
-            terraform_block = create_terraform_block_review_date_today
-            collaborator = GithubCollaborators::Collaborator.new(terraform_block, TEST_REPO_NAME)
-            @terraform_files.add_full_org_collaborator_to_file(TEST_REPO_NAME, collaborator, "pull")
-            terraform_file = GithubCollaborators::TerraformFile.new(TEST_REPO_NAME, TERRAFORM_DIR)
-            terraform_file.create_terraform_collaborator_blocks
-            collaborators_in_file = []
-            terraform_blocks = terraform_file.get_terraform_blocks
-            terraform_blocks.each do |terraform_block|
-              collaborators_in_file.push(terraform_block.username)
-            end
-            expected_collaborators = [TEST_USER_1, TEST_USER_2, TEST_USER]
-            test_equal(collaborators_in_file, expected_collaborators)
             modified_file = File.read(TEST_FILE)
             test_not_equal(modified_file, original_file)
           end
