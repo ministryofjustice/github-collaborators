@@ -3,16 +3,6 @@ module "yjaf-refdata" {
   repository = "yjaf-refdata"
   collaborators = [
     {
-      github_user  = "gregi2n"
-      permission   = "admin"
-      name         = "Greg Whiting"
-      email        = "greg.whiting@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2023-12-13"
-    },
-    {
       github_user  = "vasildimitrov22"
       permission   = "push"
       name         = "Vasil Dimitrov"
