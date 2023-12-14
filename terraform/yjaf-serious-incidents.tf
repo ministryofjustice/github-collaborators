@@ -3,16 +3,6 @@ module "yjaf-serious-incidents" {
   repository = "yjaf-serious-incidents"
   collaborators = [
     {
-      github_user  = "gregi2n"
-      permission   = "admin"
-      name         = "Greg Whiting"
-      email        = "greg.whiting@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Access is needed for development of a new feature for yjaf"
-      added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2023-12-13"
-    },
-    {
       github_user  = "javaidarshadnec"
       permission   = "admin"
       name         = "Javaid Arshad"

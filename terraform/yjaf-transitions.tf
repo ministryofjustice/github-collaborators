@@ -23,16 +23,6 @@ module "yjaf-transitions" {
       review_after = "2024-01-17"
     },
     {
-      github_user  = "gregi2n"
-      permission   = "admin"
-      name         = "Gregory Whiting"
-      email        = "greg.whiting@necsws.com"
-      org          = "NEC SWS"
-      reason       = "Working on pipeline for deployment of microservice"
-      added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2023-12-13"
-    },
-    {
       github_user  = "angelanec"
       permission   = "admin"
       name         = "Angela Site"
