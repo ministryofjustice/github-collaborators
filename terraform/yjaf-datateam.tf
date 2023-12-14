@@ -92,5 +92,15 @@ module "yjaf-datateam" {
       added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2024-03-04"
     },
+    {
+      github_user  = "gregi2n"
+      permission   = "admin"
+      name         = "Greg Whiting"
+      email        = "greg.whiting@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Part of the NEC supplier team for the YJB YJAF system"
+      added_by     = "mick.ewers@yjb.gov.uk"
+      review_after = "2024-06-30"
+    },
   ]
 }
