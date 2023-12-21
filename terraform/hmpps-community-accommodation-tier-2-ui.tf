@@ -20,7 +20,7 @@ module "hmpps-community-accommodation-tier-2-ui" {
       org          = "NCC"
       reason       = "Pen. tester"
       added_by     = "harriet.horobin-worley@digital.justice.gov.uk"
-      review_after = "2023-12-23"
+      review_after = "2024-06-20"
     },
   ]
 }
