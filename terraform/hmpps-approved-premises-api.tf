@@ -10,7 +10,7 @@ module "hmpps-approved-premises-api" {
       org          = "NCC"
       reason       = "Pen. tester"
       added_by     = "harriet.horobin-worley@digital.justice.gov.uk"
-      review_after = "2023-12-23"
+      review_after = "2024-06-20"
     },
     {
       github_user  = "jandersonncc"
