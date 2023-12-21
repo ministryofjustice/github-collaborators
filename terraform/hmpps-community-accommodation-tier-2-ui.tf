@@ -22,5 +22,15 @@ module "hmpps-community-accommodation-tier-2-ui" {
       added_by     = "harriet.horobin-worley@digital.justice.gov.uk"
       review_after = "2023-12-23"
     },
+    {
+      github_user  = "freddiescncc"
+      permission   = "pull"
+      name         = "Freddie Sibley-Calder"
+      email        = "freddie.sibley-calder@nccgroup.com"
+      org          = "NCC"
+      reason       = "Pen. tester"
+      added_by     = "harriet.horobin-worley@digital.justice.gov.uk"
+      review_after = "2023-12-23"
+    },
   ]
 }
