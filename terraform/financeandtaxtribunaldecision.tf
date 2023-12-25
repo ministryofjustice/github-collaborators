@@ -10,7 +10,7 @@ module "financeandtaxtribunaldecision" {
       org          = "DTS Cyber Security"
       reason       = "perform vulnerability scans on Tribunals website repos"
       added_by     = "mark.butler@hmcts.net"
-      review_after = "2023-12-31"
+      review_after = "2024-06-28"
     },
   ]
 }
