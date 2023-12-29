@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.5)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     bundler-audit (0.9.1)
       bundler (>= 1.2.0, < 3)
@@ -21,7 +21,7 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    git (1.18.0)
+    git (1.19.0)
       addressable (~> 2.8)
       rchardet (~> 1.8)
     hashdiff (1.0.1)
@@ -40,7 +40,7 @@ GEM
       rake (~> 13.0)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
-    public_suffix (5.0.3)
+    public_suffix (5.0.4)
     rake (13.0.6)
     rchardet (1.8.0)
     rexml (3.2.6)
