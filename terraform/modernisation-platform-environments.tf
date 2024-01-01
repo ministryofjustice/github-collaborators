@@ -103,16 +103,6 @@ module "modernisation-platform-environments" {
       review_after = "2024-05-25"
     },
     {
-      github_user  = "nbuckingham72"
-      permission   = "push"
-      name         = "nick buckingham"
-      email        = "nick.buckingham@lumen.com"
-      org          = "Lumen Technologies"
-      reason       = "The user will manage the PPUD terraform code on day to day basis"
-      added_by     = "mark.hardy@digital.justice.gov.uk"
-      review_after = "2023-12-31"
-    },
-    {
       github_user  = "pankaj-pant-lumen"
       permission   = "push"
       name         = "Pankaj Pant"
