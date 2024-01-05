@@ -14,7 +14,7 @@ GEM
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    erb (4.0.3)
+    erb (4.0.4)
       cgi (>= 0.3.3)
     ffi (1.15.5)
     ffi (1.15.5-x64-mingw32)
