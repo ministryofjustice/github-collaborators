@@ -122,5 +122,15 @@ module "modernisation-platform-environments" {
       added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-05-04"
     },
+    {
+      github_user  = "jonny190"
+      permission   = "pull"
+      name         = "Jonny Davey"
+      email        = "jonny.davey@roctechnologies.com"
+      org          = "ROC"
+      reason       = "To work on the Equip upgrade"
+      added_by     = "mark.roberts@digital.justice.gov.uk"
+      review_after = "2024-07-28"
+    },
   ]
 }
