@@ -42,5 +42,15 @@ module "yjaf-gateway-proxy" {
       added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2024-06-30"
     },
+    {
+      github_user  = "fabiosalvarezza"
+      permission   = "admin"
+      name         = "Fabio Salvarezza"
+      email        = "fabio.salvarezza@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Part of the NEC supplier team for the YJB YJAF system"
+      added_by     = "mick.ewers@yjb.gov.uk"
+      review_after = "2024-06-30"
+    },
   ]
 }
