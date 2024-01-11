@@ -20,7 +20,7 @@ module "yjaf-sentences" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2024-01-17"
+      review_after = "2024-07-15"
     },
     {
       github_user  = "javaidarshadnec"
