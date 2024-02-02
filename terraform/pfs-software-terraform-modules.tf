@@ -23,16 +23,6 @@ module "pfs-software-terraform-modules" {
       review_after = "2024-07-30"
     },
     {
-      github_user  = "mistersk"
-      permission   = "admin"
-      name         = "Sanya Khasenye"
-      email        = "sanyak@kainos.com"
-      org          = "Kainos"
-      reason       = "Kainos is working on transfering code from a kainos owned repo to an MOJ owned repo"
-      added_by     = "jonathan.houston@justice.gov.uk"
-      review_after = "2024-02-01"
-    },
-    {
       github_user  = "dmeehankainos"
       permission   = "admin"
       name         = "Darren Meehan"
