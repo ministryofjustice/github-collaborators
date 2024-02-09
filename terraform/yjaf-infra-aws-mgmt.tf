@@ -20,7 +20,7 @@ module "yjaf-infra-aws-mgmt" {
       org          = "NECSWS"
       reason       = "Developer"
       added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2024-02-15"
+      review_after = "2024-08-13"
     },
     {
       github_user  = "gregi2n"

@@ -40,7 +40,7 @@ module "yjaf-ui" {
       org          = "NECSWS"
       reason       = "Developer"
       added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2024-02-15"
+      review_after = "2024-08-13"
     },
     {
       github_user  = "andrewtrichards"
@@ -103,7 +103,7 @@ module "yjaf-ui" {
       review_after = "2024-06-30"
     },
     {
-      github_user  = "Hess3000"
+      github_user  = "hess3000"
       permission   = "admin"
       name         = "Stuart Duffy"
       email        = "stuart.duffy@necsws.com"
