@@ -43,16 +43,6 @@ module "yjaf-mule-hub-connector" {
       review_after = "2024-07-17"
     },
     {
-      github_user  = "markstanley-nps"
-      permission   = "pull"
-      name         = "Mark Stanley"
-      email        = "mark.stanley@necsws.com"
-      org          = "NECSWS"
-      reason       = "Developer"
-      added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2024-02-15"
-    },
-    {
       github_user  = "andrewtrichards"
       permission   = "admin"
       name         = "Andrew Richards"
