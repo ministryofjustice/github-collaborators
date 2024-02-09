@@ -33,16 +33,6 @@ module "yjsm-ui" {
       review_after = "2024-06-15"
     },
     {
-      github_user  = "markstanley-nps"
-      permission   = "pull"
-      name         = "Mark Stanley"
-      email        = "mark.stanley@necsws.com"
-      org          = "NECSWS"
-      reason       = "Developer"
-      added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2024-02-15"
-    },
-    {
       github_user  = "gregi2n"
       permission   = "admin"
       name         = "Greg Whiting"
