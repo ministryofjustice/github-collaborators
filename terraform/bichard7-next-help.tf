@@ -83,10 +83,10 @@ module "bichard7-next-help" {
       review_after = "2024-12-31"
     },
     {
-      github_user  = "seth-barber"
-      permission   = "pull"
-      name         = "Seth Barber"
-      email        = "seth.barber@madetech.com"
+      github_user  = "ksugden"
+      permission   = "push"
+      name         = "Kate Sugden"
+      email        = "kate.sugden@madetech.com"
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
