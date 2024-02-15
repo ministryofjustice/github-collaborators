@@ -92,5 +92,15 @@ module "yjaf-mule-hub-connector" {
       added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2024-06-30"
     },
+    {
+      github_user  = "joharveynec"
+      permission   = "pull"
+      name         = "Jo Harvey"
+      email        = "jo.harvey@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "To be able to view and manage vulnerabilities in YJAF code via Snyk"
+      added_by     = "mick.ewers@yjb.gov.uk"
+      review_after = "2025-02-15"
+    },
   ]
 }
