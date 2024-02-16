@@ -62,5 +62,15 @@ module "yjaf-utilities" {
       added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2025-02-15"
     },
+    {
+      github_user  = "vasildimitrov22"
+      permission   = "admin"
+      name         = "Vasil Dimitrov"
+      email        = "vasil.dimitrov@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Part of the NEC supplier team for the YJB YJAF system"
+      added_by     = "mick.ewers@yjb.gov.uk"
+      review_after = "2024-02-16"
+    },
   ]
 }
