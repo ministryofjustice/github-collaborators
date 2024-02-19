@@ -10,7 +10,7 @@ module "ndelius-test-automation" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "nicola.hodgkinson@justice.gov.uk"
-      review_after = "2024-02-25"
+      review_after = "2024-08-25"
     },
     {
       github_user  = "peter-bcl"
@@ -20,7 +20,7 @@ module "ndelius-test-automation" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "nicola.hodgkinson@justice.gov.uk"
-      review_after = "2024-02-25"
+      review_after = "2024-08-25"
     },
     {
       github_user  = "nd070322"
@@ -30,7 +30,7 @@ module "ndelius-test-automation" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "nicola.hodgkinson@justice.gov.uk"
-      review_after = "2024-02-25"
+      review_after = "2024-08-25"
     },
     {
       github_user  = "jrobson-unilink"
@@ -40,7 +40,7 @@ module "ndelius-test-automation" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "nicola.hodgkinson@justice.gov.uk"
-      review_after = "2024-02-25"
+      review_after = "2024-08-25"
     },
     {
       github_user  = "yfedkiv"
@@ -50,7 +50,7 @@ module "ndelius-test-automation" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "nicola.hodgkinson@justice.gov.uk"
-      review_after = "2024-02-25"
+      review_after = "2024-08-25"
     },
     {
       github_user  = "linda182"
@@ -60,7 +60,7 @@ module "ndelius-test-automation" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "nicola.hodgkinson@justice.gov.uk"
-      review_after = "2024-02-25"
+      review_after = "2024-08-25"
     },
     {
       github_user  = "madan-thapa"
