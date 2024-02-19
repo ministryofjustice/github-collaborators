@@ -139,7 +139,7 @@ module "modernisation-platform-environments" {
       email        = "christopher.kai@version1.com"
       org          = "Version 1"
       reason       = "Get access to xhibit-portal on Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
+      added_by     = "silviana.horga@digital.justice.gov.uk"
       review_after = "2024-02-19"
     },
     {
@@ -149,7 +149,7 @@ module "modernisation-platform-environments" {
       email        = "kevin.brandon@version1.com"
       org          = "Version 1"
       reason       = "Get access to xhibit-portal on Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
+      added_by     = "silviana.horga@digital.justice.gov.uk"
       review_after = "2024-02-19"
     },
     {
@@ -159,7 +159,7 @@ module "modernisation-platform-environments" {
       email        = "sam.britain@version1.com"
       org          = "Version 1"
       reason       = "Get access to xhibit-portal on Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
+      added_by     = "silviana.horga@digital.justice.gov.uk"
       review_after = "2024-02-19"
     },
   ]
