@@ -132,5 +132,35 @@ module "modernisation-platform-environments" {
       added_by     = "mark.roberts@digital.justice.gov.uk"
       review_after = "2024-07-28"
     },
+    {
+      github_user  = "christok-moj"
+      permission   = "push"
+      name         = "Christopher Kai"
+      email        = "christopher.kai@version1.com"
+      org          = "Version 1"
+      reason       = "Get access to xhibit-portal on Modernisation Platform"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
+      review_after = "2024-02-19"
+    },
+    {
+      github_user  = "kevinb-v1-uk"
+      permission   = "push"
+      name         = "Kevin Brandon"
+      email        = "kevin.brandon@version1.com"
+      org          = "Version 1"
+      reason       = "Get access to xhibit-portal on Modernisation Platform"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
+      review_after = "2024-02-19"
+    },
+    {
+      github_user  = "britains-justice"
+      permission   = "push"
+      name         = "Sam Britain"
+      email        = "sam.britain@version1.com"
+      org          = "Version 1"
+      reason       = "Get access to xhibit-portal on Modernisation Platform"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
+      review_after = "2024-02-19"
+    },
   ]
 }
