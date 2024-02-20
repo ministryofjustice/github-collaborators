@@ -140,7 +140,7 @@ module "modernisation-platform-environments" {
       org          = "Version 1"
       reason       = "Get access to xhibit-portal on Modernisation Platform"
       added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-02-19"
+      review_after = "2024-08-01"
     },
     {
       github_user  = "kevinb-v1-uk"
@@ -150,7 +150,7 @@ module "modernisation-platform-environments" {
       org          = "Version 1"
       reason       = "Get access to xhibit-portal on Modernisation Platform"
       added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-02-19"
+      review_after = "2024-08-01"
     },
     {
       github_user  = "britains-justice"
@@ -160,7 +160,7 @@ module "modernisation-platform-environments" {
       org          = "Version 1"
       reason       = "Get access to xhibit-portal on Modernisation Platform"
       added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-02-19"
+      review_after = "2024-08-01"
     },
   ]
 }
