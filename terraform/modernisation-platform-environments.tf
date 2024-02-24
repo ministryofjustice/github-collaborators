@@ -80,7 +80,7 @@ module "modernisation-platform-environments" {
       org          = "NEC Software Solutions"
       reason       = "Get access to Delius-IAPS on Modernisation Platform"
       added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-03-01"
+      review_after = "2024-08-28"
     },
     {
       github_user  = "tedcolver01"
