@@ -83,16 +83,6 @@ module "modernisation-platform-environments" {
       review_after = "2024-08-28"
     },
     {
-      github_user  = "tedcolver01"
-      permission   = "push"
-      name         = "Ted Colver"
-      email        = "gemma.mills@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Get access to Delius-IAPS on Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-03-01"
-    },
-    {
       github_user  = "simonytta"
       permission   = "push"
       name         = "Simona Treivase"
