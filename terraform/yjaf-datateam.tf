@@ -80,7 +80,7 @@ module "yjaf-datateam" {
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
       added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2024-03-04"
+      review_after = "2024-08-31"
     },
     {
       github_user  = "gregi2n"
