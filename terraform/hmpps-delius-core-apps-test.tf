@@ -4,7 +4,7 @@ module "hmpps-delius-core-apps-test" {
   collaborators = [
     {
       github_user  = "mlaskowski4"
-      permission   = "maintain"
+      permission   = "push"
       name         = "Michal Laskowski"
       email        = "mlaskowski@unilink.com"
       org          = "Unilink"
