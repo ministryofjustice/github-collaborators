@@ -13,16 +13,6 @@ module "bichard7-next-user-service" {
       review_after = "2024-12-31"
     },
     {
-      github_user  = "monotypical"
-      permission   = "push"
-      name         = "Alice Lee"
-      email        = "alice.lee@madetech.com"
-      org          = "Madetech"
-      reason       = "CJSE Bichard Development"
-      added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
-    },
-    {
       github_user  = "sachindangui"
       permission   = "pull"
       name         = "Sachin Dangui"
