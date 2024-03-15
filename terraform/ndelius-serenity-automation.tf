@@ -10,7 +10,7 @@ module "ndelius-serenity-automation" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "nicola.hodgkinson@justice.gov.uk"
-      review_after = "2024-03-21"
+      review_after = "2024-09-17"
     },
   ]
 }
