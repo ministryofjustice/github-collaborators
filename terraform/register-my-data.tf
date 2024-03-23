@@ -10,7 +10,7 @@ module "register-my-data" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2024-03-29"
+      review_after = "2024-09-25"
     },
   ]
 }
