@@ -32,5 +32,15 @@ module "moj-cjse-xhibit-portal-v2" {
       added_by     = "silviana.horga@digital.justice.gov.uk"
       review_after = "2024-09-25"
     },
+    {
+      github_user  = "PeteWV1"
+      permission   = "push"
+      name         = "Peter Wightman"
+      email        = "peter.wightman@version1.com"
+      org          = "Version 1"
+      reason       = "Needs to be able to view, submit and approve pull requests, push access to xhibit-portal repositories"
+      added_by     = "silviana.horga@digital.justice.gov.uk"
+      review_after = "2024-09-25"
+    },
   ]
 }
