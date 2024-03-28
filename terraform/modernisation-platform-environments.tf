@@ -123,16 +123,6 @@ module "modernisation-platform-environments" {
       review_after = "2024-07-28"
     },
     {
-      github_user  = "christok-moj"
-      permission   = "push"
-      name         = "Christopher Kai"
-      email        = "christopher.kai@version1.com"
-      org          = "Version 1"
-      reason       = "Get access to xhibit-portal on Modernisation Platform"
-      added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-08-01"
-    },
-    {
       github_user  = "kevinb-v1-uk"
       permission   = "push"
       name         = "Kevin Brandon"
