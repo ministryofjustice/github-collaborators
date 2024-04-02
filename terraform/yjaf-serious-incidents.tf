@@ -9,8 +9,8 @@ module "yjaf-serious-incidents" {
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Access is needed for development of a new feature for yjaf"
-      added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2024-05-02"
+      added_by     = "David.Hall@yjb.gov.uk"
+      review_after = "2024-12-23"
     },
     {
       github_user  = "vasildimitrov22"

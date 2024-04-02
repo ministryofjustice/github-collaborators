@@ -29,8 +29,8 @@ module "yjaf-conversions" {
       email        = "javaid.arshad@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
-      added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2024-05-02"
+      added_by     = "David.Hall@yjb.gov.uk"
+      review_after = "2024-12-23"
     },
     {
       github_user  = "oliviergaubert"
