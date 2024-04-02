@@ -29,8 +29,8 @@ module "yjaf-datateam" {
       email        = "javaid.arshad@necsws.com"
       org          = "NEC SWS"
       reason       = "Requesting access so I can perhaps start sharing DB workload with Andrew"
-      added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2024-05-02"
+      added_by     = "David.Hall@yjb.gov.uk"
+      review_after = "2024-12-23"
     },
     {
       github_user  = "andrewtrichards"
