@@ -1,4 +1,4 @@
-module "moj-cjse-xhibit-webportal" {
+module "moj-cjse-xhibit-webportal-api" {
   source     = "./modules/repository-collaborators"
   repository = "moj-cjse-xhibit-webportal-api"
   collaborators = [
