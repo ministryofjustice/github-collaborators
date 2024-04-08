@@ -103,16 +103,6 @@ module "bichard7-next-pnc-emulator" {
       review_after = "2024-12-31"
     },
     {
-      github_user  = "ammaar-limbada-madetech"
-      permission   = "push"
-      name         = "Ammaar Limbada"
-      email        = "ammaar.limbada@madetech.com"
-      org          = "Madetech"
-      reason       = "CJSE Bichard Development"
-      added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
-    },
-    {
       github_user  = "tausifpatel"
       permission   = "push"
       name         = "Tausif Patel"
