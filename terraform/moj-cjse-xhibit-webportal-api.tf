@@ -42,5 +42,15 @@ module "moj-cjse-xhibit-webportal-api" {
       added_by     = "silviana.horga@digital.justice.gov.uk"
       review_after = "2024-09-25"
     },
+    {
+      github_user  = "zimboflyman"
+      permission   = "admin"
+      name         = "Shane Vanleeuwen"
+      email        = "shane.vanleeuwen@version1.com"
+      org          = "Version 1"
+      reason       = "Needs admin rights to xhibit-webportal-api repository"
+      added_by     = "silviana.horga@digital.justice.gov.uk"
+      review_after = "2024-09-25"
+    },
   ]
 }

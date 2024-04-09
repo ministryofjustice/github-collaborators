@@ -23,6 +23,16 @@ module "cjse-test" {
       review_after = "2024-08-01"
     },
     {
+      github_user  = "zimboflyman"
+      permission   = "admin"
+      name         = "Shane Vanleeuwen"
+      email        = "shane.vanleeuwen@version1.com"
+      org          = "Version 1"
+      reason       = "Needs to be able to view, submit and approve pull requests, push access to xhibit-portal repositories"
+      added_by     = "silviana.horga@digital.justice.gov.uk"
+      review_after = "2024-09-25"
+    },
+    {
       github_user  = "Klaw29"
       permission   = "admin"
       name         = "Kay Babatunde"
