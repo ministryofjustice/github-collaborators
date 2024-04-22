@@ -52,5 +52,15 @@ module "moj-cjse-xhibit-webportal" {
       added_by     = "silviana.horga@digital.justice.gov.uk"
       review_after = "2024-09-25"
     },
+    {
+      github_user  = "pawellas"
+      permission   = "admin"
+      name         = "Pawel Laskowski"
+      email        = "pawel.laskowski@version1.com"
+      org          = "Version 1"
+      reason       = "Needs admin rights to xhibit-webportal repository"
+      added_by     = "silviana.horga@digital.justice.gov.uk"
+      review_after = "2024-09-25"
+    },
   ]
 }
