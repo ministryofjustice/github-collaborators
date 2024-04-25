@@ -20,7 +20,7 @@ module "pfs-software-powershelldsc" {
       org          = "Kainos"
       reason       = "Kainos is working on the new modernization platform for Unilink services"
       added_by     = "federico.staiano1@justice.gov.uk"
-      review_after = "2024-05-01"
+      review_after = "2024-10-28"
     },
     {
       github_user  = "simongivan"
