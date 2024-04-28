@@ -110,7 +110,7 @@ module "modernisation-platform-environments" {
       org          = "Lumen"
       reason       = "Get access to PPUD on Modernisation Platform"
       added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-04"
+      review_after = "2024-10-31"
     },
     {
       github_user  = "jonny190"
@@ -143,7 +143,7 @@ module "modernisation-platform-environments" {
       review_after = "2024-08-01"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
