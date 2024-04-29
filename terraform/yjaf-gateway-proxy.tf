@@ -30,7 +30,7 @@ module "yjaf-gateway-proxy" {
       org          = "NECSWS"
       reason       = "Head of Technology"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-05-02"
+      review_after = "2024-10-29"
     },
     {
       github_user  = "fabiosalvarezza"
