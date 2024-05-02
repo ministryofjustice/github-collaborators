@@ -3,16 +3,6 @@ module "modernisation-platform-environments" {
   repository = "modernisation-platform-environments"
   collaborators = [
     {
-      github_user  = "hullcoastie"
-      permission   = "push"
-      name         = "John Broom"
-      email        = "John.Broom@roctechnologies.com"
-      org          = "Roc Technologies"
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-24"
-    },
-    {
       github_user  = "jamesashton-roc"
       permission   = "push"
       name         = "James Ashton"
@@ -47,16 +37,6 @@ module "modernisation-platform-environments" {
       permission   = "push"
       name         = "Tom Rudley"
       email        = "Tom.Rudley@roctechnologies.com"
-      org          = "Roc Technologies"
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-24"
-    },
-    {
-      github_user  = "helenvickers-roc"
-      permission   = "push"
-      name         = "Helen Vickers"
-      email        = "Helen.Vickers@roctechnologies.com"
       org          = "Roc Technologies"
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "modernisation-platform@digital.justice.gov.uk"
