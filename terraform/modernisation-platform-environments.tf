@@ -83,16 +83,6 @@ module "modernisation-platform-environments" {
       review_after = "2024-06-28"
     },
     {
-      github_user  = "pankaj-pant-lumen"
-      permission   = "push"
-      name         = "Pankaj Pant"
-      email        = "Pankaj.Pant@lumen.com"
-      org          = "Lumen"
-      reason       = "Get access to PPUD on Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-04"
-    },
-    {
       github_user  = "jonny190"
       permission   = "pull"
       name         = "Jonny Davey"
@@ -123,7 +113,7 @@ module "modernisation-platform-environments" {
       review_after = "2024-08-01"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
