@@ -43,16 +43,6 @@ module "modernisation-platform-environments" {
       review_after = "2024-05-24"
     },
     {
-      github_user  = "umeshc-roy"
-      permission   = "push"
-      name         = "Umesh Ray"
-      email        = "Umesh.Ray@lumen.com"
-      org          = "Lumen"
-      reason       = "Get access to PPUD on Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-04"
-    },
-    {
       github_user  = "gemmamills01"
       permission   = "push"
       name         = "Gemma Mills"
@@ -123,7 +113,7 @@ module "modernisation-platform-environments" {
       review_after = "2024-08-01"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
