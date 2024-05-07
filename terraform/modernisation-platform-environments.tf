@@ -41,6 +41,7 @@ module "modernisation-platform-environments" {
       reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
       added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2024-05-24"
+    },
     {
       github_user  = "gemmamills01"
       permission   = "push"
