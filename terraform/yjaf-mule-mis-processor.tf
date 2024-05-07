@@ -9,7 +9,7 @@ module "yjaf-mule-mis-processor" {
       email        = "stephen.hobden@necsws.com"
       org          = "NECSWS"
       reason       = "Want to amend logging settings for all microservices"
-      added_by     = "mick.ewers@yjb.gov.uk"
+      added_by     = "David.Hall@yjb.gov.uk"
       review_after = "2024-07-09"
     },
     {
@@ -19,7 +19,7 @@ module "yjaf-mule-mis-processor" {
       email        = "angela.site@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "YJAF (new developer)"
-      added_by     = "mick.ewers@yjb.gov.uk"
+      added_by     = "David.Hall@yjb.gov.uk"
       review_after = "2024-07-17"
     },
     {
@@ -29,7 +29,7 @@ module "yjaf-mule-mis-processor" {
       email        = "thomas.tipler@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "mick.ewers@yjb.gov.uk"
+      added_by     = "David.Hall@yjb.gov.uk"
       review_after = "2024-09-01"
     },
     {
@@ -39,7 +39,7 @@ module "yjaf-mule-mis-processor" {
       email        = "fabio.salvarezza@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "mick.ewers@yjb.gov.uk"
+      added_by     = "David.Hall@yjb.gov.uk"
       review_after = "2024-06-30"
     },
     {
@@ -49,7 +49,7 @@ module "yjaf-mule-mis-processor" {
       email        = "jo.harvey@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "To be able to view and manage vulnerabilities in YJAF code via Snyk"
-      added_by     = "mick.ewers@yjb.gov.uk"
+      added_by     = "David.Hall@yjb.gov.uk"
       review_after = "2025-02-15"
     },
     {
@@ -59,8 +59,18 @@ module "yjaf-mule-mis-processor" {
       email        = "vasil.dimitrov@necsws.com"
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "mick.ewers@yjb.gov.uk"
+      added_by     = "David.Hall@yjb.gov.uk"
       review_after = "2025-02-16"
+    },
+    {
+      github_user  = "gregi2n"
+      permission   = "admin"
+      name         = "Greg Whiting"
+      email        = "greg.whiting@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Part of the NEC supplier team for the YJB YJAF system"
+      added_by     = "David.Hall@yjb.gov.uk"
+      review_after = "2024-12-23"
     },
   ]
 }
