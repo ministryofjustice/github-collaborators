@@ -43,16 +43,6 @@ module "modernisation-platform-environments" {
       review_after = "2024-05-24"
     },
     {
-      github_user  = "umeshc-roy"
-      permission   = "push"
-      name         = "Umesh Ray"
-      email        = "Umesh.Ray@lumen.com"
-      org          = "Lumen"
-      reason       = "Get access to PPUD on Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-04"
-    },
-    {
       github_user  = "gemmamills01"
       permission   = "push"
       name         = "Gemma Mills"
@@ -81,16 +71,6 @@ module "modernisation-platform-environments" {
       reason       = "The user will manage the PPUD terraform code on day to day basis"
       added_by     = "mark.hardy@digital.justice.gov.uk"
       review_after = "2024-06-28"
-    },
-    {
-      github_user  = "pankaj-pant-lumen"
-      permission   = "push"
-      name         = "Pankaj Pant"
-      email        = "Pankaj.Pant@lumen.com"
-      org          = "Lumen"
-      reason       = "Get access to PPUD on Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-04"
     },
     {
       github_user  = "jonny190"
