@@ -39,7 +39,7 @@ module "yjsm-hub" {
       email        = "andrew.richards1@necsws.com"
       org          = "NEC SWS"
       reason       = "Existing developer"
-      added_by     = "David.Hall@yjb.gov.uk
+      added_by     = "David.Hall@yjb.gov.uk"
       review_after = "2024-06-01"
     },
     {
