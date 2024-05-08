@@ -92,5 +92,15 @@ module "bichard7-next-core" {
       added_by     = "dom.tomkins@digital.justice.gov.uk"
       review_after = "2024-12-31"
     },
+    {
+      github_user  = "chubberlisk"
+      permission   = "push"
+      name         = "Wen Ting Wang"
+      email        = "wenting@madetech.com"
+      org          = "Madetech"
+      reason       = "CJSE Bichard Development"
+      added_by     = "dom.tomkins@digital.justice.gov.uk"
+      review_after = "2024-12-31"
+    },
   ]
 }
