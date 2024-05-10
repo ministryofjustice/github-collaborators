@@ -50,7 +50,7 @@ module "yjaf-cmm" {
       org          = "NEC SWS"
       reason       = "Existing developer"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-06-01"
+      review_after = "2024-09-01"
     },
     {
       github_user  = "angelanec"
