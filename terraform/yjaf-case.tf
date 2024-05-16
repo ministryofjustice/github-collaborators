@@ -102,5 +102,15 @@ module "yjaf-case" {
       added_by     = "David.Hall@yjb.gov.uk"
       review_after = "2024-12-23"
     },
+    {
+      github_user  = "jasongreen-necsws"
+      permission   = "admin"
+      name         = "Jason Green"
+      email        = "jason.green@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Part of the NEC supplier team for the YJB YJAF system"
+      added_by     = "David.Hall@yjb.gov.uk"
+      review_after = "2025-04-16"
+    },
   ]
 }
