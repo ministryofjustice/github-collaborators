@@ -60,7 +60,7 @@ module "modernisation-platform-environments" {
       org          = "Agilisys"
       reason       = "Get access to Data Insights Hub on the Modernisation Platform"
       added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-25"
+      review_after = "2024-11-21"
     },
     {
       github_user  = "nbuckingham72"
@@ -103,7 +103,7 @@ module "modernisation-platform-environments" {
       review_after = "2024-08-01"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
