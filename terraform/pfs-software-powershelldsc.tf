@@ -12,5 +12,15 @@ module "pfs-software-powershelldsc" {
       added_by     = "federico.staiano1@justice.gov.uk"
       review_after = "2024-07-30"
     },
+    {
+      github_user  = "MisterSK"
+      permission   = "admin"
+      name         = "Sanya Khasenye"
+      email        = "s.khasenye@kainos.com"
+      org          = "Kainos"
+      reason       = "Kainos is working on new modernization platform for Unilink services"
+      added_by     = "federico.staiano1@justice.gov.uk"
+      review_after = "2024-07-30"
+    },
   ]
 }
