@@ -1,13 +1,15 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.5)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
+    bigdecimal (3.1.8)
     bundler-audit (0.9.1)
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
     cgi (0.3.6)
-    crack (0.4.5)
+    crack (1.0.0)
+      bigdecimal
       rexml
     date (3.3.4)
     diff-lcs (1.5.0)
@@ -24,7 +26,7 @@ GEM
     git (1.18.0)
       addressable (~> 2.8)
       rchardet (~> 1.8)
-    hashdiff (1.0.1)
+    hashdiff (1.1.0)
     http (5.1.1)
       addressable (~> 2.8)
       http-cookie (~> 1.0)
@@ -40,7 +42,7 @@ GEM
       rake (~> 13.0)
     notifications-ruby-client (5.4.0)
       jwt (>= 1.5, < 3)
-    public_suffix (5.0.3)
+    public_suffix (5.0.5)
     rake (13.0.6)
     rchardet (1.8.0)
     rexml (3.2.8)
@@ -70,7 +72,7 @@ GEM
       unf_ext
     unf_ext (0.0.8.2)
     uuidtools (2.2.0)
-    webmock (3.19.1)
+    webmock (3.23.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
