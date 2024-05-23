@@ -102,5 +102,15 @@ module "bichard7-next-infrastructure" {
       added_by     = "dom.tomkins@digital.justice.gov.uk"
       review_after = "2024-12-31"
     },
+    {
+      github_user  = "Mjbarker1"
+      permission   = "pull"
+      name         = "Maureen Barker"
+      email        = "Maureen.Barker@justice.gov.uk"
+      org          = "MoJ"
+      reason       = "CAF Validation"
+      added_by     = "dom.tomkins@digital.justice.gov.uk"
+      review_after = "2024-12-31"
+    },
   ]
 }
