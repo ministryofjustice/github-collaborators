@@ -23,16 +23,6 @@ module "modernisation-platform-environments" {
       review_after = "2024-05-24"
     },
     {
-      github_user  = "andylandroc"
-      permission   = "push"
-      name         = "Andy Land"
-      email        = "Andy.Land@roctechnologies.com"
-      org          = "Roc Technologies"
-      reason       = "Roc have built and are supporting the HMPPS Equip application on the Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-24"
-    },
-    {
       github_user  = "trudley"
       permission   = "push"
       name         = "Tom Rudley"
@@ -103,7 +93,7 @@ module "modernisation-platform-environments" {
       review_after = "2024-08-01"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
