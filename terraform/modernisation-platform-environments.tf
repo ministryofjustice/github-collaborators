@@ -53,16 +53,6 @@ module "modernisation-platform-environments" {
       review_after = "2024-08-28"
     },
     {
-      github_user  = "simonytta"
-      permission   = "push"
-      name         = "Simona Treivase"
-      email        = "Simona.Treivase@justice.gov.uk"
-      org          = "Agilisys"
-      reason       = "Get access to Data Insights Hub on the Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-05-25"
-    },
-    {
       github_user  = "nbuckingham72"
       permission   = "push"
       name         = "nick buckingham"
@@ -103,7 +93,7 @@ module "modernisation-platform-environments" {
       review_after = "2024-08-01"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
