@@ -32,5 +32,15 @@ module "yjaf-terraform" {
       added_by     = "mick.ewers@yjb.gov.uk"
       review_after = "2025-03-14"
     },
+    {
+      github_user  = "gregi2n"
+      permission   = "admin"
+      name         = "Gregory Whiting"
+      email        = "greg.whiting@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Devops guys need access to make app/infra changes"
+      added_by     = "andy.rogers@digital,justice,gov.uk"
+      review_after = "2025-05-23"
+    }
   ]
 }
