@@ -4,7 +4,7 @@ module "legislation-drafting-helper" {
   collaborators = [
     {
       github_user  = "lmwilkigov"
-      permission   = "write"
+      permission   = "push"
       name         = "Liam Wilkinson"
       email        = "liam.wilkinson@cabinetoffice.gov.uk"
       org          = "Cabinet Office / No10"
