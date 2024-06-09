@@ -10,7 +10,7 @@ module "yjaf-infra-aws-mgmt" {
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
       added_by     = "mick.ewers@yjb.gov.uk"
-      review_after = "2024-06-15"
+      review_after = "2024-12-12"
     },
   ]
 }
