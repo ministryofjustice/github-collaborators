@@ -83,7 +83,7 @@ module "yjaf-gateway" {
       review_after = "2024-06-30"
     },
     {
-      github_user  = "hess3000"
+      github_user  = "Hess3000"
       permission   = "admin"
       name         = "Stuart Duffy"
       email        = "stuart.duffy@necsws.com"
