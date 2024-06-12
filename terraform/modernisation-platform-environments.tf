@@ -20,7 +20,7 @@ module "modernisation-platform-environments" {
       org          = "Lumen Technologies"
       reason       = "The user will manage the PPUD terraform code on day to day basis"
       added_by     = "mark.hardy@digital.justice.gov.uk"
-      review_after = "2024-06-28"
+      review_after = "2025-06-12"
     },
     {
       github_user  = "jonny190"
