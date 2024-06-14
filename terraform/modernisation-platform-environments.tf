@@ -62,5 +62,15 @@ module "modernisation-platform-environments" {
       added_by     = "silviana.horga@digital.justice.gov.uk"
       review_after = "2024-09-25"
     },
+    {
+      github_user  = "jamesashton-roc"
+      permission   = "push"
+      name         = "James Ashton"
+      email        = "james.ashton@roctechnologies.com"
+      org          = "ROC"
+      reason       = "Get access to equip github actions on Modernisation Platform"
+      added_by     = "edward.proctor@digital.justice.gov.uk"
+      review_after = "2024-12-14"
+    },
   ]
 }
