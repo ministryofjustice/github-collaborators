@@ -33,16 +33,6 @@ module "yjaf-conversions" {
       review_after = "2024-12-23"
     },
     {
-      github_user  = "oliviergaubert"
-      permission   = "admin"
-      name         = "Olivier Gaubert"
-      email        = "olivier.gaubert@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-06-15"
-    },
-    {
       github_user  = "angelanec"
       permission   = "admin"
       name         = "Angela Site"
