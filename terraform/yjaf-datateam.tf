@@ -3,16 +3,6 @@ module "yjaf-datateam" {
   repository = "yjaf-datateam"
   collaborators = [
     {
-      github_user  = "sammohammeduk"
-      permission   = "push"
-      name         = "Sam Mohammed"
-      email        = "sam.mohammed@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "For YJAF data team to store their scripts into the new yjaf data team repo"
-      added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-06-16"
-    },
-    {
       github_user  = "oliviergaubert"
       permission   = "admin"
       name         = "Olivier Gaubert"
