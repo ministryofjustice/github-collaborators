@@ -10,7 +10,7 @@ module "cjs-dashboard" {
       org          = "desnz"
       reason       = "To be able to access some code that they wrote before leaving the MoJ."
       added_by     = "laura.knowles1@justice.gov.uk"
-      review_after = "2024-09-15"
+      review_after = "2024-09-16"
     },
   ]
 }
