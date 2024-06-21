@@ -10,7 +10,7 @@ module "hmpps-env-configs" {
       org          = "Unilink"
       reason       = "To enable Unilink to continue supplying development and testing services to HMPPS"
       added_by     = "marcus.aspin@digital.justice.gov.uk"
-      review_after = "2024-06-25"
+      review_after = "2025-06-01"
     },
   ]
 }
