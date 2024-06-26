@@ -93,16 +93,6 @@ module "bichard7-next-user-service" {
       review_after = "2024-12-31"
     },
     {
-      github_user  = "ksugden"
-      permission   = "push"
-      name         = "Kate Sugden"
-      email        = "kate.sugden@madetech.com"
-      org          = "Madetech"
-      reason       = "CJSE Bichard Development"
-      added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
-    },
-    {
       github_user  = "tausifpatel"
       permission   = "push"
       name         = "Tausif Patel"
