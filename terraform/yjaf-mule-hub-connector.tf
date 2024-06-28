@@ -70,7 +70,7 @@ module "yjaf-mule-hub-connector" {
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-06-30"
+      review_after = "2024-12-27"
     },
     {
       github_user  = "joharveynec"
