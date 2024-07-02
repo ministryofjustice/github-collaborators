@@ -9,7 +9,7 @@ class GithubCollaborators
 
     def initialize
       logger.debug "initialize"
-      @ops_bot_token = ENV.fetch("OPS_BOT_TOKEN")
+      @ops_bot_token = ENV.fetch("MOJ_COLLABORATORS_GENERAL_ADMIN_BOT_PAT")
     end
 
     # Get the HTTP code from a GitHub REST API request

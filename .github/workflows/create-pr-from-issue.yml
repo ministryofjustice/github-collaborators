@@ -23,7 +23,7 @@ jobs:
         run: ruby bin/create-pr-from-issue.rb
         env:
           ISSUE: ${{ toJson(github.event.issue) }}
-          OPS_BOT_TOKEN: ${{ secrets.OPS_BOT_TOKEN }}
+          OPS_BOT_TOKEN: ${{ secrets.MOJ_COLLABORATORS_GENERAL_ADMIN_BOT_PAT }}
           REALLY_POST_TO_GH: ${{ secrets.POST_TO_GH }}
           NOTIFY_PROD_TOKEN: ${{ secrets.NOTIFY_PROD_TOKEN }}
           NOTIFY_TEST_TOKEN: ${{ secrets.NOTIFY_TEST_TOKEN }}
