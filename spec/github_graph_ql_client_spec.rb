@@ -12,7 +12,7 @@ class GithubCollaborators
 
       context "when env var is missing" do
         before {
-          ENV.delete("MOJ_COLLABORATORS_GENERAL_ADMIN_BOT_PAT")
+          ENV.delete("OPS_BOT_TOKEN")
         }
 
         it "call run_query and catch error" do
@@ -22,7 +22,7 @@ class GithubCollaborators
 
       context "when env var is provided" do
         before do
-          ENV["MOJ_COLLABORATORS_GENERAL_ADMIN_BOT_PAT"] = ""
+          ENV["OPS_BOT_TOKEN"] = ""
         end
 
         context "call run_query" do
@@ -64,7 +64,7 @@ class GithubCollaborators
           end
 
           after do
-            ENV.delete("MOJ_COLLABORATORS_GENERAL_ADMIN_BOT_PAT")
+            ENV.delete("OPS_BOT_TOKEN")
           end
         end
       end
