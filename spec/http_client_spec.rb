@@ -13,7 +13,7 @@ class GithubCollaborators
 
       context "when one env var is missing" do
         before {
-          ENV.delete("OPS_BOT_TOKEN")
+          ENV.delete("MOJ_COLLABORATORS_GENERAL_ADMIN_BOT_PAT")
         }
 
         it CATCH_ERROR do
@@ -51,7 +51,7 @@ class GithubCollaborators
 
       context "when correct env vars is provided" do
         before do
-          ENV["OPS_BOT_TOKEN"] = ""
+          ENV["MOJ_COLLABORATORS_GENERAL_ADMIN_BOT_PAT"] = ""
         end
 
         it "call post_pull_request_json" do
@@ -135,7 +135,7 @@ class GithubCollaborators
         end
 
         after do
-          ENV.delete("OPS_BOT_TOKEN")
+          ENV.delete("MOJ_COLLABORATORS_GENERAL_ADMIN_BOT_PAT")
         end
       end
     end

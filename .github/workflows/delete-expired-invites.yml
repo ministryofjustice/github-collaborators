@@ -20,5 +20,5 @@ jobs:
       - run: bundle install
       - run: bin/delete-expired-invites.rb
         env:
-          OPS_BOT_TOKEN: ${{ secrets.OPS_BOT_TOKEN }}
+          OPS_BOT_TOKEN: ${{ secrets.MOJ_COLLABORATORS_GENERAL_ADMIN_BOT_PAT }}
           LOG_LEVEL: "info"

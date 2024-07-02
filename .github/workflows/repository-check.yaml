@@ -9,4 +9,4 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: main
-      - run: bash scripts/repository-check.sh ${{ github.event.inputs.github_user }} ${{ secrets.OPS_BOT_TOKEN }}
+      - run: bash scripts/repository-check.sh ${{ github.event.inputs.github_user }} ${{ secrets.MOJ_COLLABORATORS_GENERAL_ADMIN_BOT_PAT }}
