@@ -10,7 +10,7 @@ class GithubCollaborators
     def initialize
       logger.debug "initialize"
       # Keep here so abort when object is created if the token is missing
-      @github_token = ENV.fetch("MOJ_COLLABORATORS_GENERAL_ADMIN_BOT_PAT")
+      @github_token = ENV.fetch("OPS_BOT_TOKEN")
     end
 
     # Checks the header and body content replied from a GitHub query is correct
