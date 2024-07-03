@@ -22,15 +22,5 @@ module "pfs-techops-terraform" {
       added_by     = "jonathan.houston@justice.gov.uk"
       review_after = "2024-07-01"
     },
-    {
-      github_user  = "dmeehankainos"
-      permission   = "admin"
-      name         = "Darren Meehan"
-      email        = "darren.meehan@kainos.com"
-      org          = "Kainos"
-      reason       = "Kainos is working on new modernization platform for Unilink services"
-      added_by     = "jonathan.houston@justice.gov.uk"
-      review_after = "2024-07-01"
-    },
   ]
 }
