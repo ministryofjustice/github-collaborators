@@ -50,7 +50,7 @@ module "yjaf-gateway" {
       org          = "NECSWS"
       reason       = "Want to amend logging settings for all microservices"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-07-09"
+      review_after = "2025-01-05"
     },
     {
       github_user  = "ttipler"
