@@ -20,7 +20,7 @@ module "yjaf-workflow" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-07-15"
+      review_after = "2025-01-11"
     },
     {
       github_user  = "javaidarshadnec"
