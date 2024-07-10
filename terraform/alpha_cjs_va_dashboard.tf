@@ -1,6 +1,6 @@
 module "alpha_cjs_va_dashboard" {
   source     = "./modules/repository-collaborators"
-  repository = "alpha_cjs_va_dashboard"
+  repository = "alpha-cjs-va-dashboard"
   collaborators = [
     {
       github_user  = "lewissheppard"
