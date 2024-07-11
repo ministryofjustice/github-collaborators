@@ -1,4 +1,4 @@
-module "alpha_cjs_va_dashboard" {
+module "alpha-cjs-va-dashboard" {
   source     = "./modules/repository-collaborators"
   repository = "alpha-cjs-va-dashboard"
   collaborators = [
