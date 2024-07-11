@@ -30,7 +30,7 @@ module "yjaf-transitions" {
       org          = "NEC Software Solutions"
       reason       = "YJAF (new developer)"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-07-17"
+      review_after = "2025-01-13"
     },
     {
       github_user  = "vasildimitrov22"
