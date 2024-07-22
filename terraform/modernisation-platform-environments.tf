@@ -30,7 +30,7 @@ module "modernisation-platform-environments" {
       org          = "ROC"
       reason       = "To work on the Equip upgrade"
       added_by     = "mark.roberts@digital.justice.gov.uk"
-      review_after = "2024-07-28"
+      review_after = "2025-01-24"
     },
     {
       github_user  = "kevinb-v1-uk"
@@ -53,7 +53,7 @@ module "modernisation-platform-environments" {
       review_after = "2024-08-01"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
