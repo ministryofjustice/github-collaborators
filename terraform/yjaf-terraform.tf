@@ -41,6 +41,16 @@ module "yjaf-terraform" {
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "David.Hall@yjb.gov.uk"
       review_after = "2025-05-23"
-    }
+    },
+    {
+      github_user  = "jasongreen-necsws"
+      permission   = "admin"
+      name         = "Jason Green"
+      email        = "jason.green@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "NEC Digital Studio DevOps team collaboration"
+      added_by     = "David.Hall@yjb.gov.uk"
+      review_after = "2025-01-25"
+    },
   ]
 }
