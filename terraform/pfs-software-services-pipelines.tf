@@ -20,7 +20,7 @@ module "pfs-software-services-pipelines" {
       org          = "Kainos"
       reason       = "Kainos is working on transfering code from a kainos owned repo to an MOJ owned repo"
       added_by     = "jonathan.houston@justice.gov.uk"
-      review_after = "2024-08-01"
+      review_after = "2025-01-28"
     },
     {
       github_user  = "dmeehankainos"
