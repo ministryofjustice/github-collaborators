@@ -50,10 +50,10 @@ module "modernisation-platform-environments" {
       org          = "Version 1"
       reason       = "Get access to xhibit-portal on Modernisation Platform"
       added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-08-01"
+      review_after = "2025-01-28"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
