@@ -30,10 +30,10 @@ module "pfs-software-services-pipelines" {
       org          = "Kainos"
       reason       = "Kainos is working on new modernization platform for Unilink services"
       added_by     = "federico.staiano1@justice.gov.uk"
-      review_after = "2024-08-01"
+      review_after = "2025-01-28"
     },
     {
-      github_user  = "MisterSK"
+      github_user  = "mistersk"
       permission   = "admin"
       name         = "Sanya Khasenye"
       email        = "s.khasenye@kainos.com"
