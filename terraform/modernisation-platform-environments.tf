@@ -23,16 +23,6 @@ module "modernisation-platform-environments" {
       review_after = "2025-06-12"
     },
     {
-      github_user  = "jonny190"
-      permission   = "pull"
-      name         = "Jonny Davey"
-      email        = "jonny.davey@roctechnologies.com"
-      org          = "ROC"
-      reason       = "To work on the Equip upgrade"
-      added_by     = "mark.roberts@digital.justice.gov.uk"
-      review_after = "2024-07-28"
-    },
-    {
       github_user  = "kevinb-v1-uk"
       permission   = "push"
       name         = "Kevin Brandon"
@@ -53,7 +43,7 @@ module "modernisation-platform-environments" {
       review_after = "2024-08-01"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
