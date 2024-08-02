@@ -13,16 +13,6 @@ module "cjse-test" {
       review_after = "2024-08-01"
     },
     {
-      github_user  = "raydevlinv1"
-      permission   = "admin"
-      name         = "Ray Devlin"
-      email        = "ray.devlin@version1.com"
-      org          = "Version 1"
-      reason       = "Get access to xhibit-portal on Cloud Platform"
-      added_by     = "shahzad.chaudhry@digital.justice.gov.uk"
-      review_after = "2024-08-01"
-    },
-    {
       github_user  = "zimboflyman"
       permission   = "admin"
       name         = "Shane Vanleeuwen"
@@ -43,7 +33,7 @@ module "cjse-test" {
       review_after = "2024-09-25"
     },
     {
-      github_user  = "Klaw29"
+      github_user  = "klaw29"
       permission   = "admin"
       name         = "Kay Babatunde"
       email        = "kbabatunde@planittesting.com"
