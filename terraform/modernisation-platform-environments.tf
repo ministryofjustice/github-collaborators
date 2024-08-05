@@ -43,7 +43,7 @@ module "modernisation-platform-environments" {
       review_after = "2024-08-01"
     },
     {
-      github_user  = "petewv1"
+      github_user  = "PeteWV1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
