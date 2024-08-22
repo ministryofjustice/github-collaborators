@@ -10,7 +10,7 @@ module "modernisation-platform-environments" {
       org          = "NEC Software Solutions"
       reason       = "Get access to Delius-IAPS on Modernisation Platform"
       added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-08-28"
+      review_after = "2025-02-24"
     },
     {
       github_user  = "nbuckingham72"
@@ -23,7 +23,7 @@ module "modernisation-platform-environments" {
       review_after = "2025-06-12"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
