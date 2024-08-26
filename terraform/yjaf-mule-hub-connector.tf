@@ -60,7 +60,7 @@ module "yjaf-mule-hub-connector" {
       org          = "NEC Software Solutions"
       reason       = "Devops guys need access to make app/infra changes"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-09-01"
+      review_after = "2025-02-28"
     },
     {
       github_user  = "fabiosalvarezza"
