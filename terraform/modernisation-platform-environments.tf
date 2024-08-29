@@ -3,16 +3,6 @@ module "modernisation-platform-environments" {
   repository = "modernisation-platform-environments"
   collaborators = [
     {
-      github_user  = "gemmamills01"
-      permission   = "push"
-      name         = "Gemma Mills"
-      email        = "gemma.mills@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Get access to Delius-IAPS on Modernisation Platform"
-      added_by     = "modernisation-platform@digital.justice.gov.uk"
-      review_after = "2024-08-28"
-    },
-    {
       github_user  = "nbuckingham72"
       permission   = "push"
       name         = "nick buckingham"
