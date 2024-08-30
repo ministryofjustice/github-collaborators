@@ -3,6 +3,7 @@ GEM
   specs:
     addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
+    base64 (0.2.0)
     bundler-audit (0.9.1)
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
@@ -34,11 +35,12 @@ GEM
       domain_name (~> 0.5)
     http-form_data (2.3.0)
     json (2.6.3)
-    jwt (2.7.1)
+    jwt (2.8.2)
+      base64
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    notifications-ruby-client (5.4.0)
+    notifications-ruby-client (6.2.0)
       jwt (>= 1.5, < 3)
     public_suffix (5.0.3)
     rake (13.0.6)
@@ -90,7 +92,7 @@ DEPENDENCIES
   git
   http
   json
-  notifications-ruby-client (~> 5.4)
+  notifications-ruby-client (~> 6.2)
   rspec
   simplecov
   uuidtools
