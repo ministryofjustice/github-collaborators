@@ -53,16 +53,6 @@ module "yjaf-datateam" {
       review_after = "2024-09-01"
     },
     {
-      github_user  = "vasildimitrov22"
-      permission   = "admin"
-      name         = "Vasil Dimitrov"
-      email        = "vasil.dimitrov@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Part of the NEC supplier team for the YJB YJAF system"
-      added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-08-31"
-    },
-    {
       github_user  = "fabiosalvarezza"
       permission   = "admin"
       name         = "Fabio Salvarezza"
