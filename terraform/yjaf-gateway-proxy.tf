@@ -63,16 +63,6 @@ module "yjaf-gateway-proxy" {
       review_after = "2025-02-16"
     },
     {
-      github_user  = "andrewtrichards"
-      permission   = "push"
-      name         = "Andrew Richards"
-      email        = "andrew.richards1@necsws.com"
-      org          = "NEC SWS"
-      reason       = "To be able to continue development of the project as architect/developer"
-      added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-09-01"
-    },
-    {
       github_user  = "ttipler"
       permission   = "admin"
       name         = "Thomas Tipler"

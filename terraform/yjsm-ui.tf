@@ -53,16 +53,6 @@ module "yjsm-ui" {
       review_after = "2025-02-16"
     },
     {
-      github_user  = "andrewtrichards"
-      permission   = "admin"
-      name         = "Andrew Richards"
-      email        = "andrew.richards1@necsws.com"
-      org          = "NEC SWS"
-      reason       = "Existing developer"
-      added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-09-01"
-    },
-    {
       github_user  = "jasongreen-necsws"
       permission   = "admin"
       name         = "Jason Green"

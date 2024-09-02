@@ -23,16 +23,6 @@ module "yjsm-hubadmin" {
       review_after = "2024-12-23"
     },
     {
-      github_user  = "andrewtrichards"
-      permission   = "push"
-      name         = "Andrew Richards"
-      email        = "andrew.richards1@necsws.com"
-      org          = "NEC SWS"
-      reason       = "Existing developer"
-      added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-09-01"
-    },
-    {
       github_user  = "angelanec"
       permission   = "admin"
       name         = "Angela Site"
