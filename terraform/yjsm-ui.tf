@@ -82,5 +82,15 @@ module "yjsm-ui" {
       added_by     = "David.Hall@yjb.gov.uk"
       review_after = "2025-03-01"
     },
+    {
+      github_user  = "fabiosalvarezza"
+      permission   = "push"
+      name         = "Fabio Salvarezza"
+      email        = "fabio.salvarezza@necsws.com"
+      org          = "NEC SWS"
+      reason       = "Existing developer"
+      added_by     = "David.Hall@yjb.gov.uk"
+      review_after = "2025-09-02"
+    },
   ]
 }
