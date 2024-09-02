@@ -53,16 +53,6 @@ module "yjaf-ui" {
       review_after = "2025-01-13"
     },
     {
-      github_user  = "ttipler"
-      permission   = "admin"
-      name         = "Thomas Tipler"
-      email        = "thomas.tipler@necsws.com"
-      org          = "NEC Software Solutions"
-      reason       = "Devops guys need access to make app/infra changes"
-      added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-09-01"
-    },
-    {
       github_user  = "fabiosalvarezza"
       permission   = "admin"
       name         = "Fabio Salvarezza"
