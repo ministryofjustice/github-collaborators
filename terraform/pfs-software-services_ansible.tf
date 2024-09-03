@@ -1,6 +1,6 @@
 module "pfs-software-services_ansible" {
   source     = "./modules/repository-collaborators"
-  repository = "pfs-software-terraform-modules"
+  repository = "pfs-software-services_ansible"
   collaborators = [
     {
       github_user  = "nathanials"
