@@ -1,6 +1,6 @@
 module "pfs-software-services_terraform" {
   source     = "./modules/repository-collaborators"
-  repository = "pfs-software-terraform-modules"
+  repository = "pfs-software-services_terraform"
   collaborators = [
     {
       github_user  = "nathanials"
