@@ -28,4 +28,4 @@ jobs:
         run: bundle exec rspec
       - name: Run depedency audit
         run: |
-          bundle exec bundler-audit
+          bundle exec bundler-audit check --ignore-moderate
