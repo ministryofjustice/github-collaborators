@@ -10,7 +10,7 @@ module "moj-cjse-xhibit-portal" {
       org          = "Version 1"
       reason       = "Get access to xhibit-portal repository"
       added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-09-25"
+      review_after = "2025-03-24"
     },
     {
       github_user  = "kevinb-v1-uk"
@@ -33,7 +33,7 @@ module "moj-cjse-xhibit-portal" {
       review_after = "2024-09-25"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
