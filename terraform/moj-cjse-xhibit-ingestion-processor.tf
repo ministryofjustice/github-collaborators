@@ -3,16 +3,6 @@ module "moj-cjse-xhibit-ingestion-processor" {
   repository = "moj-cjse-xhibit-ingestion-processor"
   collaborators = [
     {
-      github_user  = "kevinb-v1-uk"
-      permission   = "admin"
-      name         = "Kevin Brandon"
-      email        = "kevin.brandon@version1.com"
-      org          = "Version 1"
-      reason       = "Needs admin rights to moj-cjse-xhibit-ingestion-processor repository"
-      added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-09-25"
-    },
-    {
       github_user  = "jbantrotu"
       permission   = "admin"
       name         = "Jagadeesh Bantrotu"
@@ -33,7 +23,7 @@ module "moj-cjse-xhibit-ingestion-processor" {
       review_after = "2024-09-25"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "admin"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
