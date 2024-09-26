@@ -12,15 +12,5 @@ module "cjse-test" {
       added_by     = "silviana.horga@digital.justice.gov.uk"
       review_after = "2024-09-25"
     },
-    {
-      github_user  = "pawellas"
-      permission   = "admin"
-      name         = "Pawel Laskowski"
-      email        = "pawel.laskowski@version1.com"
-      org          = "Version 1"
-      reason       = "Get access to xhibit-portal on Cloud Platform"
-      added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-09-25"
-    },
   ]
 }
