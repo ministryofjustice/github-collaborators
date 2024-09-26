@@ -33,16 +33,6 @@ module "moj-cjse-xhibit-subscription-api" {
       review_after = "2024-09-25"
     },
     {
-      github_user  = "PeteWV1"
-      permission   = "admin"
-      name         = "Peter Wightman"
-      email        = "peter.wightman@version1.com"
-      org          = "Version 1"
-      reason       = "Needs admin rights to moj-cjse-xhibit-subscription-api repository"
-      added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-09-25"
-    },
-    {
       github_user  = "zimboflyman"
       permission   = "admin"
       name         = "Shane Vanleeuwen"

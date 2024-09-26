@@ -13,16 +13,6 @@ module "modernisation-platform-environments" {
       review_after = "2025-06-12"
     },
     {
-      github_user  = "PeteWV1"
-      permission   = "push"
-      name         = "Peter Wightman"
-      email        = "peter.wightman@version1.com"
-      org          = "Version 1"
-      reason       = "Get access to xhibit-portal on Modernisation Platform"
-      added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-09-25"
-    },
-    {
       github_user  = "jamesashton-roc"
       permission   = "push"
       name         = "James Ashton"
