@@ -33,20 +33,10 @@ module "moj-cjse-xhibit-ingestion-api" {
       review_after = "2024-09-25"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "admin"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
-      org          = "Version 1"
-      reason       = "Needs admin rights to moj-cjse-xhibit-ingestion-api repository"
-      added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-09-25"
-    },
-    {
-      github_user  = "zimboflyman"
-      permission   = "admin"
-      name         = "Shane Vanleeuwen"
-      email        = "shane.vanleeuwen@version1.com"
       org          = "Version 1"
       reason       = "Needs admin rights to moj-cjse-xhibit-ingestion-api repository"
       added_by     = "silviana.horga@digital.justice.gov.uk"
