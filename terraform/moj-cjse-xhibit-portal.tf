@@ -3,16 +3,6 @@ module "moj-cjse-xhibit-portal" {
   repository = "moj-cjse-xhibit-portal"
   collaborators = [
     {
-      github_user  = "silvianahorga-al"
-      permission   = "pull"
-      name         = "Silviana-Andreea Horga"
-      email        = "silviana.horga@digital.justice.gov.uk"
-      org          = "Version 1"
-      reason       = "Get access to xhibit-portal repository"
-      added_by     = "silviana.horga@digital.justice.gov.uk"
-      review_after = "2024-09-25"
-    },
-    {
       github_user  = "kevinb-v1-uk"
       permission   = "push"
       name         = "Kevin Brandon"
@@ -33,7 +23,7 @@ module "moj-cjse-xhibit-portal" {
       review_after = "2024-09-25"
     },
     {
-      github_user  = "PeteWV1"
+      github_user  = "petewv1"
       permission   = "push"
       name         = "Peter Wightman"
       email        = "peter.wightman@version1.com"
