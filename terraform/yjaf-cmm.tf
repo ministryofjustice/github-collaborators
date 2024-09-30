@@ -30,7 +30,7 @@ module "yjaf-cmm" {
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-10-29"
+      review_after = "2025-03-31"
     },
     {
       github_user  = "angelanec"
