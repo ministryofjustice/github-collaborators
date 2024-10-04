@@ -10,7 +10,7 @@ module "opg-use-an-lpa" {
       org          = "Ministry of Justice"
       reason       = "Used by Weblate"
       added_by     = "adam.cooper@digital.justice.gov.uk"
-      review_after = "2024-10-10"
+      review_after = "2025-04-08"
     },
   ]
 }
