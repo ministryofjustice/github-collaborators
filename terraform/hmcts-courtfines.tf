@@ -9,7 +9,7 @@ module "hmcts-courtfines" {
       email        = "jacob.richards@hmcts.net"
       org          = "CGI"
       reason       = "Support of service"
-      added_by     = "david.pearce@Justice.gov.uk"
+      added_by     = "david.pearce@justice.gov.uk"
       review_after = "2025-08-30"
     },
     {
@@ -19,7 +19,7 @@ module "hmcts-courtfines" {
       email        = "Dylan.horman@hmcts.net"
       org          = "CGI"
       reason       = "Support of service"
-      added_by     = "david.pearce@Justice.gov.uk"
+      added_by     = "david.pearce@justice.gov.uk"
       review_after = "2025-08-30"
     },
   ]
