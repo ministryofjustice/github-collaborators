@@ -11,6 +11,6 @@ module "hmcts-courtfines" {
       reason       = "Support of service"
       added_by     = "david.pearce@Justice.gov.uk"
       review_after = "2025-04-10"
-     },
+    },
   ]
 }
