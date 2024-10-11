@@ -22,5 +22,25 @@ module "hmcts-courtfines" {
       added_by     = "david.pearce@justice.gov.uk"
       review_after = "2025-08-30"
     },
+    {
+      github_user  = "alexdavies2463"
+      permission   = "admin"
+      name         = "Alex Davies"
+      email        = "alex.davies@hmcts.net"
+      org          = "CGI"
+      reason       = "Support of service"
+      added_by     = "david.pearce@justice.gov.uk"
+      review_after = "2025-08-30"
+    },
+    {
+      github_user  = "PankajParmar1"
+      permission   = "admin"
+      name         = "Pankaj Parmar"
+      email        = "pankaj.parmar1@hmcts.net"
+      org          = "CGI"
+      reason       = "Support of service"
+      added_by     = "david.pearce@justice.gov.uk"
+      review_after = "2025-08-30"
+    },
   ]
 }
