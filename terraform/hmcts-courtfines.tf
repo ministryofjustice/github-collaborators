@@ -42,5 +42,16 @@ module "hmcts-courtfines" {
       added_by     = "david.pearce@justice.gov.uk"
       review_after = "2025-08-30"
     },
+    },
+    {
+      github_user  = "zachealy113"
+      permission   = "admin"
+      name         = "Zac Healy"
+      email        = "zac.healy@CGI.com"
+      org          = "CGI"
+      reason       = "Support of service"
+      added_by     = "david.pearce@justice.gov.uk"
+      review_after = "2025-08-30"
+    },
   ]
 }
