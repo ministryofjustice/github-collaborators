@@ -52,5 +52,15 @@ module "hmcts-courtfines" {
       added_by     = "david.pearce@justice.gov.uk"
       review_after = "2025-08-30"
     },
+    {
+      github_user  = "mharman1973"
+      permission   = "admin"
+      name         = "Matthew Harman"
+      email        = "matthew.harman@hmcts.net"
+      org          = "CGI IT UK Ltd"
+      reason       = "Transition of project to CGI"
+      added_by     = "david.pearce@justice.gov.uk"
+      review_after = "2025-10-16"
+    }
   ]
 }
