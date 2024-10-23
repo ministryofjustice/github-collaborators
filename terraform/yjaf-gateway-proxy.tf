@@ -20,7 +20,7 @@ module "yjaf-gateway-proxy" {
       org          = "NECSWS"
       reason       = "Developer Requiring access to work on gateway-proxy project"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-10-29"
+      review_after = "2025-04-27"
     },
     {
       github_user  = "necpgilgunn"
