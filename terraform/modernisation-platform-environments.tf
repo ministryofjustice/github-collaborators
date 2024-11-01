@@ -32,5 +32,15 @@ module "modernisation-platform-environments" {
       added_by     = "mark.mckeown@digital.justice.gov.uk"
       review_after = "2025-03-31"
     },
+    {
+      github_user  = "gemmamills01"
+      permission   = "pull"
+      name         = "Gemma Mills"
+      email        = "gemma.mills@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "Get access to Delius-IAPS on Modernisation Platform"
+      added_by     = "modernisation-platform@digital.justice.gov.uk"
+      review_after = "2025-05-01"
+    },
   ]
 }
