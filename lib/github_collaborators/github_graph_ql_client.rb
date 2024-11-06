@@ -21,7 +21,8 @@ class GithubCollaborators
       logger.debug "is_response_okay"
 
       logger.debug response
-      
+      logger.debug response.body
+
       if response.nil? || response == "" || response.code != "200"
         return false
       end
@@ -49,11 +50,13 @@ class GithubCollaborators
       got_data = false
       count = 0
 
+      logger.debug query
+
       until got_data
         count += 1
         response = query_github_api(query)
         got_data = is_response_okay(response)
-        if count > 7
+        if count > 5
           logger.fatal "GH GraphQL query error"
           abort
         end
