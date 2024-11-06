@@ -20,7 +20,7 @@ class GithubCollaborators
     def is_response_okay(response)
       logger.debug "is_response_okay"
 
-      if response.nil? || response == "" || response.code != "200"
+      if response.nil? || response == "" || response.code != "200" && response.code != "403"
         return false
       end
 
@@ -28,6 +28,10 @@ class GithubCollaborators
         logger.fatal "GH GraphQL query data is missing"
         abort
       elsif response.body.include?(RATE_LIMITED)
+        sleep 300
+        return false
+      elsif response.body.include?("You have exceeded a secondary rate limit")
+        logger.debug "Secondary rate limit exceeded"
         sleep 300
         return false
       elsif response.body.include?("errors")
