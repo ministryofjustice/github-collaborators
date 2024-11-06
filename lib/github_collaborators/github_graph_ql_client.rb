@@ -20,7 +20,7 @@ class GithubCollaborators
     def is_response_okay(response)
       logger.debug "is_response_okay"
 
-      if response.nil? || response == "" || response.code != "200"
+      if response.nil? || response == ""
         return false
       end
 
@@ -37,6 +37,10 @@ class GithubCollaborators
       elsif response.body.include?("errors")
         logger.fatal "GH GraphQL query contains errors"
         abort(response.body)
+      end
+
+      if response.code != "200"
+        return false
       end
 
       true
