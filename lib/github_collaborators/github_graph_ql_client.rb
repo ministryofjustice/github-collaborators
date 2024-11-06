@@ -20,6 +20,8 @@ class GithubCollaborators
     def is_response_okay(response)
       logger.debug "is_response_okay"
 
+      logger.debug response
+      
       if response.nil? || response == "" || response.code != "200"
         return false
       end
