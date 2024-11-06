@@ -37,28 +37,28 @@ class GithubCollaborators
             expect { graphql_client.run_query(query) }.to raise_error(SystemExit)
           end
 
-          it "when result is not 200, catch error and abort" do
+          it "when result is not 200 or 403, catch error and abort" do
             net_http_resp = Net::HTTPResponse.new(1.0, 20, "OK")
             expect(graphql_client).to receive(:query_github_api).with(query).and_return(net_http_resp).at_least(6).times
             expect { graphql_client.run_query(query) }.to raise_error(SystemExit)
           end
 
-          it "when result is 200 but contains errors so abort" do
+          it "when result is 200 or 403 but contains errors so abort" do
             stub_request(:any, GRAPHQL_URI).to_return(body: "errors", status: 200)
             expect { graphql_client.run_query(query) }.to raise_error(SystemExit)
           end
 
-          it "when result is 200 but RATE_LIMITED so abort" do
+          it "when result is 200 or 403 but RATE_LIMITED so abort" do
             stub_request(:any, GRAPHQL_URI).to_return(body: RATE_LIMITED, status: 200)
             expect { graphql_client.run_query(query) }.to raise_error(SystemExit)
           end
 
-          it "when result is 200 but body is empty so abort" do
+          it "when result is 200 or 403 but body is empty so abort" do
             stub_request(:any, GRAPHQL_URI).to_return(body: nil, status: 200)
             expect { graphql_client.run_query(query) }.to raise_error(SystemExit)
           end
 
-          it "when result is 200 and body is ok" do
+          it "when result is 200 or 403 and body is ok" do
             stub_request(:any, GRAPHQL_URI).to_return(body: "good", status: 200)
             expect(graphql_client.run_query(query)).to eq("good")
           end
