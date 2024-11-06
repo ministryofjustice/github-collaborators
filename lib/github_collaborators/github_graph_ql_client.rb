@@ -51,7 +51,7 @@ class GithubCollaborators
         count += 1
         response = query_github_api(query)
         got_data = is_response_okay(response)
-        if count > 5
+        if count > 7
           logger.fatal "GH GraphQL query error"
           abort
         end
