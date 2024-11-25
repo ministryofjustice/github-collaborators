@@ -3,14 +3,14 @@ module "staff-device-management-virtualdesktop" {
   repository = "staff-device-management-virtualdesktop"
   collaborators = [
     {
-      github_user  = "NickyScout"
+      github_user  = "nickyscout"
       permission   = "push"
       name         = "Nikolay Milyaev"
       email        = "nmilyaev@microsoft.com"
       org          = "Microsoft"
       reason       = "MoJO AVD build into a Microsoft Windows 365 product"
       added_by     = "leanne.emans@justice.gov.uk"
-      review_after = "2024-12-01"
+      review_after = "2025-05-30"
     },
   ]
 }
