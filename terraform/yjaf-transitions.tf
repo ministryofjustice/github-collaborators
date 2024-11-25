@@ -10,7 +10,7 @@ module "yjaf-transitions" {
       org          = "NEC SWS"
       reason       = "Working on transition project"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-12-23"
+      review_after = "2025-11-25"
     },
     {
       github_user  = "ttipler"
