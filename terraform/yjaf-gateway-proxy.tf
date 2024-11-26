@@ -10,7 +10,7 @@ module "yjaf-gateway-proxy" {
       org          = "NEC Software Solutions"
       reason       = "Developer Requiring access to work on gateway-proxy project"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-12-23"
+      review_after = "2025-11-25"
     },
     {
       github_user  = "stephenhobden"

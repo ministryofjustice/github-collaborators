@@ -20,7 +20,7 @@ module "yjaf-ui" {
       org          = "NEC Software Solutions"
       reason       = "New YJAF Full Stack Developer"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-12-23"
+      review_after = "2025-11-25"
     },
     {
       github_user  = "stephenhobden"

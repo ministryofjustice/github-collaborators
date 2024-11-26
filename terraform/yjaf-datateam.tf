@@ -10,7 +10,7 @@ module "yjaf-datateam" {
       org          = "NEC SWS"
       reason       = "Requesting access so I can perhaps start sharing DB workload with Andrew"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-12-23"
+      review_after = "2025-11-25"
     },
     {
       github_user  = "angelanec"
