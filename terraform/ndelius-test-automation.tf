@@ -23,7 +23,7 @@ module "ndelius-test-automation" {
       review_after = "2025-06-01"
     },
     {
-      github_user  = "nd070322"
+      github_user  = "ND406"
       permission   = "admin"
       name         = "Neale Davison"
       email        = "ndavison@unilink.com"
