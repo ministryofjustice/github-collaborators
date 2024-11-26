@@ -10,7 +10,7 @@ module "hmpps-community-accommodation-tier-2-bail-prototypes" {
       org          = "Oxford Insights"
       reason       = "CAS 2 Bail Alpha Development"
       added_by     = "ross.jones@digital.justice.gov.uk"
-      review_after = "2025-06-31"
+      review_after = "2025-06-30"
     },
     {
       github_user  = "chrisadesign"
@@ -20,7 +20,7 @@ module "hmpps-community-accommodation-tier-2-bail-prototypes" {
       org          = "Oxford Insights"
       reason       = "CAS 2 Bail Alpha Development"
       added_by     = "ross.jones@digital.justice.gov.uk"
-      review_after = "2025-06-31"
+      review_after = "2025-06-30"
     },
     {
       github_user  = "simonwo"
@@ -30,7 +30,7 @@ module "hmpps-community-accommodation-tier-2-bail-prototypes" {
       org          = "Oxford Insights"
       reason       = "CAS 2 Bail Alpha Development"
       added_by     = "ross.jones@digital.justice.gov.uk"
-      review_after = "2025-06-31"
+      review_after = "2025-06-30"
     }
   ]
 }
