@@ -10,7 +10,7 @@ module "github-collaborators" {
       org          = "Madetech"
       reason       = "To allow collaborator to raise PRs to manage off-boarding of other collaborators"
       added_by     = "antony.bishop@digital.justice.gov.uk"
-      review_after = "2024-12-27"
+      review_after = "2025-06-27"
     },
   ]
 }
