@@ -51,6 +51,46 @@ module "hmpps-community-accommodation-tier-2-bail-prototypes" {
       reason       = "CAS 2 Bail Alpha Development"
       added_by     = "ross.jones@digital.justice.gov.uk"
       review_after = "2025-06-30"
+    },
+    {
+      github_user  = "dreynolds-27"
+      permission   = "push"
+      name         = "Dan Reynolds"
+      email        = "dan.reynolds@guest.vivace.tech"
+      org          = "Zaizi"
+      reason       = "CAS 2 Bail Alpha Development"
+      added_by     = "ross.jones@digital.justice.gov.uk"
+      review_after = "2025-06-30"
+    },
+    {
+      github_user  = "JayCork"
+      permission   = "push"
+      name         = "Jay Cork"
+      email        = "jay.cork@guest.vivace.tech"
+      org          = "Zaizi"
+      reason       = "CAS 2 Bail Alpha Development"
+      added_by     = "ross.jones@digital.justice.gov.uk"
+      review_after = "2025-06-30"
+    },
+    {
+      github_user  = "jimrippon-zaizi"
+      permission   = "push"
+      name         = "Jim Rippon"
+      email        = "jim.rippon@guest.vivace.tech"
+      org          = "Zaizi"
+      reason       = "CAS 2 Bail Alpha Development"
+      added_by     = "ross.jones@digital.justice.gov.uk"
+      review_after = "2025-06-30"
+    },
+    {
+      github_user  = "seyedrazavi"
+      permission   = "push"
+      name         = "Seyed Razavi Nematollahi"
+      email        = "seyed.razavi-menatollahi@guest.vivace.tech"
+      org          = "Zaizi"
+      reason       = "CAS 2 Bail Alpha Development"
+      added_by     = "ross.jones@digital.justice.gov.uk"
+      review_after = "2025-06-30"
     }
   ]
 }
