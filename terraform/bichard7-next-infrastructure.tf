@@ -100,7 +100,7 @@ module "bichard7-next-infrastructure" {
       org          = "MoJ"
       reason       = "CAF Validation"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2025-12-31"
+      review_after = "2024-12-31"
     },
   ]
 }
