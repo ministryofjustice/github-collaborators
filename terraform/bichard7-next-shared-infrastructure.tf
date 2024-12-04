@@ -10,7 +10,7 @@ module "bichard7-next-shared-infrastructure" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-12-31"
     },
     {
       github_user  = "joe-fol"
@@ -20,7 +20,7 @@ module "bichard7-next-shared-infrastructure" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-12-31"
     },
     {
       github_user  = "BushraAbdullahi"
@@ -30,7 +30,7 @@ module "bichard7-next-shared-infrastructure" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-12-31"
     },
     {
       github_user  = "ian-antking"
@@ -40,7 +40,7 @@ module "bichard7-next-shared-infrastructure" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-12-31"
     },
     {
       github_user  = "richardcane"
@@ -50,7 +50,7 @@ module "bichard7-next-shared-infrastructure" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-12-31"
     },
     {
       github_user  = "senny10"
@@ -60,7 +60,7 @@ module "bichard7-next-shared-infrastructure" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-12-31"
     },
     {
       github_user  = "richrace"
@@ -70,7 +70,7 @@ module "bichard7-next-shared-infrastructure" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-12-31"
     },
     {
       github_user  = "tausifpatel"
@@ -80,7 +80,7 @@ module "bichard7-next-shared-infrastructure" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-12-31"
     },
     {
       github_user  = "chubberlisk"
@@ -90,7 +90,7 @@ module "bichard7-next-shared-infrastructure" {
       org          = "Madetech"
       reason       = "CJSE Bichard Development"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-12-31"
     },
   ]
 }
