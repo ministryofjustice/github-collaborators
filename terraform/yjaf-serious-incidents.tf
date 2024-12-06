@@ -20,7 +20,7 @@ module "yjaf-serious-incidents" {
       org          = "NEC Software Solutions"
       reason       = "Access is needed for development of a new feature for yjaf"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-12-12"
+      review_after = "2025-06-10"
     },
     {
       github_user  = "ttipler"
