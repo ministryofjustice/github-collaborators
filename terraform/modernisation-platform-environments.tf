@@ -20,7 +20,7 @@ module "modernisation-platform-environments" {
       org          = "ROC"
       reason       = "Get access to equip github actions on Modernisation Platform"
       added_by     = "edward.proctor@digital.justice.gov.uk"
-      review_after = "2024-12-14"
+      review_after = "2025-06-12"
     },
     {
       github_user  = "djcostin"
