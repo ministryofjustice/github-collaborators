@@ -91,6 +91,6 @@ module "modernisation-platform-environments" {
       reason       = "External DevOps engineer for Youth Justice App Framework on Modernisation Platform"
       added_by     = "david.sibley@digital.justice.gov.uk"
       review_after = "2025-12-13"
-    }
+    },
   ]
 }
