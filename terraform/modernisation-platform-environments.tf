@@ -42,5 +42,55 @@ module "modernisation-platform-environments" {
       added_by     = "modernisation-platform@digital.justice.gov.uk"
       review_after = "2025-05-01"
     },
+    {
+      github_user  = "gregi2n"
+      permission   = "push"
+      name         = "Greg Whiting"
+      email        = "greg.whiting@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "External DevOps engineer for Youth Justice App Framework on Modernisation Platform"
+      added_by     = "david.sibley@digital.justice.gov.uk"
+      review_after = "2025-12-13"
+    },
+    {
+      github_user  = "ttipler"
+      permission   = "push"
+      name         = "Thomas Tipler"
+      email        = "thomas.tipler@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "External DevOps engineer for Youth Justice App Framework on Modernisation Platform"
+      added_by     = "david.sibley@digital.justice.gov.uk"
+      review_after = "2025-12-13"
+    },
+    {
+      github_user  = "jasongreen-necsws"
+      permission   = "push"
+      name         = "Jason Green"
+      email        = "jason.green@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "External DevOps engineer for Youth Justice App Framework on Modernisation Platform"
+      added_by     = "david.sibley@digital.justice.gov.uk"
+      review_after = "2025-12-13"
+    },
+    {
+      github_user  = "davidseekins"
+      permission   = "push"
+      name         = "David Seekins"
+      email        = "david.seekins@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "External DevOps engineer for Youth Justice App Framework on Modernisation Platform"
+      added_by     = "david.sibley@digital.justice.gov.uk"
+      review_after = "2025-12-13"
+    },
+    {
+      github_user  = "stephenhobden"
+      permission   = "push"
+      name         = "Stephen Hobden"
+      email        = "stephen.hobden@necsws.com"
+      org          = "NEC Software Solutions"
+      reason       = "External DevOps engineer for Youth Justice App Framework on Modernisation Platform"
+      added_by     = "david.sibley@digital.justice.gov.uk"
+      review_after = "2025-12-13"
+    }
   ]
 }
