@@ -23,16 +23,6 @@ module "bichard7-next-infrastructure-docker-images" {
       review_after = "2025-12-31"
     },
     {
-      github_user  = "BushraAbdullahi"
-      permission   = "push"
-      name         = "Bushra Abdullahi"
-      email        = "bushra.abdullahi@madetech.com"
-      org          = "Madetech"
-      reason       = "CJSE Bichard Development"
-      added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2025-12-31"
-    },
-    {
       github_user  = "ian-antking"
       permission   = "push"
       name         = "Ian King"
