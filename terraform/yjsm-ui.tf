@@ -30,7 +30,7 @@ module "yjsm-ui" {
       org          = "NEC Software Solutions"
       reason       = "Part of the NEC supplier team for the YJB YJAF system"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2024-12-23"
+      review_after = "2025-06-21"
     },
     {
       github_user  = "joharveynec"
