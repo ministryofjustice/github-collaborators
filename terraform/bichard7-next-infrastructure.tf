@@ -83,14 +83,14 @@ module "bichard7-next-infrastructure" {
       review_after = "2025-12-31"
     },
     {
-      github_user  = "Mjbarker1"
+      github_user  = "mjbarker1"
       permission   = "pull"
       name         = "Maureen Barker"
       email        = "Maureen.Barker@justice.gov.uk"
       org          = "MoJ"
       reason       = "CAF Validation"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-06-29"
     },
   ]
 }
