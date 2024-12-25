@@ -3,14 +3,14 @@ module "pfl-parent-planner" {
   repository = "pfl-parent-planner"
   collaborators = [
     {
-      github_user  = "StuBamforthDWP"
+      github_user  = "stubamforthdwp"
       permission   = "push"
       name         = "Stuart Bamforth"
       email        = "stu.bamforth@guest.vivace.tech"
       org          = "Wyser via the Ace platform"
       reason       = "Prototype creation for a new service"
       added_by     = "Chris.Anderson1@justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-06-29"
     },
   ]
 }
