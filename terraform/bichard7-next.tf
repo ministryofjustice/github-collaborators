@@ -70,7 +70,7 @@ module "bichard7-next" {
       org          = "HMCTS"
       reason       = "Integration testing for Common Platform"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
+      review_after = "2025-06-29"
     },
     {
       github_user  = "maheshsubramanian"
