@@ -10,7 +10,7 @@ module "yjaf-mule-mis-processor" {
       org          = "NECSWS"
       reason       = "Want to amend logging settings for all microservices"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2025-01-05"
+      review_after = "2025-07-04"
     },
     {
       github_user  = "angelanec"
