@@ -63,10 +63,10 @@ module "bichard7-next-pnc-emulator" {
       review_after = "2025-12-31"
     },
     {
-      github_user  = "maheshsubramanian"
+      github_user  = "sachindangui"
       permission   = "pull"
-      name         = "Mahesh Subramanian"
-      email        = "Mahesh.Subramanian1@hmcts.net"
+      name         = "Sachin Dangui"
+      email        = "Sachin.Dangui@hmcts.net"
       org          = "HMCTS"
       reason       = "Integration testing for Common Platform"
       added_by     = "dom.tomkins@digital.justice.gov.uk"
