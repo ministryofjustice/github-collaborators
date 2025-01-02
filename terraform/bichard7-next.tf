@@ -73,16 +73,6 @@ module "bichard7-next" {
       review_after = "2024-12-31"
     },
     {
-      github_user  = "maheshsubramanian"
-      permission   = "pull"
-      name         = "Mahesh Subramanian"
-      email        = "Mahesh.Subramanian1@hmcts.net"
-      org          = "HMCTS"
-      reason       = "Integration testing for Common Platform"
-      added_by     = "dom.tomkins@digital.justice.gov.uk"
-      review_after = "2024-12-31"
-    },
-    {
       github_user  = "tausifpatel"
       permission   = "push"
       name         = "Tausif Patel"
