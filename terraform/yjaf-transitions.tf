@@ -20,7 +20,7 @@ module "yjaf-transitions" {
       org          = "NEC SWS"
       reason       = "Working on pipeline for deployment of microservice"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2025-01-11"
+      review_after = "2025-07-10"
     },
     {
       github_user  = "angelanec"
