@@ -30,7 +30,7 @@ module "yjaf-gateway" {
       org          = "NEC Software Solutions"
       reason       = "YJAF (new developer)"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2025-01-13"
+      review_after = "2025-07-12"
     },
     {
       github_user  = "stephenhobden"
