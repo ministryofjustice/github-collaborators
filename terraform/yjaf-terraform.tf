@@ -50,7 +50,7 @@ module "yjaf-terraform" {
       org          = "NEC Software Solutions"
       reason       = "NEC Digital Studio DevOps team collaboration"
       added_by     = "David.Hall@yjb.gov.uk"
-      review_after = "2025-01-25"
+      review_after = "2025-07-24"
     },
   ]
 }
