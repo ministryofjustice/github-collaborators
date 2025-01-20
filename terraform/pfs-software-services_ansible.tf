@@ -20,7 +20,7 @@ module "pfs-software-services_ansible" {
       org          = "Kainos"
       reason       = "Kainos is working on transfering code from a kainos owned repo to an MOJ owned repo"
       added_by     = "jonathan.houston@justice.gov.uk"
-      review_after = "2025-01-26"
+      review_after = "2025-07-25"
     },
   ]
 }
