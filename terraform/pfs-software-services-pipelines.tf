@@ -30,7 +30,7 @@ module "pfs-software-services-pipelines" {
       org          = "Kainos"
       reason       = "Kainos is working on new modernization platform for Unilink services"
       added_by     = "federico.staiano1@justice.gov.uk"
-      review_after = "2025-01-28"
+      review_after = "2025-07-27"
     },
   ]
 }
